@@ -1,0 +1,7 @@
+{
+  "name": "code",
+  "version-string": "1",
+  "dependencies": [
+    "glad", "fmt", "glm"
+  ]
+}
