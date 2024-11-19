@@ -1,0 +1,335 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						5,
+						7,
+						9,
+						10
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.29"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "extern/glad",
+					"jsonFile" : "directory-extern.glad-Debug-3702a3d5c158162a1524.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "extern/glad",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "extern/glfw",
+					"childIndexes" : 
+					[
+						3,
+						4
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-extern.glfw-Debug-6a148eba8f8bbd445711.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "extern/glfw",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "extern/glfw/src",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-extern.glfw.src-Debug-933f95eff3a8143737e8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "extern/glfw/src",
+					"targetIndexes" : 
+					[
+						2,
+						7
+					]
+				},
+				{
+					"build" : "extern/glfw/docs",
+					"jsonFile" : "directory-extern.glfw.docs-Debug-8c3bd66342af29aa3fbd.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "extern/glfw/docs"
+				},
+				{
+					"build" : "extern/glm",
+					"childIndexes" : 
+					[
+						6
+					],
+					"jsonFile" : "directory-extern.glm-Debug-35cf56aad8212f7e4bdb.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "extern/glm"
+				},
+				{
+					"build" : "extern/glm/glm",
+					"jsonFile" : "directory-extern.glm.glm-Debug-3d9dd3b79f75f73626b8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "extern/glm/glm",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "extern/soloud",
+					"childIndexes" : 
+					[
+						8
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-extern.soloud-Debug-1f2b1f7d2b1ff60a99a8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "extern/soloud"
+				},
+				{
+					"build" : "extern/soloud/src",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-extern.soloud.src-Debug-e6d279a6bdeb1a80bfda.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 7,
+					"projectIndex" : 4,
+					"source" : "extern/soloud/src",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "extern/tinygltf",
+					"jsonFile" : "directory-extern.tinygltf-Debug-f3af1afbc752ff6feb58.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.29"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "extern/tinygltf",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "game",
+					"jsonFile" : "directory-game-Debug-b67dffe3df9019a6d767.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "game",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						9,
+						10
+					],
+					"name" : "code",
+					"targetIndexes" : 
+					[
+						0,
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "GLAD",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"name" : "GLFW",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						6,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5,
+						6
+					],
+					"name" : "glm",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7,
+						8
+					],
+					"name" : "soloud",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 10,
+					"id" : "Game::@0c53ff3c4131f9152fd3",
+					"jsonFile" : "target-Game-Debug-dda8bb13062db5960113.json",
+					"name" : "Game",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "glad::@6d81f930c6bec73dde7b",
+					"jsonFile" : "target-glad-Debug-170b919740d499059fae.json",
+					"name" : "glad",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "glfw::@81d610105217ee077306",
+					"jsonFile" : "target-glfw-Debug-c846ae72655a0fe08569.json",
+					"name" : "glfw",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "glm::@fd9a7823937da46381f5",
+					"jsonFile" : "target-glm-Debug-8f23ee5580b96beaf75b.json",
+					"name" : "glm",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "soloud::@006c352cce72c02180a4",
+					"jsonFile" : "target-soloud-Debug-f2256884d09b1a02cd6f.json",
+					"name" : "soloud",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "tinygltf::@a962d5f16185a7abee62",
+					"jsonFile" : "target-tinygltf-Debug-f38259802f26b5f2fdaa.json",
+					"name" : "tinygltf",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "uninstall::@13c6ebe2c8011b876f32",
+					"jsonFile" : "target-uninstall-Debug-060fa39b21d4b8b4e0d8.json",
+					"name" : "uninstall",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "update_mappings::@81d610105217ee077306",
+					"jsonFile" : "target-update_mappings-Debug-1dcdd86934692b6e7b71.json",
+					"name" : "update_mappings",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug",
+		"source" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
