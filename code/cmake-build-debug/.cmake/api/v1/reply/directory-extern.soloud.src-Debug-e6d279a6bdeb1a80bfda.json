@@ -1,0 +1,115 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"INSTALL",
+			"include"
+		],
+		"files" : 
+		[
+			"extern/soloud/contrib/cmake/Install.cmake",
+			"extern/soloud/contrib/src.cmake",
+			"extern/soloud/src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 2,
+				"line" : 2,
+				"parent" : 0
+			},
+			{
+				"file" : 1,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 224,
+				"parent" : 2
+			},
+			{
+				"file" : 0,
+				"parent" : 3
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 15,
+				"parent" : 4
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 225,
+				"parent" : 2
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"extern/soloud/src/soloud.lib"
+			],
+			"targetId" : "soloud::@006c352cce72c02180a4",
+			"targetIndex" : 4,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "include/soloud",
+			"paths" : 
+			[
+				"extern/soloud/src/../include/soloud.h",
+				"extern/soloud/src/../include/soloud_audiosource.h",
+				"extern/soloud/src/../include/soloud_bassboostfilter.h",
+				"extern/soloud/src/../include/soloud_biquadresonantfilter.h",
+				"extern/soloud/src/../include/soloud_bus.h",
+				"extern/soloud/src/../include/soloud_c.h",
+				"extern/soloud/src/../include/soloud_dcremovalfilter.h",
+				"extern/soloud/src/../include/soloud_echofilter.h",
+				"extern/soloud/src/../include/soloud_error.h",
+				"extern/soloud/src/../include/soloud_fader.h",
+				"extern/soloud/src/../include/soloud_fft.h",
+				"extern/soloud/src/../include/soloud_fftfilter.h",
+				"extern/soloud/src/../include/soloud_file.h",
+				"extern/soloud/src/../include/soloud_file_hack_off.h",
+				"extern/soloud/src/../include/soloud_file_hack_on.h",
+				"extern/soloud/src/../include/soloud_filter.h",
+				"extern/soloud/src/../include/soloud_flangerfilter.h",
+				"extern/soloud/src/../include/soloud_internal.h",
+				"extern/soloud/src/../include/soloud_lofifilter.h",
+				"extern/soloud/src/../include/soloud_monotone.h",
+				"extern/soloud/src/../include/soloud_openmpt.h",
+				"extern/soloud/src/../include/soloud_queue.h",
+				"extern/soloud/src/../include/soloud_robotizefilter.h",
+				"extern/soloud/src/../include/soloud_sfxr.h",
+				"extern/soloud/src/../include/soloud_speech.h",
+				"extern/soloud/src/../include/soloud_tedsid.h",
+				"extern/soloud/src/../include/soloud_thread.h",
+				"extern/soloud/src/../include/soloud_vic.h",
+				"extern/soloud/src/../include/soloud_vizsn.h",
+				"extern/soloud/src/../include/soloud_wav.h",
+				"extern/soloud/src/../include/soloud_waveshaperfilter.h",
+				"extern/soloud/src/../include/soloud_wavstream.h"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "extern/soloud/src",
+		"source" : "extern/soloud/src"
+	}
+}

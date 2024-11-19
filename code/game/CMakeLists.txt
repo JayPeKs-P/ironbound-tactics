@@ -30,12 +30,12 @@ add_executable(${EXE_FILE} ${SOURCE_FILES})
 target_compile_features(${EXE_FILE} PRIVATE cxx_std_17)
 
 # link with dependencies
-#find_package(fmt REQUIRED)
+find_package(fmt REQUIRED)
 
 target_link_libraries(${EXE_FILE} PRIVATE glad
         glfw
         glm
-        #fmt::fmt
+        fmt::fmt
         soloud
         tinygltf)
 
