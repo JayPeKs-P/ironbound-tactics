@@ -1,0 +1,9 @@
+[submodule "code/vcpkg"]
+	path = code/vcpkg
+	url = https://github.com/Microsoft/vcpkg.git
+[submodule "code/extern/glfw"]
+	path = code/extern/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "code/extern/glm"]
+	path = code/extern/glm
+	url = https://github.com/g-truc/glm.git
