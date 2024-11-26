@@ -2,6 +2,6 @@
   "name": "code",
   "version-string": "1",
   "dependencies": [
-    "glad", "fmt", "glm"
+    "glad", "fmt", "glm", "freetype", "imgui"
   ]
 }

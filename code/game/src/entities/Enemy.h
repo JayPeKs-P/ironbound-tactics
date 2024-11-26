@@ -16,6 +16,7 @@ public:
     void update(Game* game, float deltaTime) override;
     void draw(Game* game) override;
 
+
 private:
     std::vector<std::unique_ptr<Missile>> missiles;
     const float timeBetweenShots = 0.1f;

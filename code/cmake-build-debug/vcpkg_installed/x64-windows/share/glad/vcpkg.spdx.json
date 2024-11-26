@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/glad-x64-windows-0.1.36-fe26d707-daae-4736-b7fd-aec27ad52aae",
-  "name": "glad:x64-windows@0.1.36 bd0befe8a99272273921545e40a572009c39a8c49720a51b17c77e8b421f6992",
+  "documentNamespace": "https://spdx.org/spdxdocs/glad-x64-windows-0.1.36-1085c33d-d86b-4043-b383-4f79408911c4",
+  "name": "glad:x64-windows@0.1.36 79d3813ed37ca1def6283c87eb31ee797a76ab6f38a764ce17007f98b8991e23",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-11-19T12:38:08Z"
+    "created": "2024-11-26T09:52:31Z"
   },
   "relationships": [
     {
@@ -79,7 +79,7 @@
     {
       "name": "glad:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "bd0befe8a99272273921545e40a572009c39a8c49720a51b17c77e8b421f6992",
+      "versionInfo": "79d3813ed37ca1def6283c87eb31ee797a76ab6f38a764ce17007f98b8991e23",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
