@@ -499,6 +499,9 @@ fmt_DIR:PATH=C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/
 //The directory containing a CMake configuration file for freetype.
 freetype_DIR:PATH=C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/freetype
 
+//The directory containing a CMake configuration file for glfw3.
+glfw3_DIR:PATH=C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/glfw3
+
 //Value Computed by CMake
 glm_BINARY_DIR:STATIC=C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/glm
 
