@@ -20,7 +20,9 @@ set(SOURCE_FILES src/main.cpp
         src/entities/Missile.cpp
         src/entities/Missile.h
         src/guiElements/guiElement.cpp
-        src/guiElements/guiElement.h)
+        src/guiElements/guiElement.h
+        src/guiElements/battleMenu.cpp
+        src/guiElements/battleMenu.h)
 
 # set executable name
 set(EXE_FILE Game)

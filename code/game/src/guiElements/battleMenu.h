@@ -3,10 +3,14 @@
 //
 
 #pragma once
+#include "guiElement.h"
 
 namespace gl3 {
 
-class battleMenu {
+class battleMenu: public guiElement {
+public:
+    battleMenu() = default;
+    void renderBattleMenu();
 
 };
 

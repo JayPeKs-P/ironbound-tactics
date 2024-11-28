@@ -1,13 +1,15 @@
 #pragma once
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl2.h"
+#include "imgui_impl_opengl3.h"
 
 namespace gl3 {
-
+class Game;
 class guiElement {
 public:
-    guiElement();
+    guiElement() = default;
+    virtual ~guiElement();
+    virtual void initializeGUI(Game *Game);
 
 private:
 

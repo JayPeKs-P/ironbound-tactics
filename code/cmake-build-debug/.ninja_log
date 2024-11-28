@@ -86,4 +86,16 @@
 3525	3589	7537232937541225	extern/tinygltf/tinygltf.lib	2362a1baf571d1e7
 1154	1668	7543216287335715	game/Game.exe	65654edc7ffac1b9
 44	375	7543198649795789	game/CMakeFiles/Game.dir/src/guiElements/guiElement.cpp.obj	7e1f0de74c03a7f7
-3	2866	7543226405999322	build.ninja	837b861a89900db8
+3	2866	7544253534895918	build.ninja	837b861a89900db8
+72	1113	7544320507361366	game/CMakeFiles/Game.dir/src/guiElements/battleMenu.cpp.obj	2c88d98967f7dc45
+39	1446	7544320507036162	game/CMakeFiles/Game.dir/src/rendering/Shader.cpp.obj	4f21642a0c70df33
+62	1654	7544320507259592	game/CMakeFiles/Game.dir/src/entities/Missile.cpp.obj	79d9316ead87bba0
+54	1702	7544320507178036	game/CMakeFiles/Game.dir/src/entities/Planet.cpp.obj	5e9c92fbd073d2c2
+42	1779	7544320507066757	game/CMakeFiles/Game.dir/src/rendering/Mesh.cpp.obj	fc67d0c754113f8d
+33	1779	7544320506965974	game/CMakeFiles/Game.dir/src/main.cpp.obj	32d46cf9d0af155f
+67	1790	7544320507310517	game/CMakeFiles/Game.dir/src/guiElements/guiElement.cpp.obj	6647c663b44f8fe1
+58	1817	7544320507218866	game/CMakeFiles/Game.dir/src/entities/Enemy.cpp.obj	67cb67608150227c
+46	1820	7544320507096758	game/CMakeFiles/Game.dir/src/entities/Entity.cpp.obj	873925dcc4d9bd3c
+36	1861	7544320507005793	game/CMakeFiles/Game.dir/src/Game.cpp.obj	f4afd2abf3e64975
+50	1869	7544320507137266	game/CMakeFiles/Game.dir/src/entities/Ship.cpp.obj	e84efdf1bbd734ed
+1870	2722	7544320525331537	game/Game.exe	1fd050157ffbd841

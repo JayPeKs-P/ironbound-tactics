@@ -1517,6 +1517,15 @@ build game\CMakeFiles\Game.dir\src\guiElements\guiElement.cpp.obj: CXX_COMPILER_
   TARGET_COMPILE_PDB = game\CMakeFiles\Game.dir\
   TARGET_PDB = game\Game.pdb
 
+build game\CMakeFiles\Game.dir\src\guiElements\battleMenu.cpp.obj: CXX_COMPILER__Game_unscanned_Debug C$:\Users\julia\Documents\GitHub\05-gl3-kalb\code\game\src\guiElements\battleMenu.cpp || cmake_object_order_depends_target_Game
+  DEFINES = -DASSET_ROOT=./assets/ -DIMGUI_ENABLE_FREETYPE
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++17 -MDd -Zi
+  INCLUDES = -IC:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\glad\include -IC:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\glfw\include -IC:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\glm -IC:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\soloud\src\..\include -IC:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\tinygltf\include -external:IC:\Users\julia\Documents\GitHub\05-gl3-kalb\code\cmake-build-debug\vcpkg_installed\x64-windows\include -external:W0
+  OBJECT_DIR = game\CMakeFiles\Game.dir
+  OBJECT_FILE_DIR = game\CMakeFiles\Game.dir\src\guiElements
+  TARGET_COMPILE_PDB = game\CMakeFiles\Game.dir\
+  TARGET_PDB = game\Game.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Game
@@ -1525,7 +1534,7 @@ build game\CMakeFiles\Game.dir\src\guiElements\guiElement.cpp.obj: CXX_COMPILER_
 #############################################
 # Link the executable game\Game.exe
 
-build game\Game.exe: CXX_EXECUTABLE_LINKER__Game_Debug game\CMakeFiles\Game.dir\src\main.cpp.obj game\CMakeFiles\Game.dir\src\Game.cpp.obj game\CMakeFiles\Game.dir\src\rendering\Shader.cpp.obj game\CMakeFiles\Game.dir\src\rendering\Mesh.cpp.obj game\CMakeFiles\Game.dir\src\entities\Entity.cpp.obj game\CMakeFiles\Game.dir\src\entities\Ship.cpp.obj game\CMakeFiles\Game.dir\src\entities\Planet.cpp.obj game\CMakeFiles\Game.dir\src\entities\Enemy.cpp.obj game\CMakeFiles\Game.dir\src\entities\Missile.cpp.obj game\CMakeFiles\Game.dir\src\guiElements\guiElement.cpp.obj | extern\glad\glad.lib extern\glfw\src\glfw3.lib extern\glm\glm\glm.lib extern\soloud\src\soloud.lib extern\tinygltf\tinygltf.lib vcpkg_installed\x64-windows\debug\lib\freetyped.lib vcpkg_installed\x64-windows\debug\lib\imguid.lib || extern\glad\glad.lib extern\glfw\src\glfw3.lib extern\glm\glm\glm.lib extern\soloud\src\soloud.lib extern\tinygltf\tinygltf.lib
+build game\Game.exe: CXX_EXECUTABLE_LINKER__Game_Debug game\CMakeFiles\Game.dir\src\main.cpp.obj game\CMakeFiles\Game.dir\src\Game.cpp.obj game\CMakeFiles\Game.dir\src\rendering\Shader.cpp.obj game\CMakeFiles\Game.dir\src\rendering\Mesh.cpp.obj game\CMakeFiles\Game.dir\src\entities\Entity.cpp.obj game\CMakeFiles\Game.dir\src\entities\Ship.cpp.obj game\CMakeFiles\Game.dir\src\entities\Planet.cpp.obj game\CMakeFiles\Game.dir\src\entities\Enemy.cpp.obj game\CMakeFiles\Game.dir\src\entities\Missile.cpp.obj game\CMakeFiles\Game.dir\src\guiElements\guiElement.cpp.obj game\CMakeFiles\Game.dir\src\guiElements\battleMenu.cpp.obj | extern\glad\glad.lib extern\glfw\src\glfw3.lib extern\glm\glm\glm.lib extern\soloud\src\soloud.lib extern\tinygltf\tinygltf.lib vcpkg_installed\x64-windows\debug\lib\freetyped.lib vcpkg_installed\x64-windows\debug\lib\imguid.lib || extern\glad\glad.lib extern\glfw\src\glfw3.lib extern\glm\glm\glm.lib extern\soloud\src\soloud.lib extern\tinygltf\tinygltf.lib
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = extern\glad\glad.lib  extern\glfw\src\glfw3.lib  extern\glm\glm\glm.lib  extern\soloud\src\soloud.lib  extern\tinygltf\tinygltf.lib  vcpkg_installed\x64-windows\debug\lib\freetyped.lib  vcpkg_installed\x64-windows\debug\lib\imguid.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

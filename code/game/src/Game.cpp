@@ -96,7 +96,7 @@ void Game::draw()
     {
         entity->draw(this);
     }
-
+    battleMenu.renderBattleMenu();
     glfwSwapBuffers(window);
 }
 
@@ -150,6 +150,8 @@ void Game::run()
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
+
+    battleMenu.initializeGUI(this);
 
     glfwSetTime(1.0/60);
     while (!glfwWindowShouldClose(window))
