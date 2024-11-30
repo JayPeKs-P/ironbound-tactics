@@ -7,9 +7,9 @@ namespace gl3 {
 class Game;
 class guiElement {
 public:
-    guiElement() = default;
+    guiElement(Game* Game);
     virtual ~guiElement();
-    virtual void initializeGUI(Game *Game);
+    /*virtual void initializeGUI(Game *Game);*/
 
 private:
 

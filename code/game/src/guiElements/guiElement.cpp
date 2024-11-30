@@ -7,6 +7,17 @@
 
 using namespace gl3;
 
+guiElement::guiElement(Game* Game)
+{
+    auto window = Game->getWindow();
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); // Capture user input and configurations
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+    ImGui::StyleColorsDark(); // Set the default ImGui style
+}
+
 guiElement::~guiElement()
 {
     ImGui_ImplOpenGL3_Shutdown();
@@ -14,7 +25,7 @@ guiElement::~guiElement()
     ImGui::DestroyContext();
 }
 
-void guiElement::initializeGUI(Game* Game)
+/*void guiElement::initializeGUI(Game* Game)
 {
     auto window = Game->getWindow();
     IMGUI_CHECKVERSION();
@@ -24,4 +35,4 @@ void guiElement::initializeGUI(Game* Game)
     ImGui_ImplOpenGL3_Init("#version 330 core");
     ImGui::StyleColorsDark(); // Set the default ImGui style
 
-}
+}*/

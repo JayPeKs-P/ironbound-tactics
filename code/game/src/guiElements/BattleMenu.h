@@ -7,9 +7,9 @@
 
 namespace gl3 {
 
-class battleMenu: public guiElement {
+class BattleMenu: public guiElement {
 public:
-    battleMenu() = default;
+    BattleMenu(Game* game);
     void renderBattleMenu();
 
 };

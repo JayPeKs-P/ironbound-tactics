@@ -4,9 +4,19 @@
 #include <iostream>
 #include "battleMenu.h"
 
+
 using namespace gl3;
 
-void battleMenu::renderBattleMenu()
+BattleMenu::BattleMenu(Game* game): guiElement(game)
+{
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.9f, 0.1f, 0.0f)); // Button color
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.1f, 1.0f)); // Hover color
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.3f, 0.1f, 1.0f)); // Active color
+
+    /*ImGui::PopStyleColor(3); // Revert the styling*/
+}
+
+void BattleMenu::renderBattleMenu()
 {
     // Begin ImGui frame
     ImGui_ImplOpenGL3_NewFrame();

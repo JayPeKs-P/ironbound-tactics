@@ -96,7 +96,7 @@ void Game::draw()
     {
         entity->draw(this);
     }
-    battleMenu.renderBattleMenu();
+    battleMenu->renderBattleMenu();
     glfwSwapBuffers(window);
 }
 
@@ -151,7 +151,8 @@ void Game::run()
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
 
-    battleMenu.initializeGUI(this);
+    auto menu = std::make_unique<BattleMenu>(this);
+    battleMenu = menu.get();
 
     glfwSetTime(1.0/60);
     while (!glfwWindowShouldClose(window))
