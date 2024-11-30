@@ -45,11 +45,21 @@ Game::Game(int width, int height, const std::string &title)
     }
     audio.init();
     audio.setGlobalVolume(0.1f);
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); // Capture user input and configurations
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+    ImGui::StyleColorsDark(); // Set the default ImGui style
 }
 
 Game::~Game()
 {
     glfwTerminate();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }
 
 glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, glm::vec3 scale)
@@ -151,7 +161,7 @@ void Game::run()
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
 
-    auto menu = std::make_unique<BattleMenu>(this);
+    auto menu = std::make_unique<BattleMenu>();
     battleMenu = menu.get();
 
     glfwSetTime(1.0/60);

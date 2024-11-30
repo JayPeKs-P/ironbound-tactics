@@ -3,12 +3,16 @@
 //
 
 #pragma once
+#include <string>
+
+#include <png.h>
+#include "../Assets.h"
+#include "glad/glad.h"
 
 
-
-class Texture {
+class PngTexture {
 public:
-    [[nodiscard]] GLuint getTexture_id() const
+    [[nodiscard]] GLuint getTextureID() const
     {
         return textureID;
     }
@@ -23,14 +27,19 @@ public:
         return height;
     }
 
-    explicit PngTexture(const fs::path& relativeAssetPath);
+    explicit PngTexture(const std::filesystem::path& relativeTexturePath);
 
-    ~PngTextureLoader();
-    void loadPngTexture();
+    ~PngTexture();
+    PngTexture(const PngTexture &other) = delete;
+    PngTexture(PngTexture &&other) noexcept
+    {
+        std::swap(textureID, other.textureID);
+        std::swap(width, other.width);
+        std::swap(height, other.height);
+    }
+    void loadPngTexture(FILE* file);
 
 private:
-    FILE* file;
-    fs::path fullPath;
     GLuint textureID = 0;
     int width = 0;
     int height = 0;

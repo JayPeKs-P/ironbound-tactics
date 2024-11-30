@@ -22,7 +22,9 @@ set(SOURCE_FILES src/main.cpp
         src/guiElements/guiElement.cpp
         src/guiElements/guiElement.h
         src/guiElements/battleMenu.cpp
-        src/guiElements/battleMenu.h)
+        src/guiElements/battleMenu.h
+        src/rendering/pngTexture.cpp
+        src/rendering/pngTexture.h)
 
 # set executable name
 set(EXE_FILE Game)
@@ -36,6 +38,7 @@ target_compile_features(${EXE_FILE} PRIVATE cxx_std_17)
 # link with dependencies
 find_package(freetype REQUIRED)
 find_package(imgui REQUIRED)
+find_package(PNG REQUIRED)
 
 target_link_libraries(${EXE_FILE} PRIVATE glad
         glfw
@@ -43,7 +46,8 @@ target_link_libraries(${EXE_FILE} PRIVATE glad
         soloud
         tinygltf
         freetype
-        imgui::imgui)
+        imgui::imgui
+        PNG::PNG)
 
 target_compile_definitions(${EXE_FILE} PRIVATE ASSET_ROOT=./assets/)
 
