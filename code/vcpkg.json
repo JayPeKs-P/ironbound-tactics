@@ -9,11 +9,13 @@
     {
       "name": "imgui",
       "features": [
+        "docking-experimental",
         "opengl2-binding",
         "opengl3-binding",
         "glfw-binding",
         "freetype"
       ]
-    }
+    },
+    "libpng"
   ]
 }

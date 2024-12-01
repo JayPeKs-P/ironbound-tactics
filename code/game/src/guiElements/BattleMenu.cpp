@@ -1,53 +1,77 @@
 //
 // Created by julia on 27/11/2024.
 //
+
 #include <iostream>
+
 #include "battleMenu.h"
 
 
 using namespace gl3;
 
-BattleMenu::BattleMenu():
-guiElement(PngTexture("textures/gui/ui_atlas_48x48.png"))
+BattleMenu::BattleMenu(const ImVec2& size):
+guiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
+size(size)
 {
-
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.9f, 0.1f, 0.0f)); // Button color
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.1f, 1.0f)); // Hover color
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.3f, 0.1f, 1.0f)); // Active color
-
-    /*ImGui::PopStyleColor(3); // Revert the styling*/
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.1f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.3f, 0.1f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.863f, 0.635f, 0.0f, 1.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 4.0);
 }
 
 void BattleMenu::renderBattleMenu()
 {
-    // Begin ImGui frame
+    auto MAIN_WINDOW = ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoBringToFrontOnFocus |
+        ImGuiWindowFlags_NoInputs |
+        ImGuiWindowFlags_NoCollapse |
+         ImGuiWindowFlags_NoResize;
+    // // Begin ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
     // Create a simple window
-    ImGui::Begin("Battle Menu");
+    ImGui::SetNextWindowPos(ImVec2(0, size.y - size.y / 3));
+    ImGui::SetNextWindowSize(size);
+    ImGui::Begin("Background",nullptr, MAIN_WINDOW);
+    drawBackground(tilesToRender, size.x, size.y / 3);
+    ImGui::End();
+    auto BATTLE_MENU = ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_NoResize;
+    //size.x -= size.x / 2;
+    ImGui::SetNextWindowPos(ImVec2(48, size.y - 192));
+    ImGui::SetNextWindowSize(size);
+    ImGui::Begin("Battle Menu", nullptr, BATTLE_MENU);
+
 
     // Battle menu options
-    if (ImGui::Button("Fight")) {
-        std::cout << "Fight selected!" << std::endl;
+    if (ImGui::Button("Fight", ImVec2(144,48))) {
+
     }
-    if (ImGui::Button("Bag")) {
-        std::cout << "Bag selected!" << std::endl;
+    ImGui::SameLine();
+    if (ImGui::Button("Bag", ImVec2(144,48))) {
+
     }
-    if (ImGui::Button("Run")) {
-        std::cout << "Run selected!" << std::endl;
+    //ImGui::SameLine();
+    if (ImGui::Button("Run", ImVec2(144,48))) {
+
     }
-    if (ImGui::Button("Pokemon")) {
-        std::cout << "Pokemon selected!" << std::endl;
+    ImGui::SameLine();
+    if (ImGui::Button("Pokemon", ImVec2(144,48))) {
+
     }
 
-    // Define UV coordinates for a specific subregion
-    ImVec2 uv0 = ImVec2(0.0f, 0.0f); // Top-left
-    ImVec2 uv1 = ImVec2(90.0f, 90.0f); // Bottom-right (subregion)
-
-    // Render button with texture
-    ImGui::ImageButton("testTextureButton", textureID, ImVec2(96, 48), uv0, uv1);
+    ImGui::SameLine();
 
     ImGui::End();
 

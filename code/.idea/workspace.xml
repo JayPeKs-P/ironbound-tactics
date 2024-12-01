@@ -3,6 +3,14 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
+    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="4" type="long" />
+    <option name="/Default/Housekeeping/RefactoringsMru/RenameRefactoring/DoSearchForTextInStrings/@EntryValue" value="true" type="bool" />
+  </component>
   <component name="CMakePresetLoader">{
   &quot;useNewFormat&quot;: true
 }</component>
@@ -31,26 +39,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/assets/textures/gui/FantasyRPG1.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/Game.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/Game.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Enemy.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Enemy.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Entity.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Entity.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Ship.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Ship.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/main.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/vc140.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/vc140.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/Game.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/Game.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/Game.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/Game.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/Game.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/Game.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/Game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/Game.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/guiElements/battleMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/guiElements/battleMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/guiElements/guiElement.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/guiElement.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/guiElements/guiElement.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/guiElement.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/rendering/PngTexture.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/rendering/PngTexture.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vcpkg.json" beforeDir="false" afterPath="$PROJECT_DIR$/vcpkg.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +87,39 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -112,15 +143,17 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.west.config.association.type.startup.service": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "testingGUI",
+    "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "configurable.group.appearance",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -195,6 +228,11 @@
       <workItem from="1732618736119" duration="1523000" />
       <workItem from="1732717685516" duration="5758000" />
       <workItem from="1732798449753" duration="6009000" />
+      <workItem from="1732979198174" duration="1453000" />
+      <workItem from="1732980678674" duration="112000" />
+      <workItem from="1732980800119" duration="24088000" />
+      <workItem from="1733044359431" duration="298000" />
+      <workItem from="1733046688067" duration="29908000" />
     </task>
     <servers />
   </component>
@@ -205,5 +243,9 @@
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
     <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

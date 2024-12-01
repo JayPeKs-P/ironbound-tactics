@@ -8,17 +8,27 @@ namespace gl3 {
 class Game;
 class guiElement {
     public:
-    guiElement(PngTexture pngTexture);
+    guiElement(PngTexture pngTexture,
+        int tileWidth,
+        int tileHeight);
     virtual ~guiElement();
+
 
     private:
     PngTexture pngTexture;
-    //virtual void render();
+    void initializeGuiElement();
+    void drawTile(const std::pair<int, int>& tile, int tileID);
 
     protected:
-    GLuint textureID;
-    int textureWidth;
-    int textureHeight;
+    GLuint textureAtlasID;
+    int textureAtlasWidth;
+    int textureAtlasHeight;
+    int tileWidth;
+    int tileHeight;
+
+    ImVec2 getTileUV(int column, int row);
+    void drawBackground(const std::vector<std::pair<int, int>>& tilesToRender,
+        int backgroundWidth, int backgroundHeight);
 
 
 };

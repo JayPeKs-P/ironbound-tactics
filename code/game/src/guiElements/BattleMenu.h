@@ -9,8 +9,21 @@ namespace gl3 {
 
 class BattleMenu: public guiElement {
 public:
-    BattleMenu();
+    BattleMenu(const ImVec2& size);
     void renderBattleMenu();
+private:
+    const std::vector<std::pair<int, int>> tilesToRender = {
+        {15, 0},
+        {16, 0},
+        {17, 0},
+        {15, 1},
+        {16, 1},
+        {17, 1},
+        {15, 2},
+        {16, 2},
+        {17, 2}
+    };
+    ImVec2 size;
 
 };
 

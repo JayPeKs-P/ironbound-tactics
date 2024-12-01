@@ -51,7 +51,8 @@ Game::Game(int width, int height, const std::string &title)
     ImGuiIO& io = ImGui::GetIO(); // Capture user input and configurations
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330 core");
-    ImGui::StyleColorsDark(); // Set the default ImGui style
+    io.Fonts->AddFontFromFileTTF("C:\\Users\\julia\\Git-projects\\05-gl3-kalb\\code\\assets\\textures\\gui\\ui_atlas_48x48.png", 20);
+    // ImGui::StyleColorsDark(); // Set the default ImGui style
 }
 
 Game::~Game()
@@ -161,7 +162,10 @@ void Game::run()
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
 
-    auto menu = std::make_unique<BattleMenu>();
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    ImVec2 windowSize(width, height);
+    auto menu = std::make_unique<BattleMenu>(windowSize);
     battleMenu = menu.get();
 
     glfwSetTime(1.0/60);

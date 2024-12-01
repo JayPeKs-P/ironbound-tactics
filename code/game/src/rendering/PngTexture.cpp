@@ -89,6 +89,7 @@ void PngTexture::loadPngTexture(FILE* file)
     png_read_update_info(png, info);
 
     // Read image data
+
     png_bytep* rowPointers = new png_bytep[height];
     png_size_t rowBytes = png_get_rowbytes(png, info);
     unsigned char* pixelData = new unsigned char[rowBytes * height];
@@ -108,9 +109,6 @@ void PngTexture::loadPngTexture(FILE* file)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    std::cout << textureID << std::endl;
-    std::cout << width << std::endl;
-    std::cout << height << std::endl;
 
     delete[] pixelData;
 }
