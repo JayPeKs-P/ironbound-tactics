@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src
+# Install script for directory: C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,43 +33,43 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/soloud/src/soloud.lib")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/extern/soloud/src/soloud.lib")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/soloud" TYPE FILE FILES
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_audiosource.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_bassboostfilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_biquadresonantfilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_bus.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_c.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_dcremovalfilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_echofilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_error.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_fader.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_fft.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_fftfilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_file.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_file_hack_off.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_file_hack_on.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_filter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_flangerfilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_internal.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_lofifilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_monotone.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_openmpt.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_queue.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_robotizefilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_sfxr.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_speech.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_tedsid.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_thread.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_vic.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_vizsn.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_wav.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_waveshaperfilter.h"
-    "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include/soloud_wavstream.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_audiosource.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_bassboostfilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_biquadresonantfilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_bus.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_c.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_dcremovalfilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_echofilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_error.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_fader.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_fft.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_fftfilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_file.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_file_hack_off.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_file_hack_on.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_filter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_flangerfilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_internal.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_lofifilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_monotone.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_openmpt.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_queue.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_robotizefilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_sfxr.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_speech.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_tedsid.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_thread.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_vic.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_vizsn.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_wav.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_waveshaperfilter.h"
+    "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include/soloud_wavstream.h"
     )
 endif()
 

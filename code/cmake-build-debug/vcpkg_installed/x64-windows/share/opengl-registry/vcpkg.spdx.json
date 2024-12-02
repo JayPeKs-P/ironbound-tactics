@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/opengl-registry-x64-windows-2024-02-10#1-1b61175d-da03-4a4c-b23d-06b64eb8c9a6",
-  "name": "opengl-registry:x64-windows@2024-02-10#1 59c2afcef6aa68d9cfa29bd712714ed62b69a3ca13a0de1a80097c4479806929",
+  "documentNamespace": "https://spdx.org/spdxdocs/opengl-registry-x64-windows-2024-02-10#1-619f31cc-ff81-421f-9b47-e97d15d7f5a8",
+  "name": "opengl-registry:x64-windows@2024-02-10#1 035a1354cf09d7af1f5c648688e71bb131f575c61394c5355006b1dbe2818556",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-11-26T09:52:26Z"
+    "created": "2024-11-27T00:42:29Z"
   },
   "relationships": [
     {
@@ -69,7 +69,7 @@
     {
       "name": "opengl-registry:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "59c2afcef6aa68d9cfa29bd712714ed62b69a3ca13a0de1a80097c4479806929",
+      "versionInfo": "035a1354cf09d7af1f5c648688e71bb131f575c61394c5355006b1dbe2818556",
       "downloadLocation": "NONE",
       "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
@@ -93,7 +93,7 @@
   ],
   "files": [
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/opengl-registry/copyright",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/opengl-registry/copyright",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -105,7 +105,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/opengl-registry/portfile.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/opengl-registry/portfile.cmake",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -117,7 +117,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/opengl-registry/vcpkg.json",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/opengl-registry/vcpkg.json",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {

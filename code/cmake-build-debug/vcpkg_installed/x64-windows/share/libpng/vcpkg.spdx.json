@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/libpng-x64-windows-1.6.44-ff495fd5-e6af-4a94-bec9-108d72dbaead",
-  "name": "libpng:x64-windows@1.6.44 ed8dd35854a5ce793789fbe003c7b1af3c6a974ebcb92cdc371355e61086982e",
+  "documentNamespace": "https://spdx.org/spdxdocs/libpng-x64-windows-1.6.44-c5508a26-685a-4dbd-ab97-516bed275692",
+  "name": "libpng:x64-windows@1.6.44 5030189a008f47ea45bed3a67d64d5cd0a6c488ae65d24349a7effb0bb19a769",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-11-26T09:51:58Z"
+    "created": "2024-11-27T00:41:31Z"
   },
   "relationships": [
     {
@@ -139,7 +139,7 @@
     {
       "name": "libpng:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "ed8dd35854a5ce793789fbe003c7b1af3c6a974ebcb92cdc371355e61086982e",
+      "versionInfo": "5030189a008f47ea45bed3a67d64d5cd0a6c488ae65d24349a7effb0bb19a769",
       "downloadLocation": "NONE",
       "licenseConcluded": "libpng-2.0",
       "licenseDeclared": "NOASSERTION",
@@ -178,7 +178,7 @@
   ],
   "files": [
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/cmake.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/cmake.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -190,7 +190,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/fix-msa-support-for-mips.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/fix-msa-support-for-mips.patch",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -202,7 +202,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/fix-tools-static.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/fix-tools-static.patch",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -214,7 +214,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/libm.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/libm.patch",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {
@@ -226,7 +226,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/libpng-config.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/libpng-config.cmake",
       "SPDXID": "SPDXRef-file-4",
       "checksums": [
         {
@@ -238,7 +238,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/pkgconfig.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/pkgconfig.patch",
       "SPDXID": "SPDXRef-file-5",
       "checksums": [
         {
@@ -250,7 +250,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/portfile.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/portfile.cmake",
       "SPDXID": "SPDXRef-file-6",
       "checksums": [
         {
@@ -262,7 +262,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/usage",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/usage",
       "SPDXID": "SPDXRef-file-7",
       "checksums": [
         {
@@ -274,7 +274,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/vcpkg-cmake-wrapper.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/vcpkg-cmake-wrapper.cmake",
       "SPDXID": "SPDXRef-file-8",
       "checksums": [
         {
@@ -286,7 +286,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/libpng/vcpkg.json",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/libpng/vcpkg.json",
       "SPDXID": "SPDXRef-file-9",
       "checksums": [
         {

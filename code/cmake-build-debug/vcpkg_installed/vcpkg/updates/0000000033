@@ -1,6 +1,7 @@
-Package: glad
-Feature: loader
+Package: freetype
+Feature: brotli
+Depends: brotli
 Architecture: x64-windows
 Multi-Arch: same
-Description: Generate loader logic.
-Status: install ok installed
+Description: Support decompression of WOFF2 streams
+Status: purge ok not-installed

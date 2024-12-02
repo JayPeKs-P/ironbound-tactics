@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/brotli-x64-windows-1.1.0#1-5e5388f1-9047-495d-bd70-12b86226fe08",
-  "name": "brotli:x64-windows@1.1.0#1 34c607903547fcf2013ef8e7a2d2faa2be23d55df68ff9e0f0317f6dbc31fb03",
+  "documentNamespace": "https://spdx.org/spdxdocs/brotli-x64-windows-1.1.0#1-dc6c130c-9208-4b11-ac6d-4b3bf699984a",
+  "name": "brotli:x64-windows@1.1.0#1 5521f8404649c969a2bd830a148128f3f0bc01c6b991ce297dc3959183a283ca",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-11-26T09:52:12Z"
+    "created": "2024-11-27T00:41:49Z"
   },
   "relationships": [
     {
@@ -109,7 +109,7 @@
     {
       "name": "brotli:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "34c607903547fcf2013ef8e7a2d2faa2be23d55df68ff9e0f0317f6dbc31fb03",
+      "versionInfo": "5521f8404649c969a2bd830a148128f3f0bc01c6b991ce297dc3959183a283ca",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
@@ -133,7 +133,7 @@
   ],
   "files": [
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/brotli/emscripten.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/brotli/emscripten.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -145,7 +145,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/brotli/fix-arm-uwp.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/brotli/fix-arm-uwp.patch",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -157,7 +157,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/brotli/install.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/brotli/install.patch",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -169,7 +169,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/brotli/pkgconfig.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/brotli/pkgconfig.patch",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {
@@ -181,7 +181,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/brotli/portfile.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/brotli/portfile.cmake",
       "SPDXID": "SPDXRef-file-4",
       "checksums": [
         {
@@ -193,7 +193,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/brotli/usage",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/brotli/usage",
       "SPDXID": "SPDXRef-file-5",
       "checksums": [
         {
@@ -205,7 +205,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/brotli/vcpkg.json",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/brotli/vcpkg.json",
       "SPDXID": "SPDXRef-file-6",
       "checksums": [
         {

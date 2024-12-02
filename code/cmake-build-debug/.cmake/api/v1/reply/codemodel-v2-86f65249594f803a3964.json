@@ -265,42 +265,42 @@
 				{
 					"directoryIndex" : 10,
 					"id" : "Game::@0c53ff3c4131f9152fd3",
-					"jsonFile" : "target-Game-Debug-d55ad8a83df51cccfe09.json",
+					"jsonFile" : "target-Game-Debug-ccdc72eab73cc0a98ac4.json",
 					"name" : "Game",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "glad::@6d81f930c6bec73dde7b",
-					"jsonFile" : "target-glad-Debug-170b919740d499059fae.json",
+					"jsonFile" : "target-glad-Debug-5de3990704d34845166c.json",
 					"name" : "glad",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 3,
 					"id" : "glfw::@81d610105217ee077306",
-					"jsonFile" : "target-glfw-Debug-ec666669f59e6798305d.json",
+					"jsonFile" : "target-glfw-Debug-26cf36a9d54b051e06cc.json",
 					"name" : "glfw",
 					"projectIndex" : 2
 				},
 				{
 					"directoryIndex" : 6,
 					"id" : "glm::@fd9a7823937da46381f5",
-					"jsonFile" : "target-glm-Debug-8f23ee5580b96beaf75b.json",
+					"jsonFile" : "target-glm-Debug-ff97bfd99d8d396df369.json",
 					"name" : "glm",
 					"projectIndex" : 3
 				},
 				{
 					"directoryIndex" : 8,
 					"id" : "soloud::@006c352cce72c02180a4",
-					"jsonFile" : "target-soloud-Debug-14d138cafb8865c221ba.json",
+					"jsonFile" : "target-soloud-Debug-0fcaa17eecf40dd08985.json",
 					"name" : "soloud",
 					"projectIndex" : 4
 				},
 				{
 					"directoryIndex" : 9,
 					"id" : "tinygltf::@a962d5f16185a7abee62",
-					"jsonFile" : "target-tinygltf-Debug-f38259802f26b5f2fdaa.json",
+					"jsonFile" : "target-tinygltf-Debug-c51bf37a00f0ed48c6f7.json",
 					"name" : "tinygltf",
 					"projectIndex" : 0
 				},
@@ -324,8 +324,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug",
-		"source" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code"
+		"build" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug",
+		"source" : "C:/Users/julia/Git-projects/05-gl3-kalb/code"
 	},
 	"version" : 
 	{

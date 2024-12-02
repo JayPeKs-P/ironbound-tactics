@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud
+# Install script for directory: C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/soloud/src/cmake_install.cmake")
+  include("C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/extern/soloud/src/cmake_install.cmake")
 
 endif()
 

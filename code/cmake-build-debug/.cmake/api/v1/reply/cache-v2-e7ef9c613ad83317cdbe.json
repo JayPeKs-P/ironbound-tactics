@@ -27,7 +27,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/lib.exe"
+			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/lib.exe"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -51,7 +51,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug"
+			"value" : "c:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -75,7 +75,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "29"
+			"value" : "30"
 		},
 		{
 			"name" : "CMAKE_CACHE_PATCH_VERSION",
@@ -87,7 +87,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "6"
+			"value" : "5"
 		},
 		{
 			"name" : "CMAKE_COLOR_DIAGNOSTICS",
@@ -111,7 +111,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/bin/cmake.exe"
+			"value" : "C:/Program Files/JetBrains/CLion 2024.3/bin/cmake/win/x64/bin/cmake.exe"
 		},
 		{
 			"name" : "CMAKE_CPACK_COMMAND",
@@ -123,7 +123,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/bin/cpack.exe"
+			"value" : "C:/Program Files/JetBrains/CLion 2024.3/bin/cmake/win/x64/bin/cpack.exe"
 		},
 		{
 			"name" : "CMAKE_CTEST_COMMAND",
@@ -135,7 +135,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/bin/ctest.exe"
+			"value" : "C:/Program Files/JetBrains/CLion 2024.3/bin/cmake/win/x64/bin/ctest.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER",
@@ -151,7 +151,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/cl.exe"
+			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -263,7 +263,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/cl.exe"
+			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe"
 		},
 		{
 			"name" : "CMAKE_C_FLAGS",
@@ -491,7 +491,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -587,7 +587,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code"
 		},
 		{
 			"name" : "CMAKE_INSTALL_BINDIR",
@@ -871,7 +871,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/link.exe"
+			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/link.exe"
 		},
 		{
 			"name" : "CMAKE_MAKE_PROGRAM",
@@ -883,7 +883,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2024.2.2/bin/ninja/win/x64/ninja.exe"
+			"value" : "C:/Program Files/JetBrains/CLion 2024.3/bin/ninja/win/x64/ninja.exe"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -1231,7 +1231,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/share/cmake-3.29"
+			"value" : "C:/Program Files/JetBrains/CLion 2024.3/bin/cmake/win/x64/share/cmake-3.30"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1439,7 +1439,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/scripts/buildsystems/vcpkg.cmake"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/scripts/buildsystems/vcpkg.cmake"
 		},
 		{
 			"name" : "CMAKE_VERBOSE_MAKEFILE",
@@ -1483,7 +1483,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[optimized;C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/libpng16.lib;debug;C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/libpng16d.lib][C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include][v1.6.44()]"
+			"value" : "[optimized;C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/libpng16.lib;debug;C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/libpng16d.lib][C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include][v1.6.44()]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Threads",
@@ -1507,7 +1507,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[optimized;C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/zlib.lib;debug;C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/zlibd.lib][C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include][c ][v1.3.1()]"
+			"value" : "[optimized;C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/zlib.lib;debug;C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/zlibd.lib][C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include][c ][v1.3.1()]"
 		},
 		{
 			"name" : "GLAD_BINARY_DIR",
@@ -1519,7 +1519,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/glad"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/extern/glad"
 		},
 		{
 			"name" : "GLAD_IS_TOP_LEVEL",
@@ -1543,7 +1543,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glad"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glad"
 		},
 		{
 			"name" : "GLFW_BINARY_DIR",
@@ -1555,7 +1555,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/glfw"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/extern/glfw"
 		},
 		{
 			"name" : "GLFW_BUILD_DOCS",
@@ -1675,7 +1675,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glfw"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glfw"
 		},
 		{
 			"name" : "GLFW_USE_HYBRID_HPG",
@@ -1943,7 +1943,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/libpng16d.lib"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/libpng16d.lib"
 		},
 		{
 			"name" : "PNG_LIBRARY_RELEASE",
@@ -1959,7 +1959,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/libpng16.lib"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/libpng16.lib"
 		},
 		{
 			"name" : "PNG_PNG_INCLUDE_DIR",
@@ -1975,7 +1975,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include"
 		},
 		{
 			"name" : "SOLOUD_BACKEND_COREAUDIO",
@@ -2143,7 +2143,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed"
 		},
 		{
 			"name" : "VCPKG_INSTALL_OPTIONS",
@@ -2167,7 +2167,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code"
 		},
 		{
 			"name" : "VCPKG_MANIFEST_INSTALL",
@@ -2319,7 +2319,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include"
 		},
 		{
 			"name" : "ZLIB_LIBRARY_DEBUG",
@@ -2335,7 +2335,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/zlibd.lib"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/zlibd.lib"
 		},
 		{
 			"name" : "ZLIB_LIBRARY_RELEASE",
@@ -2351,7 +2351,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/zlib.lib"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/lib/zlib.lib"
 		},
 		{
 			"name" : "Z_VCPKG_BUILTIN_POWERSHELL_PATH",
@@ -2387,7 +2387,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/cl.exe"
+			"value" : "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe"
 		},
 		{
 			"name" : "Z_VCPKG_POWERSHELL_PATH",
@@ -2423,7 +2423,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg"
 		},
 		{
 			"name" : "_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX",
@@ -2447,7 +2447,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed"
 		},
 		{
 			"name" : "code_BINARY_DIR",
@@ -2459,7 +2459,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug"
 		},
 		{
 			"name" : "code_IS_TOP_LEVEL",
@@ -2483,7 +2483,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code"
 		},
 		{
 			"name" : "freetype_DIR",
@@ -2495,7 +2495,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/freetype"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/freetype"
 		},
 		{
 			"name" : "glfw3_DIR",
@@ -2507,7 +2507,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/glfw3"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/glfw3"
 		},
 		{
 			"name" : "glm_BINARY_DIR",
@@ -2519,7 +2519,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/glm"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/extern/glm"
 		},
 		{
 			"name" : "glm_IS_TOP_LEVEL",
@@ -2543,7 +2543,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glm"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glm"
 		},
 		{
 			"name" : "imgui_DIR",
@@ -2555,7 +2555,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/imgui"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/share/imgui"
 		},
 		{
 			"name" : "soloud_BINARY_DIR",
@@ -2567,7 +2567,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/soloud"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/extern/soloud"
 		},
 		{
 			"name" : "soloud_IS_TOP_LEVEL",
@@ -2591,7 +2591,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud"
+			"value" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud"
 		}
 	],
 	"kind" : "cache",

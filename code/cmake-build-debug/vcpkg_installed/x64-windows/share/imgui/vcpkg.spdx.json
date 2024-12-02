@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/imgui-x64-windows-1.91.5-d6ed67fb-97fd-43d7-8ef6-82f5f307c804",
-  "name": "imgui:x64-windows@1.91.5 9ec7dfa2a592aedcb02463289801e88083646513b05730fd8c2b180a09ea0828",
+  "documentNamespace": "https://spdx.org/spdxdocs/imgui-x64-windows-1.91.5-22208173-8045-4e8d-af70-e5631b6d134b",
+  "name": "imgui:x64-windows@1.91.5 2cf6c51d1ee3b5d9f30dd9758e08976e8b521faec5642f93d09e1fcb55c26cc3",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-12-01T23:48:33Z"
+    "created": "2024-11-28T08:23:34Z"
   },
   "relationships": [
     {
@@ -79,7 +79,7 @@
     {
       "name": "imgui:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "9ec7dfa2a592aedcb02463289801e88083646513b05730fd8c2b180a09ea0828",
+      "versionInfo": "2cf6c51d1ee3b5d9f30dd9758e08976e8b521faec5642f93d09e1fcb55c26cc3",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
@@ -118,7 +118,7 @@
   ],
   "files": [
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/imgui/CMakeLists.txt",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/imgui/CMakeLists.txt",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -130,7 +130,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/imgui/imgui-config.cmake.in",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/imgui/imgui-config.cmake.in",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -142,7 +142,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/imgui/portfile.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/imgui/portfile.cmake",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -154,7 +154,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/imgui/vcpkg.json",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/imgui/vcpkg.json",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {

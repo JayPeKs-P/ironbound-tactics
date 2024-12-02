@@ -43,16 +43,22 @@ Game::Game(int width, int height, const std::string &title)
     if(glGetError() != GL_NO_ERROR) {
         throw std::runtime_error("gl error");
     }
-    audio.init();
-    audio.setGlobalVolume(0.1f);
+    // audio.init();
+    // audio.setGlobalVolume(0.1f);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); // Capture user input and configurations
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330 core");
-    io.Fonts->AddFontFromFileTTF("C:\\Users\\julia\\Git-projects\\05-gl3-kalb\\code\\assets\\textures\\gui\\ui_atlas_48x48.png", 20);
-    // ImGui::StyleColorsDark(); // Set the default ImGui style
+
+    std::filesystem::path fontPath = resolveAssetPath("textures/gui/FantasyRPG1.ttf");
+    ImFont* font = io.Fonts->AddFontFromFileTTF(fontPath.string().c_str(),
+        16.0f);
+    if (!font) {
+        throw std::runtime_error("Failed to load font: " + fontPath.string());
+    }
 }
 
 Game::~Game()

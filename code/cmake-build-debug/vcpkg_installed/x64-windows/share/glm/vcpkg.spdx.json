@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/glm-x64-windows-1.0.1#3-ace386cf-774b-4e8d-8289-8889442e0f4e",
-  "name": "glm:x64-windows@1.0.1#3 798864f39c723058d6eeede268e124b2f7d8cdf7a97b8d1aa3ea312c22c16c37",
+  "documentNamespace": "https://spdx.org/spdxdocs/glm-x64-windows-1.0.1#3-4529d175-b7f1-4027-aa90-6622aabc76b6",
+  "name": "glm:x64-windows@1.0.1#3 c912f9045243b35c17cf7269ca20e4978f1c3b821fe80fe95bdab5520af018c9",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-11-26T09:52:44Z"
+    "created": "2024-11-27T00:42:44Z"
   },
   "relationships": [
     {
@@ -79,7 +79,7 @@
     {
       "name": "glm:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "798864f39c723058d6eeede268e124b2f7d8cdf7a97b8d1aa3ea312c22c16c37",
+      "versionInfo": "c912f9045243b35c17cf7269ca20e4978f1c3b821fe80fe95bdab5520af018c9",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
@@ -103,7 +103,7 @@
   ],
   "files": [
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glm/fix-clang.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glm/fix-clang.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -115,7 +115,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glm/portfile.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glm/portfile.cmake",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -127,7 +127,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glm/usage",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glm/usage",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -139,7 +139,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glm/vcpkg.json",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glm/vcpkg.json",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {

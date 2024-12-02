@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glfw/docs
+# Install script for directory: C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glfw/docs
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

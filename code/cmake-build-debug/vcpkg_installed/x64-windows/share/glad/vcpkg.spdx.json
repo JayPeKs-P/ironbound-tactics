@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/glad-x64-windows-0.1.36-1085c33d-d86b-4043-b383-4f79408911c4",
-  "name": "glad:x64-windows@0.1.36 79d3813ed37ca1def6283c87eb31ee797a76ab6f38a764ce17007f98b8991e23",
+  "documentNamespace": "https://spdx.org/spdxdocs/glad-x64-windows-0.1.36-568cafbe-9e61-44a3-9dd9-5facc6ed1a6d",
+  "name": "glad:x64-windows@0.1.36 d8f0edb6fef681e3527a21d13f6a4b35a7f52561f6b755bcbef460f3a26d2874",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-11-26T09:52:31Z"
+    "created": "2024-11-27T00:42:36Z"
   },
   "relationships": [
     {
@@ -79,7 +79,7 @@
     {
       "name": "glad:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "79d3813ed37ca1def6283c87eb31ee797a76ab6f38a764ce17007f98b8991e23",
+      "versionInfo": "d8f0edb6fef681e3527a21d13f6a4b35a7f52561f6b755bcbef460f3a26d2874",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
@@ -103,7 +103,7 @@
   ],
   "files": [
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glad/encoding.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glad/encoding.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -115,7 +115,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glad/find_python.patch",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glad/find_python.patch",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -127,7 +127,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glad/portfile.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glad/portfile.cmake",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -139,7 +139,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glad/vcpkg.json",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glad/vcpkg.json",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {

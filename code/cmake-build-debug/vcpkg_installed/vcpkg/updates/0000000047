@@ -1,7 +1,6 @@
-Package: imgui
-Feature: glfw-binding
-Depends: glfw3
+Package: vcpkg-cmake
+Version: 2024-04-23
 Architecture: x64-windows
 Multi-Arch: same
-Description: Make available GLFW binding
-Status: install ok installed
+Abi: 92c2832604e9ed366a48060695c494e3ccbe5175296efb30fdf3e91dbfadf1f6
+Status: purge ok not-installed

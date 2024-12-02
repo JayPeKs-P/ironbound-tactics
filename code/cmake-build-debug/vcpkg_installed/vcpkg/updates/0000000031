@@ -1,6 +1,7 @@
-Package: glad
-Feature: loader
+Package: freetype
+Feature: png
+Depends: libpng
 Architecture: x64-windows
 Multi-Arch: same
-Description: Generate loader logic.
-Status: install ok half-installed
+Description: Support PNG compressed OpenType embedded bitmaps.
+Status: purge ok not-installed

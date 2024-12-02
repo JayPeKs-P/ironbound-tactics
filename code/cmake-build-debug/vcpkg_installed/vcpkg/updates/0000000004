@@ -1,9 +1,7 @@
-Package: fmt
-Version: 11.0.2
-Port-Version: 1
-Depends: vcpkg-cmake, vcpkg-cmake-config
+Package: imgui
+Feature: glfw-binding
+Depends: glfw3
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 144a824acd782b25f3e37c64cc179b6ca91008b08886e877f1411acc148f8e2f
-Description: {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
-Status: install ok half-installed
+Description: Make available GLFW binding
+Status: purge ok half-installed

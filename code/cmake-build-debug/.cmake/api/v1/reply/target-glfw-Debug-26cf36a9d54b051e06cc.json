@@ -149,15 +149,15 @@
 			[
 				{
 					"backtrace" : 8,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glfw/include"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glfw/include"
 				},
 				{
 					"backtrace" : 9,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glfw/src"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glfw/src"
 				},
 				{
 					"backtrace" : 9,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/extern/glfw/src"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/extern/glfw/src"
 				}
 			],
 			"language" : "C",

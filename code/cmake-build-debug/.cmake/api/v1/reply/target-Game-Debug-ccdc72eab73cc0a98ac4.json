@@ -27,7 +27,7 @@
 		[
 			"vcpkg/scripts/buildsystems/vcpkg.cmake",
 			"game/CMakeLists.txt",
-			"C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/share/cmake-3.29/Modules/FindPNG.cmake",
+			"C:/Program Files/JetBrains/CLion 2024.3/bin/cmake/win/x64/share/cmake-3.30/Modules/FindPNG.cmake",
 			"cmake-build-debug/vcpkg_installed/x64-windows/share/png/vcpkg-cmake-wrapper.cmake"
 		],
 		"nodes" : 
@@ -82,7 +82,7 @@
 			{
 				"command" : 3,
 				"file" : 2,
-				"line" : 134,
+				"line" : 137,
 				"parent" : 8
 			},
 			{
@@ -123,28 +123,28 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glad/include"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glad/include"
 				},
 				{
 					"backtrace" : 3,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glfw/include"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glfw/include"
 				},
 				{
 					"backtrace" : 3,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/glm"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/glm"
 				},
 				{
 					"backtrace" : 3,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/soloud/src/../include"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/soloud/src/../include"
 				},
 				{
 					"backtrace" : 3,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/tinygltf/include"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/tinygltf/include"
 				},
 				{
 					"backtrace" : 3,
 					"isSystem" : true,
-					"path" : "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include"
+					"path" : "C:/Users/julia/Git-projects/05-gl3-kalb/code/cmake-build-debug/vcpkg_installed/x64-windows/include"
 				}
 			],
 			"language" : "CXX",

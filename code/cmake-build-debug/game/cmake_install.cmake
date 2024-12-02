@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/game
+# Install script for directory: C:/Users/julia/Git-projects/05-gl3-kalb/code/game
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

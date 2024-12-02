@@ -4,4 +4,4 @@ Depends: zlib
 Architecture: x64-windows
 Multi-Arch: same
 Description: Use zlib instead of internal library for DEFLATE
-Status: install ok installed
+Status: purge ok half-installed

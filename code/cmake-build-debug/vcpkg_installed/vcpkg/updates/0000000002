@@ -1,6 +1,6 @@
-Package: vcpkg-cmake
-Version: 2024-04-23
+Package: imgui
+Feature: opengl3-binding
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 92c2832604e9ed366a48060695c494e3ccbe5175296efb30fdf3e91dbfadf1f6
-Status: install ok half-installed
+Description: Make available OpenGL3/ES/ES2 (modern) binding
+Status: purge ok half-installed

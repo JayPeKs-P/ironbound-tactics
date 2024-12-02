@@ -1,8 +1,9 @@
-Package: imgui
-Version: 1.91.5
+Package: fmt
+Version: 11.0.2
+Port-Version: 1
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 9ec7dfa2a592aedcb02463289801e88083646513b05730fd8c2b180a09ea0828
-Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
-Status: install ok installed
+Abi: 144a824acd782b25f3e37c64cc179b6ca91008b08886e877f1411acc148f8e2f
+Description: {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+Status: purge ok half-installed

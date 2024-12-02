@@ -14,9 +14,11 @@ guiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
 size(size)
 {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.5f, 0.1f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.3f, 0.1f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.3f, 0.3f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.1f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.863f, 0.635f, 0.0f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_BorderShadow, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_NavHighlight, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0);
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 4.0);
 }
@@ -55,23 +57,15 @@ void BattleMenu::renderBattleMenu()
 
 
     // Battle menu options
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 48.0f));
     if (ImGui::Button("Fight", ImVec2(144,48))) {
 
     }
-    ImGui::SameLine();
-    if (ImGui::Button("Bag", ImVec2(144,48))) {
+
+    if (ImGui::Button("Defend", ImVec2(144,48))) {
 
     }
-    //ImGui::SameLine();
-    if (ImGui::Button("Run", ImVec2(144,48))) {
-
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Pokemon", ImVec2(144,48))) {
-
-    }
-
-    ImGui::SameLine();
+    ImGui::PopStyleVar();
 
     ImGui::End();
 

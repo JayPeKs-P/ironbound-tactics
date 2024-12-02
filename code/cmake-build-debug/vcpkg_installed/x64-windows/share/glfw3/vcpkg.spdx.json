@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/glfw3-x64-windows-3.4#1-f42c5e11-9ff6-4898-a7d9-ce6bdc85eb0b",
-  "name": "glfw3:x64-windows@3.4#1 d69821904dd9530d469615d674420cbba2e9d086d9c34ea393b2a317e26e8604",
+  "documentNamespace": "https://spdx.org/spdxdocs/glfw3-x64-windows-3.4#1-45b144eb-bdb8-4fbb-b1a4-e756b2aa7812",
+  "name": "glfw3:x64-windows@3.4#1 e5b11a5368628dea26d9a4a2b2961b98c1c235cf2c9cb0a51f6439f6bf52784a",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
     ],
-    "created": "2024-11-26T11:08:31Z"
+    "created": "2024-11-28T08:23:19Z"
   },
   "relationships": [
     {
@@ -69,7 +69,7 @@
     {
       "name": "glfw3:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "d69821904dd9530d469615d674420cbba2e9d086d9c34ea393b2a317e26e8604",
+      "versionInfo": "e5b11a5368628dea26d9a4a2b2961b98c1c235cf2c9cb0a51f6439f6bf52784a",
       "downloadLocation": "NONE",
       "licenseConcluded": "Zlib",
       "licenseDeclared": "NOASSERTION",
@@ -93,7 +93,7 @@
   ],
   "files": [
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glfw3/glfw3Config.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glfw3/glfw3Config.cmake",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -105,7 +105,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glfw3/portfile.cmake",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glfw3/portfile.cmake",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -117,7 +117,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/vcpkg/ports/glfw3/vcpkg.json",
+      "fileName": "./C:/Users/julia/Git-projects/05-gl3-kalb/code/vcpkg/ports/glfw3/vcpkg.json",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {

@@ -1,9 +1,10 @@
-Package: glfw3
-Version: 3.4
-Port-Version: 1
-Depends: vcpkg-cmake, vcpkg-cmake-config
+Package: bzip2
+Version: 1.0.8
+Port-Version: 6
+Depends: vcpkg-cmake
 Architecture: x64-windows
 Multi-Arch: same
-Abi: d69821904dd9530d469615d674420cbba2e9d086d9c34ea393b2a317e26e8604
-Description: GLFW is a free, Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development. It provides a simple, platform-independent API for creating windows, contexts and surfaces, reading input, handling events, etc.
-Status: install ok half-installed
+Abi: d3caa4ca64db53d5c90e164827f12e75b4e75cba84cf910e0c69bbf53547bfc3
+Description: bzip2 is a freely available, patent free, high-quality data compressor. It typically compresses files to within 10% to 15% of the best available techniques (the PPM family of statistical compressors), whilst being around twice as fast at compression and six times faster at decompression.
+Default-Features: tool
+Status: purge ok half-installed
