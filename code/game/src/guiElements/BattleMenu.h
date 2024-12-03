@@ -24,6 +24,7 @@ private:
         {17, 2}
     };
     ImVec2 size;
+    float lifePoints = 1.0f;
 
 };
 

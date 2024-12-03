@@ -19,6 +19,8 @@ size(size)
     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.863f, 0.635f, 0.0f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_BorderShadow, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_NavHighlight, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0);
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 4.0);
 }
@@ -59,7 +61,7 @@ void BattleMenu::renderBattleMenu()
     // Battle menu options
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 48.0f));
     if (ImGui::Button("Fight", ImVec2(144,48))) {
-
+        lifePoints -= 0.1f;
     }
 
     if (ImGui::Button("Defend", ImVec2(144,48))) {
@@ -69,8 +71,16 @@ void BattleMenu::renderBattleMenu()
 
     ImGui::End();
 
+    ImGui::SetNextWindowPos(ImVec2(size.x /2, size.y - 192));
+    ImGui::SetNextWindowSize(size);
+    ImGui::Begin("Life Bars", nullptr, BATTLE_MENU);
+    ImGui::Text("Enemy Health:");
+    ImGui::ProgressBar(lifePoints, ImVec2(244.0f, 24.0f));
+    ImGui::End();
+
     // Render ImGui frame
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 
 }
