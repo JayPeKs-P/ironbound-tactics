@@ -35,8 +35,7 @@ add_executable(${EXE_FILE} ${SOURCE_FILES})
 # require C++ 17 compiler
 target_compile_features(${EXE_FILE} PRIVATE cxx_std_17)
 
-# link with dependencies
-find_package(freetype REQUIRED)
+
 find_package(imgui REQUIRED)
 find_package(PNG REQUIRED)
 
@@ -45,7 +44,6 @@ target_link_libraries(${EXE_FILE} PRIVATE glad
         glm
         soloud
         tinygltf
-        freetype
         imgui::imgui
         PNG::PNG)
 

@@ -3,9 +3,7 @@
   "version-string": "1",
   "dependencies": [
     "glad",
-    "fmt",
     "glm",
-    "freetype",
     {
       "name": "imgui",
       "features": [

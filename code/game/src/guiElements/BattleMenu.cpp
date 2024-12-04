@@ -61,7 +61,7 @@ void BattleMenu::renderBattleMenu()
     // Battle menu options
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 48.0f));
     if (ImGui::Button("Fight", ImVec2(144,48))) {
-        lifePoints -= 0.1f;
+        enemyLifePoints -= 0.1f;
     }
 
     if (ImGui::Button("Defend", ImVec2(144,48))) {
@@ -75,7 +75,11 @@ void BattleMenu::renderBattleMenu()
     ImGui::SetNextWindowSize(size);
     ImGui::Begin("Life Bars", nullptr, BATTLE_MENU);
     ImGui::Text("Enemy Health:");
-    ImGui::ProgressBar(lifePoints, ImVec2(244.0f, 24.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 48.0f));
+    ImGui::ProgressBar(enemyLifePoints, ImVec2(244.0f, 24.0f));
+    ImGui::PopStyleVar();
+    ImGui::Text("Player Health:");
+    ImGui::ProgressBar(playerLifePoints, ImVec2(244.0f, 24.0f));
     ImGui::End();
 
     // Render ImGui frame

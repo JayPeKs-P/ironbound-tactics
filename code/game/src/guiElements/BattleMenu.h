@@ -24,7 +24,8 @@ private:
         {17, 2}
     };
     ImVec2 size;
-    float lifePoints = 1.0f;
+    float enemyLifePoints = 1.0f;
+    float playerLifePoints = 1.0f;
 
 };
 
