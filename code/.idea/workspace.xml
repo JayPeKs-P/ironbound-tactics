@@ -39,14 +39,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/extern/Nuklear" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitmodules" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitmodules" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/game/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vcpkg.json" beforeDir="false" afterPath="$PROJECT_DIR$/vcpkg.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,6 +124,11 @@
   }
 }</component>
   <component name="RunManager" selected="CMake Application.Game">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Game" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="Game" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="code" RUN_TARGET_NAME="Game">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -216,6 +215,7 @@
       <workItem from="1733224561693" duration="548000" />
       <workItem from="1733307363995" duration="1442000" />
       <workItem from="1733312841853" duration="2028000" />
+      <workItem from="1733323965987" duration="3181000" />
     </task>
     <servers />
   </component>
