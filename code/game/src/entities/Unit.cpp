@@ -4,5 +4,5 @@
 
 #include "Unit.h"
 
-namespace gl3 {
-} // gl3
+using namespace gl3;
+enum {Infantry = 0, Archer = 1, Siege = 2};

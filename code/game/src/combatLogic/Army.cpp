@@ -4,5 +4,19 @@
 
 #include "Army.h"
 
-namespace gl3 {
-} // gl3
+using namespace gl3;
+Army::Army(int amountOfInfantry, int amountOfArcher, int amountOfSiege)
+{
+    for (int i = 0; i < amountOfInfantry; i++)
+    {
+
+    }
+}
+
+void Army::createTroups(int amount, int id)
+{
+    for (int i = 0; i < amount; i++)
+    {
+
+    }
+}
