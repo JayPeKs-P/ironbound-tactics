@@ -3,11 +3,11 @@
 //
 
 #pragma once
-#include "guiElement.h"
+#include "GuiElement.h"
 
 namespace gl3 {
 
-class BattleMenu: public guiElement {
+class BattleMenu: public GuiElement {
 public:
     BattleMenu(const ImVec2& size);
     void renderBattleMenu();

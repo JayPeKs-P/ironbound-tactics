@@ -2,12 +2,12 @@
 // Created by julia on 26/11/2024.
 //
 
-#include "guiElement.h"
+#include "GuiElement.h"
 
 
 using namespace gl3;
 
-guiElement::guiElement(PngTexture pngTexture, int tileWidth, int tileHeight):
+GuiElement::GuiElement(PngTexture pngTexture, int tileWidth, int tileHeight):
 pngTexture(std::move(pngTexture)),
 tileWidth(tileWidth),
 tileHeight(tileHeight)
@@ -16,18 +16,18 @@ tileHeight(tileHeight)
     initializeGuiElement();
 }
 
-guiElement::~guiElement()
+GuiElement::~GuiElement()
 {
 }
 
-void guiElement::initializeGuiElement()
+void GuiElement::initializeGuiElement()
 {
     textureAtlasID = pngTexture.getTextureID();
     textureAtlasHeight = pngTexture.getPngHeight();
     textureAtlasWidth = pngTexture.getPngWidth();
 }
 
-void guiElement::drawTile(const std::pair<int, int>& tile, int tileID)
+void GuiElement::drawTile(const std::pair<int, int>& tile, int tileID)
 {
     const ImVec2 uv0 = getTileUV(tile.first, tile.second);
     const ImVec2 uv1 = getTileUV(tile.first + 1, tile.second + 1);
@@ -36,7 +36,7 @@ void guiElement::drawTile(const std::pair<int, int>& tile, int tileID)
     ImGui::PopID();
 }
 
-ImVec2 guiElement::getTileUV(int column, int row)
+ImVec2 GuiElement::getTileUV(int column, int row)
 {
     ImVec2 uv;
     uv.x = (float)(column * tileWidth) / textureAtlasWidth;         // Top-left U
@@ -46,7 +46,7 @@ ImVec2 guiElement::getTileUV(int column, int row)
     return uv;
 }
 
-void guiElement::drawBackground(const std::vector<std::pair<int, int>>& tilesToRender,
+void GuiElement::drawBackground(const std::vector<std::pair<int, int>>& tilesToRender,
     int backgroundWidth,
     int backgroundHeight)
 {

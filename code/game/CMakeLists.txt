@@ -24,7 +24,8 @@ set(SOURCE_FILES src/main.cpp
         src/guiElements/battleMenu.cpp
         src/guiElements/battleMenu.h
         src/rendering/pngTexture.cpp
-        src/rendering/pngTexture.h)
+        src/rendering/pngTexture.h
+)
 
 # set executable name
 set(EXE_FILE Game)

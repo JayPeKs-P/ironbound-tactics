@@ -6,12 +6,12 @@
 
 namespace gl3 {
 class Game;
-class guiElement {
+class GuiElement {
     public:
-    guiElement(PngTexture pngTexture,
+    GuiElement(PngTexture pngTexture,
         int tileWidth,
         int tileHeight);
-    virtual ~guiElement();
+    virtual ~GuiElement();
 
 
     private:

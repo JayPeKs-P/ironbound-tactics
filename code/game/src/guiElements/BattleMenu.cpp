@@ -10,7 +10,7 @@
 using namespace gl3;
 
 BattleMenu::BattleMenu(const ImVec2& size):
-guiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
+GuiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
 size(size)
 {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
