@@ -2,6 +2,17 @@
   "name": "code",
   "version-string": "1",
   "dependencies": [
-    "glad", "fmt", "glm", "freetype", "imgui"
+    "glad",
+    "glm",
+    {
+      "name": "imgui",
+      "features": [
+        "opengl2-binding",
+        "opengl3-binding",
+        "glfw-binding",
+        "freetype"
+      ]
+    },
+    "libpng"
   ]
 }

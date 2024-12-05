@@ -43,13 +43,30 @@ Game::Game(int width, int height, const std::string &title)
     if(glGetError() != GL_NO_ERROR) {
         throw std::runtime_error("gl error");
     }
-    audio.init();
-    audio.setGlobalVolume(0.1f);
+    // audio.init();
+    // audio.setGlobalVolume(0.1f);
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); // Capture user input and configurations
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+
+    std::filesystem::path fontPath = resolveAssetPath("textures/gui/FantasyRPG1.ttf");
+    ImFont* font = io.Fonts->AddFontFromFileTTF(fontPath.string().c_str(),
+        16.0f);
+    if (!font) {
+        throw std::runtime_error("Failed to load font: " + fontPath.string());
+    }
 }
 
 Game::~Game()
 {
     glfwTerminate();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }
 
 glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, glm::vec3 scale)
@@ -96,7 +113,7 @@ void Game::draw()
     {
         entity->draw(this);
     }
-
+    battleMenu->renderBattleMenu();
     glfwSwapBuffers(window);
 }
 
@@ -150,6 +167,12 @@ void Game::run()
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
+
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    ImVec2 windowSize(width, height);
+    auto menu = std::make_unique<BattleMenu>(windowSize);
+    battleMenu = menu.get();
 
     glfwSetTime(1.0/60);
     while (!glfwWindowShouldClose(window))

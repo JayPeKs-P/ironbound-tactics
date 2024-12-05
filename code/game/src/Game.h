@@ -13,6 +13,7 @@
 
 #include <glm/glm.hpp>
 
+#include "guiElements/BattleMenu.h"
 
 
 namespace gl3
@@ -46,6 +47,8 @@ namespace gl3
         Ship* ship = nullptr;
         GLFWwindow* window = nullptr;
         glm::mat4 mvpMatrix{};
+
+        BattleMenu* battleMenu = nullptr;
 
         SoLoud::Soloud audio;
         std::unique_ptr<SoLoud::Wav>(backgroundMusic);

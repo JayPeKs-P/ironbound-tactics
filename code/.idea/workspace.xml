@@ -3,6 +3,14 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
+    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="3" type="long" />
+    <option name="/Default/Housekeeping/RefactoringsMru/RenameRefactoring/DoSearchForTextInStrings/@EntryValue" value="true" type="bool" />
+  </component>
   <component name="CMakePresetLoader">{
   &quot;useNewFormat&quot;: true
 }</component>
@@ -33,76 +41,11 @@
     <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cache-v2-ea1331688af381279f15.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-6da8c5c0fd39a96d005f.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-bb7c0b99d151ebe62ed9.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2024-11-19T12-41-26-0011.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-Game-Debug-d7f92f44811ad64110f9.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/Game.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/Game.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Enemy.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Enemy.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Entity.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Entity.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Missile.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Missile.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Planet.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Planet.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Ship.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/entities/Ship.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/main.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/rendering/Mesh.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/rendering/Mesh.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/rendering/Shader.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/src/rendering/Shader.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/vc140.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/CMakeFiles/Game.dir/vc140.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/Game.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/Game.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/Game.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/Game.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/game/Game.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/game/Game.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg-manifest-install.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg-manifest-install.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000002" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000003" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000004" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000005" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000006" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000007" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000009" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000010" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000011" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000012" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000013" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000014" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/vcpkg/updates/0000000015" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/bin/fmt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/bin/fmt.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/bin/fmt.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/bin/fmt.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/bin/fmtd.dll" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/bin/fmtd.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/bin/fmtd.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/bin/fmtd.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/glad.lib" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/glad.lib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/glm.lib" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/debug/lib/glm.lib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/lib/glad.lib" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/lib/glad.lib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/lib/glm.lib" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/lib/glm.lib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/egl-registry/vcpkg.spdx.json" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/egl-registry/vcpkg.spdx.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/egl-registry/vcpkg_abi_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/egl-registry/vcpkg_abi_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/fmt/vcpkg.spdx.json" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/fmt/vcpkg.spdx.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/fmt/vcpkg_abi_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/fmt/vcpkg_abi_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glad/vcpkg.spdx.json" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glad/vcpkg.spdx.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glad/vcpkg_abi_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glad/vcpkg_abi_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glm/vcpkg.spdx.json" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glm/vcpkg.spdx.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glm/vcpkg_abi_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/glm/vcpkg_abi_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/opengl-registry/vcpkg.spdx.json" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/opengl-registry/vcpkg.spdx.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/opengl-registry/vcpkg_abi_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/opengl-registry/vcpkg_abi_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake-config/vcpkg.spdx.json" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake-config/vcpkg.spdx.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake-config/vcpkg_abi_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake-config/vcpkg_abi_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake/vcpkg.spdx.json" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake/vcpkg.spdx.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake/vcpkg_abi_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg_installed/x64-windows/share/vcpkg-cmake/vcpkg_abi_info.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/game/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/Enemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/Enemy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/Enemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/Enemy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/guiElements/guiElement.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/guiElement.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/guiElements/guiElement.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/guiElement.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vcpkg" beforeDir="false" afterPath="$PROJECT_DIR$/vcpkg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vcpkg.json" beforeDir="false" afterPath="$PROJECT_DIR$/vcpkg.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/guiElement.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/GuiElement.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/guiElement.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/GuiElement.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,6 +75,22 @@
     &quot;second&quot;: &quot;318ff1e6-93c6-4551-a24c-7a6f804c200a&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/game/src/Assets.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/Game.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/Game.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/entities/Enemy.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/entities/Entity.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/entities/Entity.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/guiElements/guiElement.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/guiElements/guiElement.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/rendering/Mesh.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/rendering/Mesh.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/rendering/PngTexture.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/rendering/PngTexture.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
     <option name="majorVersion" value="2024" />
@@ -150,24 +109,32 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;CMake Application.Game.executor&quot;: &quot;Run&quot;,
+    &quot;CMake Debug.code.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.west.config.association.type.startup.service&quot;: &quot;true&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;testingGUI&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RunManager" selected="CMake Application.Game">
     <configuration name="Game" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="Game" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="code" RUN_TARGET_NAME="Game">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -234,6 +201,27 @@
       <workItem from="1732612989872" duration="1606000" />
       <workItem from="1732614665324" duration="3739000" />
       <workItem from="1732618529778" duration="10000" />
+      <workItem from="1732618736119" duration="1523000" />
+      <workItem from="1732717685516" duration="5758000" />
+      <workItem from="1732798449753" duration="6009000" />
+      <workItem from="1732979198174" duration="1453000" />
+      <workItem from="1732980678674" duration="112000" />
+      <workItem from="1732980800119" duration="24088000" />
+      <workItem from="1733044359431" duration="298000" />
+      <workItem from="1733046688067" duration="29908000" />
+      <workItem from="1733096887568" duration="115000" />
+      <workItem from="1733137605332" duration="33000" />
+      <workItem from="1733140306109" duration="2114000" />
+      <workItem from="1733216512717" duration="2733000" />
+      <workItem from="1733219285374" duration="15000" />
+      <workItem from="1733219400570" duration="65000" />
+      <workItem from="1733219508094" duration="2773000" />
+      <workItem from="1733222594173" duration="1895000" />
+      <workItem from="1733224561693" duration="548000" />
+      <workItem from="1733307363995" duration="1442000" />
+      <workItem from="1733312841853" duration="2028000" />
+      <workItem from="1733323965987" duration="3181000" />
+      <workItem from="1733385615643" duration="12450000" />
     </task>
     <servers />
   </component>
@@ -244,5 +232,9 @@
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
     <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
