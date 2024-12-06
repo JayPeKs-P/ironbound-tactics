@@ -13,12 +13,13 @@ namespace gl3 {
 class Army {
     public:
     Army(int amountOfInfantry, int amountOfArcher, int amountOfSiege);
+    bool setDefending
+    (int numInfantry, int numArcher, int numSiege);
     private:
     std::vector<std::unique_ptr<Unit>>  units;
     void createTroups(Unit::Type type,
         const std::filesystem::path &gltfAssetPath,
         int amount);
-
 
 };
 

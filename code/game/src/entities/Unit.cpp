@@ -16,7 +16,7 @@ type(type)
     if (type == Type::Infantry)
     {
         this->commandPoints = 5;
-        this->usable = false;
+        this->isSiege = false;
         this->canDefend = true;
     }
     else if (type == Type::Archer)
@@ -27,7 +27,8 @@ type(type)
     else
     {
         this->commandPoints = 45;
-        this->usable = true;
+        this->isSiege = true;
+        this->canDefend = true;
     }
 }
 

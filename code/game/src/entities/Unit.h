@@ -14,11 +14,22 @@ class Unit: public Entity {
     int combatAction();
     int takeDamage(int damage);
 
-    private:
+    [[nodiscard]] Type getType() const
+    {
+        return type;
+    }
+
+    [[nodiscard]] int getCommandPoints() const
+    {
+        return commandPoints;
+    }
+    bool isReady = true;
+
+private:
     Type type;
     int commandPoints;
     bool canDefend = false;
-    bool usable = false;
+    bool isSiege = false;
 
 };
 

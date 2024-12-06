@@ -12,9 +12,18 @@ Army::Army(int numInfantry, int numArcher, int numSiege)
     createTroups(Unit::Type::Siege, "gltf/spaceship.glb", numSiege);
 }
 
+bool Army::setDefending(int numInfantry, int numArcher, int numSiege)
+{
+    if ( )
+    for (auto& unit: units)
+    {
+        if unit->getType()
+    }
+}
+
 void Army::createTroups(Unit::Type type,
-    const std::filesystem::path &gltfAssetPath,
-    int amount)
+                        const std::filesystem::path &gltfAssetPath,
+                        int amount)
 {
     for (int i = 0; i < amount; i++)
     {
