@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include <memory>
+
 #include <vector>
 
 #include "../entities/Unit.h"
@@ -15,7 +15,9 @@ class Army {
     Army(int amountOfInfantry, int amountOfArcher, int amountOfSiege);
     private:
     std::vector<std::unique_ptr<Unit>>  units;
-    void createTroups(int amount);
+    void createTroups(Unit::Type type,
+        const std::filesystem::path &gltfAssetPath,
+        int amount);
 
 
 };

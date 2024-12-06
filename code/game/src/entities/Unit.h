@@ -9,9 +9,13 @@ namespace gl3 {
 
 class Unit: public Entity {
     public:
-    Unit(int id);
+    enum class Type{Infantry, Archer, Siege};
+    Unit(Type type, const std::filesystem::path &gltfAssetPath);
     int combatAction();
+    int takeDamage(int damage);
+
     private:
+    Type type;
     int commandPoints;
     bool canDefend = false;
     bool usable = false;
