@@ -16,17 +16,20 @@ type(type)
     if (type == Type::Infantry)
     {
         this->commandPoints = 5;
+        this->lifePoints = this->commandPoints;
         this->isSiege = false;
         this->canDefend = true;
     }
     else if (type == Type::Archer)
     {
         this->commandPoints = 10;
+        this->lifePoints = this->commandPoints;
         this->canDefend = true;
     }
     else
     {
         this->commandPoints = 45;
+        this->lifePoints = this->commandPoints;
         this->isSiege = true;
         this->canDefend = true;
     }
@@ -34,6 +37,6 @@ type(type)
 
 int Unit::takeDamage(int damage)
 {
-    commandPoints -= damage;
-    return commandPoints;
+    this->lifePoints -= damage;
+    return this->lifePoints;
 }

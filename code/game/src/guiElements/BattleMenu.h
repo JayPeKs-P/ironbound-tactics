@@ -4,6 +4,7 @@
 
 #pragma once
 #include "GuiElement.h"
+#include "../combatLogic/Army.h"
 
 namespace gl3 {
 
@@ -26,6 +27,12 @@ private:
     ImVec2 size;
     float enemyLifePoints = 1.0f;
     float playerLifePoints = 1.0f;
+    bool playersTurn = true;
+    int infantrySelected = 0;
+    int archersSelected = 0;
+    int siegeSelected = 0;
+    Army playerArmy;
+    Army enemyArmy;
 
 };
 

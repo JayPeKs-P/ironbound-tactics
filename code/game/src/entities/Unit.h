@@ -11,7 +11,6 @@ class Unit: public Entity {
     public:
     enum class Type{Infantry, Archer, Siege};
     Unit(Type type, const std::filesystem::path &gltfAssetPath);
-    int combatAction();
     int takeDamage(int damage);
 
     [[nodiscard]] Type getType() const
@@ -23,13 +22,29 @@ class Unit: public Entity {
     {
         return commandPoints;
     }
-    bool isReady = true;
+
+    [[nodiscard]] bool isReady() const
+    {
+        return ready;
+    }
+
+    [[nodiscard]] int getLifePoints() const
+    {
+        return lifePoints;
+    }
+
+    void setReady(bool state)
+    {
+        ready = state;
+    }
 
 private:
     Type type;
     int commandPoints;
+    int lifePoints;
     bool canDefend = false;
     bool isSiege = false;
+    bool ready = true;
 
 };
 
