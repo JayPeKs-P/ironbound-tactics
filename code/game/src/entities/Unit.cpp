@@ -41,7 +41,9 @@ type(type)
 
 float Unit::takeDamage(float damage)
 {
-    this->lifePoints -= damage;
+    float actualDamage = std::max(0.0f, std::min(damage, this->lifePoints));
+    this->lifePoints -= actualDamage;
     return this->lifePoints;
+
 }
 

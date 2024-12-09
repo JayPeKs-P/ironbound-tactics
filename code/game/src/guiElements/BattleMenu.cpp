@@ -67,6 +67,9 @@ void BattleMenu::renderBattleMenu()
         {
             playerArmy.takeDamage(enemyArmy.dealDamage());
             playerLifePoints = playerArmy.getArmySize() / playerArmy.maxArmySize;
+        }
+        else
+        {
             enemyArmy.takeDamage(playerArmy.dealDamage());
             enemyLifePoints = enemyArmy.getArmySize() / enemyArmy.maxArmySize;
         }

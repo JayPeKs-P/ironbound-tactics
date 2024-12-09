@@ -27,20 +27,27 @@ float Army::takeDamage(float totalDamage)
             ++it;
             continue;
         }
-        if ((*it)->takeDamage(totalDamage) <= 0)
+
+        float damage = std::min(totalDamage, (*it)->getLifePoints());
+        (*it)->takeDamage(damage);
+        totalDamage -= damage;
+
+        if ((*it)->getLifePoints() <= 0)
         {
-            this->armySize-= (*it)->getCommandPoints();
-            totalDamage -= (*it)->getCommandPoints();
+            this->armySize -= (*it)->getCommandPoints();
             it = this->units.erase(it);
         }
         else
         {
-            this->armySize-=(*it)->getLifePoints();
             ++it;
         }
+
+        if (totalDamage <= 0)
+            break;
     }
     return this->armySize;
 }
+
 
 float Army::dealDamage() const
 {
