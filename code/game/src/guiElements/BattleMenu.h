@@ -12,6 +12,7 @@ class BattleMenu: public GuiElement {
 public:
     BattleMenu(const ImVec2& size);
     void renderBattleMenu();
+    void draw(Game* game);
 private:
     const std::vector<std::pair<int, int>> tilesToRender = {
         {15, 0},

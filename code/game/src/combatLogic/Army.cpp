@@ -8,6 +8,13 @@
 
 using namespace gl3;
 Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
+Entity(Shader("shaders/shaded/vertexShader.vert",
+    "shaders/shaded/fragmentShader.frag"),
+    Mesh("gltf/planet.glb"),
+    center,
+    0.0f,
+    glm::vec3(1.0f,1.0f,0.0f),
+    glm::vec4(0.0f,0.0f,0.0f,0.0f)),
 center(center)
 {
     createTroups(Unit::Type::Infantry, "gltf/planet.glb", numInfantry);
@@ -15,6 +22,15 @@ center(center)
     createTroups(Unit::Type::Siege, "gltf/spaceship.glb", numSiege);
     this->armySize = maxArmySize;
 }
+
+void Army::draw(Game* game)
+{
+    for (auto& unit : units)
+    {
+        unit->draw(game);
+    }
+}
+
 /*The way this function is implemented will probably always remove units in a set order,
 depending on the order they were pushed back on creation*/
 
@@ -107,9 +123,12 @@ void Army::createTroups(Unit::Type type,
     {
         glm::vec3 unitRandomPosition = glm::vec3(positionDist(randomNumberEngine),
             positionDist(randomNumberEngine), 0) + center;
-        auto unit = std::make_unique<Unit>(type, gltfAssetPath, unitRandomPosition, 0.0f,
-            glm::vec3(0.01f, 0.01f, 0.0f),
-            glm::vec4(1.0f,0.0f,0.0f,1.0f));
+        auto unit = std::make_unique<Unit>(type,
+                gltfAssetPath,
+                unitRandomPosition,
+                0.0f,
+                glm::vec3(0.05f, 0.05f, 0.0f),
+                glm::vec4(1.0f,1.0f,0.0f,1.0f));
         maxArmySize += unit->getCommandPoints();
         units.push_back(std::move(unit));
     }

@@ -5,15 +5,17 @@
 #pragma once
 
 #include <vector>
+#include "../entities/Entity.h"
 
 #include "../entities/Unit.h"
 
 namespace gl3 {
 
-class Army {
+class Army: Entity {
     public:
     float maxArmySize = 0;
     Army(int amountOfInfantry, int amountOfArcher, int amountOfSiege, glm::vec3 center);
+    void draw(Game* game) override;
     float takeDamage(float totalDamage);
     float dealDamage() const;
     void setDefending(Unit::Type unitType, int num);

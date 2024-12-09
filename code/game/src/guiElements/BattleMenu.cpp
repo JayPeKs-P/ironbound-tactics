@@ -12,8 +12,8 @@ using namespace gl3;
 BattleMenu::BattleMenu(const ImVec2& size):
 GuiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
 size(size),
-playerArmy(40, 11, 3, glm::vec3(0.2f,0.2f,0.0f)),
-enemyArmy(36, 12, 4, glm::vec3(-0.2f, -0.2f, 0.0f))
+playerArmy(40, 11, 3, glm::vec3(2.0f,0.0f,0.0f)),
+enemyArmy(36, 12, 4, glm::vec3(-2.0f, 0.0f, 0.0f))
 {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.3f, 0.3f, 1.0f));
@@ -187,9 +187,16 @@ void BattleMenu::renderBattleMenu()
         ImGui::Text("Victory");
         ImGui::End();
     }
+
     // Render ImGui frame
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 
+}
+
+void BattleMenu::draw(Game* game)
+{
+    playerArmy.draw(game);
+    enemyArmy.draw(game);
 }
