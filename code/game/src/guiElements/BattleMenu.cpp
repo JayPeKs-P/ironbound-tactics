@@ -170,13 +170,13 @@ void BattleMenu::renderBattleMenu()
 
     if (playerLifePoints <= 0)
     {
-        ImGui::SetNextWindowPos(ImVec2(size.x /2, size.y /2));
+        ImGui::SetNextWindowPos(ImVec2(size.x /2 - 48, size.y /2 - 8));
         ImGui::SetNextWindowSize(ImVec2(298,96));
         ImGui::Begin("End Screen", nullptr, MAIN_WINDOW);
         ImGui::Text("You Died");
         ImGui::End();
     }
-    if (enemyLifePoints <= 0)
+    if (enemyLifePoints <= 0 && !(playerLifePoints <= 0))
     {
         ImGui::SetNextWindowPos(ImVec2(size.x /2, size.y /2));
         ImGui::SetNextWindowSize(ImVec2(298,96));
