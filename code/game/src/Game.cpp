@@ -10,8 +10,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Assets.h"
-#include "entities/Enemy.h"
-#include "entities/Planet.h"
+// #include "entities/Enemy.h"
+// #include "entities/Planet.h"
 
 
 using namespace gl3;
@@ -141,27 +141,27 @@ void Game::run()
     std::uniform_real_distribution positionDist{-2.0f,2.0f};
     std::uniform_real_distribution scaleDist{0.05f,0.2f};
     std::uniform_real_distribution colorDist{0.0f,1.0f};
-    for(auto i = 0; i < 100; ++i) {
-        glm::vec3 randomPosition = {positionDist(randomNumberEngine) * 1.5f,
-                                    positionDist(randomNumberEngine) * 1.5f,
-                                    0.0f};
-        float randomScale = scaleDist(randomNumberEngine);
-        auto rgbValue = colorDist(randomNumberEngine);      //Used to guarantee, that all planets are a shade of grey.
-        glm::vec4 randomColor = {rgbValue,
-                                 rgbValue,
-                                 rgbValue,
-                                 1.0};
+    // for(auto i = 0; i < 100; ++i) {
+    //     glm::vec3 randomPosition = {positionDist(randomNumberEngine) * 1.5f,
+    //                                 positionDist(randomNumberEngine) * 1.5f,
+    //                                 0.0f};
+    //     float randomScale = scaleDist(randomNumberEngine);
+    //     auto rgbValue = colorDist(randomNumberEngine);      //Used to guarantee, that all planets are a shade of grey.
+    //     glm::vec4 randomColor = {rgbValue,
+    //                              rgbValue,
+    //                              rgbValue,
+    //                              1.0};
+    //
+    //     auto entity = std::make_unique<Planet>(randomPosition, randomScale, randomColor);
+    //     entities.push_back(std::move(entity));
+    // }
 
-        auto entity = std::make_unique<Planet>(randomPosition, randomScale, randomColor);
-        entities.push_back(std::move(entity));
-    }
-
-    auto spaceShip = std::make_unique<Ship>(glm::vec3(-2, 1, 0));
-    ship = spaceShip.get();
-    entities.push_back(std::move(spaceShip));
-
-    auto enemy = std::make_unique<Enemy>(glm::vec3(2, -1, 0), -90.0f, 0.25f);
-    entities.push_back(std::move(enemy));
+    // auto spaceShip = std::make_unique<Ship>(glm::vec3(-2, 1, 0));
+    // ship = spaceShip.get();
+    // entities.push_back(std::move(spaceShip));
+    //
+    // auto enemy = std::make_unique<Enemy>(glm::vec3(2, -1, 0), -90.0f, 0.25f);
+    // entities.push_back(std::move(enemy));
 
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());

@@ -4,20 +4,23 @@
 
 #include "Army.h"
 
+#include <random>
+
 using namespace gl3;
-Army::Army(int numInfantry, int numArcher, int numSiege)
+Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
+center(center)
 {
     createTroups(Unit::Type::Infantry, "gltf/planet.glb", numInfantry);
     createTroups(Unit::Type::Archer, "gltf/enemy.glb", numArcher);
     createTroups(Unit::Type::Siege, "gltf/spaceship.glb", numSiege);
-    armySize = maxArmySize;
+    this->armySize = maxArmySize;
 }
 /*The way this function is implemented will probably always remove units in a set order,
 depending on the order they were pushed back on creation*/
 
-int Army::takeDamage(int totalDamage)
+float Army::takeDamage(float totalDamage)
 {
-    for (auto it = units.begin(); it != units.end();)
+    for (auto it = this->units.begin(); it != this->units.end();)
     {
         if (!(*it)->isReady())
         {
@@ -26,27 +29,27 @@ int Army::takeDamage(int totalDamage)
         }
         if ((*it)->takeDamage(totalDamage) <= 0)
         {
-            armySize-= (*it)->getCommandPoints();
+            this->armySize-= (*it)->getCommandPoints();
             totalDamage -= (*it)->getCommandPoints();
-            it = units.erase(it);
+            it = this->units.erase(it);
         }
         else
         {
-            armySize-=(*it)->getLifePoints();
+            this->armySize-=(*it)->getLifePoints();
             ++it;
         }
     }
-    return armySize;
+    return this->armySize;
 }
 
-int Army::dealDamage() const
+float Army::dealDamage() const
 {
-    int totalDamage = 0;
-    for (auto& unit: units)
+    float totalDamage = 0;
+    for (auto& unit: this->units)
     {
         if (unit->isReady())
         {
-            totalDamage += unit->getCommandPoints();
+            totalDamage += 0.3f * unit->getCommandPoints();
         }
         else
         {
@@ -59,7 +62,7 @@ int Army::dealDamage() const
 void Army::setDefending(Unit::Type unitType, int num)
 {
     int count = 0;
-    for (auto& unit: units)
+    for (auto& unit: this->units)
     {
         if (num <= count){break;}
         if (unit->getType() == unitType && unit->isReady())
@@ -70,11 +73,11 @@ void Army::setDefending(Unit::Type unitType, int num)
     }
 }
 
-int Army::getCommandPoints(Unit::Type unitType, int num) const
+float Army::getCommandPoints(Unit::Type unitType, int num) const
 {
-    int totalCommandPoints = 0;
+    float totalCommandPoints = 0;
     int count = 0;
-    for (auto& unit: units)
+    for (auto& unit: this->units)
     {
         if (num <= count){break;}
         if (unit->getType() == unitType)
@@ -90,9 +93,16 @@ void Army::createTroups(Unit::Type type,
                         const std::filesystem::path &gltfAssetPath,
                         int amount)
 {
+    std::mt19937 randomNumberEngine{       //Mersenne Twister generates 32-bit unsigned integers
+        std::random_device{}()};       // Seed our Mersenne Twister using with a random number from the OS
+    std::uniform_real_distribution positionDist{-0.5f,0.5f};
     for (int i = 0; i < amount; i++)
     {
-        auto unit = std::make_unique<Unit>(type,gltfAssetPath);
+        glm::vec3 unitRandomPosition = glm::vec3(positionDist(randomNumberEngine),
+            positionDist(randomNumberEngine), 0) + center;
+        auto unit = std::make_unique<Unit>(type, gltfAssetPath, unitRandomPosition, 0.0f,
+            glm::vec3(0.01f, 0.01f, 0.0f),
+            glm::vec4(1.0f,0.0f,0.0f,1.0f));
         maxArmySize += unit->getCommandPoints();
         units.push_back(std::move(unit));
     }

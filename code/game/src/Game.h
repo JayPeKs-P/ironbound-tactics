@@ -4,7 +4,8 @@
 #pragma once
 #include <iostream>
 
-#include "../src/entities/Ship.h"
+//#include "../src/entities/Ship.h"
+#include "../src/entities/Entity.h"
 
 
 #include <soloud.h>
@@ -30,10 +31,10 @@ namespace gl3
         {
             return window;
         }
-        [[nodiscard]] Ship* getShip() const
-        {
-            return ship;
-        }
+        // [[nodiscard]] Ship* getShip() const
+        // {
+        //     return ship;
+        // }
 
     private:
         static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -44,7 +45,7 @@ namespace gl3
 
         std::vector<std::unique_ptr<Entity>> entities;
 
-        Ship* ship = nullptr;
+//        Ship* ship = nullptr;
         GLFWwindow* window = nullptr;
         glm::mat4 mvpMatrix{};
 

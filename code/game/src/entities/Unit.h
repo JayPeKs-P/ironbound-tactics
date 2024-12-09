@@ -10,15 +10,15 @@ namespace gl3 {
 class Unit: public Entity {
     public:
     enum class Type{Infantry, Archer, Siege};
-    Unit(Type type, const std::filesystem::path &gltfAssetPath);
-    int takeDamage(int damage);
+    Unit(Type type, const std::filesystem::path &gltfAssetPath, glm::vec3 position, float zRotation, glm::vec3 scale, glm::vec4 color);
+    float takeDamage(float damage);
 
     [[nodiscard]] Type getType() const
     {
         return type;
     }
 
-    [[nodiscard]] int getCommandPoints() const
+    [[nodiscard]] float getCommandPoints() const
     {
         return commandPoints;
     }
@@ -28,7 +28,7 @@ class Unit: public Entity {
         return ready;
     }
 
-    [[nodiscard]] int getLifePoints() const
+    [[nodiscard]] float getLifePoints() const
     {
         return lifePoints;
     }
@@ -40,8 +40,8 @@ class Unit: public Entity {
 
 private:
     Type type;
-    int commandPoints;
-    int lifePoints;
+    float commandPoints;
+    float lifePoints;
     bool canDefend = false;
     bool isSiege = false;
     bool ready = true;

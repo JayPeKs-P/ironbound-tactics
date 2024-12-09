@@ -12,8 +12,8 @@ using namespace gl3;
 BattleMenu::BattleMenu(const ImVec2& size):
 GuiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
 size(size),
-playerArmy(40, 11, 3),
-enemyArmy(36, 12, 4)
+playerArmy(40, 11, 3, glm::vec3(0.2f,0.2f,0.0f)),
+enemyArmy(36, 12, 4, glm::vec3(-0.2f, -0.2f, 0.0f))
 {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.3f, 0.3f, 1.0f));
@@ -66,9 +66,9 @@ void BattleMenu::renderBattleMenu()
         if (!playersTurn)
         {
             playerArmy.takeDamage(enemyArmy.dealDamage());
-            playerLifePoints = static_cast<float>(playerArmy.getArmySize()) / static_cast<float>(playerArmy.maxArmySize);
+            playerLifePoints = playerArmy.getArmySize() / playerArmy.maxArmySize;
             enemyArmy.takeDamage(playerArmy.dealDamage());
-            enemyLifePoints = static_cast<float>(enemyArmy.getArmySize()) / static_cast<float>(enemyArmy.maxArmySize);
+            enemyLifePoints = enemyArmy.getArmySize() / enemyArmy.maxArmySize;
         }
         playersTurn = !playersTurn;
     }

@@ -6,10 +6,14 @@
 
 using namespace gl3;
 
-Unit::Unit(Type type, const std::filesystem::path &gltfAssetPath):
+Unit::Unit(Type type, const std::filesystem::path &gltfAssetPath, glm::vec3 position, float zRotation, glm::vec3 scale, glm::vec4 color):
 Entity(Shader("shaders/shaded/vertexShader.vert",
     "shaders/shaded/fragmentShader.frag"),
-    Mesh(gltfAssetPath)
+    Mesh(gltfAssetPath),
+    position,
+    zRotation,
+    scale,
+    color
     ),
 type(type)
 {
@@ -35,8 +39,9 @@ type(type)
     }
 }
 
-int Unit::takeDamage(int damage)
+float Unit::takeDamage(float damage)
 {
     this->lifePoints -= damage;
     return this->lifePoints;
 }
+

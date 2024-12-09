@@ -12,24 +12,25 @@ namespace gl3 {
 
 class Army {
     public:
-    int maxArmySize = 0;
-    Army(int amountOfInfantry, int amountOfArcher, int amountOfSiege);
-    int takeDamage(int totalDamage);
-    int dealDamage() const;
+    float maxArmySize = 0;
+    Army(int amountOfInfantry, int amountOfArcher, int amountOfSiege, glm::vec3 center);
+    float takeDamage(float totalDamage);
+    float dealDamage() const;
     void setDefending(Unit::Type unitType, int num);
-    int getCommandPoints(Unit::Type unitType, int num) const;
+    float getCommandPoints(Unit::Type unitType, int num) const;
+    [[nodiscard]] float getArmySize() const
+    {
+        return armySize;
+    }
+
     private:
-    int armySize = 0;
+    float armySize = 0;
+    glm::vec3 center;
     std::vector<std::unique_ptr<Unit>>  units;
     void createTroups(Unit::Type type,
         const std::filesystem::path &gltfAssetPath,
         int amount);
 
-public:
-    [[nodiscard]] int getArmySize() const
-    {
-        return armySize;
-    }
 };
 
 } // gl3
