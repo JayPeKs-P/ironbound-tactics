@@ -2,12 +2,7 @@
 // Created by julia on 12/12/2024.
 //
 
-#pragma once
+#include "UnitSiege.h"
 
 namespace gl3 {
-
-class Unit {
-
-};
-
 } // gl3
