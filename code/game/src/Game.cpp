@@ -113,6 +113,7 @@ void Game::draw()
     {
         entity->draw(this);
     }
+    battleMenu->draw(this);
     battleMenu->renderBattleMenu();
     glfwSwapBuffers(window);
 }

@@ -7,14 +7,31 @@
 #include <random>
 
 using namespace gl3;
+
 Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
-center(center)
+    Entity(Shader("shaders/shaded/vertexShader.vert",
+                  "shaders/shaded/fragmentShader.frag"),
+           Mesh("gltf/planet.glb"),
+           center,
+           0.0f,
+           glm::vec3(1.0f, 1.0f, 0.0f),
+           glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)),
+    center(center)
 {
     createTroups(Unit::Type::Infantry, "gltf/planet.glb", numInfantry);
     createTroups(Unit::Type::Archer, "gltf/enemy.glb", numArcher);
     createTroups(Unit::Type::Siege, "gltf/spaceship.glb", numSiege);
     this->armySize = maxArmySize;
 }
+
+void Army::draw(Game* game)
+{
+    for (auto& unit : units)
+    {
+        unit->draw(game);
+    }
+}
+
 /*The way this function is implemented will probably always remove units in a set order,
 depending on the order they were pushed back on creation*/
 
@@ -52,7 +69,7 @@ float Army::takeDamage(float totalDamage)
 float Army::dealDamage() const
 {
     float totalDamage = 0;
-    for (auto& unit: this->units)
+    for (auto& unit : this->units)
     {
         if (unit->isReady())
         {
@@ -69,13 +86,13 @@ float Army::dealDamage() const
 void Army::setDefending(Unit::Type unitType, int num)
 {
     int count = 0;
-    for (auto& unit: this->units)
+    for (auto& unit : this->units)
     {
-        if (num <= count){break;}
+        if (num <= count) { break; }
         if (unit->getType() == unitType && unit->isReady())
         {
             unit->setReady(false);
-            count ++;
+            count++;
         }
     }
 }
@@ -84,9 +101,9 @@ float Army::getCommandPoints(Unit::Type unitType, int num) const
 {
     float totalCommandPoints = 0;
     int count = 0;
-    for (auto& unit: this->units)
+    for (auto& unit : this->units)
     {
-        if (num <= count){break;}
+        if (num <= count) { break; }
         if (unit->getType() == unitType)
         {
             totalCommandPoints += unit->getCommandPoints();
@@ -97,19 +114,24 @@ float Army::getCommandPoints(Unit::Type unitType, int num) const
 }
 
 void Army::createTroups(Unit::Type type,
-                        const std::filesystem::path &gltfAssetPath,
+                        const std::filesystem::path& gltfAssetPath,
                         int amount)
 {
-    std::mt19937 randomNumberEngine{       //Mersenne Twister generates 32-bit unsigned integers
-        std::random_device{}()};       // Seed our Mersenne Twister using with a random number from the OS
-    std::uniform_real_distribution positionDist{-0.5f,0.5f};
+    std::mt19937 randomNumberEngine{
+        //Mersenne Twister generates 32-bit unsigned integers
+        std::random_device{}()
+    }; // Seed our Mersenne Twister using with a random number from the OS
+    std::uniform_real_distribution positionDist{-0.5f, 0.5f};
     for (int i = 0; i < amount; i++)
     {
         glm::vec3 unitRandomPosition = glm::vec3(positionDist(randomNumberEngine),
-            positionDist(randomNumberEngine), 0) + center;
-        auto unit = std::make_unique<Unit>(type, gltfAssetPath, unitRandomPosition, 0.0f,
-            glm::vec3(0.01f, 0.01f, 0.0f),
-            glm::vec4(1.0f,0.0f,0.0f,1.0f));
+                                                 positionDist(randomNumberEngine), 0) + center;
+        auto unit = std::make_unique<Unit>(type,
+                                           gltfAssetPath,
+                                           unitRandomPosition,
+                                           0.0f,
+                                           glm::vec3(0.05f, 0.05f, 0.0f),
+                                           glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
         maxArmySize += unit->getCommandPoints();
         units.push_back(std::move(unit));
     }

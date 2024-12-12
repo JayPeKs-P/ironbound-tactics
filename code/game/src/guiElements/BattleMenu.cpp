@@ -10,10 +10,10 @@
 using namespace gl3;
 
 BattleMenu::BattleMenu(const ImVec2& size):
-GuiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
-size(size),
-playerArmy(40, 11, 3, glm::vec3(0.2f,0.2f,0.0f)),
-enemyArmy(36, 12, 4, glm::vec3(-0.2f, -0.2f, 0.0f))
+    GuiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
+    size(size),
+    playerArmy(40, 11, 3, glm::vec3(2.0f, 0.0f, 0.0f)),
+    enemyArmy(36, 12, 4, glm::vec3(-2.0f, 0.0f, 0.0f))
 {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.3f, 0.3f, 1.0f));
@@ -36,7 +36,7 @@ void BattleMenu::renderBattleMenu()
         ImGuiWindowFlags_NoBringToFrontOnFocus |
         ImGuiWindowFlags_NoInputs |
         ImGuiWindowFlags_NoCollapse |
-         ImGuiWindowFlags_NoResize;
+        ImGuiWindowFlags_NoResize;
     // // Begin ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -45,7 +45,7 @@ void BattleMenu::renderBattleMenu()
     // Create a simple window
     ImGui::SetNextWindowPos(ImVec2(0, size.y - size.y / 3));
     ImGui::SetNextWindowSize(size);
-    ImGui::Begin("Background",nullptr, MAIN_WINDOW);
+    ImGui::Begin("Background", nullptr, MAIN_WINDOW);
     drawBackground(tilesToRender, size.x, size.y / 3);
     ImGui::End();
     auto BATTLE_MENU = ImGuiWindowFlags_NoMove |
@@ -53,7 +53,7 @@ void BattleMenu::renderBattleMenu()
         ImGuiWindowFlags_NoBackground |
         ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoCollapse |
-            ImGuiWindowFlags_NoResize;
+        ImGuiWindowFlags_NoResize;
     //size.x -= size.x / 2;
     ImGui::SetNextWindowPos(ImVec2(48, size.y - 192));
     ImGui::SetNextWindowSize(ImVec2(160, 192));
@@ -62,10 +62,12 @@ void BattleMenu::renderBattleMenu()
 
     // Battle menu options
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 16.0f));
-    if (ImGui::Button("Ready", ImVec2(144,48))) {
+    if (ImGui::Button("Ready", ImVec2(144, 48)))
+    {
         if (!playersTurn)
         {
             playerArmy.takeDamage(enemyArmy.dealDamage());
+            // <- dealDamage() resets all units to ready -> when put in one scope reset to early
             playerLifePoints = playerArmy.getArmySize() / playerArmy.maxArmySize;
         }
         else
@@ -81,13 +83,15 @@ void BattleMenu::renderBattleMenu()
         ImGui::Text("\tPlayers Turn");
         ImGui::PopStyleColor();
     }
-    else {
+    else
+    {
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.40f, 0.00f, 0.00f, 1.00f));
         ImGui::Text("\tEnemies Turn");
         ImGui::PopStyleColor();
     }
 
-    if (ImGui::Button("Defend", ImVec2(144,48))) {
+    if (ImGui::Button("Defend", ImVec2(144, 48)))
+    {
         if (playersTurn)
         {
             playerArmy.setDefending(Unit::Type::Infantry, infantrySelected);
@@ -111,18 +115,18 @@ void BattleMenu::renderBattleMenu()
 
     ImGui::End();
 
-    ImGui::SetNextWindowPos(ImVec2(size.x /6, size.y - 192));
+    ImGui::SetNextWindowPos(ImVec2(size.x / 6, size.y - 192));
     ImGui::SetNextWindowSize(ImVec2(336, 192));
     ImGui::Begin("UnitButtons", nullptr, BATTLE_MENU);
 
     ImGui::Text("Infantry \nfor defense");
     ImGui::SameLine();
-    if (ImGui::Button("+##infantry", ImVec2(48,48)))
+    if (ImGui::Button("+##infantry", ImVec2(48, 48)))
     {
         infantrySelected++;
     }
     ImGui::SameLine();
-    if (ImGui::Button("-##infantry", ImVec2(48,48)) && infantrySelected > 0)
+    if (ImGui::Button("-##infantry", ImVec2(48, 48)) && infantrySelected > 0)
     {
         infantrySelected--;
     }
@@ -130,33 +134,33 @@ void BattleMenu::renderBattleMenu()
     ImGui::Text("Amount: \n%d", infantrySelected);
     ImGui::Text("Archers \nfor defense");
     ImGui::SameLine();
-    if (ImGui::Button("+##archer", ImVec2(48,48)))
+    if (ImGui::Button("+##archer", ImVec2(48, 48)))
     {
         archersSelected++;
     }
     ImGui::SameLine();
-    if (ImGui::Button("-##archer", ImVec2(48,48)) && archersSelected > 0)
+    if (ImGui::Button("-##archer", ImVec2(48, 48)) && archersSelected > 0)
     {
         archersSelected--;
     }
     ImGui::SameLine();
-    ImGui::Text("Amount: \n%d",archersSelected);
+    ImGui::Text("Amount: \n%d", archersSelected);
     ImGui::Text("Siege\nfor defense");
     ImGui::SameLine();
-    if (ImGui::Button("+##siege", ImVec2(48,48)))
+    if (ImGui::Button("+##siege", ImVec2(48, 48)))
     {
         siegeSelected++;
     }
     ImGui::SameLine();
-    if (ImGui::Button("-##siege", ImVec2(48,48)) && siegeSelected > 0)
+    if (ImGui::Button("-##siege", ImVec2(48, 48)) && siegeSelected > 0)
     {
         siegeSelected--;
     }
     ImGui::SameLine();
-    ImGui::Text("Amount: \n%d",siegeSelected);
+    ImGui::Text("Amount: \n%d", siegeSelected);
     ImGui::End();
 
-    ImGui::SetNextWindowPos(ImVec2(size.x /2, size.y - 192));
+    ImGui::SetNextWindowPos(ImVec2(size.x / 2, size.y - 192));
     ImGui::SetNextWindowSize(size);
     ImGui::Begin("Life Bars", nullptr, BATTLE_MENU);
     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.40f, 0.00f, 0.00f, 1.00f));
@@ -173,23 +177,28 @@ void BattleMenu::renderBattleMenu()
 
     if (playerLifePoints <= 0)
     {
-        ImGui::SetNextWindowPos(ImVec2(size.x /2 - 48, size.y /2 - 8));
-        ImGui::SetNextWindowSize(ImVec2(298,96));
+        ImGui::SetNextWindowPos(ImVec2(size.x / 2 - 48, size.y / 2 - 8));
+        ImGui::SetNextWindowSize(ImVec2(298, 96));
         ImGui::Begin("End Screen", nullptr, MAIN_WINDOW);
         ImGui::Text("You Died");
         ImGui::End();
     }
     if (enemyLifePoints <= 0 && !(playerLifePoints <= 0))
     {
-        ImGui::SetNextWindowPos(ImVec2(size.x /2, size.y /2));
-        ImGui::SetNextWindowSize(ImVec2(298,96));
+        ImGui::SetNextWindowPos(ImVec2(size.x / 2, size.y / 2));
+        ImGui::SetNextWindowSize(ImVec2(298, 96));
         ImGui::Begin("End Screen", nullptr, MAIN_WINDOW);
         ImGui::Text("Victory");
         ImGui::End();
     }
+
     // Render ImGui frame
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
 
-
+void BattleMenu::draw(Game* game)
+{
+    playerArmy.draw(game);
+    enemyArmy.draw(game);
 }
