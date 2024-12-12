@@ -29,10 +29,10 @@ set(SOURCE_FILES src/main.cpp
         src/entities/unitTypes/UnitHumanoid.h
         src/combatLogic/Army.cpp
         src/combatLogic/Army.h
-        src/entities/UnitSiege.cpp
-        src/entities/UnitSiege.h
         src/entities/Unit.cpp
         src/entities/Unit.h
+        src/entities/unitTypes/UnitSiege.cpp
+        src/entities/unitTypes/UnitSiege.h
 )
 
 # set executable name

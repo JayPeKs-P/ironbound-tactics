@@ -3,42 +3,23 @@
 //
 
 #pragma once
-#include "../Entity.h"
+#include "../Unit.h"
 
 namespace gl3 {
 
-class UnitHumanoid: public Entity {
+class UnitHumanoid: public Unit {
     public:
     enum class Type{Infantry,
         Archer,
         Siege
     };
-    UnitHumanoid(Type type, const std::filesystem::path &gltfAssetPath, glm::vec3 position, float zRotation, glm::vec3 scale, glm::vec4 color);
-    float takeDamage(float damage);
+    UnitHumanoid(Type type, const std::filesystem::path &gltfAssetPath,
+        glm::vec3 position, float zRotation,
+        glm::vec3 scale, glm::vec4 color);
 
     [[nodiscard]] Type getType() const
     {
         return type;
-    }
-
-    [[nodiscard]] float getCommandPoints() const
-    {
-        return commandPoints;
-    }
-
-    [[nodiscard]] bool isReady() const
-    {
-        return ready;
-    }
-
-    [[nodiscard]] float getLifePoints() const
-    {
-        return lifePoints;
-    }
-
-    void setReady(bool state)
-    {
-        ready = state;
     }
 
 private:

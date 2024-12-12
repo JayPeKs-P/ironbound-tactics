@@ -41,11 +41,3 @@ type(type)
     }
 }
 
-float UnitHumanoid::takeDamage(float damage)
-{
-    float actualDamage = std::max(0.0f, std::min(damage, this->lifePoints));
-    this->lifePoints -= actualDamage;
-    return this->lifePoints;
-
-}
-
