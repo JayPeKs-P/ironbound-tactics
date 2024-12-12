@@ -25,10 +25,14 @@ set(SOURCE_FILES src/main.cpp
         src/guiElements/battleMenu.h
         src/rendering/pngTexture.cpp
         src/rendering/pngTexture.h
-        src/entities/Unit.cpp
-        src/entities/Unit.h
+        src/entities/unitTypes/UnitHumanoid.cpp
+        src/entities/unitTypes/UnitHumanoid.h
         src/combatLogic/Army.cpp
         src/combatLogic/Army.h
+        src/entities/UnitSiege.cpp
+        src/entities/UnitSiege.h
+        src/entities/Unit.cpp
+        src/entities/Unit.h
 )
 
 # set executable name

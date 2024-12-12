@@ -94,20 +94,20 @@ void BattleMenu::renderBattleMenu()
     {
         if (playersTurn)
         {
-            playerArmy.setDefending(Unit::Type::Infantry, infantrySelected);
+            playerArmy.setDefending(UnitHumanoid::Type::Infantry, infantrySelected);
             infantrySelected = 0;
-            playerArmy.setDefending(Unit::Type::Archer, archersSelected);
+            playerArmy.setDefending(UnitHumanoid::Type::Archer, archersSelected);
             archersSelected = 0;
-            playerArmy.setDefending(Unit::Type::Siege, siegeSelected);
+            playerArmy.setDefending(UnitHumanoid::Type::Siege, siegeSelected);
             siegeSelected = 0;
         }
         else
         {
-            enemyArmy.setDefending(Unit::Type::Infantry, infantrySelected);
+            enemyArmy.setDefending(UnitHumanoid::Type::Infantry, infantrySelected);
             infantrySelected = 0;
-            enemyArmy.setDefending(Unit::Type::Archer, archersSelected);
+            enemyArmy.setDefending(UnitHumanoid::Type::Archer, archersSelected);
             archersSelected = 0;
-            enemyArmy.setDefending(Unit::Type::Siege, siegeSelected);
+            enemyArmy.setDefending(UnitHumanoid::Type::Siege, siegeSelected);
             siegeSelected = 0;
         }
     }

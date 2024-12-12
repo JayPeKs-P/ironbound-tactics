@@ -4,5 +4,4 @@
 
 #include "UnitSiege.h"
 
-namespace gl3 {
-} // gl3
+using namespace gl3;

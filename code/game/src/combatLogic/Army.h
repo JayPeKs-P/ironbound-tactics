@@ -7,7 +7,7 @@
 #include <vector>
 #include "../entities/Entity.h"
 
-#include "../entities/Unit.h"
+#include "../entities/unitTypes//UnitHumanoid.h"
 
 namespace gl3
 {
@@ -19,8 +19,8 @@ namespace gl3
         void draw(Game* game) override;
         float takeDamage(float totalDamage);
         float dealDamage() const;
-        void setDefending(Unit::Type unitType, int num);
-        float getCommandPoints(Unit::Type unitType, int num) const;
+        void setDefending(UnitHumanoid::Type unitType, int num);
+        float getCommandPoints(UnitHumanoid::Type unitType, int num) const;
 
         [[nodiscard]] float getArmySize() const
         {
@@ -30,8 +30,8 @@ namespace gl3
     private:
         float armySize = 0;
         glm::vec3 center;
-        std::vector<std::unique_ptr<Unit>> units;
-        void createTroups(Unit::Type type,
+        std::vector<std::unique_ptr<UnitHumanoid>> units;
+        void createTroups(UnitHumanoid::Type type,
                           const std::filesystem::path& gltfAssetPath,
                           int amount);
     };

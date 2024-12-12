@@ -25,7 +25,6 @@ type(type)
     {
         this->commandPoints = 5;
         this->lifePoints = this->commandPoints;
-        this->isSiege = false;
         this->canDefend = true;
     }
     else if (type == Type::Archer)
@@ -38,7 +37,6 @@ type(type)
     {
         this->commandPoints = 45;
         this->lifePoints = this->commandPoints;
-        this->isSiege = true;
         this->canDefend = true;
     }
 }

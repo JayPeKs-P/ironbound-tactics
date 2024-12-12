@@ -18,9 +18,9 @@ Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
            glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)),
     center(center)
 {
-    createTroups(Unit::Type::Infantry, "gltf/planet.glb", numInfantry);
-    createTroups(Unit::Type::Archer, "gltf/enemy.glb", numArcher);
-    createTroups(Unit::Type::Siege, "gltf/spaceship.glb", numSiege);
+    createTroups(UnitHumanoid::Type::Infantry, "gltf/planet.glb", numInfantry);
+    createTroups(UnitHumanoid::Type::Archer, "gltf/enemy.glb", numArcher);
+    createTroups(UnitHumanoid::Type::Siege, "gltf/spaceship.glb", numSiege);
     this->armySize = maxArmySize;
 }
 
@@ -83,7 +83,7 @@ float Army::dealDamage() const
     return totalDamage;
 }
 
-void Army::setDefending(Unit::Type unitType, int num)
+void Army::setDefending(UnitHumanoid::Type unitType, int num)
 {
     int count = 0;
     for (auto& unit : this->units)
@@ -97,7 +97,7 @@ void Army::setDefending(Unit::Type unitType, int num)
     }
 }
 
-float Army::getCommandPoints(Unit::Type unitType, int num) const
+float Army::getCommandPoints(UnitHumanoid::Type unitType, int num) const
 {
     float totalCommandPoints = 0;
     int count = 0;
@@ -113,7 +113,7 @@ float Army::getCommandPoints(Unit::Type unitType, int num) const
     return totalCommandPoints;
 }
 
-void Army::createTroups(Unit::Type type,
+void Army::createTroups(UnitHumanoid::Type type,
                         const std::filesystem::path& gltfAssetPath,
                         int amount)
 {
@@ -126,7 +126,7 @@ void Army::createTroups(Unit::Type type,
     {
         glm::vec3 unitRandomPosition = glm::vec3(positionDist(randomNumberEngine),
                                                  positionDist(randomNumberEngine), 0) + center;
-        auto unit = std::make_unique<Unit>(type,
+        auto unit = std::make_unique<UnitHumanoid>(type,
                                            gltfAssetPath,
                                            unitRandomPosition,
                                            0.0f,
