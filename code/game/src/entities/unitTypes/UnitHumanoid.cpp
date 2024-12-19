@@ -12,13 +12,7 @@ UnitHumanoid::UnitHumanoid(Type type,
     float zRotation,
     glm::vec3 scale,
     glm::vec4 color):
-Entity(Shader("shaders/shaded/vertexShader.vert",
-    "shaders/shaded/fragmentShader.frag"),
-    Mesh(gltfAssetPath),
-    position,
-    zRotation,
-    scale,
-    color),
+Unit(gltfAssetPath, position, zRotation, scale, color),
 type(type)
 {
     if (type == Type::Infantry)
@@ -26,18 +20,14 @@ type(type)
         this->commandPoints = 5;
         this->lifePoints = this->commandPoints;
         this->canDefend = true;
+        this->place = Fourth;
     }
     else if (type == Type::Archer)
     {
         this->commandPoints = 10;
         this->lifePoints = this->commandPoints;
         this->canDefend = true;
-    }
-    else
-    {
-        this->commandPoints = 45;
-        this->lifePoints = this->commandPoints;
-        this->canDefend = true;
+        this->place = Second;
     }
 }
 

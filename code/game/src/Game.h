@@ -49,7 +49,7 @@ namespace gl3
         GLFWwindow* window = nullptr;
         glm::mat4 mvpMatrix{};
 
-        BattleMenu* battleMenu = nullptr;
+        // BattleMenu* battleMenu = nullptr;
 
         SoLoud::Soloud audio;
         std::unique_ptr<SoLoud::Wav>(backgroundMusic);

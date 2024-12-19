@@ -10,8 +10,7 @@ namespace gl3 {
 class UnitHumanoid: public Unit {
     public:
     enum class Type{Infantry,
-        Archer,
-        Siege
+        Archer
     };
     UnitHumanoid(Type type, const std::filesystem::path &gltfAssetPath,
         glm::vec3 position, float zRotation,
@@ -24,10 +23,8 @@ class UnitHumanoid: public Unit {
 
 private:
     Type type;
-    float commandPoints;
-    float lifePoints;
-    bool canDefend = false;
-    bool ready = true;
+    PlaceInOrder place;
+
 
 };
 

@@ -98,7 +98,7 @@ void BattleMenu::renderBattleMenu()
             infantrySelected = 0;
             playerArmy.setDefending(UnitHumanoid::Type::Archer, archersSelected);
             archersSelected = 0;
-            playerArmy.setDefending(UnitHumanoid::Type::Siege, siegeSelected);
+            //playerArmy.setDefending(UnitHumanoid::Type::Siege, siegeSelected);
             siegeSelected = 0;
         }
         else
@@ -107,7 +107,7 @@ void BattleMenu::renderBattleMenu()
             infantrySelected = 0;
             enemyArmy.setDefending(UnitHumanoid::Type::Archer, archersSelected);
             archersSelected = 0;
-            enemyArmy.setDefending(UnitHumanoid::Type::Siege, siegeSelected);
+            //enemyArmy.setDefending(UnitHumanoid::Type::Siege, siegeSelected);
             siegeSelected = 0;
         }
     }
@@ -195,6 +195,7 @@ void BattleMenu::renderBattleMenu()
     // Render ImGui frame
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 }
 
 void BattleMenu::draw(Game* game)

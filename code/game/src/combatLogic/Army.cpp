@@ -20,7 +20,7 @@ Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
 {
     createTroups(UnitHumanoid::Type::Infantry, "gltf/planet.glb", numInfantry);
     createTroups(UnitHumanoid::Type::Archer, "gltf/enemy.glb", numArcher);
-    createTroups(UnitHumanoid::Type::Siege, "gltf/spaceship.glb", numSiege);
+    //createTroups(UnitHumanoid::Type::Siege, "gltf/spaceship.glb", numSiege);
     this->armySize = maxArmySize;
 }
 

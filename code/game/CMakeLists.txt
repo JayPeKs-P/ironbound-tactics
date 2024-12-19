@@ -53,6 +53,7 @@ target_link_libraries(${EXE_FILE} PRIVATE glad
         glm
         soloud
         tinygltf
+        nuklear_impl
         imgui::imgui
         PNG::PNG)
 

@@ -34,9 +34,18 @@ class Unit: public Entity {
         ready = state;
     }
 
-private:
-    float commandPoints;
-    float lifePoints;
+protected:
+    enum PlaceInOrder
+    {
+        First,
+        Second,
+        Third,
+        Fourth,
+        LastThisTurn,
+        NextTurn
+    };
+    float commandPoints = 0.0f;
+    float lifePoints = 0.0f;
     bool canDefend = false;
     bool ready = true;
 

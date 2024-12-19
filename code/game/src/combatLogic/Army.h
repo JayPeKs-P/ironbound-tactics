@@ -27,6 +27,7 @@ namespace gl3
             return armySize;
         }
 
+
     private:
         float armySize = 0;
         glm::vec3 center;

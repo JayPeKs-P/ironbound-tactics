@@ -113,8 +113,8 @@ void Game::draw()
     {
         entity->draw(this);
     }
-    battleMenu->draw(this);
-    battleMenu->renderBattleMenu();
+    // battleMenu->draw(this);
+    // battleMenu->renderBattleMenu();
     glfwSwapBuffers(window);
 }
 
@@ -172,8 +172,8 @@ void Game::run()
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     ImVec2 windowSize(width, height);
-    auto menu = std::make_unique<BattleMenu>(windowSize);
-    battleMenu = menu.get();
+    // auto menu = std::make_unique<BattleMenu>(windowSize);
+    // battleMenu = menu.get();
 
     glfwSetTime(1.0/60);
     while (!glfwWindowShouldClose(window))
@@ -182,6 +182,8 @@ void Game::run()
         draw();
         updateDeltaTime();
         glfwPollEvents();
+
+
     }
 
     glDeleteVertexArrays(1, &VAO);
