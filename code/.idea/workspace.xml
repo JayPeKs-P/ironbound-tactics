@@ -29,7 +29,6 @@
       <config projectName="code" targetName="glad" />
       <config projectName="code" targetName="Game" />
       <config projectName="code" targetName="glfw" />
-      <config projectName="code" targetName="nuklear_impl" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -38,25 +37,19 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/extern/custom_implementation/nuklear/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_impl.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
+    <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file&#10;Merge pull request #749 from beatwise/xcbwin-title&#10;&#10;sets xcb window's title, fixes #738">
+      <change afterPath="$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_glfw_gl3.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/Nuklear" beforeDir="false" afterPath="$PROJECT_DIR$/extern/Nuklear" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/Nuklear/nuklear.h" beforeDir="false" afterPath="$PROJECT_DIR$/extern/Nuklear/nuklear.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/custom_implementation/nuklear/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/extern/custom_implementation/nuklear/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_impl.c" beforeDir="false" afterPath="$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_impl.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/game/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/Game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/Game.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/combatLogic/Army.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/combatLogic/Army.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/combatLogic/Army.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/combatLogic/Army.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/Unit.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/Unit.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/Unit.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/Unit.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitHumanoid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitHumanoid.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitHumanoid.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitHumanoid.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitSiege.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitSiege.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitSiege.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/entities/unitTypes/UnitSiege.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +81,11 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extern/Nuklear/demo/glfw_opengl3/main.c" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extern/Nuklear/demo/glfw_opengl3/nuklear_glfw_gl3.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_impl.c" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/Assets.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/Game.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/Game.h" root0="FORCE_HIGHLIGHTING" />
@@ -98,12 +96,15 @@
     <setting file="file://$PROJECT_DIR$/game/src/entities/unitTypes/UnitHumanoid.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/game/src/guiElements/GuiElement.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/game/src/guiElements/GuiElement.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/guiElements/GuiElement.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/game/src/guiElements/GuiElement.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/rendering/Mesh.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/rendering/Mesh.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/rendering/PngTexture.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/game/src/rendering/PngTexture.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -133,7 +134,7 @@
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "createSiegeUnit",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/NuklearHeader",
+    "last_opened_file_path": "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/custom_implementation/nuklear",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -145,6 +146,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\custom_implementation\nuklear" />
       <recent name="C:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\NuklearHeader" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -153,12 +155,12 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.Game">
-    <configuration name="Game" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="Game" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="code" RUN_TARGET_NAME="Game">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="Game" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="Game" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="code" RUN_TARGET_NAME="Game">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -174,11 +176,6 @@
       </method>
     </configuration>
     <configuration name="glm" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="glm" CONFIG_NAME="Debug">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="nuklear_impl" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="nuklear_impl" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -208,7 +205,6 @@
       <item itemvalue="CMake Application.glad" />
       <item itemvalue="CMake Application.glfw" />
       <item itemvalue="CMake Application.glm" />
-      <item itemvalue="CMake Application.nuklear_impl" />
       <item itemvalue="CMake Application.soloud" />
       <item itemvalue="CMake Application.tinygltf" />
       <item itemvalue="CMake Application.uninstall" />
@@ -265,8 +261,19 @@
       <workItem from="1734014122206" duration="1624000" />
       <workItem from="1734016085162" duration="2361000" />
       <workItem from="1734426188439" duration="9983000" />
-      <workItem from="1734604987821" duration="5016000" />
+      <workItem from="1734604987821" duration="6029000" />
+      <workItem from="1734952071853" duration="2404000" />
+      <workItem from="1734954978720" duration="14227000" />
     </task>
+    <task id="LOCAL-00001" summary="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file">
+      <option name="closed" value="true" />
+      <created>1734611747628</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1734611747628</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,6 +283,22 @@
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
     <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file" />
+    <MESSAGE value="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file&#10;Merge pull request #749 from beatwise/xcbwin-title&#10;&#10;sets xcb window's title, fixes #738 " />
+    <option name="LAST_COMMIT_MESSAGE" value="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file&#10;Merge pull request #749 from beatwise/xcbwin-title&#10;&#10;sets xcb window's title, fixes #738 " />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

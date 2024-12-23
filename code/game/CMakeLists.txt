@@ -19,10 +19,10 @@ set(SOURCE_FILES src/main.cpp
         src/entities/Enemy.h
         src/entities/Missile.cpp
         src/entities/Missile.h
-        src/guiElements/guiElement.cpp
-        src/guiElements/guiElement.h
-        src/guiElements/battleMenu.cpp
-        src/guiElements/battleMenu.h
+#        src/guiElements/guiElement.cpp
+#        src/guiElements/guiElement.h
+#        src/guiElements/battleMenu.cpp
+#        src/guiElements/battleMenu.h
         src/rendering/pngTexture.cpp
         src/rendering/pngTexture.h
         src/entities/unitTypes/UnitHumanoid.cpp

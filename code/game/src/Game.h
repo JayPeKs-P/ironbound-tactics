@@ -13,8 +13,50 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
+//
+// #include "guiElements/BattleMenu.h"
 
-#include "guiElements/BattleMenu.h"
+#include <GLFW/glfw3.h>
+
+// #define NK_INCLUDE_FIXED_TYPES
+// #define NK_INCLUDE_STANDARD_IO
+// #define NK_INCLUDE_STANDARD_VARARGS
+// #define NK_INCLUDE_DEFAULT_ALLOCATOR
+// #define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+// #define NK_INCLUDE_FONT_BAKING
+// #define NK_INCLUDE_DEFAULT_FONT
+//  #define NK_IMPLEMENTATION
+// #define NK_GLFW_GL3_IMPLEMENTATION
+// #define NK_KEYSTATE_BASED_INPUT
+// #include <nuklear.h>
+#include <nuklear_glfw_gl3.h>
+
+#define MAX_VERTEX_BUFFER 512 * 1024
+#define MAX_ELEMENT_BUFFER 128 * 1024
+
+/*#define INCLUDE_ALL */
+/*#define INCLUDE_STYLE */
+/*#define INCLUDE_CALCULATOR */
+// /*#define INCLUDE_CANVAS */
+// #define INCLUDE_OVERVIEW
+/*#define INCLUDE_NODE_EDITOR */
+
+#ifdef INCLUDE_STYLE
+  #include "../Nuklear/demo/common/style.c"
+#endif
+#ifdef INCLUDE_CALCULATOR
+  #include "../Nuklear/demo/common/calculator.c"
+#endif
+#ifdef INCLUDE_CANVAS
+  #include "../Nuklear/demo/common/canvas.c"
+#endif
+#ifdef INCLUDE_OVERVIEW
+  #include "../Nuklear/demo/common/overview.c"
+#endif
+#ifdef INCLUDE_NODE_EDITOR
+  #include "../Nuklear/demo/common/node_editor.c"
+#endif
+
 
 
 namespace gl3
@@ -37,6 +79,10 @@ namespace gl3
         // }
 
     private:
+        struct nk_glfw glfw = {nullptr};
+        struct nk_context *ctx;
+        struct nk_colorf bg;
+
         static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
         void update();
