@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-
+#include <nuklear_glfw_gl3.h>
 #include "battleMenu.h"
 
 
@@ -29,25 +29,18 @@ BattleMenu::BattleMenu(const ImVec2& size):
 
 void BattleMenu::renderBattleMenu()
 {
-    auto MAIN_WINDOW = ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoScrollbar |
-        ImGuiWindowFlags_NoBackground |
-        ImGuiWindowFlags_NoTitleBar |
-        ImGuiWindowFlags_NoBringToFrontOnFocus |
-        ImGuiWindowFlags_NoInputs |
-        ImGuiWindowFlags_NoCollapse |
-        ImGuiWindowFlags_NoResize;
-    // // Begin ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    auto MAIN_WINDOW = NK_WINDOW_NO_INPUT;
+
+    // // Begin Nuklear frame
+    nk_glfw3_new_frame(&glfw);
 
     // Create a simple window
-    ImGui::SetNextWindowPos(ImVec2(0, size.y - size.y / 3));
-    ImGui::SetNextWindowSize(size);
-    ImGui::Begin("Background", nullptr, MAIN_WINDOW);
-    drawBackground(tilesToRender, size.x, size.y / 3);
-    ImGui::End();
+    if (nk_begin(ctx, "Combat Menu", nk_rect(0, size.y - size.y / 3, size.x, size.y / 3),
+                MAIN_WINDOW)
+    {
+        nk_layout_row_static(ctx, 48, 144, 3);
+        nk_label(ctx
+
     auto BATTLE_MENU = ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoScrollbar |
         ImGuiWindowFlags_NoBackground |

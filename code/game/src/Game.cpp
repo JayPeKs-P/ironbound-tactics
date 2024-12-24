@@ -200,15 +200,14 @@ void Game::run()
     while (!glfwWindowShouldClose(window))
     {
         update();
-        draw();
+        // draw();
         updateDeltaTime();
         glfwPollEvents();
         nk_glfw3_new_frame(&glfw);
 
         /* GUI */
         if (nk_begin(ctx, "Demo", nk_rect(50, 50, 230, 250),
-            NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
-            NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
+            NK_WINDOW_NO_INPUT|NK_WINDOW_TITLE))
         {
             enum {EASY, HARD};
             static int op = EASY;

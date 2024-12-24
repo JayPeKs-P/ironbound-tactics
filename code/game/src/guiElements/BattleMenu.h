@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 #include "GuiElement.h"
 #include "../combatLogic/Army.h"
 
