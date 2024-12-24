@@ -6,19 +6,18 @@
 
 |  General Info  | |
 | ---|---|
-| Working Title | `Edit me!` |
+| Working Title | `War with me` |
 | Final Title | `Edit me!` |
-| Student | `Name`, `edit-me`@stud-mail.uni-wuerzburg.de, `s######` |
+| Student | `Julian Kalb`, julian.kalb@stud-mail.uni-wuerzburg.de, `s402363` |
 | Target Platform(s) | `Edit me!` |
-| Start Date | 21.10.2019 |
+| Start Date | 29.10.2024 |
 | Study Program | Games Engineering B.Sc.|
-| Engine Version | Unity 2021.3.11f1 or Unreal 5.0.3 |
+| Language | C++ |
 
 ### Abstract
 
-`Insert your project description here, and keep it up-to-date.`
-
-`--- 8< --- READ, THEN REPLACE WITH CUSTOM CONTENT BELOW HERE --- 8< ---`
+This project was started for the GameLab 3 module. The game is a turn based endless battler with a JRPG fighting system.
+tbc
 
 ## Repository Usage Guides
 
