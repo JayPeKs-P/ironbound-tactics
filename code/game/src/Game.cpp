@@ -239,21 +239,6 @@ void Game::run()
         }
         nk_end(ctx);
 
-        /* -------------- EXAMPLES ---------------- */
-        #ifdef INCLUDE_CALCULATOR
-          calculator(ctx);
-        #endif
-        #ifdef INCLUDE_CANVAS
-          canvas(ctx);
-        #endif
-        #ifdef INCLUDE_OVERVIEW
-          overview(ctx);
-        #endif
-        #ifdef INCLUDE_NODE_EDITOR
-          node_editor(ctx);
-        #endif
-        /* ----------------------------------------- */
-
         /* Draw */
         glfwGetWindowSize(window, &width, &height);
         glViewport(0, 0, width, height);
@@ -264,7 +249,9 @@ void Game::run()
          * defaults everything back into a default state.
          * Make sure to either a.) save and restore or b.) reset your own state after
          * rendering the UI. */
-        nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+        nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
+            MAX_VERTEX_BUFFER,
+            MAX_ELEMENT_BUFFER);
         glfwSwapBuffers(window);
 
     }

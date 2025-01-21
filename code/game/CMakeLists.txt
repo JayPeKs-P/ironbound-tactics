@@ -33,6 +33,8 @@ set(SOURCE_FILES src/main.cpp
         src/entities/Unit.h
         src/entities/unitTypes/UnitSiege.cpp
         src/entities/unitTypes/UnitSiege.h
+        src/rendering/GUI.cpp
+        src/rendering/GUI.h
 )
 
 # set executable name

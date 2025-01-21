@@ -38,10 +38,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file&#10;Merge pull request #749 from beatwise/xcbwin-title&#10;&#10;sets xcb window's title, fixes #738">
+      <change afterPath="$PROJECT_DIR$/game/src/rendering/GUI.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/rendering/GUI.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extern/Nuklear" beforeDir="false" afterPath="$PROJECT_DIR$/extern/Nuklear" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extern/Nuklear/nuklear.h" beforeDir="false" afterPath="$PROJECT_DIR$/extern/Nuklear/nuklear.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_glfw_gl3.h" beforeDir="false" afterPath="$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_glfw_gl3.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/game/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/Game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/Game.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/BattleMenu.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/GuiElement.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/GuiElement.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/guiElements/GuiElement.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/guiElements/GuiElement.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -252,6 +260,9 @@
       <workItem from="1735039937030" duration="3495000" />
       <workItem from="1735043881766" duration="206000" />
       <workItem from="1735044176312" duration="88000" />
+      <workItem from="1737201835807" duration="8475000" />
+      <workItem from="1737292344465" duration="5859000" />
+      <workItem from="1737450847160" duration="304000" />
     </task>
     <task id="LOCAL-00001" summary="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file">
       <option name="closed" value="true" />

@@ -26,7 +26,7 @@ class GuiElement {
     int tileWidth;
     int tileHeight;
 
-    ImVec2 getTileUV(int column, int row);
+//    ImVec2 getTileUV(int column, int row);
     void drawBackground(const std::vector<std::pair<int, int>>& tilesToRender,
         int backgroundWidth, int backgroundHeight);
 

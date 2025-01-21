@@ -5,6 +5,7 @@
 #pragma once
 
 #include "GuiElement.h"
+
 #include "../combatLogic/Army.h"
 
 namespace gl3
@@ -12,11 +13,14 @@ namespace gl3
     class BattleMenu : public GuiElement
     {
     public:
-        BattleMenu(const ImVec2& size);
+        BattleMenu(struct nk_vec2& size);
         void renderBattleMenu();
         void draw(Game* game);
 
     private:
+        struct nk_glfw glfw = {nullptr};
+        struct nk_context *ctx;
+        struct nk_colorf bg;
         const std::vector<std::pair<int, int>> tilesToRender = {
             {15, 0},
             {16, 0},

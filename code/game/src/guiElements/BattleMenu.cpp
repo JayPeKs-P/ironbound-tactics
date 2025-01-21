@@ -3,28 +3,20 @@
 //
 
 #include <iostream>
+#include "BattleMenu.h"
+
 #include <nuklear_glfw_gl3.h>
-#include "battleMenu.h"
 
 
 using namespace gl3;
 
-BattleMenu::BattleMenu(const ImVec2& size):
+BattleMenu::BattleMenu(struct nk_vec2& size):
     GuiElement(PngTexture("textures/gui/ui_atlas_48x48.png"), 48, 48),
     size(size),
     playerArmy(40, 11, 3, glm::vec3(2.0f, 0.0f, 0.0f)),
     enemyArmy(36, 12, 4, glm::vec3(-2.0f, 0.0f, 0.0f))
 {
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.3f, 0.3f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.1f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.863f, 0.635f, 0.0f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_BorderShadow, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_NavHighlight, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
-    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.335f, 0.16f, 0.15f, 1.0f));
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0);
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 4.0);
+
 }
 
 void BattleMenu::renderBattleMenu()
