@@ -13,8 +13,18 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-//
-// #include "guiElements/BattleMenu.h"
+#include <nuklear_glfw_gl3.h>
+//-----------------------------------------
+/*
+NOTE TO MYSELF: Shold there ever be any
+weird behavior with rendering, I never
+fully understood those macros (they are
+used in nk_glfw3_render(), which uses their
+data for glBufferData()
+*/
+#define MAX_VERTEX_BUFFER 1024 *1024
+#define MAX_ELEMENT_BUFFER 128 * 1024
+//-----------------------------------------
 
 
 namespace gl3
@@ -37,12 +47,19 @@ namespace gl3
         // }
 
     private:
+        void initGUI();
+        void updateGUI();
+        void drawGUI();
+        void destroyGUI();
 
         static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
         void update();
         void draw();
         void updateDeltaTime();
+
+        struct nk_glfw glfw = {nullptr};
+        struct nk_context *ctx;
 
         std::vector<std::unique_ptr<Entity>> entities;
 

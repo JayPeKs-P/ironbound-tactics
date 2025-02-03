@@ -45,14 +45,14 @@ Game::Game(int width, int height, const std::string &title)
     }
     // audio.init();
     // audio.setGlobalVolume(0.1f);
-
-
+    initGUI();
 
 }
 
 Game::~Game()
 {
     glfwTerminate();
+    destroyGUI();
 }
 
 glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, glm::vec3 scale)
@@ -87,7 +87,7 @@ void Game::update()
     {
         entity->update(this, deltaTime);
     }
-
+    updateGUI();
 }
 
 void Game::draw()
@@ -99,8 +99,8 @@ void Game::draw()
     {
         entity->draw(this);
     }
-    // battleMenu->draw(this);
-    // battleMenu->renderBattleMenu();
+    drawGUI();
+
      glfwSwapBuffers(window);
 }
 
@@ -155,74 +155,183 @@ void Game::run()
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
 
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    // ImVec2 windowSize(width, height);
-    // auto menu = std::make_unique<BattleMenu>(windowSize);
-    // battleMenu = menu.get();
-
     glfwSetTime(1.0/60);
 
     while (!glfwWindowShouldClose(window))
     {
         update();
-        // draw();
+        draw();
         updateDeltaTime();
         glfwPollEvents();
-        nk_glfw3_new_frame(&glfw);
-
-        /* GUI */
-        if (nk_begin(ctx, "Demo", nk_rect(50, 50, 230, 250),
-            NK_WINDOW_NO_INPUT|NK_WINDOW_TITLE))
-        {
-            enum {EASY, HARD};
-            static int op = EASY;
-            static int property = 20;
-            nk_layout_row_static(ctx, 30, 80, 1);
-            if (nk_button_label(ctx, "button"))
-                fprintf(stdout, "button pressed\n");
-
-            nk_layout_row_dynamic(ctx, 30, 2);
-            if (nk_option_label(ctx, "easy", op == EASY)) op = EASY;
-            if (nk_option_label(ctx, "hard", op == HARD)) op = HARD;
-
-            nk_layout_row_dynamic(ctx, 25, 1);
-            nk_property_int(ctx, "Compression:", 0, &property, 100, 10, 1);
-
-            nk_layout_row_dynamic(ctx, 20, 1);
-            nk_label(ctx, "background:", NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ctx, 25, 1);
-            if (nk_combo_begin_color(ctx, nk_rgb_cf(bg), nk_vec2(nk_widget_width(ctx),400))) {
-                nk_layout_row_dynamic(ctx, 120, 1);
-                bg = nk_color_picker(ctx, bg, NK_RGBA);
-                nk_layout_row_dynamic(ctx, 25, 1);
-                bg.r = nk_propertyf(ctx, "#R:", 0, bg.r, 1.0f, 0.01f,0.005f);
-                bg.g = nk_propertyf(ctx, "#G:", 0, bg.g, 1.0f, 0.01f,0.005f);
-                bg.b = nk_propertyf(ctx, "#B:", 0, bg.b, 1.0f, 0.01f,0.005f);
-                bg.a = nk_propertyf(ctx, "#A:", 0, bg.a, 1.0f, 0.01f,0.005f);
-                nk_combo_end(ctx);
-            }
-        }
-        nk_end(ctx);
-
-        /* Draw */
-        glfwGetWindowSize(window, &width, &height);
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(bg.r, bg.g, bg.b, bg.a);
-        /* IMPORTANT: `nk_glfw_render` modifies some global OpenGL state
-         * with blending, scissor, face culling, depth test and viewport and
-         * defaults everything back into a default state.
-         * Make sure to either a.) save and restore or b.) reset your own state after
-         * rendering the UI. */
-        nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
-            MAX_VERTEX_BUFFER,
-            MAX_ELEMENT_BUFFER);
-        glfwSwapBuffers(window);
-
     }
 
     glDeleteVertexArrays(1, &VAO);
 }
 
+void Game::initGUI()
+{
+    ctx = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
+    {struct nk_font_atlas *atlas;
+        nk_glfw3_font_stash_begin(&glfw, &atlas);
+        /*struct nk_font *droid = nk_font_atlas_add_from_file(atlas, "../../../extra_font/DroidSans.ttf", 14, 0);*/
+        /*struct nk_font *roboto = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Roboto-Regular.ttf", 14, 0);*/
+        /*struct nk_font *future = nk_font_atlas_add_from_file(atlas, "../../../extra_font/kenvector_future_thin.ttf", 13, 0);*/
+        /*struct nk_font *clean = nk_font_atlas_add_from_file(atlas, "../../../extra_font/ProggyClean.ttf", 12, 0);*/
+        /*struct nk_font *tiny = nk_font_atlas_add_from_file(atlas, "../../../extra_font/ProggyTiny.ttf", 10, 0);*/
+        /*struct nk_font *cousine = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Cousine-Regular.ttf", 13, 0);*/
+        nk_glfw3_font_stash_end(&glfw);
+        /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
+        /*nk_style_set_font(ctx, &droid->handle);*/}
+}
+
+void Game::updateGUI()
+{
+    nk_glfw3_new_frame(&glfw);
+}
+
+void Game::drawGUI()
+{
+
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+    /* GUI */
+    if (nk_begin(ctx, "Army",
+        nk_rect(windowWidth/4,
+        windowHeight - windowHeight/4,
+        windowWidth/2,
+        windowHeight/4),
+        NK_WINDOW_TITLE))
+    {
+        enum {Infantry, Archer};
+        enum {Catapult, Assault_Cover};
+
+        static int humanoid = -1;
+        static int siege = -1;
+
+        int amountOfTroups = 10;
+        ;
+        static int value = 1;
+
+        nk_layout_row_dynamic(ctx, windowHeight/6, 2);
+        if (nk_group_begin(ctx, "UnitsGroup", NK_WINDOW_BORDER))
+        {
+            nk_label(ctx, "Units", NK_TEXT_CENTERED);
+            if (nk_tree_push(ctx, NK_TREE_TAB, "Infantry", NK_MINIMIZED))
+            {
+                nk_layout_row_push(ctx, 50);
+                nk_label(ctx, "Volume:", NK_TEXT_LEFT);
+                nk_layout_row_push(ctx, 110);
+                nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
+                nk_tree_pop(ctx);
+            }
+            if (nk_tree_push(ctx, NK_TREE_TAB, "Archers", NK_MINIMIZED))
+            {
+                nk_layout_row_push(ctx, 50);
+                nk_label(ctx, "Volume:", NK_TEXT_LEFT);
+                nk_layout_row_push(ctx, 110);
+                nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
+                nk_tree_pop(ctx);
+            }
+            nk_group_end(ctx);
+        }
+        if (nk_group_begin(ctx, "SiegeGroup", NK_WINDOW_BORDER))
+        {
+            if (nk_tree_push(ctx, NK_TREE_TAB, "Siege", NK_MINIMIZED))
+            {
+                nk_layout_row_dynamic(ctx, 30, 1);
+                nk_label(ctx, "Volume:", NK_TEXT_LEFT);
+                nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
+                nk_tree_pop(ctx);
+            }
+            nk_group_end(ctx);
+        }
+
+        nk_layout_row_dynamic(ctx, 30, 2);
+        if (nk_option_label(ctx, "Infantry", humanoid == Infantry))
+        {
+            humanoid = Infantry;
+            amountOfTroups = 20;
+        }
+        if (nk_option_label(ctx, "Archer", humanoid == Archer))
+        {
+            humanoid = Archer;
+            amountOfTroups = 10;
+        }
+        if (nk_tree_push(ctx, NK_TREE_NODE, "Siege Units", NK_MINIMIZED))
+        {
+            // nk_layout_row_dynamic(ctx, 30, 1);
+            if (nk_option_label(ctx, "Catapult", siege == Catapult))
+            {
+                siege = Catapult;
+            }
+            if (nk_option_label(ctx, "Assault Cover", siege == Assault_Cover))
+            {
+                siege = Assault_Cover;
+            }
+            nk_tree_pop(ctx);
+        }
+
+
+        nk_layout_row_static(ctx, 30, 80, 1);
+        if (nk_button_label(ctx, "button"))
+            fprintf(stdout, "button pressed\n");
+
+        nk_layout_row_dynamic(ctx, 25, 1);
+        // nk_property_int(ctx, "Compression:", 0, &property, 100, 10, 1);
+
+        nk_layout_row_dynamic(ctx, 20, 1);
+        nk_label(ctx, "background:", NK_TEXT_LEFT);
+        nk_layout_row_dynamic(ctx, 25, 1);
+        // if (nk_combo_begin_color(ctx, nk_rgb_cf(bg), nk_vec2(nk_widget_width(ctx),400))) {
+        //     nk_layout_row_dynamic(ctx, 120, 1);
+        //     bg = nk_color_picker(ctx, bg, NK_RGBA);
+        //     nk_layout_row_dynamic(ctx, 25, 1);
+        //     bg.r = nk_propertyf(ctx, "#R:", 0, bg.r, 1.0f, 0.01f,0.005f);
+        //     bg.g = nk_propertyf(ctx, "#G:", 0, bg.g, 1.0f, 0.01f,0.005f);
+        //     bg.b = nk_propertyf(ctx, "#B:", 0, bg.b, 1.0f, 0.01f,0.005f);
+        //     bg.a = nk_propertyf(ctx, "#A:", 0, bg.a, 1.0f, 0.01f,0.005f);
+        //     nk_combo_end(ctx);
+        // }
+    }
+    nk_end(ctx);
+
+    if (nk_begin(ctx, "Enemy",
+        nk_rect(windowWidth/4,
+        0,
+        windowWidth/2,
+        windowHeight/4),
+        NK_WINDOW_NO_INPUT|NK_WINDOW_TITLE))
+    {
+        enum {Infantry, Archer, Siege};
+        static int type = -1;
+
+        nk_layout_row_dynamic(ctx, 30, 3);
+        if (nk_option_label(ctx, "infantry", type == Infantry))
+        {
+            type = Infantry;
+        }
+        if (nk_option_label(ctx, "archer", type == Archer))
+        {
+            type = Archer;
+        }
+        if (nk_option_label(ctx, "siege", type == Siege))
+        {
+            type = Siege;
+        }
+
+
+    }
+    nk_end(ctx);
+
+
+    nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
+            MAX_VERTEX_BUFFER,
+            MAX_ELEMENT_BUFFER);
+}
+
+void Game::destroyGUI()
+{
+    nk_glfw3_shutdown(&glfw);
+}
 
