@@ -4,12 +4,14 @@
 
 #include "Game.h"
 
+#include <charconv>
 #include <random>                           // for std::mt19937, std::uniform_int_distribution and std::random_device
 
 #include <stdexcept>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Assets.h"
+#include "entities/unitTypes/UnitHumanoid.h"
 // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
 
@@ -170,10 +172,53 @@ void Game::run()
 
 void Game::initGUI()
 {
+    loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
     ctx = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
+    style = &ctx->style;
+
+    style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));
+    style->window.border = 10.0f;
+    style->window.border_color = nk_rgba(120, 58, 58, 163);
+    style->window.header.label_normal = nk_rgba(120, 58, 58, 210);
+    style->window.header.label_hover = nk_rgba(120, 58, 58, 210);
+    style->window.header.label_active = nk_rgba(120, 58, 58, 210);
+    style->window.header.normal = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
+    style->window.header.hover = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
+    style->window.header.active = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
+
+    style->button.normal = nk_style_item_image(getTileImage(0, 11, 3, 1, 3072, 3072));
+    style->button.hover = nk_style_item_image(getTileImage(3, 11, 3, 1, 3072, 3072));
+    style->button.active = nk_style_item_image(getTileImage(6, 11, 3, 1, 3072, 3072));
+    style->button.text_normal = nk_rgba(255, 255, 255, 255);
+    style->button.text_hover = nk_rgba(255, 250, 200, 255);
+
+    style->option.normal = nk_style_item_image(getTileImage(21, 11, 1, 1, 3072, 3072));
+    style->option.hover = nk_style_item_image(getTileImage(22, 11, 1, 1, 3072, 3072));
+    style->option.active = nk_style_item_image(getTileImage(23, 11, 1, 1, 3072, 3072));
+    style->option.cursor_normal = nk_style_item_image(getTileImage(24, 11, 1, 1, 3072, 3072));
+    style->option.cursor_hover = nk_style_item_image(getTileImage(25, 11, 1, 1, 3072, 3072));
+    style->option.text_normal = nk_rgba(255, 255, 255, 255);
+    style->option.text_hover = nk_rgba(255, 250, 200, 255);
+
+    style->progress.normal = nk_style_item_image(getTileImage(0, 14, 3, 1, 3072, 3072));
+    style->progress.cursor_normal = nk_style_item_image(getTileImage(6, 14, 3, 1, 3072, 3072));
+
+    style->slider.normal = nk_style_item_image(getTileImage(0, 6, 3, 1, 3072, 3072));
+    style->slider.hover = nk_style_item_image(getTileImage(0, 6, 3, 1, 3072, 3072));
+    style->slider.active = nk_style_item_image(getTileImage(0, 6, 3, 1, 3072, 3072));
+    style->slider.cursor_normal = nk_style_item_image(getTileImage(21, 12, 1, 1, 3072, 3072));
+    style->slider.cursor_hover = nk_style_item_image(getTileImage(22, 12, 1, 1, 3072, 3072));
+    style->slider.cursor_active = nk_style_item_image(getTileImage(23, 12, 1, 1, 3072, 3072));
+    style->slider.bar_filled = nk_rgba(100, 100, 200, 200);
+    style->slider.bar_normal = nk_rgba(92, 58, 58, 163);
+    style->slider.bar_hover = nk_rgba(92, 58, 58, 163);
+    style->slider.bar_active = nk_rgba(92, 58, 58, 163);
+
+    style->text.color = nk_rgba(255, 255, 255, 255);
+
     {struct nk_font_atlas *atlas;
         nk_glfw3_font_stash_begin(&glfw, &atlas);
-        /*struct nk_font *droid = nk_font_atlas_add_from_file(atlas, "../../../extra_font/DroidSans.ttf", 14, 0);*/
+        struct nk_font *FantasyRPG1 = nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", 20, 0);
         /*struct nk_font *roboto = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Roboto-Regular.ttf", 14, 0);*/
         /*struct nk_font *future = nk_font_atlas_add_from_file(atlas, "../../../extra_font/kenvector_future_thin.ttf", 13, 0);*/
         /*struct nk_font *clean = nk_font_atlas_add_from_file(atlas, "../../../extra_font/ProggyClean.ttf", 12, 0);*/
@@ -181,7 +226,7 @@ void Game::initGUI()
         /*struct nk_font *cousine = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Cousine-Regular.ttf", 13, 0);*/
         nk_glfw3_font_stash_end(&glfw);
         /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
-        /*nk_style_set_font(ctx, &droid->handle);*/}
+        nk_style_set_font(ctx, &FantasyRPG1->handle);}
 }
 
 void Game::updateGUI()
@@ -189,145 +234,190 @@ void Game::updateGUI()
     nk_glfw3_new_frame(&glfw);
 }
 
+void Game::drawPlayerHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight) {
+
+        nk_layout_row_dynamic(ctx, 24, 3);
+        nk_label(ctx, "Infantry", NK_TEXT_LEFT);
+        nk_label(ctx, "Archer", NK_TEXT_LEFT);
+        nk_label(ctx, "Siege", NK_TEXT_LEFT);
+        nk_layout_row_dynamic(ctx, 36, 3);
+        nk_progress(ctx, &healthInfantryPlayer, 100, NK_FIXED);
+        nk_progress(ctx, &healthArcherPlayer, 100, NK_FIXED);
+        nk_progress(ctx, &healthSiegePlayer, 100, NK_FIXED);
+}
+
+void Game::drawUnitSelectionMenu(struct nk_context *ctx, int windowWidth, int windowHeight) {
+    if (nk_begin(ctx, "Units",
+        nk_rect(windowWidth / 4, windowHeight - windowHeight / 2, windowWidth / 2, 60), NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BORDER)) {
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+
+        const char* unitNames[] = { "Infantry", "Archer", "Siege" };
+        Category unitCategories[] = { Category::Infantry, Category::Archer, Category::Siege };
+        int unitTroops[] = { infAmount, archAmount, siegeAmount };
+
+        for (int i = 0; i < 3; i++) {
+            if (nk_button_label(ctx, unitNames[i])) {
+                if (selectedOne == Category::Empty) {
+                    selectedOne = unitCategories[i];
+                    amountOfTroups = unitTroops[i];
+                    std::cout << "Selected " << unitNames[i] << " first\n";
+                } else if (selectedOne != unitCategories[i]) {
+                    selectedTwo = unitCategories[i];
+                    owner = OwnerOfUnit::Player;
+                    std::cout << "Selected " << unitNames[i] << " second\n";
+                } else {
+                    selectedOne = Category::Empty;
+                    selectedTwo = Category::Empty;
+                    owner = OwnerOfUnit::No_Selection;
+                    std::cout << "Reset to empty\n";
+                }
+            }
+        }
+    }
+    nk_end(ctx);
+}
+
+void Game::drawUnitActions(struct nk_context *ctx, Category selectedUnit) {
+    if (selectedUnit == Category::Empty) return;
+
+    nk_layout_row_dynamic(ctx, 26, 3);
+    nk_label(ctx, (selectedUnit == Category::Infantry) ? "Infantry" :
+                   (selectedUnit == Category::Archer) ? "Archer" : "Siege", NK_TEXT_LEFT);
+    nk_label(ctx, "Available  Units: ", NK_TEXT_LEFT);
+
+    char amountLabel[16];
+    snprintf(amountLabel, sizeof(amountLabel), "%d", amountOfTroups);
+    nk_label(ctx, amountLabel, NK_TEXT_LEFT);
+
+    if (nk_tree_push(ctx, NK_TREE_TAB, "Available  Actions", NK_MAXIMIZED)) {
+        nk_layout_row_dynamic(ctx, 36, 2);
+
+        if (owner == OwnerOfUnit::AI && selectedTwo != Category::Empty) {
+            if (nk_button_label(ctx, "Attack"))
+            {
+                if (selectedOne == Category::Archer && round == ONE) amountOfTroups = 0;
+                if (selectedOne == Category::Siege) amountOfTroups = 0, reset();
+                if (selectedOne == Category::Archer && round == TWO) amountOfTroups = 0, reset();
+
+            }
+            nk_slider_int(ctx, 0, &valueAttack, amountOfTroups, 1);
+        } else if (selectedTwo == Category::Siege) {
+            if (nk_button_label(ctx, "Use Catapult"))
+            {
+                if (selectedOne == Category::Infantry) amountOfTroups = 20;
+            }
+            nk_slider_int(ctx, 0, &valueCatapult, amountOfTroups, 1);
+            if (nk_button_label(ctx, "Use Assault Cover"))
+            {
+                if (selectedOne == Category::Infantry) amountOfTroups = 0;
+            }
+            nk_slider_int(ctx, 0, &valueAssaultCover, amountOfTroups, 1);
+        } else if (selectedTwo == Category::Archer) {
+            if (nk_button_label(ctx, "Protect"))
+            {
+                if (selectedOne == Category::Siege) amountOfTroups = 6;
+
+            }
+            nk_slider_int(ctx, 0, &valueDefend, amountOfTroups, 1);
+        }else if (selectedTwo == Category::Infantry)
+        {
+            if (nk_button_label(ctx, "Protect"))
+            {
+                if (selectedOne == Category::Siege) amountOfTroups = 0;
+            }
+            nk_slider_int(ctx, 0, &valueDefendInf, amountOfTroups, 1);
+        }
+        nk_tree_pop(ctx);
+    }
+}
+
+void Game::reset()
+{
+    if (round == ONE)
+    {
+        selectedOne = Category::Empty;
+        selectedTwo = Category::Empty;
+        owner = OwnerOfUnit::No_Selection;
+
+        infAmount = 18;
+        archAmount = 28;
+        siegeAmount = 6;
+
+        healthInfantryPlayer = 85;
+        healthArcherPlayer = 93;
+        healthSiegePlayer = 100;
+
+        healthInfantryAI = 100;
+        healthArcherAI = 75;
+        healthSiegeAI = 100;
+
+        round = TWO;
+    }
+    else if (round == TWO)
+    {
+        selectedOne = Category::Empty;
+        selectedTwo = Category::Empty;
+        owner = OwnerOfUnit::No_Selection;
+
+        infAmount = 29;
+        archAmount = 26;
+        siegeAmount = 7;
+
+        healthInfantryPlayer = 72;
+        healthArcherPlayer = 86;
+        healthSiegePlayer = 70;
+
+        healthInfantryAI = 45;
+        healthArcherAI = 75;
+        healthSiegeAI = 50;
+    }
+}
+
+
+void Game::drawEnemyHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight) {
+    if (nk_begin(ctx, "Enemy",
+        nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
+        NK_WINDOW_TITLE|NK_WINDOW_BORDER)) {
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+        nk_progress(ctx, &healthInfantryAI, 100, NK_FIXED);
+        nk_progress(ctx, &healthArcherAI, 100, NK_FIXED);
+        nk_progress(ctx, &healthSiegeAI, 100, NK_FIXED);
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+        const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
+        Category enemyCategories[] = { Category::Infantry, Category::Archer, Category::Siege };
+
+        for (int i = 0; i < 3; i++) {
+            if (nk_option_label(ctx, enemyNames[i], owner == OwnerOfUnit::AI && selectedTwo == enemyCategories[i]) && selectedOne != Category::Empty) {
+                if (owner != OwnerOfUnit::AI) owner = OwnerOfUnit::AI;
+                if (selectedTwo != enemyCategories[i]) selectedTwo = enemyCategories[i];
+            }
+        }
+    }
+    nk_end(ctx);
+}
+
+void Game::drawRender(struct nk_context *ctx, int windowWidth, int windowHeight) {
+    drawUnitSelectionMenu(ctx, windowWidth, windowHeight);
+
+    if (nk_begin(ctx, "UnitsGroup", nk_rect(windowWidth / 4, windowHeight - windowHeight / 3, windowWidth / 2, windowHeight / 3), NK_WINDOW_BORDER|NK_WINDOW_NO_SCROLLBAR)) {
+        drawPlayerHealthBars(ctx, windowWidth, windowHeight);
+        drawUnitActions(ctx, selectedOne);
+    }
+    nk_end(ctx);
+
+    drawEnemyHealthBars(ctx, windowWidth, windowHeight);
+
+    nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+}
+
 void Game::drawGUI()
 {
-
     int windowWidth, windowHeight;
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
-
-    /* GUI */
-    if (nk_begin(ctx, "Army",
-        nk_rect(windowWidth/4,
-        windowHeight - windowHeight/4,
-        windowWidth/2,
-        windowHeight/4),
-        NK_WINDOW_TITLE))
-    {
-        enum {Infantry, Archer};
-        enum {Catapult, Assault_Cover};
-
-        static int humanoid = -1;
-        static int siege = -1;
-
-        int amountOfTroups = 10;
-        ;
-        static int value = 1;
-
-        nk_layout_row_dynamic(ctx, windowHeight/6, 2);
-        if (nk_group_begin(ctx, "UnitsGroup", NK_WINDOW_BORDER))
-        {
-            nk_label(ctx, "Units", NK_TEXT_CENTERED);
-            if (nk_tree_push(ctx, NK_TREE_TAB, "Infantry", NK_MINIMIZED))
-            {
-                nk_layout_row_push(ctx, 50);
-                nk_label(ctx, "Volume:", NK_TEXT_LEFT);
-                nk_layout_row_push(ctx, 110);
-                nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
-                nk_tree_pop(ctx);
-            }
-            if (nk_tree_push(ctx, NK_TREE_TAB, "Archers", NK_MINIMIZED))
-            {
-                nk_layout_row_push(ctx, 50);
-                nk_label(ctx, "Volume:", NK_TEXT_LEFT);
-                nk_layout_row_push(ctx, 110);
-                nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
-                nk_tree_pop(ctx);
-            }
-            nk_group_end(ctx);
-        }
-        if (nk_group_begin(ctx, "SiegeGroup", NK_WINDOW_BORDER))
-        {
-            if (nk_tree_push(ctx, NK_TREE_TAB, "Siege", NK_MINIMIZED))
-            {
-                nk_layout_row_dynamic(ctx, 30, 1);
-                nk_label(ctx, "Volume:", NK_TEXT_LEFT);
-                nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
-                nk_tree_pop(ctx);
-            }
-            nk_group_end(ctx);
-        }
-
-        nk_layout_row_dynamic(ctx, 30, 2);
-        if (nk_option_label(ctx, "Infantry", humanoid == Infantry))
-        {
-            humanoid = Infantry;
-            amountOfTroups = 20;
-        }
-        if (nk_option_label(ctx, "Archer", humanoid == Archer))
-        {
-            humanoid = Archer;
-            amountOfTroups = 10;
-        }
-        if (nk_tree_push(ctx, NK_TREE_NODE, "Siege Units", NK_MINIMIZED))
-        {
-            // nk_layout_row_dynamic(ctx, 30, 1);
-            if (nk_option_label(ctx, "Catapult", siege == Catapult))
-            {
-                siege = Catapult;
-            }
-            if (nk_option_label(ctx, "Assault Cover", siege == Assault_Cover))
-            {
-                siege = Assault_Cover;
-            }
-            nk_tree_pop(ctx);
-        }
-
-
-        nk_layout_row_static(ctx, 30, 80, 1);
-        if (nk_button_label(ctx, "button"))
-            fprintf(stdout, "button pressed\n");
-
-        nk_layout_row_dynamic(ctx, 25, 1);
-        // nk_property_int(ctx, "Compression:", 0, &property, 100, 10, 1);
-
-        nk_layout_row_dynamic(ctx, 20, 1);
-        nk_label(ctx, "background:", NK_TEXT_LEFT);
-        nk_layout_row_dynamic(ctx, 25, 1);
-        // if (nk_combo_begin_color(ctx, nk_rgb_cf(bg), nk_vec2(nk_widget_width(ctx),400))) {
-        //     nk_layout_row_dynamic(ctx, 120, 1);
-        //     bg = nk_color_picker(ctx, bg, NK_RGBA);
-        //     nk_layout_row_dynamic(ctx, 25, 1);
-        //     bg.r = nk_propertyf(ctx, "#R:", 0, bg.r, 1.0f, 0.01f,0.005f);
-        //     bg.g = nk_propertyf(ctx, "#G:", 0, bg.g, 1.0f, 0.01f,0.005f);
-        //     bg.b = nk_propertyf(ctx, "#B:", 0, bg.b, 1.0f, 0.01f,0.005f);
-        //     bg.a = nk_propertyf(ctx, "#A:", 0, bg.a, 1.0f, 0.01f,0.005f);
-        //     nk_combo_end(ctx);
-        // }
-    }
-    nk_end(ctx);
-
-    if (nk_begin(ctx, "Enemy",
-        nk_rect(windowWidth/4,
-        0,
-        windowWidth/2,
-        windowHeight/4),
-        NK_WINDOW_NO_INPUT|NK_WINDOW_TITLE))
-    {
-        enum {Infantry, Archer, Siege};
-        static int type = -1;
-
-        nk_layout_row_dynamic(ctx, 30, 3);
-        if (nk_option_label(ctx, "infantry", type == Infantry))
-        {
-            type = Infantry;
-        }
-        if (nk_option_label(ctx, "archer", type == Archer))
-        {
-            type = Archer;
-        }
-        if (nk_option_label(ctx, "siege", type == Siege))
-        {
-            type = Siege;
-        }
-
-
-    }
-    nk_end(ctx);
-
-
-    nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
-            MAX_VERTEX_BUFFER,
-            MAX_ELEMENT_BUFFER);
+    drawRender(ctx, windowWidth, windowHeight);
 }
 
 void Game::destroyGUI()
@@ -335,3 +425,32 @@ void Game::destroyGUI()
     nk_glfw3_shutdown(&glfw);
 }
 
+
+void Game::loadTextureAtlas(const char* texturePath)
+{
+    int width, height, channels;
+    unsigned char* image = stbi_load(texturePath, &width, &height, &channels, 4); // Load as RGBA
+
+    if (!image) {
+        std::cerr << "Failed to load texture atlas: " << texturePath << "\n";
+        return;
+    }
+
+    glGenTextures(1, &textureAtlasID);
+    glBindTexture(GL_TEXTURE_2D, textureAtlasID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(image);
+
+    // Convert OpenGL texture to Nuklear Image Handle
+    atlas = nk_image_id(textureAtlasID);
+}
+
+struct nk_image Game::getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight)
+{
+    return nk_subimage_id(textureAtlasID, atlasWidth, atlasHeight,
+                          nk_rect(tileX * 48, tileY * 48, tileWidth * 48, tileHeight * 48));
+}

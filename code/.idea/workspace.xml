@@ -38,7 +38,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file&#10;Merge pull request #749 from beatwise/xcbwin-title&#10;&#10;sets xcb window's title, fixes #738">
+      <change afterPath="$PROJECT_DIR$/extern/custom_implementation/stb/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extern/custom_implementation/stb/stb_image.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/Nuklear" beforeDir="false" afterPath="$PROJECT_DIR$/extern/Nuklear" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/Nuklear/demo/glfw_opengl3/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/extern/Nuklear/demo/glfw_opengl3/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extern/Nuklear/example/stb_image.h" beforeDir="false" afterPath="$PROJECT_DIR$/extern/Nuklear/example/stb_image.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/game/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/Game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/Game.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.h" afterDir="false" />
     </list>
@@ -72,6 +79,20 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/extern/Nuklear/demo/glfw_opengl3/main.c" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/extern/Nuklear/demo/glfw_opengl3/nuklear_glfw_gl3.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/extern/custom_implementation/nuklear/nuklear_impl.c" root0="FORCE_HIGHLIGHTING" />
@@ -123,7 +144,7 @@
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "createSiegeUnit",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/julia/Documents/GitHub/05-gl3-kalb/code/extern/custom_implementation/nuklear",
+    "last_opened_file_path": "C:/Users/julia/Git-projects/05-gl3-kalb/code/extern/custom_implementation/stb",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -135,6 +156,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\julia\Git-projects\05-gl3-kalb\code\extern\custom_implementation\stb" />
       <recent name="C:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\custom_implementation\nuklear" />
       <recent name="C:\Users\julia\Documents\GitHub\05-gl3-kalb\code\extern\NuklearHeader" />
     </key>
@@ -144,6 +166,11 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.Game">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Game" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="Game" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="code" RUN_TARGET_NAME="Game">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -257,6 +284,7 @@
       <workItem from="1738056147951" duration="5922000" />
       <workItem from="1738573006100" duration="988000" />
       <workItem from="1738596944112" duration="9879000" />
+      <workItem from="1738652556249" duration="39669000" />
     </task>
     <task id="LOCAL-00001" summary="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file">
       <option name="closed" value="true" />
