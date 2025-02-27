@@ -3,21 +3,24 @@
 //
 
 #pragma once
+#include "nuklear.h"
 
 namespace gui {
 
 class GuiCombat {
     public:
-    GuiCombat();
+    GuiCombat(struct nk_context *ctx);
     ~GuiCombat();
 
     private:
-    void setStyleWindow();
-    void setStyleButton();
-    void setStyleOptionLabel();
-    void setStyleProgressBar();
-    void setStyleSlider();
-    void setStyleText();
+    void setStyleWindow(nk_style* style);
+    void setStyleButton(nk_style* style);
+    void setStyleOptionLabel(nk_style* style);
+    void setStyleProgressBar(nk_style* style);
+    void setStyleSlider(nk_style* style);
+    void setStyleText(nk_style* style);
+
+    nk_context* ctx;
 
 
 };

@@ -279,7 +279,7 @@ void Game::drawUnitSelectionMenu(struct nk_context *ctx, int windowWidth, int wi
     nk_end(ctx);
 }
 
-void Game::drawUnitActions(struct nk_context *ctx, Category selectedUnit) {
+void Game::drawUnitActions(struct nk_context *ctx, Category selectedUnit)  {
     if (selectedUnit == Category::Empty) return;
 
     nk_layout_row_dynamic(ctx, 26, 3);

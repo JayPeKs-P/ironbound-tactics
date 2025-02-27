@@ -2,11 +2,15 @@
 // Created by julia on 25/02/2025.
 //
 
-#include "guiCombat.h"
+#include "GuiCombat.h"
 
 using namespace gui;
 
-void GuiCombat::setStyleWindow()
+GuiCombat::GuiCombat(struct nk_context* ctx):ctx(ctx)
+{
+}
+
+void GuiCombat::setStyleWindow(nk_style* style)
 {
     style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));
     style->window.border = 10.0f;
@@ -19,7 +23,7 @@ void GuiCombat::setStyleWindow()
     style->window.header.active = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
 }
 
-void GuiCombat::setStyleButton()
+void GuiCombat::setStyleButton(nk_style* style)
 {
     style->button.normal = nk_style_item_image(getTileImage(0, 11, 3, 1, 3072, 3072));
     style->button.hover = nk_style_item_image(getTileImage(3, 11, 3, 1, 3072, 3072));
@@ -28,7 +32,7 @@ void GuiCombat::setStyleButton()
     style->button.text_hover = nk_rgba(255, 250, 200, 255);
 }
 
-void GuiCombat::setStyleOptionLabel()
+void GuiCombat::setStyleOptionLabel(nk_style* style)
 {
     style->option.normal = nk_style_item_image(getTileImage(21, 11, 1, 1, 3072, 3072));
     style->option.hover = nk_style_item_image(getTileImage(22, 11, 1, 1, 3072, 3072));
@@ -39,13 +43,13 @@ void GuiCombat::setStyleOptionLabel()
     style->option.text_hover = nk_rgba(255, 250, 200, 255);
 }
 
-void GuiCombat::setStyleProgressBar()
+void GuiCombat::setStyleProgressBar(nk_style* style)
 {
     style->progress.normal = nk_style_item_image(getTileImage(0, 14, 3, 1, 3072, 3072));
     style->progress.cursor_normal = nk_style_item_image(getTileImage(6, 14, 3, 1, 3072, 3072));
 }
 
-void GuiCombat::setStyleSlider()
+void GuiCombat::setStyleSlider(nk_style* style)
 {
     style->slider.normal = nk_style_item_image(getTileImage(0, 6, 3, 1, 3072, 3072));
     style->slider.hover = nk_style_item_image(getTileImage(0, 6, 3, 1, 3072, 3072));
@@ -59,7 +63,7 @@ void GuiCombat::setStyleSlider()
     style->slider.bar_active = nk_rgba(92, 58, 58, 163);
 }
 
-void GuiCombat::setStyleText()
+void GuiCombat::setStyleText(nk_style* style)
 {
     style->text.color = nk_rgba(255, 255, 255, 255);
 }
