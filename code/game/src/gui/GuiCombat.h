@@ -4,9 +4,21 @@
 
 #pragma once
 
-namespace gl3 {
+namespace gui {
 
-class guiCombat {
+class GuiCombat {
+    public:
+    GuiCombat();
+    ~GuiCombat();
+
+    private:
+    void setStyleWindow();
+    void setStyleButton();
+    void setStyleOptionLabel();
+    void setStyleProgressBar();
+    void setStyleSlider();
+    void setStyleText();
+
 
 };
 

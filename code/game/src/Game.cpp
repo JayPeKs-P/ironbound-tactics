@@ -8,6 +8,7 @@
 #include <random>                           // for std::mt19937, std::uniform_int_distribution and std::random_device
 
 #include <stdexcept>
+#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Assets.h"

@@ -2,8 +2,7 @@
 // Created by julia on 22/10/2024.
 //
 #pragma once
-#include <iostream>
-
+#include <glad/glad.h>
 //#include "../src/entities/Ship.h"
 #include "../src/entities/Entity.h"
 
@@ -19,7 +18,7 @@
 
 //-----------------------------------------
 /*
-NOTE TO MYSELF: Shold there ever be any
+NOTE TO MYSELF: Should there ever be any
 weird behavior with rendering, I never
 fully understood those macros (they are
 used in nk_glfw3_render(), which uses their
