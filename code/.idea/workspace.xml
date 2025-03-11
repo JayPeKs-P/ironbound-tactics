@@ -7,7 +7,7 @@
     <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
-    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="4" type="long" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="3" type="long" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
   </component>
   <component name="CMakePresetLoader">{
@@ -40,9 +40,6 @@
     <list default="true" id="2797c74a-dc60-47b0-878d-36c0c8ecc0bb" name="Changes" comment="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file&#10;Merge pull request #749 from beatwise/xcbwin-title&#10;&#10;sets xcb window's title, fixes #738">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/Game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/Game.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/gui/GuiCombat.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/gui/GuiCombat.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/gui/GuiCombat.h" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/gui/GuiCombat.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -279,6 +276,7 @@
       <workItem from="1740468104850" duration="9131000" />
       <workItem from="1740663592567" duration="79000" />
       <workItem from="1740663696400" duration="5200000" />
+      <workItem from="1741690178770" duration="3321000" />
     </task>
     <task id="LOCAL-00001" summary="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file">
       <option name="closed" value="true" />
