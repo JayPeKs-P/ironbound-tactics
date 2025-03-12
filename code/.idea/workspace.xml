@@ -7,8 +7,8 @@
     <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
-    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="3" type="long" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="3" type="long" />
   </component>
   <component name="CMakePresetLoader">{
   &quot;useNewFormat&quot;: true
@@ -171,11 +171,6 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.Game">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Engine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="code" TARGET_NAME="Engine" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -222,6 +217,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="CMake Application.Engine" />
       <item itemvalue="CMake Application.Game" />
       <item itemvalue="CMake Application.glad" />
       <item itemvalue="CMake Application.glfw" />
@@ -230,7 +226,6 @@
       <item itemvalue="CMake Application.tinygltf" />
       <item itemvalue="CMake Application.uninstall" />
       <item itemvalue="CMake Application.update_mappings" />
-      <item itemvalue="CMake Application.Engine" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -302,6 +297,7 @@
       <workItem from="1740663696400" duration="5200000" />
       <workItem from="1741690178770" duration="3321000" />
       <workItem from="1741766764136" duration="3262000" />
+      <workItem from="1741770721404" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="- reworked the Unit hierarchy&#10;- added nuklear and created a seperate implementation folder, where its CMake file is located. also created an implementation .c file">
       <option name="closed" value="true" />
