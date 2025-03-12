@@ -52,15 +52,7 @@ target_compile_features(${EXE_FILE} PRIVATE cxx_std_17)
 find_package(imgui REQUIRED)
 find_package(PNG REQUIRED)
 
-target_link_libraries(${EXE_FILE} PRIVATE glad
-        glfw
-        glm
-        soloud
-        tinygltf
-        nuklear_impl
-        stb
-        imgui::imgui
-        PNG::PNG)
+target_link_libraries(${EXE_FILE} PRIVATE Engine)
 
 target_compile_definitions(${EXE_FILE} PRIVATE ASSET_ROOT=./assets/)
 

@@ -21,4 +21,6 @@ add_subdirectory(extern/custom_implementation/nuklear)
 
 add_subdirectory(extern/custom_implementation/stb)
 
+add_subdirectory(engine)
+
 add_subdirectory(game)
