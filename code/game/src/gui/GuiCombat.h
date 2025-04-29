@@ -9,10 +9,21 @@ namespace gui {
 
 class GuiCombat {
     public:
-    GuiCombat(struct nk_context *ctx);
+    GuiCombat(struct nk_context *ctx, struct nk_image atlas);
     ~GuiCombat();
 
     private:
+
+    struct nk_image GuiCombat::getTileImage(
+    int tileX,
+    int tileY,
+    int tileWidth,
+    int tileHeight,
+    int atlasWidth,
+    int atlasHeight);
+
+    struct nk_image atlas;
+
     void setStyleWindow(nk_style* style);
     void setStyleButton(nk_style* style);
     void setStyleOptionLabel(nk_style* style);

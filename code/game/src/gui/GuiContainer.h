@@ -18,7 +18,6 @@ class GuiContainer {
     void init();
     void draw();
     void update();
-
     private:
     struct nk_glfw glfw = {nullptr};
     struct nk_context *ctx;

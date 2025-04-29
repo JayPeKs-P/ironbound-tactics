@@ -10,6 +10,12 @@ GuiCombat::GuiCombat(struct nk_context* ctx):ctx(ctx)
 {
 }
 
+struct nk_image GuiCombat::getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight)
+{
+    return nk_subimage_id(textureAtlasID, atlasWidth, atlasHeight,
+                          nk_rect(tileX * 48, tileY * 48, tileWidth * 48, tileHeight * 48));
+}
+
 void GuiCombat::setStyleWindow(nk_style* style)
 {
     style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));
