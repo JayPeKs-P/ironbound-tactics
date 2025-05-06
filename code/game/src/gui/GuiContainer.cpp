@@ -4,6 +4,10 @@
 
 #include "GuiContainer.h"
 
+#include <iostream>
+#include <stb_image.h>
+#include "GuiCombat.h"
+
 using namespace gui;
 
 GuiContainer::GuiContainer(GLFWwindow* window):window(window)
@@ -25,6 +29,8 @@ GuiContainer::~GuiContainer()
 
 void GuiContainer::init()
 {
+   loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
+   GuiCombat combatMenu(ctx, textureAtlasID);
 }
 
 void GuiContainer::draw()
@@ -34,4 +40,24 @@ void GuiContainer::draw()
 void GuiContainer::update()
 {
     nk_glfw3_new_frame(&glfw);
+}
+
+void GuiContainer::loadTextureAtlas(const char* texturePath)
+{
+    int width, height, channels;
+    unsigned char* image = stbi_load(texturePath, &width, &height, &channels, 4); // Load as RGBA
+
+    if (!image) {
+        std::cerr << "Failed to load texture atlas: " << texturePath << "\n";
+        return;
+    }
+
+    glGenTextures(1, &textureAtlasID);
+    glBindTexture(GL_TEXTURE_2D, textureAtlasID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(image);
 }

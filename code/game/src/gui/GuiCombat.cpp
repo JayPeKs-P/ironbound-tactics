@@ -6,13 +6,14 @@
 
 using namespace gui;
 
-GuiCombat::GuiCombat(struct nk_context* ctx):ctx(ctx)
+GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint textureID):ctx(ctx), textureID(textureID)
 {
+    // atlas = nk_image_id(textureID);
 }
 
 struct nk_image GuiCombat::getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight)
 {
-    return nk_subimage_id(textureAtlasID, atlasWidth, atlasHeight,
+    return nk_subimage_id(textureID, atlasWidth, atlasHeight,
                           nk_rect(tileX * 48, tileY * 48, tileWidth * 48, tileHeight * 48));
 }
 
