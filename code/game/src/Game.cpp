@@ -247,6 +247,30 @@ void Game::drawPlayerHealthBars(struct nk_context *ctx, int windowWidth, int win
         nk_progress(ctx, &healthSiegePlayer, 100, NK_FIXED);
 }
 
+void Game::drawEnemyHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight) {
+    if (nk_begin(ctx, "Enemy",
+        nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
+        NK_WINDOW_TITLE|NK_WINDOW_BORDER)) {
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+        nk_progress(ctx, &healthInfantryAI, 100, NK_FIXED);
+        nk_progress(ctx, &healthArcherAI, 100, NK_FIXED);
+        nk_progress(ctx, &healthSiegeAI, 100, NK_FIXED);
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+        const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
+        Category enemyCategories[] = { Category::Infantry, Category::Archer, Category::Siege };
+
+        for (int i = 0; i < 3; i++) {
+            if (nk_option_label(ctx, enemyNames[i], owner == OwnerOfUnit::AI && selectedTwo == enemyCategories[i]) && selectedOne != Category::Empty) {
+                if (owner != OwnerOfUnit::AI) owner = OwnerOfUnit::AI;
+                if (selectedTwo != enemyCategories[i]) selectedTwo = enemyCategories[i];
+            }
+        }
+    }
+    nk_end(ctx);
+}
+
 void Game::drawUnitSelectionMenu(struct nk_context *ctx, int windowWidth, int windowHeight) {
     if (nk_begin(ctx, "Units",
         nk_rect(windowWidth / 4, windowHeight - windowHeight / 2, windowWidth / 2, 60), NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BORDER)) {
@@ -376,34 +400,17 @@ void Game::reset()
 }
 
 
-void Game::drawEnemyHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight) {
-    if (nk_begin(ctx, "Enemy",
-        nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
-        NK_WINDOW_TITLE|NK_WINDOW_BORDER)) {
 
-        nk_layout_row_dynamic(ctx, 36, 3);
-        nk_progress(ctx, &healthInfantryAI, 100, NK_FIXED);
-        nk_progress(ctx, &healthArcherAI, 100, NK_FIXED);
-        nk_progress(ctx, &healthSiegeAI, 100, NK_FIXED);
-
-        nk_layout_row_dynamic(ctx, 36, 3);
-        const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
-        Category enemyCategories[] = { Category::Infantry, Category::Archer, Category::Siege };
-
-        for (int i = 0; i < 3; i++) {
-            if (nk_option_label(ctx, enemyNames[i], owner == OwnerOfUnit::AI && selectedTwo == enemyCategories[i]) && selectedOne != Category::Empty) {
-                if (owner != OwnerOfUnit::AI) owner = OwnerOfUnit::AI;
-                if (selectedTwo != enemyCategories[i]) selectedTwo = enemyCategories[i];
-            }
-        }
-    }
-    nk_end(ctx);
-}
 
 void Game::drawRender(struct nk_context *ctx, int windowWidth, int windowHeight) {
     drawUnitSelectionMenu(ctx, windowWidth, windowHeight);
 
-    if (nk_begin(ctx, "UnitsGroup", nk_rect(windowWidth / 4, windowHeight - windowHeight / 3, windowWidth / 2, windowHeight / 3), NK_WINDOW_BORDER|NK_WINDOW_NO_SCROLLBAR)) {
+    if (nk_begin(ctx, "UnitsGroup",
+        nk_rect(windowWidth / 4,
+                windowHeight - windowHeight / 3,
+                windowWidth / 2,
+                windowHeight / 3),
+            NK_WINDOW_BORDER|NK_WINDOW_NO_SCROLLBAR)) {
         drawPlayerHealthBars(ctx, windowWidth, windowHeight);
         drawUnitActions(ctx, selectedOne);
     }

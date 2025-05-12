@@ -5,8 +5,12 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #define NK_INCLUDE_STANDARD_IO
 #include <nuklear_glfw_gl3.h>
+
+#define MAX_VERTEX_BUFFER 1024 *1024
+#define MAX_ELEMENT_BUFFER 128 * 1024
 
 namespace gui {
 

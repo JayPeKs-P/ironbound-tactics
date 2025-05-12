@@ -35,6 +35,11 @@ void GuiContainer::init()
 
 void GuiContainer::draw()
 {
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+    //maybe create a template for GuiObjects and then draw them, no matter what type they have
+
+    nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 }
 
 void GuiContainer::update()
