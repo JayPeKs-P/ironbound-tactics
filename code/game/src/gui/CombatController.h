@@ -14,10 +14,10 @@
 
 namespace gui {
 
-class GuiContainer {
+class CombatController {
     public:
-    GuiContainer(GLFWwindow* window);
-    ~GuiContainer();
+    CombatController(GLFWwindow* window);
+    ~CombatController();
 
     void init();
     void draw();

@@ -2,7 +2,7 @@
 // Created by julia on 25/02/2025.
 //
 
-#include "GuiContainer.h"
+#include "CombatController.h"
 
 #include <iostream>
 #include <stb_image.h>
@@ -10,7 +10,7 @@
 
 using namespace gui;
 
-GuiContainer::GuiContainer(GLFWwindow* window):window(window)
+CombatController::CombatController(GLFWwindow* window):window(window)
 {
     ctx = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
 
@@ -22,18 +22,18 @@ GuiContainer::GuiContainer(GLFWwindow* window):window(window)
         nk_style_set_font(ctx, &FantasyRPG1->handle);}
 }
 
-GuiContainer::~GuiContainer()
+CombatController::~CombatController()
 {
     nk_glfw3_shutdown(&glfw);
 }
 
-void GuiContainer::init()
+void CombatController::init()
 {
    loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
    GuiCombat combatMenu(ctx, textureAtlasID);
 }
 
-void GuiContainer::draw()
+void CombatController::draw()
 {
     int windowWidth, windowHeight;
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
@@ -42,12 +42,12 @@ void GuiContainer::draw()
     nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 }
 
-void GuiContainer::update()
+void CombatController::update()
 {
     nk_glfw3_new_frame(&glfw);
 }
 
-void GuiContainer::loadTextureAtlas(const char* texturePath)
+void CombatController::loadTextureAtlas(const char* texturePath)
 {
     int width, height, channels;
     unsigned char* image = stbi_load(texturePath, &width, &height, &channels, 4); // Load as RGBA

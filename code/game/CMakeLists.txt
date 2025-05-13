@@ -33,8 +33,8 @@ set(SOURCE_FILES src/main.cpp
         src/entities/Unit.h
         src/entities/unitTypes/UnitSiege.cpp
         src/entities/unitTypes/UnitSiege.h
-        src/gui/guiContainer.cpp
-        src/gui/guiContainer.h
+        src/gui/CombatController.cpp
+        src/gui/CombatController.h
         src/gui/guiCombat.cpp
         src/gui/guiCombat.h
 )
