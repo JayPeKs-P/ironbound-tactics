@@ -399,9 +399,6 @@ void Game::reset()
     }
 }
 
-
-
-
 void Game::drawRender(struct nk_context *ctx, int windowWidth, int windowHeight) {
     drawUnitSelectionMenu(ctx, windowWidth, windowHeight);
 
@@ -432,7 +429,6 @@ void Game::destroyGUI()
 {
     nk_glfw3_shutdown(&glfw);
 }
-
 
 void Game::loadTextureAtlas(const char* texturePath)
 {

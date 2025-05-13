@@ -12,6 +12,9 @@
 #define MAX_VERTEX_BUFFER 1024 *1024
 #define MAX_ELEMENT_BUFFER 128 * 1024
 
+#include "GuiCombat.h"
+#include "../combatLogic/Army.h"
+
 namespace gui {
 
 class CombatController {
@@ -22,7 +25,12 @@ class CombatController {
     void init();
     void draw();
     void update();
+
     private:
+    GuiCombat guiCombat;
+    gl3::Army* playerArmy = nullptr;
+    gl3::Army* aiArmy = nullptr;
+
     GLuint textureAtlasID = -1;
     void loadTextureAtlas(const char* texturePath);
     struct nk_glfw glfw = {nullptr};
