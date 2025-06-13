@@ -3,21 +3,17 @@
 //
 
 #pragma once
-#include "Entity.h"
-
+#include <random>
 namespace gl3 {
 
-class Unit: public Entity {
-    public:
-    Unit(const std::filesystem::path &gltfAssetPath,
-        glm::vec3 position, float zRotation,
-        glm::vec3 scale, glm::vec4 color);
+class Unit{
+public:
+    Unit(float hp, float def, float atk, int acc, int critc);
+    ~Unit();
+    void move();
+    float attack();
+    void use();
     float takeDamage(float damage);
-
-    [[nodiscard]] float getCommandPoints() const
-    {
-        return commandPoints;
-    }
 
     [[nodiscard]] bool isReady() const
     {
@@ -35,18 +31,14 @@ class Unit: public Entity {
     }
 
 protected:
-    enum PlaceInOrder
-    {
-        First,
-        Second,
-        Third,
-        Fourth,
-        LastThisTurn,
-        NextTurn
-    };
-    float commandPoints = 0.0f;
-    float lifePoints = 0.0f;
-    bool canDefend = false;
+    std::mt19937 rng{std::random_device{}()};
+    std::uniform_int_distribution<int> dist{0, 99};
+    float lifePoints;
+    float armorValue;
+    float attackValue;
+    int accuracy;
+    int critChance;
+    float critMultiplier = 2.0f;
     bool ready = true;
 
 };

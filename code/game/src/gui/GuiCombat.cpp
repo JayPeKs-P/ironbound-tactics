@@ -13,7 +13,7 @@ using namespace gui;
 
 GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint textureID):ctx(ctx), textureID(textureID)
 {
-    // atlas = nk_image_id(textureID);
+
 }
 
 void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
@@ -158,12 +158,6 @@ void GuiCombat::drawRender(int windowWidth, int windowHeight) {
 
 }
 
-struct nk_image GuiCombat::getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight)
-{
-    return nk_subimage_id(textureID, atlasWidth, atlasHeight,
-                          nk_rect(tileX * 48, tileY * 48, tileWidth * 48, tileHeight * 48));
-}
-
 void GuiCombat::setStyleWindow(nk_style* style)
 {
     style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));
@@ -220,4 +214,10 @@ void GuiCombat::setStyleSlider(nk_style* style)
 void GuiCombat::setStyleText(nk_style* style)
 {
     style->text.color = nk_rgba(255, 255, 255, 255);
+}
+
+struct nk_image GuiCombat::getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight)
+{
+    return nk_subimage_id(textureID, atlasWidth, atlasHeight,
+                          nk_rect(tileX * 48, tileY * 48, tileWidth * 48, tileHeight * 48));
 }

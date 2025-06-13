@@ -27,7 +27,7 @@ class CombatController {
     void update();
 
     private:
-    GuiCombat guiCombat;
+    // GuiCombat guiCombat;
     gl3::Army* playerArmy = nullptr;
     gl3::Army* aiArmy = nullptr;
 

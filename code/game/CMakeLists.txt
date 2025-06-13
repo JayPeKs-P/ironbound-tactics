@@ -25,18 +25,18 @@ set(SOURCE_FILES src/main.cpp
 #        src/guiElements/battleMenu.h
 #        src/rendering/pngTexture.cpp
 #        src/rendering/pngTexture.h
-        src/entities/unitTypes/UnitHumanoid.cpp
-        src/entities/unitTypes/UnitHumanoid.h
         src/combatLogic/Army.cpp
         src/combatLogic/Army.h
         src/entities/Unit.cpp
         src/entities/Unit.h
-        src/entities/unitTypes/UnitSiege.cpp
-        src/entities/unitTypes/UnitSiege.h
         src/gui/CombatController.cpp
         src/gui/CombatController.h
         src/gui/guiCombat.cpp
         src/gui/guiCombat.h
+        src/entities/unitTypes/Infantry.cpp
+        src/entities/unitTypes/Infantry.h
+        src/entities/unitTypes/Archer.cpp
+        src/entities/unitTypes/Archer.h
 )
 
 # set executable name

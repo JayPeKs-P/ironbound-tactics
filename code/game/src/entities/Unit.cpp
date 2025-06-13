@@ -6,20 +6,41 @@
 
 using namespace gl3;
 
-Unit::Unit(const std::filesystem::path& gltfAssetPath, glm::vec3 position, float zRotation, glm::vec3 scale,
-glm::vec4 color): Entity(Shader("shaders/shaded/vertexShader.vert",
-"shaders/shaded/fragmentShader.frag"),
-Mesh(gltfAssetPath),
-position,
-zRotation,
-scale,
-color)
+Unit::Unit(float hp, float def, float atk, int acc, int critc):
+lifePoints(hp),
+armorValue(def),
+attackValue(atk),
+accuracy(acc),
+critChance(critc)
 {
+
+}
+
+
+float Unit::attack()
+{
+    int hitRoll = dist(rng);
+    if (hitRoll >= accuracy)
+    {
+        return 0;
+    }
+    float damage = attackValue;
+
+    int critRoll = dist(rng);
+    if (critRoll < critChance)
+    {
+       damage *= critMultiplier;
+    }
+    return damage;
 }
 
 float Unit::takeDamage(float damage)
 {
-    float actualDamage = std::max(0.0f, std::min(damage, this->lifePoints));
-    this->lifePoints -= actualDamage;
-    return this->lifePoints;
+    float differenceAD = damage - armorValue;
+    armorValue -= damage/20;
+    if (differenceAD > 0)
+    {
+       lifePoints -= differenceAD;
+    }
+    return lifePoints;
 }
