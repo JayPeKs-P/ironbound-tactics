@@ -18,8 +18,8 @@ Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
            glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)),
     center(center)
 {
-    createTroups(UnitHumanoid::Type::Infantry, "gltf/planet.glb", numInfantry);
-    createTroups(UnitHumanoid::Type::Archer, "gltf/enemy.glb", numArcher);
+    // createTroups(UnitHumanoid::Type::Infantry, "gltf/planet.glb", numInfantry);
+    // createTroups(UnitHumanoid::Type::Archer, "gltf/enemy.glb", numArcher);
     //createTroups(UnitHumanoid::Type::Siege, "gltf/spaceship.glb", numSiege);
     this->armySize = maxArmySize;
 }
@@ -28,7 +28,7 @@ void Army::draw(Game* game)
 {
     for (auto& unit : units)
     {
-        unit->draw(game);
+        // unit->draw(game);
     }
 }
 
@@ -51,7 +51,7 @@ float Army::takeDamage(float totalDamage)
 
         if ((*it)->getLifePoints() <= 0)
         {
-            this->armySize -= (*it)->getCommandPoints();
+            // this->armySize -= (*it)->getCommandPoints();
             it = this->units.erase(it);
         }
         else
@@ -73,7 +73,7 @@ float Army::dealDamage() const
     {
         if (unit->isReady())
         {
-            totalDamage += 0.3f * unit->getCommandPoints();
+            // totalDamage += 0.3f * unit->getCommandPoints();
         }
         else
         {
@@ -83,37 +83,37 @@ float Army::dealDamage() const
     return totalDamage;
 }
 
-void Army::setDefending(UnitHumanoid::Type unitType, int num)
+void Army::setDefending(Unit unit, int num)
 {
     int count = 0;
     for (auto& unit : this->units)
     {
-        if (num <= count) { break; }
-        if (unit->getType() == unitType && unit->isReady())
-        {
-            unit->setReady(false);
-            count++;
-        }
+        // if (num <= count) { break; }
+        // if (unit->getType() == unitType && unit->isReady())
+        // {
+        //     unit->setReady(false);
+        //     count++;
+        // }
     }
 }
 
-float Army::getCommandPoints(UnitHumanoid::Type unitType, int num) const
+float Army::getCommandPoints(Unit unit, int num) const
 {
     float totalCommandPoints = 0;
     int count = 0;
     for (auto& unit : this->units)
     {
-        if (num <= count) { break; }
-        if (unit->getType() == unitType)
-        {
-            totalCommandPoints += unit->getCommandPoints();
-            count++;
-        }
+        // if (num <= count) { break; }
+        // if (unit->getType() == unitType)
+        // {
+        //     totalCommandPoints += unit->getCommandPoints();
+        //     count++;
+        // }
     }
     return totalCommandPoints;
 }
 
-void Army::createTroups(UnitHumanoid::Type type,
+void Army::createTroups(Unit unit,
                         const std::filesystem::path& gltfAssetPath,
                         int amount)
 {
@@ -126,13 +126,14 @@ void Army::createTroups(UnitHumanoid::Type type,
     {
         glm::vec3 unitRandomPosition = glm::vec3(positionDist(randomNumberEngine),
                                                  positionDist(randomNumberEngine), 0) + center;
-        auto unit = std::make_unique<UnitHumanoid>(type,
-                                           gltfAssetPath,
-                                           unitRandomPosition,
-                                           0.0f,
-                                           glm::vec3(0.05f, 0.05f, 0.0f),
-                                           glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-        maxArmySize += unit->getCommandPoints();
-        units.push_back(std::move(unit));
+        // auto unit = std::make_unique<Unit>(
+        //     //type,
+        //                                    gltfAssetPath,
+        //                                    unitRandomPosition,
+        //                                    0.0f,
+        //                                    glm::vec3(0.05f, 0.05f, 0.0f),
+        //                                    glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+        // maxArmySize += unit->getCommandPoints();
+        // units.push_back(std::move(unit));
     }
 }
