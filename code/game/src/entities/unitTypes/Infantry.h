@@ -10,7 +10,7 @@ namespace gl3 {
 class Infantry: public Unit{
 public:
     Infantry();
-    ~Infantry();
+    ~Infantry() = default;;
 };
 
 } // gl3

@@ -10,7 +10,7 @@ namespace gl3 {
 class Archer: public Unit {
 public:
     Archer();
-    ~Archer();
+    ~Archer() = default;;
 
 };
 

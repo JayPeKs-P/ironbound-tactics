@@ -3,7 +3,6 @@
 //
 #pragma once
 #include <glad/glad.h>
-//#include "../src/entities/Ship.h"
 #include "../src/entities/Entity.h"
 
 
@@ -12,8 +11,6 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-#define NK_INCLUDE_STANDARD_IO
-#include <nuklear_glfw_gl3.h>
 
 
 //-----------------------------------------
@@ -24,11 +21,10 @@ fully understood those macros (they are
 used in nk_glfw3_render(), which uses their
 data for glBufferData()
 */
-#define MAX_VERTEX_BUFFER 1024 *1024
-#define MAX_ELEMENT_BUFFER 128 * 1024
 //-----------------------------------------
 //!!!!! already set in tinygltf #define STB_IMAGE_IMPLEMENTATION !!!!!!!!
 #include <stb_image.h>
+#include "../src/gui/CombatController.h"
 
 namespace gl3
 {
@@ -44,10 +40,6 @@ namespace gl3
         {
             return window;
         }
-        // [[nodiscard]] Ship* getShip() const
-        // {
-        //     return ship;
-        // }
 
     private:
         //--------------GUI--------------------------------
@@ -102,8 +94,7 @@ namespace gl3
         void draw();
         void updateDeltaTime();
 
-        struct nk_glfw glfw = {nullptr};
-        struct nk_context *ctx;
+
 
         std::vector<std::unique_ptr<Entity>> entities;
 

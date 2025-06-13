@@ -9,7 +9,7 @@ namespace gl3 {
 class Unit{
 public:
     Unit(float hp, float def, float atk, int acc, int critc);
-    ~Unit();
+    ~Unit() = default;
     void move();
     float attack();
     void use();
