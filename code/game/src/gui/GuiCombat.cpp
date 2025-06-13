@@ -1,5 +1,5 @@
 //
-// Created by julia on 25/02/2025.
+// Created by Julian Kalb on 25/02/2025.
 //
 
 #include "GuiCombat.h"

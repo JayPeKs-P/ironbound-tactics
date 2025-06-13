@@ -1,5 +1,5 @@
 //
-// Created by julia on 25/02/2025.
+// Created by Julian Kalb on 25/02/2025.
 //
 
 #pragma once
@@ -13,9 +13,9 @@
 #define MAX_ELEMENT_BUFFER 128 * 1024
 
 #include "GuiCombat.h"
-#include "../combatLogic/Army.h"
+#include "../entities/Unit.h"
 
-namespace gui {
+namespace gl3 {
 
 class CombatController {
     public:
@@ -27,9 +27,9 @@ class CombatController {
     void update();
 
     private:
+    std::vector<std::unique_ptr<Unit>> playerUnits;
+    std::vector<std::unique_ptr<Unit>> enemyUnits;
     // GuiCombat guiCombat;
-    gl3::Army* playerArmy = nullptr;
-    gl3::Army* aiArmy = nullptr;
 
     GLuint textureAtlasID = -1;
     void loadTextureAtlas(const char* texturePath);

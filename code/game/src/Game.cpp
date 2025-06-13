@@ -1,5 +1,5 @@
 //
-// Created by julia on 22/10/2024.
+// Created by Julian Kalb on 22/10/2024.
 //
 
 #include "Game.h"
@@ -12,7 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Assets.h"
-#include "entities/unitTypes/UnitHumanoid.h"
 // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
 

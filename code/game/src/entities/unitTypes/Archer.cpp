@@ -1,5 +1,5 @@
 //
-// Created by julia on 13/06/2025.
+// Created by Julian Kalb on 13/06/2025.
 //
 
 #include "Archer.h"

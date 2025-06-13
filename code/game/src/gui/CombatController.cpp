@@ -1,5 +1,5 @@
 //
-// Created by julia on 25/02/2025.
+// Created by Julian Kalb on 25/02/2025.
 //
 
 #include "CombatController.h"
@@ -7,8 +7,10 @@
 #include <iostream>
 #include <stb_image.h>
 #include "GuiCombat.h"
+#include "../entities/unitTypes/Archer.h"
+#include "../entities/unitTypes/Infantry.h"
 
-using namespace gui;
+using namespace gl3;
 
 CombatController::CombatController(GLFWwindow* window):window(window)
 {
@@ -20,6 +22,16 @@ CombatController::CombatController(GLFWwindow* window):window(window)
         nk_glfw3_font_stash_end(&glfw);
         /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
         nk_style_set_font(ctx, &FantasyRPG1->handle);}
+
+    auto pInf = std::make_unique<Infantry>();
+    auto pArch = std::make_unique<Archer>();
+    playerUnits.push_back(std::move(pInf));
+    playerUnits.push_back(std::move(pArch));
+
+    auto eInf = std::make_unique<Infantry>();
+    auto eArch = std::make_unique<Archer>();
+    enemyUnits.push_back(std::move(eInf));
+    enemyUnits.push_back(std::move(eArch));
 }
 
 CombatController::~CombatController()
@@ -30,7 +42,7 @@ CombatController::~CombatController()
 void CombatController::init()
 {
    loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
-   GuiCombat combatMenu(ctx, textureAtlasID);
+   gui::GuiCombat combatMenu(ctx, textureAtlasID);
 }
 
 void CombatController::draw()

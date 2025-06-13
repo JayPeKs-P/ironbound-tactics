@@ -1,5 +1,5 @@
 //
-// Created by julia on 22/10/2024.
+// Created by Julian Kalb on 22/10/2024.
 //
 #pragma once
 #include <glad/glad.h>

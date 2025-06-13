@@ -1,11 +1,9 @@
 //
-// Created by julia on 25/02/2025.
+// Created by Julian Kalb on 25/02/2025.
 //
 
 #pragma once
 #include "nuklear.h"
-#include "../entities/unitTypes/Archer.h"
-#include "../entities/unitTypes/Infantry.h"
 
 namespace gui {
 
@@ -17,11 +15,6 @@ public:
     void GuiCombat::drawRender(int windowWidth, int windowHeight);
 
 private:
-    gl3::Infantry pInf;
-    gl3::Archer pArch;
-    gl3::Infantry eInf;
-    gl3::Archer eArch;
-
     nk_uint textureID;
 
     struct nk_image GuiCombat::getTileImage(
