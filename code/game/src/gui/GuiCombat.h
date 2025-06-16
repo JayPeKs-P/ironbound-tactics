@@ -11,7 +11,7 @@ namespace gui {
 
 class GuiCombat {
 public:
-    GuiCombat(struct nk_context *ctx, nk_uint textureID);
+    GuiCombat(struct nk_context *ctx, nk_uint& textureID);
     ~GuiCombat() = default;
 
     void GuiCombat::drawRender(int windowWidth, int windowHeight);

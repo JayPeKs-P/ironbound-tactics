@@ -5,15 +5,17 @@
 #include "GuiCombat.h"
 
 #include <cstdio>
+#include <iostream>
+#include <ostream>
 /* Included to use snprintf() in void drawUnitActions()
  * - needed for now to show cast amountOfTroups to char for nk_label
  */
 
 using namespace gui;
 
-GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint textureID):ctx(ctx), textureID(textureID)
+GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint& textureID):ctx(ctx), textureID(textureID)
 {
-
+    std::cout<<textureID<<std::endl;
 }
 
 void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
