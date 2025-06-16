@@ -42,6 +42,7 @@ namespace gl3
         }
 
     private:
+        CombatController* combatController = nullptr;
         //--------------GUI--------------------------------
         // enum class OwnerOfUnit{No_Selection, Player, AI};
         // enum class Category {Empty, Infantry, Archer, Siege, Catapult, Assault_Cover};

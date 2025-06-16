@@ -42,7 +42,7 @@ CombatController::~CombatController()
 void CombatController::init()
 {
    loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
-   gui::GuiCombat combatMenu(ctx, textureAtlasID);
+   guiCombat = new gui::GuiCombat(ctx, textureAtlasID);
 }
 
 void CombatController::draw()
@@ -52,6 +52,7 @@ void CombatController::draw()
     //maybe create a template for GuiObjects and then draw them, no matter what type they have
 
     nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+    guiCombat->drawRender(windowWidth, windowHeight);
 }
 
 void CombatController::update()

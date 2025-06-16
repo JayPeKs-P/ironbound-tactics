@@ -29,7 +29,7 @@ class CombatController {
     private:
     std::vector<std::unique_ptr<Unit>> playerUnits;
     std::vector<std::unique_ptr<Unit>> enemyUnits;
-    // GuiCombat guiCombat;
+    gui::GuiCombat* guiCombat = nullptr;
 
     GLuint textureAtlasID = -1;
     void loadTextureAtlas(const char* texturePath);

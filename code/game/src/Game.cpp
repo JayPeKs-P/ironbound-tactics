@@ -45,6 +45,8 @@ Game::Game(int width, int height, const std::string &title)
     if(glGetError() != GL_NO_ERROR) {
         throw std::runtime_error("gl error");
     }
+    combatController = new CombatController(window);
+    combatController->init();
     // audio.init();
     // audio.setGlobalVolume(0.1f);
 
@@ -87,6 +89,7 @@ void Game::update()
     {
         entity->update(this, deltaTime);
     }
+    combatController->update();
 }
 
 void Game::draw()
@@ -98,6 +101,7 @@ void Game::draw()
     {
         entity->draw(this);
     }
+    combatController->draw();
 
      glfwSwapBuffers(window);
 }
