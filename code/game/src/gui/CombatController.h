@@ -22,6 +22,8 @@ class CombatController {
     CombatController(GLFWwindow* window);
     ~CombatController();
 
+    void handleTurn(bool newRound);
+
     void init();
     void draw();
     void update();

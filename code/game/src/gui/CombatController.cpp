@@ -39,6 +39,8 @@ CombatController::~CombatController()
     nk_glfw3_shutdown(&glfw);
 }
 
+
+
 void CombatController::init()
 {
    loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
@@ -59,6 +61,7 @@ void CombatController::draw()
 
 void CombatController::update()
 {
+
     nk_glfw3_new_frame(&glfw);
 }
 
@@ -80,4 +83,18 @@ void CombatController::loadTextureAtlas(const char* texturePath)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbi_image_free(image);
+}
+
+void CombatController::handleTurn(bool newRound)
+{
+    if (newRound){
+        for (const auto &unit: playerUnits)
+        {
+            std::cout << "Player HP: " << unit->getLifePoints() << std::endl;
+        }
+        for (const auto &unit: enemyUnits)
+        {
+            std::cout <<"Enemy HP: " << unit->getLifePoints() << std::endl;
+        }
+    }
 }
