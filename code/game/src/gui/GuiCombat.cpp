@@ -1,13 +1,163 @@
 //
-// Created by julia on 25/02/2025.
+// Created by Julian Kalb on 25/02/2025.
 //
 
 #include "GuiCombat.h"
 
+#include <cstdio>
+#include <iostream>
+#include <ostream>
+/* Included to use snprintf() in void drawUnitActions()
+ * - needed for now to show cast amountOfTroups to char for nk_label
+ */
+
 using namespace gui;
 
-GuiCombat::GuiCombat(struct nk_context* ctx):ctx(ctx)
+GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint& textureID):ctx(ctx), textureID(textureID)
 {
+    std::cout<<textureID<<std::endl;
+}
+
+void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
+{
+        nk_layout_row_dynamic(ctx, 24, 3);
+        nk_label(ctx, "Infantry", NK_TEXT_LEFT);
+        nk_label(ctx, "Archer", NK_TEXT_LEFT);
+        nk_label(ctx, "Siege", NK_TEXT_LEFT);
+        nk_layout_row_dynamic(ctx, 36, 3);
+        nk_progress(ctx, &healthInfantryPlayer, 100, NK_FIXED);
+        nk_progress(ctx, &healthArcherPlayer, 100, NK_FIXED);
+        nk_progress(ctx, &healthSiegePlayer, 100, NK_FIXED);
+}
+
+void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
+{
+        if (nk_begin(ctx, "Enemy",
+        nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
+        NK_WINDOW_TITLE|NK_WINDOW_BORDER)) {
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+        nk_progress(ctx, &healthInfantryAI, 100, NK_FIXED);
+        nk_progress(ctx, &healthArcherAI, 100, NK_FIXED);
+        nk_progress(ctx, &healthSiegeAI, 100, NK_FIXED);
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+        const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
+        Category enemyCategories[] = { Category::Infantry, Category::Archer, Category::Siege };
+
+        for (int i = 0; i < 3; i++) {
+            if (nk_option_label(ctx,
+            enemyNames[i],
+                    owner == OwnerOfUnit::AI &&
+                    selectedTwo == enemyCategories[i]) &&
+                selectedOne != Category::Empty)
+                {
+                if (owner != OwnerOfUnit::AI) owner = OwnerOfUnit::AI;
+                if (selectedTwo != enemyCategories[i]) selectedTwo = enemyCategories[i];
+            }
+        }
+    }
+    nk_end(ctx);
+}
+
+void GuiCombat::drawUnitSelectionMenu(int windowWidth, int windowHeight)
+{
+        if (nk_begin(ctx, "Units",
+        nk_rect(windowWidth / 4, windowHeight - windowHeight / 2, windowWidth / 2, 60), NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BORDER)) {
+
+        nk_layout_row_dynamic(ctx, 36, 3);
+
+        const char* unitNames[] = { "Infantry", "Archer", "Siege" };
+        Category unitCategories[] = { Category::Infantry, Category::Archer, Category::Siege };
+        int unitTroops[] = { infAmount, archAmount, siegeAmount };
+
+        for (int i = 0; i < 3; i++) {
+            if (nk_button_label(ctx, unitNames[i])) {
+                if (selectedOne == Category::Empty) {
+                    selectedOne = unitCategories[i];
+                    amountOfTroups = unitTroops[i];
+                } else if (selectedOne != unitCategories[i]) {
+                    selectedTwo = unitCategories[i];
+                    owner = OwnerOfUnit::Player;
+                } else {
+                    selectedOne = Category::Empty;
+                    selectedTwo = Category::Empty;
+                    owner = OwnerOfUnit::No_Selection;
+                }
+            }
+        }
+    }
+    nk_end(ctx);
+}
+
+void GuiCombat::drawUnitActions(int selectedUnit)
+{
+    if (selectedUnit == Category::Empty) return;
+
+    nk_layout_row_dynamic(ctx, 26, 3);
+    nk_label(ctx, (selectedUnit == Category::Infantry) ? "Infantry" :
+                   (selectedUnit == Category::Archer) ? "Archer" : "Siege", NK_TEXT_LEFT);
+    nk_label(ctx, "Available  Units: ", NK_TEXT_LEFT);
+
+    char amountLabel[16];
+    snprintf(amountLabel, sizeof(amountLabel), "%d", amountOfTroups);
+    nk_label(ctx, amountLabel, NK_TEXT_LEFT);
+
+    if (nk_tree_push(ctx, NK_TREE_TAB, "Available  Actions", NK_MAXIMIZED)) {
+        nk_layout_row_dynamic(ctx, 36, 2);
+
+        if (owner == OwnerOfUnit::AI && selectedTwo != Category::Empty) {
+            if (nk_button_label(ctx, "Attack"))
+            {
+
+            }
+            nk_slider_int(ctx, 0, &valueAttack, amountOfTroups, 1);
+        } else if (selectedTwo == Category::Siege) {
+            if (nk_button_label(ctx, "Use Catapult"))
+            {
+                if (selectedOne == Category::Infantry) amountOfTroups = 20;
+            }
+            nk_slider_int(ctx, 0, &valueCatapult, amountOfTroups, 1);
+            if (nk_button_label(ctx, "Use Assault Cover"))
+            {
+                if (selectedOne == Category::Infantry) amountOfTroups = 0;
+            }
+            nk_slider_int(ctx, 0, &valueAssaultCover, amountOfTroups, 1);
+        } else if (selectedTwo == Category::Archer) {
+            if (nk_button_label(ctx, "Protect"))
+            {
+                if (selectedOne == Category::Siege) amountOfTroups = 6;
+
+            }
+            nk_slider_int(ctx, 0, &valueDefend, amountOfTroups, 1);
+        }else if (selectedTwo == Category::Infantry)
+        {
+            if (nk_button_label(ctx, "Protect"))
+            {
+                if (selectedOne == Category::Siege) amountOfTroups = 0;
+            }
+            nk_slider_int(ctx, 0, &valueDefendInf, amountOfTroups, 1);
+        }
+        nk_tree_pop(ctx);
+    }
+}
+
+void GuiCombat::drawRender(int windowWidth, int windowHeight) {
+    drawUnitSelectionMenu(windowWidth, windowHeight);
+
+    if (nk_begin(ctx, "UnitsGroup",
+        nk_rect(windowWidth / 4,
+                windowHeight - windowHeight / 3,
+                windowWidth / 2,
+                windowHeight / 3),
+            NK_WINDOW_BORDER|NK_WINDOW_NO_SCROLLBAR)) {
+        drawPlayerHealthBars(windowWidth, windowHeight);
+        drawUnitActions(/* Category selectedOne*/);
+    }
+    nk_end(ctx);
+
+    drawEnemyHealthBars(windowWidth, windowHeight);
+
 }
 
 void GuiCombat::setStyleWindow(nk_style* style)
@@ -66,4 +216,10 @@ void GuiCombat::setStyleSlider(nk_style* style)
 void GuiCombat::setStyleText(nk_style* style)
 {
     style->text.color = nk_rgba(255, 255, 255, 255);
+}
+
+struct nk_image GuiCombat::getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight)
+{
+    return nk_subimage_id(textureID, atlasWidth, atlasHeight,
+                          nk_rect(tileX * 48, tileY * 48, tileWidth * 48, tileHeight * 48));
 }

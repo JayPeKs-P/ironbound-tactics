@@ -1,9 +1,8 @@
 //
-// Created by julia on 22/10/2024.
+// Created by Julian Kalb on 22/10/2024.
 //
 #pragma once
 #include <glad/glad.h>
-//#include "../src/entities/Ship.h"
 #include "../src/entities/Entity.h"
 
 
@@ -12,8 +11,6 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-#define NK_INCLUDE_STANDARD_IO
-#include <nuklear_glfw_gl3.h>
 
 
 //-----------------------------------------
@@ -24,11 +21,10 @@ fully understood those macros (they are
 used in nk_glfw3_render(), which uses their
 data for glBufferData()
 */
-#define MAX_VERTEX_BUFFER 1024 *1024
-#define MAX_ELEMENT_BUFFER 128 * 1024
 //-----------------------------------------
 //!!!!! already set in tinygltf #define STB_IMAGE_IMPLEMENTATION !!!!!!!!
 #include <stb_image.h>
+#include "../src/gui/CombatController.h"
 
 namespace gl3
 {
@@ -44,57 +40,54 @@ namespace gl3
         {
             return window;
         }
-        // [[nodiscard]] Ship* getShip() const
-        // {
-        //     return ship;
-        // }
 
     private:
+        CombatController* combatController = nullptr;
         //--------------GUI--------------------------------
-        enum class OwnerOfUnit{No_Selection, Player, AI};
-        enum class Category {Empty, Infantry, Archer, Siege, Catapult, Assault_Cover};
-
-        void initGUI();
-        void updateGUI();
-        void drawGUI();
-        void destroyGUI();
-
-        void drawPlayerHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight);
-        void drawUnitSelectionMenu(struct nk_context *ctx, int windowWidth, int windowHeight);
-        void drawUnitActions(struct nk_context *ctx, Category selectedUnit);
-        void drawEnemyHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight);
-        void drawRender(struct nk_context *ctx, int windowWidth, int windowHeight);
-
-
-        OwnerOfUnit owner = OwnerOfUnit::No_Selection;
-        Category selectedOne = Category::Empty;
-        Category selectedTwo = Category::Empty;
-        int amountOfTroups = 0;
-        int valueAttack = 0;
-        int valueDefend = 0;
-        int valueCatapult = 0;
-        int valueAssaultCover = 0;
-        int valueDefendInf = 0;
-
-        nk_size healthInfantryPlayer = 100;
-        nk_size healthArcherPlayer = 100;
-        nk_size healthSiegePlayer = 100;
-        nk_size healthInfantryAI = 100;
-        nk_size healthArcherAI = 100;
-        nk_size healthSiegeAI = 100;
-
-        GLuint textureAtlasID;
-        struct nk_image atlas;
-        struct nk_style *style;
-        void loadTextureAtlas(const char* texturePath);
-
-        struct nk_image getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight);
-        enum round{ONE, TWO, THREE, FOUR, FIVE, SIX};
-        int round = ONE;
-        int infAmount = 40;
-        int archAmount = 30;
-        int siegeAmount = 10;
-        void reset();
+        // enum class OwnerOfUnit{No_Selection, Player, AI};
+        // enum class Category {Empty, Infantry, Archer, Siege, Catapult, Assault_Cover};
+        //
+        // void initGUI();
+        // void updateGUI();
+        // void drawGUI();
+        // void destroyGUI();
+        //
+        // void drawPlayerHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight);
+        // void drawUnitSelectionMenu(struct nk_context *ctx, int windowWidth, int windowHeight);
+        // void drawUnitActions(struct nk_context *ctx, Category selectedUnit);
+        // void drawEnemyHealthBars(struct nk_context *ctx, int windowWidth, int windowHeight);
+        // void drawRender(struct nk_context *ctx, int windowWidth, int windowHeight);
+        //
+        //
+        // OwnerOfUnit owner = OwnerOfUnit::No_Selection;
+        // Category selectedOne = Category::Empty;
+        // Category selectedTwo = Category::Empty;
+        // int amountOfTroups = 0;
+        // int valueAttack = 0;
+        // int valueDefend = 0;
+        // int valueCatapult = 0;
+        // int valueAssaultCover = 0;
+        // int valueDefendInf = 0;
+        //
+        // nk_size healthInfantryPlayer = 100;
+        // nk_size healthArcherPlayer = 100;
+        // nk_size healthSiegePlayer = 100;
+        // nk_size healthInfantryAI = 100;
+        // nk_size healthArcherAI = 100;
+        // nk_size healthSiegeAI = 100;
+        //
+        // GLuint textureAtlasID;
+        // struct nk_image atlas;
+        // struct nk_style *style;
+        // void loadTextureAtlas(const char* texturePath);
+        //
+        // struct nk_image getTileImage(int tileX, int tileY, int tileWidth, int tileHeight, int atlasWidth, int atlasHeight);
+        // enum round{ONE, TWO, THREE, FOUR, FIVE, SIX};
+        // int round = ONE;
+        // int infAmount = 40;
+        // int archAmount = 30;
+        // int siegeAmount = 10;
+        // void reset();
         //------------END OF GUI--------------------------------------
         static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -102,8 +95,7 @@ namespace gl3
         void draw();
         void updateDeltaTime();
 
-        struct nk_glfw glfw = {nullptr};
-        struct nk_context *ctx;
+
 
         std::vector<std::unique_ptr<Entity>> entities;
 

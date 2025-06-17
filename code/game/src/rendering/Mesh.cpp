@@ -1,5 +1,5 @@
 //
-// Created by julia on 23/10/2024.
+// Created by Julian Kalb on 23/10/2024.
 //
 
 #include "Mesh.h"

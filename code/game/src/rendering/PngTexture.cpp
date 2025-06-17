@@ -1,5 +1,5 @@
 //
-// Created by julia on 30/11/2024.
+// Created by Julian Kalb on 30/11/2024.
 //
 
 #include "PngTexture.h"

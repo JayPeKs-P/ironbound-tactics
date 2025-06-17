@@ -1,5 +1,5 @@
 //
-// Created by julia on 24/10/2024.
+// Created by Julian Kalb on 24/10/2024.
 //
 
 #include <glm/gtc/matrix_transform.hpp>
