@@ -23,45 +23,12 @@ engine::Game(width, height, title)
 {
     // audio.init();
     // audio.setGlobalVolume(0.1f);
-    combatController = new CombatController(window);
+    combatController = new CombatController(this->getWindow());
     combatController->init();
 }
 
-void Game::update()
+void Game::start()
 {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
-    }
-
-    for (const auto & entity : entities)
-    {
-        entity->update(this, deltaTime);
-    }
-    combatController->update();
-}
-
-void Game::draw()
-{
-    glClearColor(0.172f, 0.243f, 0.313f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    for (const auto & entity : entities)
-    {
-        entity->draw(this);
-    }
-    combatController->draw();
-
-     glfwSwapBuffers(window);
-}
-
-void Game::run()
-{
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return;
-    }
-
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -97,16 +64,26 @@ void Game::run()
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
+}
 
-    glfwSetTime(1.0/60);
-
-    while (!glfwWindowShouldClose(window))
-    {
-        update();
-        draw();
-        updateDeltaTime();
-        glfwPollEvents();
+void Game::update(GLFWwindow *window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
     }
 
-    glDeleteVertexArrays(1, &VAO);
+    for (const auto & entity : entities)
+    {
+        entity->update(this, deltaTime);
+    }
+    combatController->update();
+}
+
+void Game::draw()
+{
+    for (const auto & entity : entities)
+    {
+        entity->draw(this);
+    }
+    combatController->draw();
 }

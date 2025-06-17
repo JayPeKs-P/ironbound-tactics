@@ -2,40 +2,15 @@
 #include "engine/Game.h"
 
 using namespace gl3::engine;
-
-Game::Game(int width, int height, const std::string& title)
+Game::Game(int width, int height, const std::string& title):
+context(width, height, title)
 {
-    if (!glfwInit())
-    {
-        throw std::runtime_error("Failed to initialize GLFW");
-    }
-    // define openGL version (4.6)
-    //--------------------------------
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-
-    window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-
-    if (window == nullptr)
-    {
-        throw std::runtime_error("Failed to create window");
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-    glEnable(GL_DEPTH_TEST);
-    if(glGetError() != GL_NO_ERROR) {
-        throw std::runtime_error("gl error");
-    }
 
 }
 
 Game::~Game()
 {
-    glfwTerminate();
+    context.~Context();
 }
 
 glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, glm::vec3 scale)
@@ -55,14 +30,20 @@ glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, g
     return mvpMatrix;
 }
 
+void Game::run()
+{
+    start();
+    context.run([&](context::Context &gl3CTX)
+    {
+        update(getWindow());
+        draw();
+        updateDeltaTime();
+    });
+}
+
 void Game::updateDeltaTime()
 {
     float frameTime = glfwGetTime();
     deltaTime = frameTime - lastFrameTime;
     lastFrameTime = frameTime;
-}
-
-void Game::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
 }

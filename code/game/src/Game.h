@@ -16,12 +16,12 @@ namespace gl3
     class Game: public engine::Game {
     public:
         Game(int width, int height, const std::string& title);
-        void run() override;
 
     private:
         CombatController* combatController = nullptr;
 
-        void update() override;
+        void start() override;
+        void update(GLFWwindow *window) override;
         void draw() override;
 
 
