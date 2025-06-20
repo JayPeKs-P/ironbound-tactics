@@ -3,7 +3,9 @@
 
 using namespace gl3::engine;
 Game::Game(int width, int height, const std::string& title):
-context(width, height, title)
+context(width, height, title),
+componentManager(*this),
+entityManager(componentManager,*this)
 {
 
 }
@@ -32,13 +34,19 @@ glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, g
 
 void Game::run()
 {
+    onStartup.invoke(*this);
     start();
+    onAfterStartup.invoke(*this);
     context.run([&](context::Context &gl3CTX)
     {
+        onBeforeUpdate.invoke(*this);
         update(getWindow());
         draw();
         updateDeltaTime();
+        onAfterUpdate.invoke(*this);
     });
+    onBeforeShutdown.invoke(*this);
+    onShutdown.invoke(*this);
 }
 
 void Game::updateDeltaTime()
