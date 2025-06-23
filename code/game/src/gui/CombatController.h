@@ -12,14 +12,16 @@
 #define MAX_VERTEX_BUFFER 1024 *1024
 #define MAX_ELEMENT_BUFFER 128 * 1024
 
+#include "engine/ecs/System.h"
+
 #include "GuiCombat.h"
 #include "../entities/Unit.h"
 
 namespace gl3 {
 
-class CombatController {
+class CombatController: public engine::ecs::System {
     public:
-    CombatController(GLFWwindow* window);
+    CombatController(engine::Game &game );
     ~CombatController();
 
     void handleTurn(bool newRound);

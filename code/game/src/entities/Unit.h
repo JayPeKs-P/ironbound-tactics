@@ -8,8 +8,12 @@ namespace gl3 {
 
 class Unit{
 public:
-    Unit(float hp, float def, float atk, int acc, int critc);
+    enum TypeOfUnit {INFANTRY, ARCHER};
+    Unit(float hp, float def, float atk, int acc, int critc, TypeOfUnit type);
     ~Unit() = default;
+
+
+
     void move();
     float attack();
     void use();
@@ -24,6 +28,8 @@ public:
     {
         return lifePoints;
     }
+
+    [[nodiscard]] TypeOfUnit getType() const {return typeOfUnit;}
 
     void setReady(bool state)
     {
@@ -40,6 +46,9 @@ protected:
     int critChance;
     float critMultiplier = 2.0f;
     bool ready = true;
+
+private:
+    TypeOfUnit typeOfUnit;
 
 };
 

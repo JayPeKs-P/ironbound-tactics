@@ -12,7 +12,9 @@
 
 using namespace gl3;
 
-CombatController::CombatController(GLFWwindow* window):window(window)
+CombatController::CombatController(engine::Game &game):
+    System(game),
+window(game.getWindow())
 {
     ctx = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
 
@@ -61,8 +63,8 @@ void CombatController::draw()
 
 void CombatController::update()
 {
-
     nk_glfw3_new_frame(&glfw);
+    handleTurn(true);
 }
 
 void CombatController::loadTextureAtlas(const char* texturePath)
@@ -87,14 +89,32 @@ void CombatController::loadTextureAtlas(const char* texturePath)
 
 void CombatController::handleTurn(bool newRound)
 {
-    if (newRound){
-        for (const auto &unit: playerUnits)
+    float pHP = 0;
+    for (auto& unit: playerUnits)
+    {
+        pHP += unit->getLifePoints();
+    }
+    std::cout<<"Player HP: "<<pHP<<std::endl;
+    float eHP = 0;
+    for (auto& unit: enemyUnits)
+    {
+        eHP += unit->getLifePoints();
+    }
+    std::cout<<"Enemy HP: "<<eHP<<std::endl;
+    std::cout<<"Attack with Inf? [y/n]"<<std::endl;
+    char input;
+    std::cin>>input;
+    if (input=='y')
+    {
+        std::cout<<"Target? [a/i]"<<std::endl;
+        std::cin>>input;
+        if (input=='a')
         {
-            std::cout << "Player HP: " << unit->getLifePoints() << std::endl;
+            enemyUnits[1]->takeDamage(playerUnits[0]->attack());
         }
-        for (const auto &unit: enemyUnits)
+        if (input=='i')
         {
-            std::cout <<"Enemy HP: " << unit->getLifePoints() << std::endl;
+            enemyUnits[0]->takeDamage(playerUnits[0]->attack());
         }
     }
 }

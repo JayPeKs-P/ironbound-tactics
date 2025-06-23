@@ -17,6 +17,7 @@ namespace gl3::engine {
 
 namespace gl3::engine::ecs {
     class ComponentManager {
+        using ComponentContainer = std::map<guid_t, std::unique_ptr<Component>>;
     public:
         explicit ComponentManager(engine::Game &engine);
 
@@ -30,6 +31,17 @@ namespace gl3::engine::ecs {
         template<typename C>
         C &getComponent(guid_t owner) {
             return *reinterpret_cast<C*>(containers.at(typeid(C).hash_code()).at(owner).get());
+        }
+
+        template<typename C>
+         bool hasComponent(const guid_t &owner) {
+            auto &container = containers[typeid(C).hash_code()];
+            return container.find(owner) != container.end();
+        }
+
+        template<typename C>
+        ComponentContainer &getContainer() {
+            return containers[typeid(C).hash_code()];
         }
 
         template<typename C>

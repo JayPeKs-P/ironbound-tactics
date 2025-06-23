@@ -23,7 +23,7 @@ engine::Game(width, height, title)
 {
     // audio.init();
     // audio.setGlobalVolume(0.1f);
-    combatController = new CombatController(this->getWindow());
+    combatController = new CombatController(*this);
     combatController->init();
 }
 

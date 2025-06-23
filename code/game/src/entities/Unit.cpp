@@ -6,12 +6,13 @@
 
 using namespace gl3;
 
-Unit::Unit(float hp, float def, float atk, int acc, int critc):
+Unit::Unit(float hp, float def, float atk, int acc, int critc, TypeOfUnit type):
 lifePoints(hp),
 armorValue(def),
 attackValue(atk),
 accuracy(acc),
-critChance(critc)
+critChance(critc),
+typeOfUnit(type)
 {
 
 }

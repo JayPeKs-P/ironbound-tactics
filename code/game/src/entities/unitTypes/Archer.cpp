@@ -5,7 +5,7 @@
 #include "Archer.h"
 
 namespace gl3 {
-    Archer::Archer(): Unit(80, 20, 40, 85, 8)
+    Archer::Archer(): Unit(80, 20, 40, 85, 8, ARCHER)
     {
     }
 } // gl3
