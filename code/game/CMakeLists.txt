@@ -37,6 +37,9 @@ set(SOURCE_FILES src/main.cpp
         src/entities/unitTypes/Infantry.h
         src/entities/unitTypes/Archer.cpp
         src/entities/unitTypes/Archer.h
+        src/entities/objectTypes/Catapult.cpp
+        src/entities/objectTypes/Catapult.h
+        src/components/HexTile.h
 )
 
 # set executable name

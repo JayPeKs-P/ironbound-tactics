@@ -8,7 +8,7 @@ namespace gl3 {
 
 class Unit{
 public:
-    enum TypeOfUnit {INFANTRY, ARCHER};
+    enum TypeOfUnit {INFANTRY, ARCHER, CATAPULT};
     Unit(float hp, float def, float atk, int acc, int critc, TypeOfUnit type);
     ~Unit() = default;
 
@@ -16,7 +16,6 @@ public:
 
     void move();
     float attack();
-    void use();
     float takeDamage(float damage);
 
     [[nodiscard]] bool isReady() const

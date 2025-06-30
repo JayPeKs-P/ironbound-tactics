@@ -8,15 +8,7 @@
 
 using namespace gl3;
 
-Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
-    Entity(Shader("shaders/shaded/vertexShader.vert",
-                  "shaders/shaded/fragmentShader.frag"),
-           Mesh("gltf/planet.glb"),
-           center,
-           0.0f,
-           glm::vec3(1.0f, 1.0f, 0.0f),
-           glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)),
-    center(center)
+Army::Army(int numInfantry, int numArcher, int numSiege)
 {
     // createTroups(UnitHumanoid::Type::Infantry, "gltf/planet.glb", numInfantry);
     // createTroups(UnitHumanoid::Type::Archer, "gltf/enemy.glb", numArcher);
@@ -24,13 +16,6 @@ Army::Army(int numInfantry, int numArcher, int numSiege, glm::vec3 center):
     this->armySize = maxArmySize;
 }
 
-void Army::draw(Game* game)
-{
-    for (auto& unit : units)
-    {
-        // unit->draw(game);
-    }
-}
 
 /*The way this function is implemented will probably always remove units in a set order,
 depending on the order they were pushed back on creation*/
@@ -114,18 +99,10 @@ float Army::getCommandPoints(Unit unit, int num) const
 }
 
 void Army::createTroups(Unit unit,
-                        const std::filesystem::path& gltfAssetPath,
                         int amount)
 {
-    std::mt19937 randomNumberEngine{
-        //Mersenne Twister generates 32-bit unsigned integers
-        std::random_device{}()
-    }; // Seed our Mersenne Twister using with a random number from the OS
-    std::uniform_real_distribution positionDist{-0.5f, 0.5f};
     for (int i = 0; i < amount; i++)
     {
-        glm::vec3 unitRandomPosition = glm::vec3(positionDist(randomNumberEngine),
-                                                 positionDist(randomNumberEngine), 0) + center;
         // auto unit = std::make_unique<Unit>(
         //     //type,
         //                                    gltfAssetPath,

@@ -64,7 +64,7 @@ void CombatController::draw()
 void CombatController::update()
 {
     nk_glfw3_new_frame(&glfw);
-    handleTurn(true);
+    // handleTurn(true);
 }
 
 void CombatController::loadTextureAtlas(const char* texturePath)
