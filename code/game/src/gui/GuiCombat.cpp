@@ -16,6 +16,14 @@ using namespace gui;
 GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint& textureID):ctx(ctx), textureID(textureID)
 {
     std::cout<<textureID<<std::endl;
+    nk_style* style = &ctx->style;
+    setStyleWindow(style);
+    setStyleButton(style);
+    setStyleOptionLabel(style);
+    setStyleProgressBar(style);
+    setStyleSlider(style);
+    setStyleText(style);
+
 }
 
 void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
@@ -152,7 +160,7 @@ void GuiCombat::drawRender(int windowWidth, int windowHeight) {
                 windowHeight / 3),
             NK_WINDOW_BORDER|NK_WINDOW_NO_SCROLLBAR)) {
         drawPlayerHealthBars(windowWidth, windowHeight);
-        drawUnitActions(/* Category selectedOne*/);
+        drawUnitActions(selectedOne);
     }
     nk_end(ctx);
 
