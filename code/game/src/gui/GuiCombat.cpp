@@ -15,7 +15,6 @@ using namespace gui;
 
 GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint& textureID):ctx(ctx), textureID(textureID)
 {
-    std::cout<<textureID<<std::endl;
     nk_style* style = &ctx->style;
     setStyleWindow(style);
     setStyleButton(style);

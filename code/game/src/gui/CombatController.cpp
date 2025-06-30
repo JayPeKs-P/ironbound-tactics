@@ -46,9 +46,7 @@ CombatController::~CombatController()
 void CombatController::init()
 {
    loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
-    std::cout<<textureAtlasID<<std::endl;
    guiCombat = new gui::GuiCombat(ctx, textureAtlasID);
-    std::cout<<textureAtlasID<<std::endl;
 }
 
 void CombatController::draw()
