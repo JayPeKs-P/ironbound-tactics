@@ -7,14 +7,34 @@
 #include <memory>
 
 #include "engine/ecs/Component.h"
+#include "../entities/Unit.h"
 
 namespace gl3 {
-template<typename UnitType, int N>
-class UnitContainer: Component {
-  public:
-    using unitContainer_t = std::vector<std::unique_ptr<UnitType>>;
+    using engine::ecs::Component;
+    using engine::ecs::ComponentManager;
+    using engine::ecs::guid_t;
+    using engine::ecs::Entity;
 
-    unitContainer_t units;
+template<typename UnitType>
+class UnitContainer: public Component {
+  public:
+    static_assert(std::is_base_of<Unit, UnitType>::value,
+        "UnitContainer can only be instantiated with types derived from Unit");
+    friend ComponentManager;
+    friend Entity;
+
+    std::vector<std::unique_ptr<Unit>> units;
+
+    void add(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            auto unit = std::make_unique<UnitType>();
+            units.push_back(std::move(unit));
+        }
+    }
+    private:
+        explicit UnitContainer(guid_t owner) : Component(owner){ }
 
 };
 

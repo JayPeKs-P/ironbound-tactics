@@ -21,9 +21,9 @@ namespace gl3::engine::ecs {
     public:
         explicit ComponentManager(engine::Game &engine);
 
-        template<typename C>
-        [[nodiscard]] C &addComponent(guid_t owner) {
-            C component(owner);
+        template<typename C, typename ...Args>
+        [[nodiscard]] C &addComponent(guid_t owner, Args ...args) {
+            C component(owner, args...);
             containers[typeid(C).hash_code()][owner] = std::make_unique<C>(std::move(component));
             return getComponent<C>(owner);
         }

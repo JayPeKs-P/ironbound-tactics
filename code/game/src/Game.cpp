@@ -12,7 +12,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Assets.h"
-// #include "entities/Enemy.h"
+#include "components/UnitContainer.h"
+#include "entities/objectTypes/Catapult.h"
+#include "entities/unitTypes/Archer.h"
+#include "entities/unitTypes/Infantry.h"
+ // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
 
 
@@ -23,8 +27,7 @@ engine::Game(width, height, title)
 {
     // audio.init();
     // audio.setGlobalVolume(0.1f);
-    combatController = new CombatController(*this);
-    combatController->init();
+
 }
 
 void Game::start()
@@ -60,6 +63,31 @@ void Game::start()
     // auto enemy = std::make_unique<Enemy>(glm::vec3(2, -1, 0), -90.0f, 0.25f);
     // entities.push_back(std::move(enemy));
 
+    combatController = new CombatController(*this);
+    combatController->init();
+
+    //----- Entities of player's army -----
+    auto &pInfantry = engine::Game::entityManager.createEntity();
+    auto &pInfContainer = pInfantry.addComponent<UnitContainer<Infantry>>();
+
+    auto &pArchers = engine::Game::entityManager.createEntity();
+    auto &pArcContainer = pArchers.addComponent<UnitContainer<Archer>>();
+
+    auto &pCatapults = engine::Game::entityManager.createEntity();
+    auto &pCatContainer = pCatapults.addComponent<UnitContainer<Catapult>>();
+
+
+    //----- Entities of enemy's army -----
+    auto &eInfantry = engine::Game::entityManager.createEntity();
+    auto &eInfContainer = eInfantry.addComponent<UnitContainer<Infantry>>();
+
+    auto &eArchers = engine::Game::entityManager.createEntity();
+    auto &eArcContainer = eArchers.addComponent<UnitContainer<Archer>>();
+
+    auto &eCatapults = engine::Game::entityManager.createEntity();
+    auto &eCatContainer = eCatapults.addComponent<UnitContainer<Catapult>>();
+
+
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     backgroundMusic->setLooping(true);
@@ -72,18 +100,18 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
 
-    for (const auto & entity : entities)
-    {
-        entity->update(this, deltaTime);
-    }
+    // for (const auto & entity : entities)
+    // {
+    //     entity->update(this, deltaTime);
+    // }
     combatController->update();
 }
 
 void Game::draw()
 {
-    for (const auto & entity : entities)
-    {
-        entity->draw(this);
-    }
+    // for (const auto & entity : entities)
+    // {
+    //     entity->draw(this);
+    // }
     combatController->draw();
 }

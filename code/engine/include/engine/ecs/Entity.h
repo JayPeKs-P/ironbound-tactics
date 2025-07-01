@@ -16,9 +16,9 @@ namespace gl3::engine::ecs {
         [[nodiscard]] guid_t guid() const { return id; }
         [[nodiscard]] bool isDeleted() const { return deleted; }
 
-        template<typename C>
-        [[nodiscard]] C &addComponent() {
-            return componentManager.addComponent<C>(id);
+        template<typename C, typename ... Args>
+        [[nodiscard]] C &addComponent(Args ...args) {
+            return componentManager.addComponent<C>(id, args...);
         }
 
         template<typename C>

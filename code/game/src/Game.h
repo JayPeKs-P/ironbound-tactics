@@ -3,13 +3,14 @@
 //
 #pragma once
 #include "engine/Game.h"
-#include "../src/entities/Entity.h"
+// #include "../src/entities/Entity.h"
 
 
 #include <soloud.h>
 #include <soloud_wav.h>
 
 #include "../src/gui/CombatController.h"
+
 
 namespace gl3
 {
@@ -26,7 +27,7 @@ namespace gl3
 
 
 
-        std::vector<std::unique_ptr<Entity>> entities;
+        // std::vector<std::unique_ptr<Entity>> entities;
 
 //        Ship* ship = nullptr;
 
