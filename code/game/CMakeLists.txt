@@ -40,6 +40,7 @@ set(SOURCE_FILES src/main.cpp
         src/entities/objectTypes/Catapult.cpp
         src/entities/objectTypes/Catapult.h
         src/components/HexTile.h
+        src/components/UnitContainer.h
 )
 
 # set executable name
