@@ -12,10 +12,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Assets.h"
+
 #include "components/UnitContainer.h"
 #include "entities/objectTypes/Catapult.h"
 #include "entities/unitTypes/Archer.h"
 #include "entities/unitTypes/Infantry.h"
+#include "components/TagComponent.h"
  // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
 
@@ -69,24 +71,46 @@ void Game::start()
     //----- Entities of player's army -----
     auto &pInfantry = engine::Game::entityManager.createEntity();
     auto &pInfContainer = pInfantry.addComponent<UnitContainer<Infantry>>();
+    pInfantry.addComponent<TagComponent>(Tag{Tag::PLAYER});
 
     auto &pArchers = engine::Game::entityManager.createEntity();
     auto &pArcContainer = pArchers.addComponent<UnitContainer<Archer>>();
+    pArchers.addComponent<TagComponent>(Tag{Tag::PLAYER});
 
     auto &pCatapults = engine::Game::entityManager.createEntity();
     auto &pCatContainer = pCatapults.addComponent<UnitContainer<Catapult>>();
+    pCatapults.addComponent<TagComponent>(Tag{Tag::PLAYER});
 
 
     //----- Entities of enemy's army -----
     auto &eInfantry = engine::Game::entityManager.createEntity();
     auto &eInfContainer = eInfantry.addComponent<UnitContainer<Infantry>>();
+    eInfantry.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
     auto &eArchers = engine::Game::entityManager.createEntity();
     auto &eArcContainer = eArchers.addComponent<UnitContainer<Archer>>();
+    eArchers.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
     auto &eCatapults = engine::Game::entityManager.createEntity();
     auto &eCatContainer = eCatapults.addComponent<UnitContainer<Catapult>>();
+    eCatapults.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
+    for (auto &[owner, _] : this->componentManager.getContainer<TagComponent>())
+    {
+        auto &TAG = componentManager.getComponent<TagComponent>(owner);
+        if (TAG.value == Tag::PLAYER)
+        {
+            std::cout << "Entity ID: " << owner << " Tag: Player" << std::endl;
+        }
+        else if (TAG.value == Tag::ENEMY)
+        {
+            std::cout << "Entity ID: " << owner << " Tag: Enemy" << std::endl;
+        }
+        else
+        {
+            std::cout << "ERROR" << std::endl;
+        }
+    }
 
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());

@@ -40,8 +40,6 @@ class CombatController: public engine::ecs::System {
     void update();
 
     private:
-    std::vector<std::unique_ptr<Unit>> playerUnits;
-    std::vector<std::unique_ptr<Unit>> enemyUnits;
     gui::GuiCombat* guiCombat = nullptr;
 
     GLuint textureAtlasID = -1;

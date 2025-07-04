@@ -9,6 +9,7 @@
 #include "GuiCombat.h"
 #include "../entities/unitTypes/Archer.h"
 #include "../entities/unitTypes/Infantry.h"
+#include "../entities/objectTypes/Catapult.h"
 
 using namespace gl3;
 
@@ -25,15 +26,6 @@ window(game.getWindow())
         /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
         nk_style_set_font(ctx, &FantasyRPG1->handle);}
 
-    auto pInf = std::make_unique<Infantry>();
-    auto pArch = std::make_unique<Archer>();
-    playerUnits.push_back(std::move(pInf));
-    playerUnits.push_back(std::move(pArch));
-
-    auto eInf = std::make_unique<Infantry>();
-    auto eArch = std::make_unique<Archer>();
-    enemyUnits.push_back(std::move(eInf));
-    enemyUnits.push_back(std::move(eArch));
 }
 
 CombatController::~CombatController()
@@ -47,6 +39,8 @@ void CombatController::init()
 {
    loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
    guiCombat = new gui::GuiCombat(ctx, textureAtlasID);
+
+
 }
 
 void CombatController::draw()
@@ -87,32 +81,32 @@ void CombatController::loadTextureAtlas(const char* texturePath)
 
 void CombatController::handleTurn(bool newRound)
 {
-    float pHP = 0;
-    for (auto& unit: playerUnits)
-    {
-        pHP += unit->getLifePoints();
-    }
-    std::cout<<"Player HP: "<<pHP<<std::endl;
-    float eHP = 0;
-    for (auto& unit: enemyUnits)
-    {
-        eHP += unit->getLifePoints();
-    }
-    std::cout<<"Enemy HP: "<<eHP<<std::endl;
-    std::cout<<"Attack with Inf? [y/n]"<<std::endl;
-    char input;
-    std::cin>>input;
-    if (input=='y')
-    {
-        std::cout<<"Target? [a/i]"<<std::endl;
-        std::cin>>input;
-        if (input=='a')
-        {
-            enemyUnits[1]->takeDamage(playerUnits[0]->attack());
-        }
-        if (input=='i')
-        {
-            enemyUnits[0]->takeDamage(playerUnits[0]->attack());
-        }
-    }
+    // float pHP = 0;
+    // for (auto& unit: playerUnits)
+    // {
+    //     pHP += unit->getLifePoints();
+    // }
+    // std::cout<<"Player HP: "<<pHP<<std::endl;
+    // float eHP = 0;
+    // for (auto& unit: enemyUnits)
+    // {
+    //     eHP += unit->getLifePoints();
+    // }
+    // std::cout<<"Enemy HP: "<<eHP<<std::endl;
+    // std::cout<<"Attack with Inf? [y/n]"<<std::endl;
+    // char input;
+    // std::cin>>input;
+    // if (input=='y')
+    // {
+    //     std::cout<<"Target? [a/i]"<<std::endl;
+    //     std::cin>>input;
+    //     if (input=='a')
+    //     {
+    //         enemyUnits[1]->takeDamage(playerUnits[0]->attack());
+    //     }
+    //     if (input=='i')
+    //     {
+    //         enemyUnits[0]->takeDamage(playerUnits[0]->attack());
+    //     }
+    // }
 }
