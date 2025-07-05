@@ -19,6 +19,7 @@ class GuiCombat: public Component {
 public:
 
     void GuiCombat::drawRender(int windowWidth, int windowHeight);
+    void resetSelection();
 
 private:
     GuiCombat(guid_t owner, nk_context *ctx, nk_uint& textureID);

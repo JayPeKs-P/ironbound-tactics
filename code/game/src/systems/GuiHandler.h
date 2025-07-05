@@ -27,7 +27,7 @@ private:
     void renderGUI(engine::Game &game);
     void loadTextureAtlas(const char* texturePath);
     GLuint textureAtlasID = -1;
-        GLFWwindow* window;
+    GLFWwindow* window;
     nk_context *nkCTX;
     nk_glfw glfw = {nullptr};
 

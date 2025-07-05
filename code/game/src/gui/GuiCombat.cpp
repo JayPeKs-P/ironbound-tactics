@@ -169,6 +169,13 @@ void GuiCombat::drawRender(int windowWidth, int windowHeight) {
 
 }
 
+void GuiCombat::resetSelection()
+{
+    owner = No_Selection;
+    selectedOne = Empty;
+    selectedTwo = Empty;
+}
+
 void GuiCombat::setStyleWindow(nk_style* style)
 {
     style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));

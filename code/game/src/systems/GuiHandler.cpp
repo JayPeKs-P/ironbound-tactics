@@ -27,6 +27,7 @@ namespace gl3 {
         engine.onAfterUpdate.addListener([&](engine::Game &game)
         {
             renderGUI(game);
+
         });
     }
 
@@ -69,7 +70,12 @@ namespace gl3 {
         {
             auto &gui = game.componentManager.getComponent<GuiCombat>(owner);
             gui.drawRender(windowWidth, windowHeight);
+            if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+            {
+                gui.resetSelection();
+            }
         }
+
     }
 
 
