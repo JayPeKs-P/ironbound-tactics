@@ -68,7 +68,6 @@ void Game::start()
 
     guiHandler = new GuiHandler(*this);
     combatController = new CombatController(*this);
-    combatController->init();
 
     //----- Entities of player's army -----
     auto &pInfantry = engine::Game::entityManager.createEntity();
@@ -98,6 +97,7 @@ void Game::start()
     eCatapults.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
 
+    combatController->init(*this);
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     backgroundMusic->setLooping(true);
@@ -114,7 +114,6 @@ void Game::update(GLFWwindow *window)
     // {
     //     entity->update(this, deltaTime);
     // }
-    combatController->update();
 }
 
 void Game::draw()
@@ -123,5 +122,4 @@ void Game::draw()
     // {
     //     entity->draw(this);
     // }
-    combatController->draw();
 }

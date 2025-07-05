@@ -6,12 +6,17 @@
 #include "engine/ecs/System.h"
 #include "engine/Events.h"
 
+#include "../components/UnitContainer.h"
+#include "../entities/unitTypes/Archer.h"
+#include "../entities/unitTypes/Infantry.h"
+#include "../entities/objectTypes/Catapult.h"
+
 #include "../entities/Unit.h"
 
 namespace gl3 {
 
 class CombatController: public engine::ecs::System {
-    public:
+public:
     // TODO: check if this typedef needs to add <..., CombatController&> like in wp3 engine/game.h
     using eventCC_t = engine::events::Event<CombatController>;
     CombatController(engine::Game &game );
@@ -25,9 +30,12 @@ class CombatController: public engine::ecs::System {
 
     void handleTurn(bool newRound);
 
-    void init();
+    void init(engine::Game &game);
 
-    private:
+private:
+    UnitContainer<Infantry>* pInfContainer = nullptr;
+    UnitContainer<Archer>* pArcContainer = nullptr;
+    UnitContainer<Catapult>* pCatContainer = nullptr;
 
 };
 

@@ -4,9 +4,8 @@
 
 #include "CombatController.h"
 
-#include "../entities/unitTypes/Archer.h"
-#include "../entities/unitTypes/Infantry.h"
-#include "../entities/objectTypes/Catapult.h"
+#include "../components/TagComponent.h"
+
 
 using namespace gl3;
 
@@ -21,8 +20,38 @@ CombatController::~CombatController()
 
 
 
-void CombatController::init()
+void CombatController::init(engine::Game &game)
 {
+    auto &infContainer = game.componentManager.getContainer<UnitContainer<Infantry>>();
+    auto &arcContainer = game.componentManager.getContainer<UnitContainer<Archer>>();
+    auto &catContainer = game.componentManager.getContainer<UnitContainer<Catapult>>();
+    for (auto &[owner, _] : infContainer)
+    {
+        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
+        if (tagComponent == Tag::PLAYER)
+        {
+            pInfContainer = &game.componentManager.getComponent<UnitContainer<Infantry>>(owner);
+            pInfContainer->add(10);
+        }
+    }
+    for (auto &[owner, _] : arcContainer)
+    {
+        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
+        if (tagComponent == Tag::PLAYER)
+        {
+            pArcContainer = &game.componentManager.getComponent<UnitContainer<Archer>>(owner);
+            pArcContainer->add(15);
+        }
+    }
+    for (auto &[owner, _] : catContainer)
+    {
+        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
+        if (tagComponent == Tag::PLAYER)
+        {
+            pCatContainer = &game.componentManager.getComponent<UnitContainer<Catapult>>(owner);
+            pCatContainer->add(5);
+        }
+    }
 }
 
 
@@ -59,4 +88,5 @@ void CombatController::handleTurn(bool newRound)
     //         enemyUnits[0]->takeDamage(playerUnits[0]->attack());
     //     }
     // }
+
 }
