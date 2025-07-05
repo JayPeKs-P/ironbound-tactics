@@ -16,7 +16,7 @@ namespace gl3 {
     using engine::ecs::Entity;
 
 template<typename UnitType>
-class UnitContainer: public Component {
+class UnitContainer final : public Component {
   public:
     static_assert(std::is_base_of<Unit, UnitType>::value,
         "UnitContainer can only be instantiated with types derived from Unit");

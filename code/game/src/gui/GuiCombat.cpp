@@ -11,9 +11,11 @@
  * - needed for now to show cast amountOfTroups to char for nk_label
  */
 
-using namespace gui;
+using namespace gl3;
+//TODO add events to this class and let the functions in CombatController subscribe to those
 
-GuiCombat::GuiCombat(struct nk_context* ctx, nk_uint& textureID):ctx(ctx), textureID(textureID)
+GuiCombat::GuiCombat(guid_t owner, nk_context* ctx, nk_uint& textureID)
+    : Component(owner), ctx(ctx), textureID(textureID)
 {
     nk_style* style = &ctx->style;
     setStyleWindow(style);
@@ -116,7 +118,7 @@ void GuiCombat::drawUnitActions(int selectedUnit)
         if (owner == OwnerOfUnit::AI && selectedTwo != Category::Empty) {
             if (nk_button_label(ctx, "Attack"))
             {
-
+                healthInfantryPlayer -= 10.0f;
             }
             nk_slider_int(ctx, 0, &valueAttack, amountOfTroups, 1);
         } else if (selectedTwo == Category::Siege) {

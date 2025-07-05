@@ -41,6 +41,8 @@ set(SOURCE_FILES src/main.cpp
         src/entities/objectTypes/Catapult.h
         src/components/HexTile.h
         src/components/UnitContainer.h
+        src/systems/GuiHandler.cpp
+        src/systems/GuiHandler.h
 )
 
 # set executable name

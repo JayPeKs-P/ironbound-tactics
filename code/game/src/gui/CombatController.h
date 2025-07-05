@@ -3,19 +3,9 @@
 //
 
 #pragma once
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#define NK_INCLUDE_STANDARD_IO
-#include <nuklear_glfw_gl3.h>
-
-#define MAX_VERTEX_BUFFER 1024 *1024
-#define MAX_ELEMENT_BUFFER 128 * 1024
-
 #include "engine/ecs/System.h"
 #include "engine/Events.h"
 
-#include "GuiCombat.h"
 #include "../entities/Unit.h"
 
 namespace gl3 {
@@ -36,18 +26,8 @@ class CombatController: public engine::ecs::System {
     void handleTurn(bool newRound);
 
     void init();
-    void draw();
-    void update();
 
     private:
-    gui::GuiCombat* guiCombat = nullptr;
-
-    GLuint textureAtlasID = -1;
-    void loadTextureAtlas(const char* texturePath);
-    struct nk_glfw glfw = {nullptr};
-    struct nk_context *ctx;
-
-    GLFWwindow* window;
 
 };
 

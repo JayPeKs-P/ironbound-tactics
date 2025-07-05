@@ -18,7 +18,8 @@
 #include "entities/unitTypes/Archer.h"
 #include "entities/unitTypes/Infantry.h"
 #include "components/TagComponent.h"
- // #include "entities/Enemy.h"
+#include "systems/GuiHandler.h"
+// #include "entities/Enemy.h"
 // #include "entities/Planet.h"
 
 
@@ -65,6 +66,7 @@ void Game::start()
     // auto enemy = std::make_unique<Enemy>(glm::vec3(2, -1, 0), -90.0f, 0.25f);
     // entities.push_back(std::move(enemy));
 
+    guiHandler = new GuiHandler(*this);
     combatController = new CombatController(*this);
     combatController->init();
 
@@ -95,22 +97,6 @@ void Game::start()
     auto &eCatContainer = eCatapults.addComponent<UnitContainer<Catapult>>();
     eCatapults.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
-    for (auto &[owner, _] : this->componentManager.getContainer<TagComponent>())
-    {
-        auto &TAG = componentManager.getComponent<TagComponent>(owner);
-        if (TAG.value == Tag::PLAYER)
-        {
-            std::cout << "Entity ID: " << owner << " Tag: Player" << std::endl;
-        }
-        else if (TAG.value == Tag::ENEMY)
-        {
-            std::cout << "Entity ID: " << owner << " Tag: Enemy" << std::endl;
-        }
-        else
-        {
-            std::cout << "ERROR" << std::endl;
-        }
-    }
 
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());

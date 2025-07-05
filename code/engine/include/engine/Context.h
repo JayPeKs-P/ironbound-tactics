@@ -7,7 +7,6 @@
 #include <functional>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <nuklear_glfw_gl3.h>
 
 namespace gl3::engine::context {
     class Context {

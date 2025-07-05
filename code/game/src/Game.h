@@ -10,6 +10,7 @@
 #include <soloud_wav.h>
 
 #include "../src/gui/CombatController.h"
+#include "systems/GuiHandler.h"
 
 
 namespace gl3
@@ -19,6 +20,7 @@ namespace gl3
         Game(int width, int height, const std::string& title);
 
     private:
+        GuiHandler* guiHandler = nullptr;
         CombatController* combatController = nullptr;
 
         void start() override;

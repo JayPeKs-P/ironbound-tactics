@@ -6,17 +6,22 @@
 // #include "nuklear.h"
 // #define NK_INCLUDE_STANDARD_IO
 #include <nuklear_glfw_gl3.h>
+#include "engine/ecs/Component.h"
 
-namespace gui {
+    using gl3::engine::ecs::Component;
+    using gl3::engine::ecs::ComponentManager;
+    using gl3::engine::ecs::guid_t;
+    using gl3::engine::ecs::Entity;
 
-class GuiCombat {
+class GuiCombat: public Component {
+    friend ComponentManager;
+    friend Entity;
 public:
-    GuiCombat(struct nk_context *ctx, nk_uint& textureID);
-    ~GuiCombat() = default;
 
     void GuiCombat::drawRender(int windowWidth, int windowHeight);
 
 private:
+    GuiCombat(guid_t owner, nk_context *ctx, nk_uint& textureID);
     nk_uint textureID;
 
     struct nk_image GuiCombat::getTileImage(
@@ -27,7 +32,6 @@ private:
     int atlasWidth,
     int atlasHeight);
 
-    // struct nk_image atlas;
 
     // TEMPORARILY USED VARIABLES
     //---
@@ -73,5 +77,3 @@ private:
 
 
 };
-
-} // gl3
