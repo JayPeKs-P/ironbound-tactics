@@ -43,6 +43,7 @@ set(SOURCE_FILES src/main.cpp
         src/components/UnitContainer.h
         src/systems/GuiHandler.cpp
         src/systems/GuiHandler.h
+        src/components/GuiState.h
 )
 
 # set executable name

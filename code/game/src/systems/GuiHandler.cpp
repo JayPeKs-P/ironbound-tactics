@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stb_image.h>
 
+#include "../components/GuiState.h"
 #include "../gui/GuiCombat.h"
 
 
@@ -50,6 +51,13 @@ namespace gl3 {
         loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
 
         combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
+        for (auto& [owner, _] : game.componentManager.getContainer<GuiState>())
+        {
+            if (game.componentManager.hasComponent<GuiState>(owner))
+            {
+                activeScene = &game.componentManager.getComponent<GuiState>(owner);
+            }
+        }
     }
 
     void GuiHandler::selectCurrentScene(engine::Game& game)
@@ -65,7 +73,16 @@ namespace gl3 {
         nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
             MAX_VERTEX_BUFFER,
             MAX_ELEMENT_BUFFER);
-        combatGUI->renderGUI(windowWidth, windowHeight);
+        switch (activeScene->current)
+        {
+            case GuiScene::MAIN_MENU:
+                break;
+            case GuiScene::COMBAT_MENU:
+                combatGUI->renderGUI(windowWidth, windowHeight);
+                break;
+            case GuiScene::UNIT_SELECTION:
+                break;
+        }
         if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         {
             // gui.resetSelection();

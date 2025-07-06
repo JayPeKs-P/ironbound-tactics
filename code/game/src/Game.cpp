@@ -14,10 +14,11 @@
 #include "Assets.h"
 
 #include "components/UnitContainer.h"
+#include "components/TagComponent.h"
+#include "components/GuiState.h"
 #include "entities/objectTypes/Catapult.h"
 #include "entities/unitTypes/Archer.h"
 #include "entities/unitTypes/Infantry.h"
-#include "components/TagComponent.h"
 #include "systems/GuiHandler.h"
 // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
@@ -68,6 +69,11 @@ void Game::start()
 
     guiHandler = new GuiHandler(*this);
     combatController = new CombatController(*this);
+
+    //---- Entities ----
+    auto &guiSceneEntity = engine::Game::entityManager.createEntity();
+    guiSceneEntity.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
+
 
     //----- Entities of player's army -----
     auto &pInfantry = engine::Game::entityManager.createEntity();

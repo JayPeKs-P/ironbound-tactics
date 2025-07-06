@@ -16,6 +16,8 @@
 #include "engine/ecs/System.h"
 #include "engine/ecs/Gui.h"
 
+struct GuiState;
+
 namespace gl3 {
 
 class GuiHandler: public engine::ecs::System {
@@ -28,7 +30,9 @@ private:
     void renderGUI(engine::Game &game);
     void loadTextureAtlas(const char* texturePath);
     //-----GUI Szenen-----
+    GuiState *activeScene = nullptr;
     std::unique_ptr<engine::ecs::Gui> combatGUI = nullptr;
+
     GLuint textureAtlasID = -1;
     GLFWwindow* window;
     nk_context *nkCTX;
