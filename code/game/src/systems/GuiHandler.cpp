@@ -48,12 +48,12 @@ namespace gl3 {
             nk_style_set_font(nkCTX, &FantasyRPG1->handle);
         }
         loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
+
+        combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
     }
 
     void GuiHandler::selectCurrentScene(engine::Game& game)
     {
-        auto &gui = game.entityManager.createEntity();
-        gui.addComponent<GuiCombat>(nkCTX, textureAtlasID);
 
     }
 
@@ -65,15 +65,10 @@ namespace gl3 {
         nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
             MAX_VERTEX_BUFFER,
             MAX_ELEMENT_BUFFER);
-        auto &guiContainer = game.componentManager.getContainer<GuiCombat>();
-        for (auto &[owner, _] : guiContainer)
+        combatGUI->renderGUI(windowWidth, windowHeight);
+        if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         {
-            auto &gui = game.componentManager.getComponent<GuiCombat>(owner);
-            gui.drawRender(windowWidth, windowHeight);
-            if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-            {
-                gui.resetSelection();
-            }
+            // gui.resetSelection();
         }
 
     }

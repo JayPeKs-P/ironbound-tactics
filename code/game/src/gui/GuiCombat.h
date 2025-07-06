@@ -3,28 +3,30 @@
 //
 
 #pragma once
-// #include "nuklear.h"
-// #define NK_INCLUDE_STANDARD_IO
-#include <nuklear_glfw_gl3.h>
-#include "engine/ecs/Component.h"
+#include "engine/ecs/Gui.h"
+#include "engine/Events.h"
+#include "../entities/Unit.h"
 
-    using gl3::engine::ecs::Component;
-    using gl3::engine::ecs::ComponentManager;
-    using gl3::engine::ecs::guid_t;
-    using gl3::engine::ecs::Entity;
+using gl3::engine::ecs::Gui;
 
-class GuiCombat: public Component {
-    friend ComponentManager;
-    friend Entity;
+class GuiCombat: public Gui {
 public:
+    GuiCombat(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
+    //-----Inputevents-----
+    using event_t = gl3::engine::events::Event<GuiCombat,
+    std::vector<std::unique_ptr<gl3::Unit>>,                //Actor
+    int,
+    std::vector<std::unique_ptr<gl3::Unit>>>;               //Target
+    event_t attack;
+    event_t defend;
+    event_t use;
 
-    void GuiCombat::drawRender(int windowWidth, int windowHeight);
+
+
+    void GuiCombat::renderGUI(int windowWidth, int windowHeight);
     void resetSelection();
 
 private:
-    GuiCombat(guid_t owner, nk_context *ctx, nk_uint& textureID);
-    nk_uint textureID;
-
     struct nk_image GuiCombat::getTileImage(
     int tileX,
     int tileY,
@@ -74,7 +76,6 @@ private:
     void setStyleSlider(nk_style* style);
     void setStyleText(nk_style* style);
 
-    nk_context* ctx;
 
 
 };
