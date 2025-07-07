@@ -27,14 +27,14 @@ set(SOURCE_FILES src/main.cpp
 #        src/rendering/pngTexture.h
         src/combatLogic/Army.cpp
         src/combatLogic/Army.h
-        src/entities/Unit.h
+        src/components/unitTypes/Unit.h
         src/gui/CombatController.cpp
         src/gui/CombatController.h
         src/gui/guiCombat.cpp
         src/gui/guiCombat.h
-        src/entities/unitTypes/Infantry.h
-        src/entities/unitTypes/Archer.h
-        src/entities/objectTypes/Catapult.h
+        src/components/unitTypes/Infantry.h
+        src/components/unitTypes/Archer.h
+        src/components/unitTypes/Catapult.h
         src/components/HexTile.h
         src/components/UnitContainer.h
         src/systems/GuiHandler.cpp

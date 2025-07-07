@@ -7,7 +7,7 @@
 #include <vector>
 // #include "../entities/Entity.h"
 
-#include "../entities/Unit.h"
+#include "../components/unitTypes/Unit.h"
 
 namespace gl3
 {

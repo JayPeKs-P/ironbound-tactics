@@ -7,9 +7,9 @@
 #include "engine/ecs/Gui.h"
 #include "../components/TagComponent.h"
 #include "../components/CombatSelection.h"
-#include "../entities/unitTypes/Infantry.h"
-#include "../entities/unitTypes/Archer.h"
-#include "../entities/objectTypes/Catapult.h"
+#include "../components/unitTypes/Infantry.h"
+#include "../components/unitTypes/Archer.h"
+#include "../components/unitTypes/Catapult.h"
 
 using gl3::engine::ecs::Gui;
 

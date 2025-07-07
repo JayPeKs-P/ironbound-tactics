@@ -6,11 +6,11 @@
 #include "engine/ecs/System.h"
 #include <random>
 
-#include "../entities/unitTypes/Archer.h"
-#include "../entities/unitTypes/Infantry.h"
-#include "../entities/objectTypes/Catapult.h"
+#include "../components/unitTypes/Archer.h"
+#include "../components//unitTypes/Infantry.h"
+#include "../components/unitTypes/Catapult.h"
 
-#include "../entities/Unit.h"
+#include "../components/unitTypes/Unit.h"
 
 namespace gl3 {
 

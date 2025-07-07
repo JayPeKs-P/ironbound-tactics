@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "engine/ecs/Component.h"
-#include "../entities/Unit.h"
+#include "unitTypes/Unit.h"
 
 namespace gl3 {
     using engine::ecs::Component;
