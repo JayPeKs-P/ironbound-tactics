@@ -7,6 +7,9 @@
 #include "engine/ecs/Gui.h"
 #include "../components/TagComponent.h"
 #include "../components/CombatSelection.h"
+#include "../entities/unitTypes/Infantry.h"
+#include "../entities/unitTypes/Archer.h"
+#include "../entities/objectTypes/Catapult.h"
 
 using gl3::engine::ecs::Gui;
 
@@ -45,13 +48,8 @@ private:
     int valueDefendInf = 0;
     //---
 
-    nk_size healthInfantryPlayer = 100;
-    nk_size healthArcherPlayer = 100;
-    nk_size healthSiegePlayer = 100;
-    nk_size healthInfantryAI = 100;
-    nk_size healthArcherAI = 100;
-    nk_size healthSiegeAI = 100;
 
+    void getComponents(gl3::engine::Game& game);
 
     void drawPlayerHealthBars(int windowWidth, int windowHeight);
     void drawEnemyHealthBars(int windowWidth, int windowHeight);
@@ -64,6 +62,14 @@ private:
     void setStyleProgressBar(nk_style* style);
     void setStyleSlider(nk_style* style);
     void setStyleText(nk_style* style);
+
+    Infantry* pInf_C = nullptr;
+    Archer* pArc_C = nullptr;
+    Catapult* pCat_C = nullptr;
+
+    Infantry* eInf_C = nullptr;
+    Archer* eArc_C = nullptr;
+    Catapult* eCat_C = nullptr;
 
 
 

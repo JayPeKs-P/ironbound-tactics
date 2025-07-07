@@ -25,18 +25,70 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
     setStyleSlider(style);
     setStyleText(style);
 
+    engine.onAfterStartup.addListener([&](engine::Game& game)
+    {
+        getComponents(game);
+    });
+
+}
+
+void GuiCombat::getComponents(engine::Game &game)
+{
+    auto &infContainer = game.componentManager.getContainer<Infantry>();
+    auto &arcContainer = game.componentManager.getContainer<Archer>();
+    auto &catContainer = game.componentManager.getContainer<Catapult>();
+    for (auto &[owner, _] : infContainer)
+    {
+        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
+        if (tagComponent == Tag::PLAYER)
+        {
+            pInf_C = &game.componentManager.getComponent<Infantry>(owner);
+        }
+        else
+        {
+            eInf_C = &game.componentManager.getComponent<Infantry>(owner);
+        }
+    }
+    for (auto &[owner, _] : arcContainer)
+    {
+        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
+        if (tagComponent == Tag::PLAYER)
+        {
+            pArc_C = &game.componentManager.getComponent<Archer>(owner);
+        }
+        else
+        {
+            eArc_C = &game.componentManager.getComponent<Archer>(owner);
+        }
+    }
+    for (auto &[owner, _] : catContainer)
+    {
+        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
+        if (tagComponent == Tag::PLAYER)
+        {
+            pCat_C = &game.componentManager.getComponent<Catapult>(owner);
+        }
+        else
+        {
+            eCat_C = &game.componentManager.getComponent<Catapult>(owner);
+        }
+    }
 }
 
 void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
 {
+    auto pInfHP = static_cast<unsigned long long>(100.0 * pInf_C->totalAmount / pInf_C->lifetimeMaxAmount);
+    auto pArcHP = static_cast<unsigned long long>(100.0 * pArc_C->totalAmount / pArc_C->lifetimeMaxAmount);
+    auto pCatHP = static_cast<unsigned long long>(100.0 * pCat_C->totalAmount / pCat_C->lifetimeMaxAmount);
+
     nk_layout_row_dynamic(ctx, windowHeight/30, 3);
     nk_label(ctx, "Infantry", NK_TEXT_LEFT);
     nk_label(ctx, "Archer", NK_TEXT_LEFT);
     nk_label(ctx, "Siege", NK_TEXT_LEFT);
     nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-    nk_progress(ctx, &healthInfantryPlayer, 100, NK_FIXED);
-    nk_progress(ctx, &healthArcherPlayer, 100, NK_FIXED);
-    nk_progress(ctx, &healthSiegePlayer, 100, NK_FIXED);
+    nk_progress(ctx, &pInfHP, 100, NK_FIXED);
+    nk_progress(ctx, &pArcHP, 100, NK_FIXED);
+    nk_progress(ctx, &pCatHP, 100, NK_FIXED);
 }
 
 void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
@@ -45,6 +97,9 @@ void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
     nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
     NK_WINDOW_TITLE|NK_WINDOW_BORDER))
     {
+        auto healthInfantryAI = static_cast<unsigned long long>(100 * eInf_C->totalAmount / eInf_C->lifetimeMaxAmount);
+        auto healthArcherAI = static_cast<unsigned long long>(100 * eArc_C->totalAmount / eArc_C->lifetimeMaxAmount);
+        auto healthSiegeAI = static_cast<unsigned long long>(100 * eCat_C->totalAmount / eCat_C->lifetimeMaxAmount);
 
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
         nk_progress(ctx, &healthInfantryAI, 100, NK_FIXED);

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <ostream>
 
+#include "../components/CombatSelection.h"
 #include "GuiCombat.h"
 #include "../components/TagComponent.h"
 
@@ -25,7 +26,7 @@ CombatController::CombatController(engine::Game &game):
             {
                 if (selP == Category::INFANTRY)
                 {
-                    if (selE == Category::INFANTRY);
+                    if (selE == Category::INFANTRY)takeDamage(eInf_C, attack(pInf_C, amount));
                     if (selE == Category::ARCHER) std::cout << "Archer: "<< amount << std::endl;
                     if (selE == Category::CATAPULT);
                 }else if (selP == Category::ARCHER)
@@ -61,12 +62,12 @@ void CombatController::init(engine::Game &game)
         if (tagComponent == Tag::PLAYER)
         {
             pInf_C = &game.componentManager.getComponent<Infantry>(owner);
-            pInf_C->totalAmount = 10;
+            setAmount(pInf_C, 10);
         }
         else
         {
             eInf_C = &game.componentManager.getComponent<Infantry>(owner);
-            eInf_C->totalAmount = 20;
+            setAmount(eInf_C, 20);
         }
     }
     for (auto &[owner, _] : arcContainer)
@@ -75,12 +76,12 @@ void CombatController::init(engine::Game &game)
         if (tagComponent == Tag::PLAYER)
         {
             pArc_C = &game.componentManager.getComponent<Archer>(owner);
-            pArc_C->totalAmount = 15;
+            setAmount(pArc_C, 15);
         }
         else
         {
             eArc_C = &game.componentManager.getComponent<Archer>(owner);
-            eArc_C->totalAmount = 10;
+            setAmount(eArc_C, 10);
         }
     }
     for (auto &[owner, _] : catContainer)
@@ -89,35 +90,49 @@ void CombatController::init(engine::Game &game)
         if (tagComponent == Tag::PLAYER)
         {
             pCat_C = &game.componentManager.getComponent<Catapult>(owner);
-            pCat_C->totalAmount = 5;
+            setAmount(pCat_C, 5);
         }
         else
         {
             eCat_C = &game.componentManager.getComponent<Catapult>(owner);
-            eCat_C->totalAmount = 4;
+            setAmount(eCat_C, 3);
         }
     }
 }
 
-float CombatController::attack(Unit* unit)
+void CombatController::setAmount(Unit* unit, int amount)
 {
-    int hitRoll = dist(rng);
-    if (hitRoll >= unit->accuracy)
-    {
-        return 0;
-    }
-    float damage = unit->attackValue;
-
-    int critRoll = dist(rng);
-    if (critRoll < unit->critChance)
-    {
-       damage *= unit->critMultiplier;
-    }
-    return damage;
+    unit->totalAmount = amount;
+    unit->lifetimeMaxAmount = amount;
+    unit->availableAmount = amount;
 }
 
-void CombatController::takeDamage(float damage)
+float CombatController::attack(Unit* unit, int amount)
 {
+    float totalDamage = 0;
+    for (int i = 0; i < amount; i++)
+    {
+        int hitRoll = dist(rng);
+        if (hitRoll >= unit->accuracy)
+        {
+            continue;
+        }
+        float damage = unit->attackValue;
+
+        int critRoll = dist(rng);
+        if (critRoll < unit->critChance)
+        {
+            damage *= unit->critMultiplier;
+        }
+        totalDamage += damage;
+    }
+    return totalDamage;
+}
+
+void CombatController::takeDamage(Unit* unit, float damage)
+{
+    float amountDead = damage/unit->unitLPValue;
+    unit->totalAmount -= amountDead;
     // float differenceAD = damage - armorValue;
     // armorValue -= damage/20;
     // if (differenceAD > 0)
