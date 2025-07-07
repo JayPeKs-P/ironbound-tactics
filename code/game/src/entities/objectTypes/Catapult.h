@@ -3,27 +3,19 @@
 //
 
 #pragma once
-
 #include "../Unit.h"
-#include "../unitTypes/Infantry.h"
+#include "engine/ecs/Component.h"
 
-namespace gl3 {
-class Catapult: public Unit {
+using gl3::engine::ecs::Component;
+using gl3::engine::ecs::ComponentManager;
+using gl3::engine::ecs::guid_t;
+using gl3::engine::ecs::Entity;
 
-    public:
-        Catapult();
-        ~Catapult() = default;
-    [[nodiscard]] bool getIsOccupied(){return isOccupied;}
-    void occupy(Infantry *unit);
-    void abandon();
-
-    protected:
-
-    private:
-
-    bool isOccupied = false;
-    Unit* occupier = nullptr;
-
+struct Catapult: Unit, Component{
+    friend ComponentManager;
+    friend Entity;
+private:
+    Catapult(guid_t owner, int amount)
+    : Component(owner),
+    Unit(400, 20, 150, 80, 12, amount){}
 };
-
-} // gl3

@@ -4,6 +4,10 @@
 
 #include "CombatController.h"
 
+#include <iostream>
+#include <ostream>
+
+#include "GuiCombat.h"
 #include "../components/TagComponent.h"
 
 
@@ -12,6 +16,32 @@ using namespace gl3;
 CombatController::CombatController(engine::Game &game):
     System(game)
 {
+    for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
+    {
+        if (game.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
+        {
+            auto& selectionEvent = engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner);
+            selectionEvent.attack.addListener([&](Category selP, int amount, Category selE)
+            {
+                if (selP == Category::INFANTRY)
+                {
+                    if (selE == Category::INFANTRY);
+                    if (selE == Category::ARCHER) std::cout << "Archer: "<< amount << std::endl;
+                    if (selE == Category::CATAPULT);
+                }else if (selP == Category::ARCHER)
+                {
+                    if (selE == Category::INFANTRY) std::cout << "Infantry: "<< amount << std::endl;
+                    if (selE == Category::ARCHER) std::cout << "Archer: "<< amount << std::endl;
+                    if (selE == Category::CATAPULT);
+                }else if (selP == Category::CATAPULT)
+                {
+                    if (selE == Category::INFANTRY) std::cout << "Infantry: "<< amount << std::endl;
+                    if (selE == Category::ARCHER) std::cout << "Archer: "<< amount << std::endl;
+                    if (selE == Category::CATAPULT);
+                }
+            });
+        }
+    }
 }
 
 CombatController::~CombatController()
@@ -22,16 +52,21 @@ CombatController::~CombatController()
 
 void CombatController::init(engine::Game &game)
 {
-    auto &infContainer = game.componentManager.getContainer<UnitContainer<Infantry>>();
-    auto &arcContainer = game.componentManager.getContainer<UnitContainer<Archer>>();
-    auto &catContainer = game.componentManager.getContainer<UnitContainer<Catapult>>();
+    auto &infContainer = game.componentManager.getContainer<Infantry>();
+    auto &arcContainer = game.componentManager.getContainer<Archer>();
+    auto &catContainer = game.componentManager.getContainer<Catapult>();
     for (auto &[owner, _] : infContainer)
     {
         auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
         if (tagComponent == Tag::PLAYER)
         {
-            pInfContainer = &game.componentManager.getComponent<UnitContainer<Infantry>>(owner);
-            pInfContainer->add(10);
+            pInf_C = &game.componentManager.getComponent<Infantry>(owner);
+            pInf_C->totalAmount = 10;
+        }
+        else
+        {
+            eInf_C = &game.componentManager.getComponent<Infantry>(owner);
+            eInf_C->totalAmount = 20;
         }
     }
     for (auto &[owner, _] : arcContainer)
@@ -39,8 +74,13 @@ void CombatController::init(engine::Game &game)
         auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
         if (tagComponent == Tag::PLAYER)
         {
-            pArcContainer = &game.componentManager.getComponent<UnitContainer<Archer>>(owner);
-            pArcContainer->add(15);
+            pArc_C = &game.componentManager.getComponent<Archer>(owner);
+            pArc_C->totalAmount = 15;
+        }
+        else
+        {
+            eArc_C = &game.componentManager.getComponent<Archer>(owner);
+            eArc_C->totalAmount = 10;
         }
     }
     for (auto &[owner, _] : catContainer)
@@ -48,15 +88,44 @@ void CombatController::init(engine::Game &game)
         auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
         if (tagComponent == Tag::PLAYER)
         {
-            pCatContainer = &game.componentManager.getComponent<UnitContainer<Catapult>>(owner);
-            pCatContainer->add(5);
+            pCat_C = &game.componentManager.getComponent<Catapult>(owner);
+            pCat_C->totalAmount = 5;
+        }
+        else
+        {
+            eCat_C = &game.componentManager.getComponent<Catapult>(owner);
+            eCat_C->totalAmount = 4;
         }
     }
 }
 
+float CombatController::attack(Unit* unit)
+{
+    int hitRoll = dist(rng);
+    if (hitRoll >= unit->accuracy)
+    {
+        return 0;
+    }
+    float damage = unit->attackValue;
 
+    int critRoll = dist(rng);
+    if (critRoll < unit->critChance)
+    {
+       damage *= unit->critMultiplier;
+    }
+    return damage;
+}
 
-
+void CombatController::takeDamage(float damage)
+{
+    // float differenceAD = damage - armorValue;
+    // armorValue -= damage/20;
+    // if (differenceAD > 0)
+    // {
+    //    lifePoints -= differenceAD;
+    // }
+    // return lifePoints;
+}
 
 void CombatController::handleTurn(bool newRound)
 {

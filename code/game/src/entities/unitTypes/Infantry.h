@@ -4,13 +4,18 @@
 
 #pragma once
 #include "../Unit.h"
+#include "engine/ecs/Component.h"
 
-namespace gl3 {
+using gl3::engine::ecs::Component;
+using gl3::engine::ecs::ComponentManager;
+using gl3::engine::ecs::guid_t;
+using gl3::engine::ecs::Entity;
 
-class Infantry: public Unit{
-public:
-    Infantry();
-    ~Infantry() = default;;
+struct Infantry: Unit, Component{
+    friend ComponentManager;
+    friend Entity;
+private:
+    Infantry(guid_t owner, int amount)
+    : Component(owner),
+    Unit(100, 30, 50, 99, 10, amount){}
 };
-
-} // gl3

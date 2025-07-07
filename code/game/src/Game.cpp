@@ -77,31 +77,31 @@ void Game::start()
 
 
     //----- Entities of player's army -----
-    auto &pInfantry = engine::Game::entityManager.createEntity();
-    auto &pInfContainer = pInfantry.addComponent<UnitContainer<Infantry>>();
-    pInfantry.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    auto &pInf_E = engine::Game::entityManager.createEntity();
+    auto &pInf_C = pInf_E.addComponent<Infantry>(0);
+    pInf_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
 
-    auto &pArchers = engine::Game::entityManager.createEntity();
-    auto &pArcContainer = pArchers.addComponent<UnitContainer<Archer>>();
-    pArchers.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    auto &pArc_E = engine::Game::entityManager.createEntity();
+    auto &pArc_C = pArc_E.addComponent<Archer>(0);
+    pArc_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
 
-    auto &pCatapults = engine::Game::entityManager.createEntity();
-    auto &pCatContainer = pCatapults.addComponent<UnitContainer<Catapult>>();
-    pCatapults.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    auto &pCat_E = engine::Game::entityManager.createEntity();
+    auto &pCat_C = pCat_E.addComponent<Catapult>(0);
+    pCat_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
 
 
     //----- Entities of enemy's army -----
-    auto &eInfantry = engine::Game::entityManager.createEntity();
-    auto &eInfContainer = eInfantry.addComponent<UnitContainer<Infantry>>();
-    eInfantry.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    auto &eInf_E = engine::Game::entityManager.createEntity();
+    auto &eInf_C = eInf_E.addComponent<Infantry>(0);
+    eInf_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
-    auto &eArchers = engine::Game::entityManager.createEntity();
-    auto &eArcContainer = eArchers.addComponent<UnitContainer<Archer>>();
-    eArchers.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    auto &eArc_E = engine::Game::entityManager.createEntity();
+    auto &eArc_C = eArc_E.addComponent<Archer>(0);
+    eArc_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
-    auto &eCatapults = engine::Game::entityManager.createEntity();
-    auto &eCatContainer = eCatapults.addComponent<UnitContainer<Catapult>>();
-    eCatapults.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    auto &eCat_E = engine::Game::entityManager.createEntity();
+    auto &eCat_C = eCat_E.addComponent<Catapult>(0);
+    eCat_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
     guiHandler = std::make_unique<GuiHandler>(*this);
     guiHandler->initialize(*this);

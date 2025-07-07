@@ -29,7 +29,6 @@ namespace gl3
 
     private:
         float armySize = 0;
-        std::vector<std::unique_ptr<Unit>> units;
         void createTroups(Unit unit,
                           int amount);
     };

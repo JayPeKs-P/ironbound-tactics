@@ -5,8 +5,9 @@
 #pragma once
 #include "engine/ecs/System.h"
 #include "engine/Events.h"
+#include <random>
 
-#include "../components/UnitContainer.h"
+#include "../components/CombatSelection.h"
 #include "../entities/unitTypes/Archer.h"
 #include "../entities/unitTypes/Infantry.h"
 #include "../entities/objectTypes/Catapult.h"
@@ -33,10 +34,18 @@ public:
     void init(engine::Game &game);
 
 private:
-    UnitContainer<Infantry>* pInfContainer = nullptr;
-    UnitContainer<Archer>* pArcContainer = nullptr;
-    UnitContainer<Catapult>* pCatContainer = nullptr;
+    float CombatController::attack(Unit* unit);
+    void CombatController::takeDamage(float damage);
+    std::mt19937 rng{std::random_device{}()};
+    std::uniform_int_distribution<int> dist{0, 99};
+    Infantry* pInf_C = nullptr;
+    Archer* pArc_C = nullptr;
+    Catapult* pCat_C = nullptr;
+
+    Infantry* eInf_C = nullptr;
+    Archer* eArc_C = nullptr;
+    Catapult* eCat_C = nullptr;
 
 };
 
-} // gui
+}

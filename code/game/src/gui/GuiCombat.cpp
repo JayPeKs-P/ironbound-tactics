@@ -135,7 +135,7 @@ void GuiCombat::drawUnitActions()
                 {
                     if (engine.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
                     {
-                        engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner).attack.invoke(selectedOne.value(), amountOfTroups, selectedTwo.value());
+                        engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner).attack.invoke(selectedOne.value(), valueAttack, selectedTwo.value());
                     }
                 }
             }
