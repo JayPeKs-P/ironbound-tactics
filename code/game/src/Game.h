@@ -19,8 +19,13 @@ namespace gl3
     public:
         Game(int width, int height, const std::string& title);
 
+        [[nodiscard]] std::shared_ptr<GuiHandler> gui_handler() const
+        {
+            return guiHandler;
+        }
+
     private:
-        GuiHandler* guiHandler = nullptr;
+        std::shared_ptr<GuiHandler> guiHandler;
         CombatController* combatController = nullptr;
 
         void start() override;

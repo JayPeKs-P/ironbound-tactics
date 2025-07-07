@@ -24,15 +24,22 @@ class GuiHandler: public engine::ecs::System {
 public:
     GuiHandler(engine::Game &game );
     ~GuiHandler();
-private:
     void initialize(engine::Game &game);
+    [[nodiscard]] std::shared_ptr<engine::ecs::Gui> combat_gui() const
+    {
+        return combatGUI;
+    }
+private:
     void selectCurrentScene(engine::Game &game);
     void renderGUI(engine::Game &game);
     void loadTextureAtlas(const char* texturePath);
     //-----GUI Szenen-----
     GuiState *activeScene = nullptr;
-    std::unique_ptr<engine::ecs::Gui> combatGUI = nullptr;
+    std::shared_ptr<engine::ecs::Gui> combatGUI = nullptr;
 
+    int windowWidth, windowHeight= 0;
+    int currentW, currentH = 720;
+    nk_font_atlas *atlas = nullptr;
     GLuint textureAtlasID = -1;
     GLFWwindow* window;
     nk_context *nkCTX;

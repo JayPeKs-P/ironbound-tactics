@@ -18,7 +18,6 @@ namespace gl3 {
     {
         engine.onAfterStartup.addListener([&](engine::Game &game)
         {
-            initialize(game);
             selectCurrentScene(game);
         });
         engine.onBeforeUpdate.addListener([&](engine::Game &game)
@@ -39,11 +38,11 @@ namespace gl3 {
 
     void GuiHandler::initialize(engine::Game &game)
     {
+        glfwGetWindowSize(game.getWindow(), &windowWidth, &windowHeight);
         nkCTX = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
         {
-            nk_font_atlas *atlas;
             nk_glfw3_font_stash_begin(&glfw, &atlas);
-            nk_font *FantasyRPG1 = nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", 20, 0);
+            nk_font *FantasyRPG1 = nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", windowHeight/36, 0);
             nk_glfw3_font_stash_end(&glfw);
             /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
             nk_style_set_font(nkCTX, &FantasyRPG1->handle);
@@ -67,9 +66,23 @@ namespace gl3 {
 
     void GuiHandler::renderGUI(engine::Game& game)
     {
-        int windowWidth, windowHeight;
         glfwGetWindowSize(game.getWindow(), &windowWidth, &windowHeight);
-
+        if (currentH != windowHeight)
+        {
+            currentH = windowHeight;
+            nk_glfw3_font_stash_begin(&glfw, &atlas);
+            int fontSize = std::max(windowHeight / 36, 10);
+            nk_font *rpg1= nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", fontSize, 0);
+            nk_glfw3_font_stash_end(&glfw);
+            if (rpg1)
+            {
+            nk_style_set_font(nkCTX, &rpg1->handle);
+            }
+            else
+            {
+                std::cerr << "Font konnte nicht geladen werden! (Größe: " << fontSize;
+            }
+        }
         nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
             MAX_VERTEX_BUFFER,
             MAX_ELEMENT_BUFFER);

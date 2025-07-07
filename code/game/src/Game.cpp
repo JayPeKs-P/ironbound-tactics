@@ -20,6 +20,8 @@
 #include "entities/unitTypes/Archer.h"
 #include "entities/unitTypes/Infantry.h"
 #include "systems/GuiHandler.h"
+#include "components/CombatSelection.h"
+#include "gui/GuiCombat.h"
 // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
 
@@ -67,12 +69,11 @@ void Game::start()
     // auto enemy = std::make_unique<Enemy>(glm::vec3(2, -1, 0), -90.0f, 0.25f);
     // entities.push_back(std::move(enemy));
 
-    guiHandler = new GuiHandler(*this);
-    combatController = new CombatController(*this);
 
     //---- Entities ----
     auto &guiSceneEntity = engine::Game::entityManager.createEntity();
     guiSceneEntity.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
+    guiSceneEntity.addComponent<CombatSelection<GuiCombat>>();
 
 
     //----- Entities of player's army -----
@@ -102,7 +103,9 @@ void Game::start()
     auto &eCatContainer = eCatapults.addComponent<UnitContainer<Catapult>>();
     eCatapults.addComponent<TagComponent>(Tag{Tag::ENEMY});
 
-
+    guiHandler = std::make_unique<GuiHandler>(*this);
+    guiHandler->initialize(*this);
+    combatController = new CombatController(*this);
     combatController->init(*this);
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());

@@ -16,7 +16,6 @@ enum class GuiScene
     UNIT_SELECTION,
     COMBAT_MENU
 };
-
 struct GuiState: Component {
     friend ComponentManager;
     friend Entity;

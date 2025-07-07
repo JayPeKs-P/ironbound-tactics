@@ -7,7 +7,8 @@ file(GLOB_RECURSE SOURCE_LIST CONFIGURE_DEPENDS "src/**.cpp")
 set(ENGINE_NAME Engine)
 
 add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
-        include/engine/ecs/Gui.h)
+        include/engine/ecs/Gui.h
+)
 
 target_compile_features(${ENGINE_NAME} PRIVATE cxx_std_17)
 set_target_properties(${ENGINE_NAME} PROPERTIES LINKER_LANGUAGE CXX)

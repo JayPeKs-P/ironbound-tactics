@@ -3,25 +3,16 @@
 //
 
 #pragma once
+#include <optional>
 #include "engine/ecs/Gui.h"
-#include "engine/Events.h"
-#include "../entities/Unit.h"
+#include "../components/TagComponent.h"
+#include "../components/CombatSelection.h"
 
 using gl3::engine::ecs::Gui;
 
 class GuiCombat: public Gui {
 public:
     GuiCombat(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
-    //-----Inputevents-----
-    using event_t = gl3::engine::events::Event<GuiCombat,
-    std::vector<std::unique_ptr<gl3::Unit>>,                //Actor
-    int,
-    std::vector<std::unique_ptr<gl3::Unit>>>;               //Target
-    event_t attack;
-    event_t defend;
-    event_t use;
-
-
 
     void GuiCombat::renderGUI(int windowWidth, int windowHeight);
     void resetSelection();
@@ -38,11 +29,9 @@ private:
 
     // TEMPORARILY USED VARIABLES
     //---
-    enum OwnerOfUnit{No_Selection, Player, AI};
-    enum Category {Empty, Infantry, Archer, Siege, Catapult, Assault_Cover};
-    OwnerOfUnit owner = OwnerOfUnit::No_Selection;
-    Category selectedOne = Category::Empty;
-    Category selectedTwo = Category::Empty;
+    std::optional<gl3::Tag> owner;
+    std::optional<Category> selectedOne;
+    std::optional<Category> selectedTwo;
 
     int infAmount = 40;
     int archAmount = 30;
@@ -67,7 +56,7 @@ private:
     void drawPlayerHealthBars(int windowWidth, int windowHeight);
     void drawEnemyHealthBars(int windowWidth, int windowHeight);
     void drawUnitSelectionMenu(int windowWidth, int windowHeight);
-    void drawUnitActions(int selectedOne = 0);  //selectedOne was an enum class in Game.cpp. might become a normal enum
+    void drawUnitActions();  //selectedOne was an enum class in Game.cpp. might become a normal enum
 
     void setStyleWindow(nk_style* style);
     void setStyleButton(nk_style* style);
