@@ -26,14 +26,14 @@ CombatController::CombatController(engine::Game &game):
             {
                 if (selP == Category::INFANTRY)
                 {
-                    if (selE == Category::INFANTRY)takeDamage(eInf_C, attack(pInf_C, amount));
-                    if (selE == Category::ARCHER) std::cout << "Archer: "<< amount << std::endl;
-                    if (selE == Category::CATAPULT);
+                    if (selE == Category::INFANTRY) takeDamage(eInf_C, attack(pInf_C, amount));
+                    if (selE == Category::ARCHER) takeDamage(eArc_C, attack(pInf_C, amount));
+                    if (selE == Category::CATAPULT) takeDamage(eCat_C, attack(pInf_C, amount));
                 }else if (selP == Category::ARCHER)
                 {
-                    if (selE == Category::INFANTRY) std::cout << "Infantry: "<< amount << std::endl;
-                    if (selE == Category::ARCHER) std::cout << "Archer: "<< amount << std::endl;
-                    if (selE == Category::CATAPULT);
+                    if (selE == Category::INFANTRY) takeDamage(eInf_C, attack(pArc_C,amount));
+                    if (selE == Category::ARCHER) takeDamage(eArc_C, attack(pArc_C, amount));
+                    if (selE == Category::CATAPULT) takeDamage(eCat_C, attack(pArc_C, amount));
                 }else if (selP == Category::CATAPULT)
                 {
                     if (selE == Category::INFANTRY) std::cout << "Infantry: "<< amount << std::endl;
@@ -109,6 +109,7 @@ void CombatController::setAmount(Unit* unit, int amount)
 
 float CombatController::attack(Unit* unit, int amount)
 {
+    unit->availableAmount -= amount;
     float totalDamage = 0;
     for (int i = 0; i < amount; i++)
     {

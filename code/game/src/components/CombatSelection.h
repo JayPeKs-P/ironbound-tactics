@@ -11,7 +11,7 @@ using gl3::engine::ecs::Component;
 using gl3::engine::ecs::ComponentManager;
 using gl3::engine::ecs::guid_t;
 using gl3::engine::ecs::Entity;
-
+//TODO create GuiSelection Parent Interface, that stores events of any kind
 enum class Category {INFANTRY, ARCHER, SIEGE, CATAPULT, ASSAULT_COVER};
 template <typename G>
 struct CombatSelection : Component {

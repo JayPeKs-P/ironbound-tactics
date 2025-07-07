@@ -36,14 +36,11 @@ private:
     std::optional<Category> selectedOne;
     std::optional<Category> selectedTwo;
 
-    int infAmount = 40;
-    int archAmount = 30;
-    int siegeAmount = 10;
-
     int amountOfTroups = 0;
-    int valueAttack = 0;
-    int valueDefend = 0;
-    int valueCatapult = 0;
+    int value = 0;
+    // int value = 0;
+    // int value = 0;
+    // int value = 0;
     int valueAssaultCover = 0;
     int valueDefendInf = 0;
     //---
