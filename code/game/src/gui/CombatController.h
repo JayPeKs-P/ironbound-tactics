@@ -3,8 +3,9 @@
 //
 
 #pragma once
-#include "engine/ecs/System.h"
 #include <random>
+#include "engine/ecs/System.h"
+#include "engine/Events.h"
 
 #include "../components/unitTypes/Archer.h"
 #include "../components//unitTypes/Infantry.h"
@@ -14,17 +15,20 @@
 
 namespace gl3 {
 
-class CombatController: public engine::ecs::System {
+class CombatController: public engine::ecs::System
+{
 public:
     // TODO: check if this typedef needs to add <..., CombatController&> like in wp3 engine/game.h
     CombatController(engine::Game &game );
     ~CombatController();
 
-    void handleTurn(bool newRound);
-
+    void handleTurn();
     void init(engine::Game &game);
-
+    using event_t = engine::events::Event<CombatController>;
+    event_t onTurnEnd;
+    std::vector<decltype(onTurnEnd)::handle_t> listenersTurnEnd;
 private:
+
     void setAmount(Unit* unit, int amount);
     float CombatController::attack(Unit* unit, int amount);
     void CombatController::takeDamage(Unit* unit, float damage);

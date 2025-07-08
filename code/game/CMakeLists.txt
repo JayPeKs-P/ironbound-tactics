@@ -35,8 +35,6 @@ set(SOURCE_FILES src/main.cpp
         src/components/unitTypes/Infantry.h
         src/components/unitTypes/Archer.h
         src/components/unitTypes/Catapult.h
-        src/components/HexTile.h
-        src/components/UnitContainer.h
         src/systems/GuiHandler.cpp
         src/systems/GuiHandler.h
         src/components/GuiState.h

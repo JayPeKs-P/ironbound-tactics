@@ -26,7 +26,15 @@ CombatController::CombatController(engine::Game &game):
             {
                 if (selP == Category::INFANTRY)
                 {
-                    if (selE == Category::INFANTRY) takeDamage(eInf_C, attack(pInf_C, amount));
+                    if (selE == Category::INFANTRY)
+                    {
+                        pInf_C->availableAmount -= amount;
+                        auto handle = onTurnEnd.addListener([&]()
+                        {
+                            takeDamage(eInf_C, attack(pInf_C, amount));
+                        });
+                        listenersTurnEnd.push_back(handle);
+                    }
                     if (selE == Category::ARCHER) takeDamage(eArc_C, attack(pInf_C, amount));
                     if (selE == Category::CATAPULT) takeDamage(eCat_C, attack(pInf_C, amount));
                 }else if (selP == Category::ARCHER)
@@ -109,7 +117,6 @@ void CombatController::setAmount(Unit* unit, int amount)
 
 float CombatController::attack(Unit* unit, int amount)
 {
-    unit->availableAmount -= amount;
     float totalDamage = 0;
     for (int i = 0; i < amount; i++)
     {
@@ -143,35 +150,14 @@ void CombatController::takeDamage(Unit* unit, float damage)
     // return lifePoints;
 }
 
-void CombatController::handleTurn(bool newRound)
+void CombatController::handleTurn()
 {
-    // float pHP = 0;
-    // for (auto& unit: playerUnits)
-    // {
-    //     pHP += unit->getLifePoints();
-    // }
-    // std::cout<<"Player HP: "<<pHP<<std::endl;
-    // float eHP = 0;
-    // for (auto& unit: enemyUnits)
-    // {
-    //     eHP += unit->getLifePoints();
-    // }
-    // std::cout<<"Enemy HP: "<<eHP<<std::endl;
-    // std::cout<<"Attack with Inf? [y/n]"<<std::endl;
-    // char input;
-    // std::cin>>input;
-    // if (input=='y')
-    // {
-    //     std::cout<<"Target? [a/i]"<<std::endl;
-    //     std::cin>>input;
-    //     if (input=='a')
-    //     {
-    //         enemyUnits[1]->takeDamage(playerUnits[0]->attack());
-    //     }
-    //     if (input=='i')
-    //     {
-    //         enemyUnits[0]->takeDamage(playerUnits[0]->attack());
-    //     }
-    // }
-
+    if (pInf_C->availableAmount == 0 && pArc_C->availableAmount == 0 && pCat_C->availableAmount == 0)
+    {
+        onTurnEnd.invoke();
+        for (auto& handle : listenersTurnEnd)
+        {
+            onTurnEnd.removeListener(handle);
+        }
+    }
 }

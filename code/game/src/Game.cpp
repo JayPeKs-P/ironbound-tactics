@@ -13,7 +13,6 @@
 
 #include "Assets.h"
 
-#include "components/UnitContainer.h"
 #include "components/TagComponent.h"
 #include "components/GuiState.h"
 #include "components/unitTypes/Catapult.h"
@@ -118,11 +117,7 @@ void Game::update(GLFWwindow *window)
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
-
-    // for (const auto & entity : entities)
-    // {
-    //     entity->update(this, deltaTime);
-    // }
+    combatController->handleTurn();
 }
 
 void Game::draw()
