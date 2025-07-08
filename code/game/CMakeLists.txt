@@ -28,8 +28,8 @@ set(SOURCE_FILES src/main.cpp
         src/combatLogic/Army.cpp
         src/combatLogic/Army.h
         src/components/unitTypes/Unit.h
-        src/gui/CombatController.cpp
-        src/gui/CombatController.h
+        src/systems/CombatController.cpp
+        src/systems/CombatController.h
         src/gui/guiCombat.cpp
         src/gui/guiCombat.h
         src/components/unitTypes/Infantry.h

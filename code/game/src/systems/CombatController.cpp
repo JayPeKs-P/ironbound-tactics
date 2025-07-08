@@ -7,7 +7,7 @@
 #include <iostream>
 #include <ostream>
 
-#include "GuiCombat.h"
+#include "../gui/GuiCombat.h"
 #include "../components/TagComponent.h"
 
 

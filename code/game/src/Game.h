@@ -9,7 +9,7 @@
 #include <soloud.h>
 #include <soloud_wav.h>
 
-#include "../src/gui/CombatController.h"
+#include "systems/CombatController.h"
 #include "systems/GuiHandler.h"
 
 
