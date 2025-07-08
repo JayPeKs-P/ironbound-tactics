@@ -31,8 +31,20 @@ CombatController::CombatController(engine::Game &game):
                     chooseAttackTarget(pArc_C, selE, amount);
                 }else if (selP == Category::CATAPULT)
                 {
-                    std::cout << "Catapult attack" << std::endl;
                     chooseAttackTarget(pCat_C, selE, amount);
+                }
+            });
+            selectionEvent.use.addListener([&](Category selP, int amount, Category selPTarget)
+            {
+                if (selP == Category::INFANTRY)
+                {
+                    if (selPTarget == Category::CATAPULT)
+                    {
+                        std::cout << "Catapult" << std::endl;
+                    }else if (selPTarget == Category::ASSAULT_COVER)
+                    {
+
+                    }
                 }
             });
         }
@@ -123,11 +135,11 @@ void CombatController::chooseAttackTarget(Unit* unit, Category selection, int am
     unit->availableAmount -= amount;
 }
 
-void CombatController::setAmount(Unit* unit, int amount)
+void CombatController::setAmount(Unit* unit, int max, int total)
 {
-    unit->totalAmount = amount;
-    unit->lifetimeMaxAmount = amount;
-    unit->availableAmount = amount;
+    unit->totalAmount = total;
+    unit->lifetimeMaxAmount = max;
+    unit->availableAmount = total;
 }
 
 float CombatController::attack(Unit* unit, int amount)

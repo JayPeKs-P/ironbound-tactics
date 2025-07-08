@@ -1,11 +1,13 @@
 //
-// Created by Julian Kalb on 12/12/2024.
+// Created by Julian Kalb on 08/07/2025.
 //
 
 #pragma once
 
-struct Unit{
-    float unitLPValue;
+
+
+struct SiegeEngine {
+    float hpValue;
     float armorValue;
     float attackValue;
     int accuracy;
@@ -14,15 +16,16 @@ struct Unit{
     int lifetimeMaxAmount;
     int totalAmount;
     int availableAmount;
+    int useableAmount = 0;
 protected:
-    Unit (float hp, float def, float atk, int acc, int critc, int amount)
-        :unitLPValue(hp),
+    SiegeEngine(float hp, float def, float atk, int acc, int critc, int amount)
+        : hpValue(hp),
         armorValue(def),
         attackValue(atk),
         accuracy(acc),
         critChance(critc),
         totalAmount(amount),
         availableAmount(amount),
-        lifetimeMaxAmount(amount){ };
+        lifetimeMaxAmount(amount){ }
 
 };

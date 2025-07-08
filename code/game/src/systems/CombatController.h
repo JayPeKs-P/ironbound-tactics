@@ -30,9 +30,12 @@ public:
     std::vector<decltype(onTurnEnd)::handle_t> listenersTurnEnd;
 private:
     void chooseAttackTarget(Unit* unit, Category selection, int amount);
-    void setAmount(Unit* unit, int amount);
-    float CombatController::attack(Unit* unit, int amount);
-    void CombatController::takeDamage(Unit* unit, float damage);
+    void setAmount(Unit* unit,  int value);
+    void setAmount(SiegeEngine *siege, int value);
+    float attack(Unit* unit, int amount);
+    float attack(SiegeEngine *siege, int amount);
+    void takeDamage(Unit* unit, float damage);
+    void takeDamage(SiegeEngine*, float damage);
     std::mt19937 rng{std::random_device{}()};
     std::uniform_int_distribution<int> dist{0, 99};
     Infantry* pInf_C = nullptr;

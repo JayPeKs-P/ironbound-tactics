@@ -79,7 +79,7 @@ void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
 {
     auto pInfHP = static_cast<unsigned long long>(100.0 * pInf_C->totalAmount / pInf_C->lifetimeMaxAmount);
     auto pArcHP = static_cast<unsigned long long>(100.0 * pArc_C->totalAmount / pArc_C->lifetimeMaxAmount);
-    auto pCatHP = static_cast<unsigned long long>(100.0 * pCat_C->totalAmount / pCat_C->lifetimeMaxAmount);
+    auto pCatHP = static_cast<unsigned long long>(100.0 * pCat_C->useableAmount / pCat_C->lifetimeMaxAmount);
 
     nk_layout_row_dynamic(ctx, windowHeight/30, 3);
     nk_label(ctx, "Infantry", NK_TEXT_LEFT);
@@ -99,7 +99,7 @@ void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
     {
         auto eInfHP = static_cast<unsigned long long>(100 * eInf_C->totalAmount / eInf_C->lifetimeMaxAmount);
         auto eArcHP = static_cast<unsigned long long>(100 * eArc_C->totalAmount / eArc_C->lifetimeMaxAmount);
-        auto eCatHP = static_cast<unsigned long long>(100 * eCat_C->totalAmount / eCat_C->lifetimeMaxAmount);
+        auto eCatHP = static_cast<unsigned long long>(100 * eCat_C->useableAmount / eCat_C->lifetimeMaxAmount);
 
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
         nk_progress(ctx, &eInfHP, 100, NK_FIXED);
@@ -137,7 +137,7 @@ void GuiCombat::drawUnitSelectionMenu(int windowWidth, int windowHeight)
 
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
 
-        const char* unitNames[] = { "Infantry", "Archer", "Siege" };
+        const char* unitNames[] = { "Infantry", "Archer", "Catapult" };
         Category unitCategories[] = { Category::INFANTRY, Category::ARCHER, Category::CATAPULT };
         int unitTroops[] = { pInf_C->availableAmount, pArc_C->availableAmount, pCat_C->availableAmount };
 
@@ -199,16 +199,31 @@ void GuiCombat::drawUnitActions()
             char amountLabel[16];
             snprintf(amountLabel, sizeof(amountLabel), "%d", value);
             nk_label(ctx, amountLabel, NK_TEXT_LEFT);
-        } else if (selectedTwo == Category::SIEGE)
+        } else if (selectedTwo == Category::CATAPULT)
         {
             if (nk_button_label(ctx, "Use Catapult"))
             {
-                if (selectedOne == Category::INFANTRY) amountOfTroups = 20;
+                for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
+                {
+                    if (engine.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
+                    {
+                        engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner).use.invoke(selectedOne.value(), value, selectedTwo.value());
+                    }
+                }
+                resetSelection();
             }
             nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
-            if (nk_button_label(ctx, "Use Assault Cover"))
+            if (nk_button_label(ctx, "(!)Use Assault Cover"))
             {
-                if (selectedOne == Category::INFANTRY) amountOfTroups = 0;
+                //TODO change selected two back to siege from catapult here and in unitSelection()
+                for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
+                {
+                    if (engine.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
+                    {
+                        engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner).use.invoke(selectedOne.value(), value, selectedTwo.value());
+                    }
+                }
+                resetSelection();
             }
             nk_slider_int(ctx, 0, &valueAssaultCover, amountOfTroups, 1);
         } else if (selectedTwo == Category::ARCHER)

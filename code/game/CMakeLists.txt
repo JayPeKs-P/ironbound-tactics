@@ -39,6 +39,7 @@ set(SOURCE_FILES src/main.cpp
         src/systems/GuiHandler.h
         src/components/GuiState.h
         src/components/CombatSelection.h
+        src/components/unitTypes/SiegeEngine.h
 )
 
 # set executable name
