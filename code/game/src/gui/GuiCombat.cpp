@@ -108,7 +108,7 @@ void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
 
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
         const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
-        Category enemyCategories[] = { Category::INFANTRY, Category::ARCHER, Category::SIEGE };
+        Category enemyCategories[] = { Category::INFANTRY, Category::ARCHER, Category::CATAPULT };
 
         for (int i = 0; i < 3; i++)
         {

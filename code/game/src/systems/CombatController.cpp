@@ -96,7 +96,6 @@ void CombatController::init(engine::Game &game)
 
 void CombatController::chooseAttackTarget(Unit* unit, Category selection, int amount)
 {
-    unit->availableAmount -= amount;
         if (selection == Category::INFANTRY)
         {
             auto handle = onTurnEnd.addListener([=]()
@@ -121,6 +120,7 @@ void CombatController::chooseAttackTarget(Unit* unit, Category selection, int am
             });
             listenersTurnEnd.push_back(handle);
         }
+    unit->availableAmount -= amount;
 }
 
 void CombatController::setAmount(Unit* unit, int amount)
@@ -175,5 +175,6 @@ void CombatController::handleTurn()
         {
             onTurnEnd.removeListener(handle);
         }
+        listenersTurnEnd.clear();
     }
 }
