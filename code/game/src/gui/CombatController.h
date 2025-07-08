@@ -7,6 +7,7 @@
 #include "engine/ecs/System.h"
 #include "engine/Events.h"
 
+#include "../components/CombatSelection.h"
 #include "../components/unitTypes/Archer.h"
 #include "../components//unitTypes/Infantry.h"
 #include "../components/unitTypes/Catapult.h"
@@ -28,7 +29,7 @@ public:
     event_t onTurnEnd;
     std::vector<decltype(onTurnEnd)::handle_t> listenersTurnEnd;
 private:
-
+    void chooseAttackTarget(Unit* unit, Category selection, int amount);
     void setAmount(Unit* unit, int amount);
     float CombatController::attack(Unit* unit, int amount);
     void CombatController::takeDamage(Unit* unit, float damage);

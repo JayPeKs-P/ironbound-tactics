@@ -7,7 +7,6 @@
 #include <iostream>
 #include <ostream>
 
-#include "../components/CombatSelection.h"
 #include "GuiCombat.h"
 #include "../components/TagComponent.h"
 
@@ -26,27 +25,14 @@ CombatController::CombatController(engine::Game &game):
             {
                 if (selP == Category::INFANTRY)
                 {
-                    if (selE == Category::INFANTRY)
-                    {
-                        pInf_C->availableAmount -= amount;
-                        auto handle = onTurnEnd.addListener([&]()
-                        {
-                            takeDamage(eInf_C, attack(pInf_C, amount));
-                        });
-                        listenersTurnEnd.push_back(handle);
-                    }
-                    if (selE == Category::ARCHER) takeDamage(eArc_C, attack(pInf_C, amount));
-                    if (selE == Category::CATAPULT) takeDamage(eCat_C, attack(pInf_C, amount));
+                    chooseAttackTarget(pInf_C, selE, amount);
                 }else if (selP == Category::ARCHER)
                 {
-                    if (selE == Category::INFANTRY) takeDamage(eInf_C, attack(pArc_C,amount));
-                    if (selE == Category::ARCHER) takeDamage(eArc_C, attack(pArc_C, amount));
-                    if (selE == Category::CATAPULT) takeDamage(eCat_C, attack(pArc_C, amount));
+                    chooseAttackTarget(pArc_C, selE, amount);
                 }else if (selP == Category::CATAPULT)
                 {
-                    if (selE == Category::INFANTRY) std::cout << "Infantry: "<< amount << std::endl;
-                    if (selE == Category::ARCHER) std::cout << "Archer: "<< amount << std::endl;
-                    if (selE == Category::CATAPULT);
+                    std::cout << "Catapult attack" << std::endl;
+                    chooseAttackTarget(pCat_C, selE, amount);
                 }
             });
         }
@@ -108,6 +94,35 @@ void CombatController::init(engine::Game &game)
     }
 }
 
+void CombatController::chooseAttackTarget(Unit* unit, Category selection, int amount)
+{
+    unit->availableAmount -= amount;
+        if (selection == Category::INFANTRY)
+        {
+            auto handle = onTurnEnd.addListener([=]()
+            {
+                takeDamage(eInf_C, attack(unit, amount));
+            });
+            listenersTurnEnd.push_back(handle);
+        }
+        if (selection == Category::ARCHER)
+        {
+            auto handle = onTurnEnd.addListener([=]()
+            {
+                takeDamage(eArc_C, attack(unit, amount));
+            });
+            listenersTurnEnd.push_back(handle);
+        }
+        if (selection == Category::CATAPULT)
+        {
+            auto handle = onTurnEnd.addListener([=]()
+            {
+                takeDamage(eCat_C, attack(unit, amount));
+            });
+            listenersTurnEnd.push_back(handle);
+        }
+}
+
 void CombatController::setAmount(Unit* unit, int amount)
 {
     unit->totalAmount = amount;
@@ -134,6 +149,7 @@ float CombatController::attack(Unit* unit, int amount)
         }
         totalDamage += damage;
     }
+    unit->availableAmount = unit->totalAmount;
     return totalDamage;
 }
 

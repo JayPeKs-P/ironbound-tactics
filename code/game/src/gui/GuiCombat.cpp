@@ -138,7 +138,7 @@ void GuiCombat::drawUnitSelectionMenu(int windowWidth, int windowHeight)
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
 
         const char* unitNames[] = { "Infantry", "Archer", "Siege" };
-        Category unitCategories[] = { Category::INFANTRY, Category::ARCHER, Category::SIEGE };
+        Category unitCategories[] = { Category::INFANTRY, Category::ARCHER, Category::CATAPULT };
         int unitTroops[] = { pInf_C->availableAmount, pArc_C->availableAmount, pCat_C->availableAmount };
 
         for (int i = 0; i < 3; i++)
