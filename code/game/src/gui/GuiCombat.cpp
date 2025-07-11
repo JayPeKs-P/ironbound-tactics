@@ -212,7 +212,13 @@ void GuiCombat::drawUnitActions()
                 }
                 resetSelection();
             }
-            nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
+            if(pCat_C->totalAmount*pCat_C->cost <= pInf_C->totalAmount)
+            {
+                nk_slider_int(ctx, 0, &value, pCat_C->totalAmount-pCat_C->useableAmount, 1);
+            }else
+            {
+                nk_slider_int(ctx, 0, &value, amountOfTroups / pCat_C->cost, 1);
+            }
             if (nk_button_label(ctx, "(!)Use Assault Cover"))
             {
                 //TODO change selected two back to siege from catapult here and in unitSelection()

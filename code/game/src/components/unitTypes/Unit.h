@@ -5,7 +5,7 @@
 #pragma once
 
 struct Unit{
-    float unitLPValue;
+    float hpValue;
     float armorValue;
     float attackValue;
     int accuracy;
@@ -16,7 +16,7 @@ struct Unit{
     int availableAmount;
 protected:
     Unit (float hp, float def, float atk, int acc, int critc, int amount)
-        :unitLPValue(hp),
+        :hpValue(hp),
         armorValue(def),
         attackValue(atk),
         accuracy(acc),

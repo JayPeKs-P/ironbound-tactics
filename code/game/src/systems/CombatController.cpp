@@ -40,6 +40,7 @@ CombatController::CombatController(engine::Game &game):
                 {
                     if (selPTarget == Category::CATAPULT)
                     {
+                        use(amount);
                         std::cout << "Catapult" << std::endl;
                     }else if (selPTarget == Category::ASSAULT_COVER)
                     {
@@ -135,11 +136,46 @@ void CombatController::chooseAttackTarget(Unit* unit, Category selection, int am
     unit->availableAmount -= amount;
 }
 
-void CombatController::setAmount(Unit* unit, int max, int total)
+void CombatController::chooseAttackTarget(SiegeEngine* siege, Category selection, int amount)
 {
-    unit->totalAmount = total;
-    unit->lifetimeMaxAmount = max;
-    unit->availableAmount = total;
+            if (selection == Category::INFANTRY)
+        {
+            auto handle = onTurnEnd.addListener([=]()
+            {
+                takeDamage(eInf_C, attack(siege, amount));
+            });
+            listenersTurnEnd.push_back(handle);
+        }
+        if (selection == Category::ARCHER)
+        {
+            auto handle = onTurnEnd.addListener([=]()
+            {
+                takeDamage(eArc_C, attack(siege, amount));
+            });
+            listenersTurnEnd.push_back(handle);
+        }
+        if (selection == Category::CATAPULT)
+        {
+            auto handle = onTurnEnd.addListener([=]()
+            {
+                takeDamage(eCat_C, attack(siege, amount));
+            });
+            listenersTurnEnd.push_back(handle);
+        }
+    siege->availableAmount -= amount;
+}
+
+void CombatController::setAmount(Unit* unit, int value)
+{
+    unit->totalAmount = value;
+    unit->lifetimeMaxAmount = value;
+    unit->availableAmount = value;
+}
+
+void CombatController::setAmount(SiegeEngine* siege, int value)
+{
+    siege->totalAmount = value;
+    siege->lifetimeMaxAmount = value;
 }
 
 float CombatController::attack(Unit* unit, int amount)
@@ -161,14 +197,36 @@ float CombatController::attack(Unit* unit, int amount)
         }
         totalDamage += damage;
     }
-    unit->availableAmount = unit->totalAmount;
+    return totalDamage;
+}
+
+float CombatController::attack(SiegeEngine* siege, int amount)
+{
+    float totalDamage = 0;
+    for (int i = 0; i < amount; i++)
+    {
+        int hitRoll = dist(rng);
+        if (hitRoll >= siege->accuracy)
+        {
+            continue;
+        }
+        float damage = siege->attackValue;
+
+        int critRoll = dist(rng);
+        if (critRoll < siege->critChance)
+        {
+            damage *= siege->critMultiplier;
+        }
+        totalDamage += damage;
+    }
+    siege->availableAmount = siege->useableAmount;
     return totalDamage;
 }
 
 void CombatController::takeDamage(Unit* unit, float damage)
 {
-    float amountDead = damage/unit->unitLPValue;
-    unit->totalAmount -= amountDead;
+    float amountDead = damage/unit->hpValue;
+    unit->totalAmount -= static_cast<int>(amountDead);
     // float differenceAD = damage - armorValue;
     // armorValue -= damage/20;
     // if (differenceAD > 0)
@@ -176,6 +234,30 @@ void CombatController::takeDamage(Unit* unit, float damage)
     //    lifePoints -= differenceAD;
     // }
     // return lifePoints;
+}
+
+void CombatController::takeDamage(SiegeEngine* siege, float damage)
+{
+     float amountDead = damage/siege->hpValue;
+    siege->totalAmount -= static_cast<int>(amountDead);
+}
+
+void CombatController::use(int amount)
+{
+    pCat_C->useableAmount += amount;
+    pInf_C->totalAmount -= amount * pCat_C->cost;
+    pInf_C->availableAmount -= amount * pCat_C->cost;
+
+}
+
+void CombatController::reset(Unit* unit)
+{
+    unit->availableAmount = unit->totalAmount;
+}
+
+void CombatController::reset(SiegeEngine* siege)
+{
+    siege->availableAmount = siege->useableAmount;
 }
 
 void CombatController::handleTurn()
@@ -188,5 +270,8 @@ void CombatController::handleTurn()
             onTurnEnd.removeListener(handle);
         }
         listenersTurnEnd.clear();
+        reset(pInf_C);
+        reset(pArc_C);
+        reset(pCat_C);
     }
 }

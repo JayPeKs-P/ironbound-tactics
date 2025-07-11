@@ -18,5 +18,5 @@ struct Catapult: Component, SiegeEngine{
 private:
     Catapult(guid_t owner, int amount)
     : Component(owner),
-    SiegeEngine(400, 20, 150, 80, 12, amount){}
+    SiegeEngine(400, 20, 150, 80, 12, amount, 5){}
 };
