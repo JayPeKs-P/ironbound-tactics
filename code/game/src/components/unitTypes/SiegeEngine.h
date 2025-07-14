@@ -18,8 +18,9 @@ struct SiegeEngine {
     int availableAmount;
     int useableAmount = 0;
     int cost;
+    int speed;
 protected:
-    SiegeEngine(float hp, float def, float atk, int acc, int critc, int amount, int cost)
+    SiegeEngine(float hp, float def, float atk, int acc, int critc, int amount, int cost, int speed)
         : hpValue(hp),
         armorValue(def),
         attackValue(atk),
@@ -28,6 +29,7 @@ protected:
         totalAmount(amount),
         availableAmount(amount),
         lifetimeMaxAmount(amount),
-        cost(cost){ }
+        cost(cost),
+        speed(speed) { }
 
 };

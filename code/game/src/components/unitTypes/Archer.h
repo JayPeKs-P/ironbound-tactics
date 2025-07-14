@@ -16,5 +16,5 @@ struct Archer: Unit, Component{
 private:
     Archer(guid_t owner, int amount)
     : Component(owner),
-    Unit(80, 20, 40, 85, 8, amount){}
+    Unit(80, 20, 40, 85, 8, amount, 1){}
 };

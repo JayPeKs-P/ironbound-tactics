@@ -14,8 +14,9 @@ struct Unit{
     int lifetimeMaxAmount;
     int totalAmount;
     int availableAmount;
+    int speed;
 protected:
-    Unit (float hp, float def, float atk, int acc, int critc, int amount)
+    Unit (float hp, float def, float atk, int acc, int critc, int amount, int speed)
         :hpValue(hp),
         armorValue(def),
         attackValue(atk),
@@ -23,6 +24,7 @@ protected:
         critChance(critc),
         totalAmount(amount),
         availableAmount(amount),
-        lifetimeMaxAmount(amount){ };
+        lifetimeMaxAmount(amount),
+        speed(speed) { };
 
 };

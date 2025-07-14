@@ -17,5 +17,5 @@ struct Infantry: Unit, Component{
 private:
     Infantry(guid_t owner, int amount)
     : Component(owner),
-    Unit(100, 30, 50, 99, 10, amount){}
+    Unit(100, 30, 50, 99, 10, amount, 2){}
 };

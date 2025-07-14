@@ -9,6 +9,7 @@
 #include "engine/Events.h"
 #include "engine/ecs/ComponentManager.h"
 #include "engine/ecs/EntityManager.h"
+#include "engine/logic/Action.h"
 
 namespace gl3::engine {
     class Game{
@@ -24,6 +25,8 @@ namespace gl3::engine {
 
         engine::ecs::ComponentManager componentManager;
         engine::ecs::EntityManager entityManager;
+
+        std::list<engine::combat::Action> actionRegistry;
 
         virtual void run();
         static glm::mat4 calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, glm::vec3 scale);
