@@ -9,6 +9,7 @@
 
 #include "../gui/GuiCombat.h"
 #include "../components/TagComponent.h"
+#include "engine/logic/ActionRegistry.h"
 
 
 using namespace gl3;
@@ -42,6 +43,10 @@ CombatController::CombatController(engine::Game &game):
                     {
                         use(amount);
                         std::cout << "Catapult" << std::endl;
+                        engine.actionRegister.scheduleAction(1,[=]()
+                        {
+                            reset(pCat_C, amount);
+                        });
                     }else if (selPTarget == Category::ASSAULT_COVER)
                     {
 
@@ -111,56 +116,62 @@ void CombatController::chooseAttackTarget(Unit* unit, Category selection, int am
 {
         if (selection == Category::INFANTRY)
         {
-            auto handle = onTurnEnd.addListener([=]()
+            engine.actionRegister.scheduleAction(unit->speed,
+                [=] ()
             {
                 takeDamage(eInf_C, attack(unit, amount));
+                reset(unit, amount);
             });
-            listenersTurnEnd.push_back(handle);
         }
         if (selection == Category::ARCHER)
         {
-            auto handle = onTurnEnd.addListener([=]()
+            engine.actionRegister.scheduleAction(unit->speed,
+                [=] ()
             {
                 takeDamage(eArc_C, attack(unit, amount));
+                reset(unit, amount);
             });
-            listenersTurnEnd.push_back(handle);
         }
         if (selection == Category::CATAPULT)
         {
-            auto handle = onTurnEnd.addListener([=]()
+            engine.actionRegister.scheduleAction(unit->speed,
+                [=] ()
             {
                 takeDamage(eCat_C, attack(unit, amount));
+                reset(unit, amount);
             });
-            listenersTurnEnd.push_back(handle);
         }
     unit->availableAmount -= amount;
 }
 
 void CombatController::chooseAttackTarget(SiegeEngine* siege, Category selection, int amount)
 {
-            if (selection == Category::INFANTRY)
+        if (selection == Category::INFANTRY)
         {
-            auto handle = onTurnEnd.addListener([=]()
+            engine.actionRegister.scheduleAction(siege->speed,
+                [=] ()
             {
                 takeDamage(eInf_C, attack(siege, amount));
+                reset(siege, amount);
             });
-            listenersTurnEnd.push_back(handle);
         }
         if (selection == Category::ARCHER)
         {
-            auto handle = onTurnEnd.addListener([=]()
+            engine.actionRegister.scheduleAction(siege->speed,
+                [=] ()
             {
                 takeDamage(eArc_C, attack(siege, amount));
+                reset(siege, amount);
             });
-            listenersTurnEnd.push_back(handle);
         }
         if (selection == Category::CATAPULT)
         {
-            auto handle = onTurnEnd.addListener([=]()
+            engine.actionRegister.scheduleAction(siege->speed,
+                [=] ()
             {
                 takeDamage(eCat_C, attack(siege, amount));
+                reset(siege, amount);
             });
-            listenersTurnEnd.push_back(handle);
         }
     siege->availableAmount -= amount;
 }
@@ -219,7 +230,6 @@ float CombatController::attack(SiegeEngine* siege, int amount)
         }
         totalDamage += damage;
     }
-    siege->availableAmount = siege->useableAmount;
     return totalDamage;
 }
 
@@ -250,28 +260,20 @@ void CombatController::use(int amount)
 
 }
 
-void CombatController::reset(Unit* unit)
+void CombatController::reset(Unit* unit, int amount)
 {
-    unit->availableAmount = unit->totalAmount;
+    unit->availableAmount += amount;
 }
 
-void CombatController::reset(SiegeEngine* siege)
+void CombatController::reset(SiegeEngine* siege, int amount)
 {
-    siege->availableAmount = siege->useableAmount;
+    siege->availableAmount += amount;
 }
 
 void CombatController::handleTurn()
 {
     if (pInf_C->availableAmount == 0 && pArc_C->availableAmount == 0 && pCat_C->availableAmount == 0)
     {
-        onTurnEnd.invoke();
-        for (auto& handle : listenersTurnEnd)
-        {
-            onTurnEnd.removeListener(handle);
-        }
-        listenersTurnEnd.clear();
-        reset(pInf_C);
-        reset(pArc_C);
-        reset(pCat_C);
+        engine.actionRegister.advance();
     }
 }

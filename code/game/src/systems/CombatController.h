@@ -25,9 +25,6 @@ public:
 
     void handleTurn();
     void init(engine::Game &game);
-    using event_t = engine::events::Event<CombatController>;
-    event_t onTurnEnd;
-    std::vector<decltype(onTurnEnd)::handle_t> listenersTurnEnd;
 private:
     //TODO extract those functions into seperate CombatHelper file(s), maybe even implement them as templatefunctions
     void chooseAttackTarget(Unit* unit, Category selection, int amount);
@@ -39,8 +36,8 @@ private:
     void takeDamage(Unit* unit, float damage);
     void takeDamage(SiegeEngine*, float damage);
     void use(int amount);
-    void reset(Unit* unit);
-    void reset(SiegeEngine* siege);
+    void reset(Unit* unit, int amount);
+    void reset(SiegeEngine* siege, int amount);
     std::mt19937 rng{std::random_device{}()};
     std::uniform_int_distribution<int> dist{0, 99};
     Infantry* pInf_C = nullptr;

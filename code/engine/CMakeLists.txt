@@ -8,7 +8,7 @@ set(ENGINE_NAME Engine)
 
 add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
         include/engine/ecs/Gui.h
-        include/engine/logic/ActionRegistry.cpp
+        src/logic/ActionRegistry.cpp
         include/engine/logic/ActionRegistry.h
         include/engine/logic/Action.h
         include/engine/logic/Action.h

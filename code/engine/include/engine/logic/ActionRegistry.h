@@ -8,7 +8,9 @@
 namespace gl3::engine::combat {
 class ActionRegistry {
 public:
-    static void scheduleAction(int delay, std::function<void()> action, std::list<Action>* actions);
-    static void advance(std::list<Action>* actions);
+    void scheduleAction(int delay, std::function<void()> action);
+    void advance();
+private:
+    std::list<Action> actions;
 };
 }
