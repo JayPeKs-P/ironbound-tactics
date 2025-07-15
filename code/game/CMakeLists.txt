@@ -9,14 +9,6 @@ set(SOURCE_FILES src/main.cpp
         src/rendering/Mesh.cpp
         src/rendering/Mesh.h
         src/Assets.h
-        #        src/guiElements/guiElement.cpp
-#        src/guiElements/guiElement.h
-#        src/guiElements/battleMenu.cpp
-#        src/guiElements/battleMenu.h
-#        src/rendering/pngTexture.cpp
-#        src/rendering/pngTexture.h
-        src/combatLogic/Army.cpp
-        src/combatLogic/Army.h
         src/components/unitTypes/Unit.h
         src/systems/CombatController.cpp
         src/systems/CombatController.h
@@ -42,8 +34,6 @@ add_executable(${EXE_FILE} ${SOURCE_FILES})
 target_compile_features(${EXE_FILE} PRIVATE cxx_std_17)
 
 
-find_package(imgui REQUIRED)
-find_package(PNG REQUIRED)
 
 target_link_libraries(${EXE_FILE} PRIVATE Engine)
 

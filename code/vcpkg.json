@@ -3,16 +3,6 @@
   "version-string": "1",
   "dependencies": [
     "glad",
-    "glm",
-    {
-      "name": "imgui",
-      "features": [
-        "opengl2-binding",
-        "opengl3-binding",
-        "glfw-binding",
-        "freetype"
-      ]
-    },
-    "libpng"
+    "glm"
   ]
 }
