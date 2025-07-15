@@ -8,18 +8,8 @@ set(SOURCE_FILES src/main.cpp
         src/rendering/Shader.h
         src/rendering/Mesh.cpp
         src/rendering/Mesh.h
-        src/entities/Entity.cpp
-        src/entities/Entity.h
-        src/entities/Ship.cpp
-        src/entities/Ship.h
         src/Assets.h
-        src/entities/Planet.cpp
-        src/entities/Planet.h
-        src/entities/Enemy.cpp
-        src/entities/Enemy.h
-        src/entities/Missile.cpp
-        src/entities/Missile.h
-#        src/guiElements/guiElement.cpp
+        #        src/guiElements/guiElement.cpp
 #        src/guiElements/guiElement.h
 #        src/guiElements/battleMenu.cpp
 #        src/guiElements/battleMenu.h
