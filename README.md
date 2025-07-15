@@ -20,6 +20,8 @@ This project was started for the GameLab 3 module. The game is a turn based endl
 tbc
 
 ## Repository Usage Guides
+IMPORTANT: This project uses submodules. Use `git clone --recurse-submodules <...>` when cloning. 
+Also this project requires CMake 3.29 as minimum. Should it not be possible, for whatever reason, to use this version or newer, change `cmake_minimum_required(VERSION 3.28.1)` in engine/CMakeLists.txt and root CMakeLists.txt.
 
 ```
 RepositoryRoot/
