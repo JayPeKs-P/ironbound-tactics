@@ -5,6 +5,7 @@
 #include "GuiHandler.h"
 
 #include <iostream>
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include "../components/GuiState.h"

@@ -21,7 +21,6 @@ target_link_libraries(${ENGINE_NAME} PUBLIC glad
         glfw
         glm
         soloud
-        tinygltf
         nuklear_impl
         stb)
 

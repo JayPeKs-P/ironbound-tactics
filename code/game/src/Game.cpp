@@ -28,11 +28,22 @@
 using namespace gl3;
 
 Game::Game(int width, int height, const std::string &title):
-engine::Game(width, height, title)
+engine::Game(width, height, title),
+shader("shaders/vertexShader.vert", "shaders/fragmentShader.frag"),
+mesh({
+                         0.5f, 0.025f, 0.0f,
+                         0.0f, 0.3f, 0.0f,
+                         -0.2f, 0.05f, 0.0f,
+
+                         0.5f, -0.025f, 0.0f,
+                         0.0f, -0.3f, 0.0f,
+                         -0.2f, -0.05f, 0.0f
+                 },
+                 {0, 1, 2,
+                  3, 4, 5})
 {
     // audio.init();
     // audio.setGlobalVolume(0.1f);
-
 }
 
 void Game::start()
@@ -122,8 +133,8 @@ void Game::update(GLFWwindow *window)
 
 void Game::draw()
 {
-    // for (const auto & entity : entities)
-    // {
-    //     entity->draw(this);
-    // }
+    auto mvpMatrix = calculateMvpMatrix({0,0,0}, 90, {1, 1, 1} );
+    shader.use();
+    shader.setMatrix("mvp", mvpMatrix);
+    mesh.draw();
 }

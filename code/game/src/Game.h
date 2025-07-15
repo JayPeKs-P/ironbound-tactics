@@ -3,7 +3,6 @@
 //
 #pragma once
 #include "engine/Game.h"
-// #include "../src/entities/Entity.h"
 
 
 #include <soloud.h>
@@ -11,6 +10,9 @@
 
 #include "systems/CombatController.h"
 #include "systems/GuiHandler.h"
+
+#include "rendering/Shader.h"
+#include "rendering/Mesh.h"
 
 
 namespace gl3
@@ -43,6 +45,8 @@ namespace gl3
         SoLoud::Soloud audio;
         std::unique_ptr<SoLoud::Wav>(backgroundMusic);
 
+        Shader shader;
+        Mesh mesh;
 
         float zRotation = 0.0f;
         float rotationSpeed = 120.0f;
