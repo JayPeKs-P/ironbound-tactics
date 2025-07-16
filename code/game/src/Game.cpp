@@ -139,6 +139,7 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
+    elapsedTime += deltaTime;
 }
 
 void Game::draw()
@@ -149,8 +150,14 @@ void Game::draw()
     auto mvpBackGround = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
     shader.use();
     shader.setMatrix("mvp", mvpBackGround);
+    shader.setFloat("uvOffset", 0.0f);
     background.draw();
     shader.use();
     shader.setMatrix("mvp", mvpMatrix);
+    int totalFrames = 4;
+    float frameDuration = 0.2f;
+    int currentFrame = static_cast<int>(elapsedTime / frameDuration) % totalFrames;
+    float uvOffset = currentFrame * (1.0f / totalFrames);
+    shader.setFloat("uvOffset", uvOffset);
     mesh.draw();
 }

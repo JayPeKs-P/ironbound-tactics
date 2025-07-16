@@ -8,9 +8,10 @@ out vec3 ourColor;
 out vec2 TexCoord;
 
 uniform mat4 mvp;
+uniform float uvOffset;
 
 void main() {
     gl_Position = mvp * vec4(aPosition, 1.0f);
     ourColor = aColor;
-    TexCoord = aTexCoord;
+    TexCoord = aTexCoord + vec2(uvOffset, 0.0f);
 }

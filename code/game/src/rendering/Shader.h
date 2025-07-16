@@ -22,6 +22,7 @@ namespace gl3 {
         void use() const;
         void setMatrix(const std::string &uniformName, glm::mat4 matrix) const;
         void setVector(const std::string &uniformName, glm::vec4 vector) const;
+        void setFloat(const std::string &uniformName, float value) const;
 
         Shader(const Shader &shader) = delete;
 

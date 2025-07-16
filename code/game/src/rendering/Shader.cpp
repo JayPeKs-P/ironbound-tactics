@@ -55,6 +55,12 @@ void Shader::setVector(const std::string& uniformName, glm::vec4 vector) const
     glUniform4fv(uniformLocation, 1, glm::value_ptr(vector));
 }
 
+void Shader::setFloat(const std::string& uniformName, float value) const
+{
+    int uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
+    glUniform1f(uniformLocation, value);
+}
+
 void Shader::use() const
 {
     glUseProgram(shaderProgram);

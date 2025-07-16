@@ -40,6 +40,7 @@ namespace gl3::engine {
         virtual void updateDeltaTime();
 
         float deltaTime = 1.0f / 60;
+        float elapsedTime = 0.0f;
     private:
         glm::mat4 mvpMatrix{};
         context::Context context;
