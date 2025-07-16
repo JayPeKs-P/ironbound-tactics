@@ -12,6 +12,8 @@ add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
         include/engine/logic/ActionRegistry.h
         include/engine/logic/Action.h
         include/engine/logic/Action.h
+        include/engine/Texture.h
+        src/Texture.cpp
 )
 
 target_compile_features(${ENGINE_NAME} PRIVATE cxx_std_17)

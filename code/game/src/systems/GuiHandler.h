@@ -32,7 +32,6 @@ public:
 private:
     void selectCurrentScene(engine::Game &game);
     void renderGUI(engine::Game &game);
-    void loadTextureAtlas(const char* texturePath);
     //-----GUI Szenen-----
     GuiState *activeScene = nullptr;
     std::shared_ptr<engine::ecs::Gui> combatGUI = nullptr;

@@ -3,10 +3,9 @@
 //
 
 #include "GuiHandler.h"
-
+#include "engine/Texture.h"
 #include <iostream>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+
 
 #include "../components/GuiState.h"
 #include "../gui/GuiCombat.h"
@@ -48,7 +47,7 @@ namespace gl3 {
             /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
             nk_style_set_font(nkCTX, &FantasyRPG1->handle);
         }
-        loadTextureAtlas("assets/textures/gui/ui_atlas_48x48.png");
+        textureAtlasID = engine::util::Texture::load("assets/textures/gui/ui_atlas_48x48.png");
 
         combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
         for (auto& [owner, _] : game.componentManager.getContainer<GuiState>())
@@ -101,27 +100,5 @@ namespace gl3 {
         {
             // gui.resetSelection();
         }
-
-    }
-
-
-    void GuiHandler::loadTextureAtlas(const char* texturePath)
-    {
-        int width, height, channels;
-        unsigned char* image = stbi_load(texturePath, &width, &height, &channels, 4); // Load as RGBA
-
-        if (!image) {
-            std::cerr << "Failed to load texture atlas: " << texturePath << "\n";
-            return;
-        }
-
-        glGenTextures(1, &textureAtlasID);
-        glBindTexture(GL_TEXTURE_2D, textureAtlasID);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(image);
     }
 } // gl3
