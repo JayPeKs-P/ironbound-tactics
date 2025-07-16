@@ -33,20 +33,20 @@ engine::Game(width, height, title),
 shader("shaders/vertexShader.vert", "shaders/fragmentShader.frag"),
 mesh({
                     //positions                  // colors                  // texture coords
-                     0.5f,   0.5f,   0.0f,      1.0f,   0.0f,   0.0f,       1.0f,   1.0f,
-                     0.5f,  -0.5f,   0.0f,      0.0f,   1.0f,   0.0f,       1.0f,   0.0f,
-                    -0.5f,  -0.5f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,
-                    -0.5f,   0.5f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f
+                     0.5f,   0.5f,   0.0f,      1.0f,   0.0f,   0.0f,       0.25f,   0.5f,
+                     0.5f,  -0.5f,   0.0f,      0.0f,   1.0f,   0.0f,       0.25f,   0.25f,
+                    -0.5f,  -0.5f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.25f,
+                    -0.5f,   0.5f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   0.5f
                  },
                  {0, 1, 3,
                   1, 2, 3},
                   engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_03_Idle.png")),
 background({
                     //positions                  // colors                  // texture coords
-                     1.0f,   0.574f,  -0.1f,      1.0f,   0.0f,   0.0f,       1.0f,   1.0f,
-                     1.0f,  -0.574f,  -0.1f,      0.0f,   1.0f,   0.0f,       1.0f,   0.0f,
-                    -1.0f,  -0.574f,  -0.1f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,
-                    -1.0f,   0.574f,  -0.1f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f
+                     1.0f,   0.574f,  -0.1f,      1.0f,   0.0f,   0.0f,       1.0f,   1.0f,     //top right
+                     1.0f,  -0.574f,  -0.1f,      0.0f,   1.0f,   0.0f,       1.0f,   0.0f,     //bottom right
+                    -1.0f,  -0.574f,  -0.1f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,     //bottom left
+                    -1.0f,   0.574f,  -0.1f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f      //top left
                  },
                  {0, 1, 3,
                   1, 2, 3},
@@ -145,7 +145,7 @@ void Game::draw()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    auto mvpMatrix = calculateMvpMatrix({0,0,0}, 0, {1, 1, 1} );
+    auto mvpMatrix = calculateMvpMatrix({-2,0,0}, 0, {0.2, 0.2, 1} );
     auto mvpBackGround = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
     shader.use();
     shader.setMatrix("mvp", mvpBackGround);
