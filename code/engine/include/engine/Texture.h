@@ -8,6 +8,6 @@ namespace gl3::engine::util {
 class Texture
 {
 public:
-    static unsigned int load(const char* texturePath);
+    static unsigned int load(const char* texturePath, bool flip = true);
 };
 };

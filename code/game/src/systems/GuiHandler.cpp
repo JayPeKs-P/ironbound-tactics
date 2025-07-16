@@ -47,7 +47,7 @@ namespace gl3 {
             /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
             nk_style_set_font(nkCTX, &FantasyRPG1->handle);
         }
-        textureAtlasID = engine::util::Texture::load("assets/textures/gui/ui_atlas_48x48.png");
+        textureAtlasID = engine::util::Texture::load("assets/textures/gui/ui_atlas_48x48.png", false);
 
         combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
         for (auto& [owner, _] : game.componentManager.getContainer<GuiState>())

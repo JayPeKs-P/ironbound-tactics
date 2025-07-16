@@ -23,6 +23,7 @@
 #include "gui/GuiCombat.h"
 // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
+#include "engine/Texture.h"
 
 
 using namespace gl3;
@@ -31,16 +32,25 @@ Game::Game(int width, int height, const std::string &title):
 engine::Game(width, height, title),
 shader("shaders/vertexShader.vert", "shaders/fragmentShader.frag"),
 mesh({
-                         0.5f, 0.025f, 0.0f,
-                         0.0f, 0.3f, 0.0f,
-                         -0.2f, 0.05f, 0.0f,
-
-                         0.5f, -0.025f, 0.0f,
-                         0.0f, -0.3f, 0.0f,
-                         -0.2f, -0.05f, 0.0f
+                    //positions                  // colors                  // texture coords
+                     0.5f,   0.5f,   0.0f,      1.0f,   0.0f,   0.0f,       1.0f,   1.0f,
+                     0.5f,  -0.5f,   0.0f,      0.0f,   1.0f,   0.0f,       1.0f,   0.0f,
+                    -0.5f,  -0.5f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,
+                    -0.5f,   0.5f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f
                  },
-                 {0, 1, 2,
-                  3, 4, 5})
+                 {0, 1, 3,
+                  1, 2, 3},
+                  engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_03_Idle.png")),
+background({
+                    //positions                  // colors                  // texture coords
+                     1.0f,   0.574f,  -0.1f,      1.0f,   0.0f,   0.0f,       1.0f,   1.0f,
+                     1.0f,  -0.574f,  -0.1f,      0.0f,   1.0f,   0.0f,       1.0f,   0.0f,
+                    -1.0f,  -0.574f,  -0.1f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,
+                    -1.0f,   0.574f,  -0.1f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f
+                 },
+                 {0, 1, 3,
+                  1, 2, 3},
+                  engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png"))
 {
     // audio.init();
     // audio.setGlobalVolume(0.1f);
@@ -133,7 +143,13 @@ void Game::update(GLFWwindow *window)
 
 void Game::draw()
 {
-    auto mvpMatrix = calculateMvpMatrix({0,0,0}, 90, {1, 1, 1} );
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    auto mvpMatrix = calculateMvpMatrix({0,0,0}, 0, {1, 1, 1} );
+    auto mvpBackGround = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
+    shader.use();
+    shader.setMatrix("mvp", mvpBackGround);
+    background.draw();
     shader.use();
     shader.setMatrix("mvp", mvpMatrix);
     mesh.draw();

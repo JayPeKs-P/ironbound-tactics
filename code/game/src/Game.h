@@ -47,6 +47,7 @@ namespace gl3
 
         Shader shader;
         Mesh mesh;
+        Mesh background;
 
         float zRotation = 0.0f;
         float rotationSpeed = 120.0f;

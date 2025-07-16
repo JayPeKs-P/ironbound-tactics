@@ -31,6 +31,10 @@ namespace gl3 {
             std::swap(this->vertexShader, other.vertexShader);
             std::swap(this->fragmentShader, other.fragmentShader);
         }
+        [[nodiscard]] unsigned int getShaderProgram() const
+        {
+            return shaderProgram;
+        }
         private:
         unsigned int shaderProgram;
         unsigned int vertexShader;

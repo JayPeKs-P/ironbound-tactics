@@ -68,6 +68,7 @@ unsigned int Shader::loadAndCompileShader(GLuint shaderType, const fs::path& sha
     glShaderSource(shaderID, 1, &source, nullptr);
     glCompileShader(shaderID);
 
+
     glStatusData compilationStatus{};
     compilationStatus.shaderName = shaderType == GL_VERTEX_SHADER ? "Vertex" : "Fragment";
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compilationStatus.success);

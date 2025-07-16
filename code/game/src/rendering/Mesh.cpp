@@ -5,6 +5,7 @@
 #include "Mesh.h"
 
 #include <glad/glad.h>
+#include "engine/Texture.h"
 
 using namespace gl3;
 
@@ -17,10 +18,11 @@ GLuint createBuffer(GLuint bufferType, const std::vector<T> &bufferData) {
     return buffer;
 }
 
-Mesh::Mesh(const std::vector<float> &vertices, const std::vector<unsigned int> &indices):
+Mesh::Mesh(const std::vector<float> &vertices, const std::vector<unsigned int> &indices, unsigned int texID):
          numberOfIndices(indices.size()),
          VBO(createBuffer(GL_ARRAY_BUFFER, vertices)),
-         EBO(createBuffer(GL_ELEMENT_ARRAY_BUFFER, indices))
+         EBO(createBuffer(GL_ELEMENT_ARRAY_BUFFER, indices)),
+         texture(texID)
 {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -39,10 +41,19 @@ void Mesh::draw() const
     glBindVertexArray(VAO);
     //VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
     //EBO
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
     glDrawElements(GL_TRIANGLES, numberOfIndices, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
 }
