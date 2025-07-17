@@ -27,7 +27,7 @@ namespace gl3 {
         engine.onAfterUpdate.addListener([&](engine::Game &game)
         {
             renderGUI(game);
-
+            restoreGameState();
         });
     }
 
@@ -57,6 +57,17 @@ namespace gl3 {
                 activeScene = &game.componentManager.getComponent<GuiState>(owner);
             }
         }
+    }
+
+    void GuiHandler::restoreGameState()
+    {
+        glDisable(GL_SCISSOR_TEST);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //
     }
 
     void GuiHandler::selectCurrentScene(engine::Game& game)

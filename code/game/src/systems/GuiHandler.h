@@ -30,6 +30,7 @@ public:
         return combatGUI;
     }
 private:
+    void restoreGameState();
     void selectCurrentScene(engine::Game &game);
     void renderGUI(engine::Game &game);
     //-----GUI Szenen-----

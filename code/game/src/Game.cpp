@@ -58,9 +58,9 @@ background({
 
 void Game::start()
 {
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    // unsigned int VAO;
+    // glGenVertexArrays(1, &VAO);
+    // glBindVertexArray(VAO);
 
     std::mt19937 randomNumberEngine{       //Mersenne Twister generates 32-bit unsigned integers
         std::random_device{}()};       // Seed our Mersenne Twister using with a random number from the OS
@@ -144,20 +144,44 @@ void Game::update(GLFWwindow *window)
 
 void Game::draw()
 {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    auto mvpMatrix = calculateMvpMatrix({-2,0,0}, 0, {0.2, 0.2, 1} );
-    auto mvpBackGround = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
+    std::vector <InstanceData> instances;
+    float yCoord = -1.25;
+    float zCoord = 0.0f;
+    for (int i = 0; i < 5; i++)
+    {
+        yCoord += 0.05f;
+        zCoord -= 0.01f;
+        float xCoord = -2.25;
+        for (int j = 0; j < 10; j++)
+        {
+            xCoord += 0.1f;
+            InstanceData instanceX;
+            instanceX.modelMatrix = calculateMvpMatrix({xCoord, yCoord ,zCoord}, 0, {0.25, 0.25, 1});
+            instances.push_back(instanceX);
+        }
+        InstanceData instanceY;
+        instanceY.modelMatrix = calculateMvpMatrix({-2.25,yCoord ,zCoord}, 0, {0.25, 0.25, 1} );
+        instances.push_back(instanceY);
+    }
+    std::vector <InstanceData> backgroundInstances;
+    InstanceData backgroundData;
+    backgroundData.modelMatrix = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
+    backgroundInstances.push_back(backgroundData);
+    //test end
+    auto mvpMatrix = calculateMvpMatrix({-2.25,-1.25,0}, 0, {0.25, 0.25, 1} );
+
     shader.use();
-    shader.setMatrix("mvp", mvpBackGround);
     shader.setFloat("uvOffset", 0.0f);
-    background.draw();
+    background.update(backgroundInstances);
+    background.draw(1);
     shader.use();
-    shader.setMatrix("mvp", mvpMatrix);
+    // shader.setMatrix("mvp", mvpMatrix);
+    shader.setMatrix("mvp", glm::mat4(1.0f));
+    mesh.update(instances);
     int totalFrames = 4;
     float frameDuration = 0.2f;
     int currentFrame = static_cast<int>(elapsedTime / frameDuration) % totalFrames;
     float uvOffset = currentFrame * (1.0f / totalFrames);
     shader.setFloat("uvOffset", uvOffset);
-    mesh.draw();
+    mesh.draw(instances.size());
 }

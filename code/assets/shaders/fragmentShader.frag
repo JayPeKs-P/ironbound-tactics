@@ -8,5 +8,9 @@ in vec2 TexCoord;
 uniform sampler2D ourTexture;
 
 void main() {
-    fragColor = texture(ourTexture, TexCoord);
+    vec4 rawTexture = texture(ourTexture, TexCoord);
+    if (rawTexture.a < 0.1){
+        discard;
+    }
+    fragColor = rawTexture;
 }
