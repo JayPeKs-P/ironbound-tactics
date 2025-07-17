@@ -22,6 +22,11 @@ set(SOURCE_FILES src/main.cpp
         src/components/GuiState.h
         src/components/CombatSelection.h
         src/components/unitTypes/SiegeEngine.h
+        src/components/Model2D.h
+        src/components/Shader.h
+        src/systems/rendering/RenderSystem.cpp
+        src/systems/rendering/RenderSystem.h
+        src/components/InstanceBuffer.h
 )
 
 # set executable name

@@ -23,7 +23,11 @@
 #include "gui/GuiCombat.h"
 // #include "entities/Enemy.h"
 // #include "entities/Planet.h"
+#include "components/InstanceBuffer.h"
+#include "components/Model2D.h"
+#include "components/Shader.h"
 #include "engine/Texture.h"
+#include "engine/util/VertPresets.h"
 
 
 using namespace gl3;
@@ -89,7 +93,7 @@ void Game::start()
     // auto enemy = std::make_unique<Enemy>(glm::vec3(2, -1, 0), -90.0f, 0.25f);
     // entities.push_back(std::move(enemy));
 
-
+    unsigned int tempTexID = -1;
     //---- Entities ----
     auto &guiSceneEntity = engine::Game::entityManager.createEntity();
     guiSceneEntity.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
@@ -100,6 +104,10 @@ void Game::start()
     auto &pInf_E = engine::Game::entityManager.createEntity();
     auto &pInf_C = pInf_E.addComponent<Infantry>(0);
     pInf_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png");
+    pInf_E.addComponent<Model2D>(tempTexID, engine::util::VertPreset::quad, engine::util::VertPreset::quadIndices);
+    pInf_E.addComponent<InstanceBuffer>();
+    pInf_E.addComponent<Shader>();
 
     auto &pArc_E = engine::Game::entityManager.createEntity();
     auto &pArc_C = pArc_E.addComponent<Archer>(0);

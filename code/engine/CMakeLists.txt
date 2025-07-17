@@ -14,6 +14,7 @@ add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
         include/engine/logic/Action.h
         include/engine/Texture.h
         src/Texture.cpp
+        include/engine/util/VertPresets.h
 )
 
 target_compile_features(${ENGINE_NAME} PRIVATE cxx_std_17)
