@@ -33,10 +33,10 @@ engine::Game(width, height, title),
 shader("shaders/vertexShader.vert", "shaders/fragmentShader.frag"),
 mesh({
                     //positions                  // colors                  // texture coords
-                     0.5f,   0.5f,   0.0f,      1.0f,   0.0f,   0.0f,       0.25f,   0.5f,
-                     0.5f,  -0.5f,   0.0f,      0.0f,   1.0f,   0.0f,       0.25f,   0.25f,
-                    -0.5f,  -0.5f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.25f,
-                    -0.5f,   0.5f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   0.5f
+                     0.25f,   0.25f,   0.0f,      1.0f,   0.0f,   0.0f,       0.25f,   0.5f,
+                     0.25f,  -0.25f,   0.0f,      0.0f,   1.0f,   0.0f,       0.25f,   0.25f,
+                    -0.25f,  -0.25f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.25f,
+                    -0.25f,   0.25f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   0.5f
                  },
                  {0, 1, 3,
                   1, 2, 3},

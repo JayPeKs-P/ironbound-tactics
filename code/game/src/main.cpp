@@ -6,8 +6,8 @@ int main()
 {
     try
     {
-        gl3::Game spaceBattle(1280, 720, "Space Battle");
-        spaceBattle.run();
+        gl3::Game ironBoundTactics(1280, 720, "Ironbound Tactics");
+        ironBoundTactics.run();
     }
     catch (const std::exception &e)
     {
