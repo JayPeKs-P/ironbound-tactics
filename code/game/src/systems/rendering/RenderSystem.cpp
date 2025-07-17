@@ -3,23 +3,50 @@
 //
 
 #include "RenderSystem.h"
+#include <fstream>
+#include <sstream>
+#include "../../Assets.h"
 
-#include "../../components/InstanceBuffer.h"
 #include "../../components/Model2D.h"
+#include "../../components/Shader.h"
 
 namespace gl3 {
-template<typename T>
-GLuint createBuffer(GLuint bufferType, const std::vector<T> &bufferData) {
-    unsigned int buffer = 0;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(bufferType, buffer);
-    glBufferData(bufferType, bufferData.size() * sizeof(T), bufferData.data(), GL_DYNAMIC_DRAW);
-    return buffer;
-}
+    struct glStatusData
+    {
+        int success;
+        const char *shaderName;
+        char infoLog[GL_INFO_LOG_LENGTH];
+    };
+
+    std::string readText(const fs::path &filePath) {
+        std::ifstream sourceFile(resolveAssetPath(filePath));
+        std::stringstream buffer;
+        buffer << sourceFile.rdbuf();
+        return buffer.str();
+    }
+    template<typename T>
+    GLuint createBuffer(GLuint bufferType, const std::vector<T> &bufferData) {
+        unsigned int buffer = 0;
+        glGenBuffers(1, &buffer);
+        glBindBuffer(bufferType, buffer);
+        glBufferData(bufferType, bufferData.size() * sizeof(T), bufferData.data(), GL_DYNAMIC_DRAW);
+        return buffer;
+    }
 
     RenderSystem::RenderSystem(engine::Game &game):
     System(game)
     {
+        engine.onAfterStartup.addListener([&](engine::Game& game)
+        {
+            initShaders(game);
+            initBuffers(game);
+        });
+    }
+
+    RenderSystem::~RenderSystem()
+    {
+        deleteBuffers();
+        deleteShader();
     }
 
     void RenderSystem::draw(engine::Game &game)
@@ -27,6 +54,9 @@ GLuint createBuffer(GLuint bufferType, const std::vector<T> &bufferData) {
         auto& model2DContainer = game.componentManager.getContainer<Model2D>();
         for (auto &[owner, _]: model2DContainer)
         {
+            auto& shader_C = game.componentManager.getComponent<Shader>(owner);
+            glUseProgram(shader_C.get_shader_program());
+
             auto& model2D_C = game.componentManager.getComponent<Model2D>(owner);
             glBindVertexArray(model2D_C.VAO);
             glActiveTexture(GL_TEXTURE0);
@@ -38,8 +68,45 @@ GLuint createBuffer(GLuint bufferType, const std::vector<T> &bufferData) {
             }else
             {
             glDrawElements(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr);
-            glBindVertexArray(0);
             }
+            glBindVertexArray(0);
+        }
+    }
+
+    void RenderSystem::update(InstanceBuffer instanceBuffer_C)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(InstanceData),instanceBuffer_C.instances.data());
+    }
+
+    void RenderSystem::initShaders(engine::Game& game)
+    {
+        auto& shaderContainer = game.componentManager.getContainer<Shader>();
+        for (auto &[owner, _]: shaderContainer)
+        {
+            auto& shader_C = game.componentManager.getComponent<Shader>(owner);
+            if (game.componentManager.hasComponent<InstanceBuffer>(owner))
+            {
+                auto shaderData = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/vertexShader.vert");
+                shader_C.set_vertex_shader(shaderData);
+                shaderData = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/fragmentShader.frag");
+                shader_C.set_fragment_shader(shaderData);
+            }else
+            {
+                auto shaderData = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/shaded/vertexShader.vert");
+                shader_C.set_vertex_shader(shaderData);
+                shaderData = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/shaded/fragmentShader.frag");
+                shader_C.set_fragment_shader(shaderData);
+            }
+            shader_C.set_shader_program(glCreateProgram());
+            auto vertexShader = shader_C.get_vertex_shader();
+            auto fragmentShader = shader_C.get_fragment_shader();
+            auto program = shader_C.get_shader_program();
+            glAttachShader(program, vertexShader);
+            glAttachShader(program, fragmentShader);
+            glLinkProgram(program);
+            glDetachShader(program, vertexShader);
+            glDetachShader(program, fragmentShader);
         }
     }
 
@@ -102,5 +169,55 @@ GLuint createBuffer(GLuint bufferType, const std::vector<T> &bufferData) {
             }
             glDeleteVertexArrays(1, &model2D_C.VAO);
         }
+    }
+
+    void RenderSystem::deleteShader()
+    {
+        auto& shaderContainer = engine.componentManager.getContainer<Shader>();
+        for (auto &[owner, _]: shaderContainer)
+        {
+            auto& shader_C = engine.componentManager.getComponent<Shader>(owner);
+            glDeleteShader(shader_C.get_vertex_shader());
+            glDeleteShader(shader_C.get_fragment_shader());
+        }
+    }
+
+    void RenderSystem::setMatrix(const std::string& uniformName, glm::mat4 matrix, GLuint shaderProgram)
+    {
+        auto uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
+        glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+    }
+
+    void RenderSystem::setVector(const std::string& uniformName, glm::vec4 vector, GLuint shaderProgram)
+    {
+        int uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
+        glUniform4fv(uniformLocation, 1, glm::value_ptr(vector));
+    }
+
+    void RenderSystem::setFloat(const std::string& uniformName, float value, GLuint shaderProgram)
+    {
+        int uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
+        glUniform1f(uniformLocation, value);
+    }
+
+    unsigned int RenderSystem::loadAndCompileShader(GLuint shaderType, const fs::path& shaderPath)
+    {
+        auto shaderID = glCreateShader(shaderType);
+        auto shaderSource = readText(shaderPath);
+        auto source = shaderSource.c_str();
+        glShaderSource(shaderID, 1, &source, nullptr);
+        glCompileShader(shaderID);
+
+
+        glStatusData compilationStatus{};
+        compilationStatus.shaderName = shaderType == GL_VERTEX_SHADER ? "Vertex" : "Fragment";
+        glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compilationStatus.success);
+        if(compilationStatus.success == GL_FALSE)
+        {
+            glGetShaderInfoLog(shaderID, GL_INFO_LOG_LENGTH, nullptr, compilationStatus.infoLog);
+            throw std::runtime_error("ERROR: " + std::string(compilationStatus.shaderName) + " shader compilation failed.\n" +
+            std::string(compilationStatus.infoLog));
+        }
+        return shaderID;
     }
 } // gl3

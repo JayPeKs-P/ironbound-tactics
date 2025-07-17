@@ -1,12 +1,17 @@
 #version 460 core
 
 layout (location = 0) in vec3 aPosition;
-layout (location = 1) in vec3 aNormal;
+layout (location = 1) in vec3 aColor;
+layout (location = 2) in vec2 aTexCoord;
+
+out vec3 ourColor;
+out vec2 TexCoord;
+
 uniform mat4 mvp;
-uniform mat4 modelToWorldNormal;
-out vec3 normal;
+uniform float uvOffset;
 
 void main() {
     gl_Position = mvp * vec4(aPosition, 1.0f);
-    normal = vec3(modelToWorldNormal * vec4(aNormal, 0.0f));
+    ourColor = aColor;
+    TexCoord = aTexCoord + vec2(uvOffset, 0.0f);
 }

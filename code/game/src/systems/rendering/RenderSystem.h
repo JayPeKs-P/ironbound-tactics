@@ -10,6 +10,7 @@
 
 #include <glm/glm.hpp>
 #include "engine/ecs/System.h"
+#include "../../components/InstanceBuffer.h"
 
 namespace fs = std::filesystem;
 
@@ -24,11 +25,15 @@ class RenderSystem: public engine::ecs::System {
     explicit RenderSystem(engine::Game &game);
     ~RenderSystem() override;
     void draw(engine::Game &game);
-    void update();
+    void update(InstanceBuffer instanceBuffer_C);
+    void initShaders(engine::Game &game);
     void initBuffers(engine::Game &game);
     void deleteBuffers();
     void deleteShader();
-    void loadAndCompileShader(GLuint shaderType, const fs::path &shaderPath);
+    static void setMatrix(const std::string &uniformName, glm::mat4 matrix, GLuint shaderProgram) ;
+    static void setVector(const std::string &uniformName, glm::vec4 vector, GLuint shaderProgram) ;
+    static void setFloat(const std::string &uniformName, float value, GLuint shaderProgram) ;
+    unsigned int loadAndCompileShader(GLuint shaderType, const fs::path& shaderPath);
 
 };
 
