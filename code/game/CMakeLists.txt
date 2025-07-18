@@ -4,10 +4,6 @@ cmake_minimum_required(VERSION 3.18)
 set(SOURCE_FILES src/main.cpp
         src/Game.cpp
         src/Game.h
-#        src/rendering/Shader.cpp
-#        src/rendering/Shader.h
-#        src/rendering/Mesh.cpp
-#        src/rendering/Mesh.h
         src/Assets.h
         src/components/unitTypes/Unit.h
         src/systems/CombatController.cpp

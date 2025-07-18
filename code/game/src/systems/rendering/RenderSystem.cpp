@@ -183,6 +183,10 @@ namespace gl3 {
 
     void RenderSystem::deleteShader(engine::Game& game)
     {
+        glDeleteShader(batchVertexShader);
+        glDeleteShader(batchFragmentShader);
+        glDeleteShader(singleVertexShader);
+        glDeleteShader(singleFragmentShader);
     }
 
     void RenderSystem::setMatrix(const std::string& uniformName, glm::mat4 matrix, GLuint shaderProgram)

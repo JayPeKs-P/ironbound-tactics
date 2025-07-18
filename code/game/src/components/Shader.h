@@ -13,6 +13,11 @@ struct Shader: Component
 {
     friend ComponentManager;
     friend Entity;
+    Shader(const Shader &shader) = delete;
+    Shader(Shader &&other) noexcept
+    {
+        std::swap(this->shaderProgram, other.shaderProgram);
+    }
 
     [[nodiscard]] unsigned int get_shader_program() const
     {
