@@ -10,10 +10,10 @@ using gl3::engine::ecs::ComponentManager;
 using gl3::engine::ecs::guid_t;
 using gl3::engine::ecs::Entity;
 
-struct InstanceData
-{
-    glm::mat4 model;
-};
+// struct InstanceData
+// {
+//     glm::mat4 model;
+// };
 struct InstanceBuffer: Component
 {
     friend ComponentManager;
@@ -25,7 +25,7 @@ struct InstanceBuffer: Component
         this->instances = std::move(other.instances);
     }
     unsigned int VBO = 0;
-    std::vector <InstanceData> instances;
+    std::vector <glm::mat4> instances;
     float uvOffset = 0.0f;
 private:
     explicit InstanceBuffer(guid_t owner):

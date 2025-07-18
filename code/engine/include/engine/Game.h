@@ -9,27 +9,34 @@
 #include "engine/Events.h"
 #include "engine/ecs/ComponentManager.h"
 #include "engine/ecs/EntityManager.h"
+#include "engine/sceneGraph/Transform.h"
 #include "logic/ActionRegistry.h"
+
 
 namespace gl3::engine {
     class Game{
     public:
         using event_t = events::Event<Game, Game&>;
+
+        virtual void run();
+        static glm::mat4 calculateMvpMatrix(glm::mat4 model);
+        GLFWwindow *getWindow() {return context.getWindow();}
+
         // List of core events
         event_t onStartup;
         event_t onAfterStartup;
         event_t onBeforeUpdate;
+        event_t onUpdate;
         event_t onAfterUpdate;
         event_t onBeforeShutdown;
         event_t onShutdown;
 
-        engine::ecs::ComponentManager componentManager;
-        engine::ecs::EntityManager entityManager;
+        ComponentManager componentManager;
+        ecs::EntityManager entityManager;
+        sceneGraph::Transform* origin = nullptr;
 
         engine::combat::ActionRegistry actionRegister;
-        virtual void run();
-        static glm::mat4 calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, glm::vec3 scale);
-        GLFWwindow *getWindow() {return context.getWindow();}
+        float elapsedTime = 0.0f;
     protected:
         Game(int width, int height, const std::string& title);
         virtual ~Game();
@@ -40,7 +47,6 @@ namespace gl3::engine {
         virtual void updateDeltaTime();
 
         float deltaTime = 1.0f / 60;
-        float elapsedTime = 0.0f;
     private:
         glm::mat4 mvpMatrix{};
         context::Context context;

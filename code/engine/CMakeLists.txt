@@ -15,6 +15,10 @@ add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
         include/engine/Texture.h
         src/Texture.cpp
         include/engine/util/VertPresets.h
+        src/sceneGraph/Transform.cpp
+        include/engine/sceneGraph/Transform.h
+        include/engine/sceneGraph/SceneGraphPruner.h
+        include/engine/sceneGraph/SceneGraphUpdater.h
 )
 
 target_compile_features(${ENGINE_NAME} PRIVATE cxx_std_17)

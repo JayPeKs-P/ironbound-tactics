@@ -23,6 +23,9 @@ set(SOURCE_FILES src/main.cpp
         src/systems/rendering/RenderSystem.cpp
         src/systems/rendering/RenderSystem.h
         src/components/InstanceBuffer.h
+        src/components/UnitState.h
+        src/systems/rendering/InstanceManager.cpp
+        src/systems/rendering/InstanceManager.h
 )
 
 # set executable name

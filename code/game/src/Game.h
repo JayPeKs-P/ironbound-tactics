@@ -10,6 +10,7 @@
 
 #include "systems/CombatController.h"
 #include "systems/GuiHandler.h"
+#include "systems/rendering/InstanceManager.h"
 #include "systems/rendering/RenderSystem.h"
 
 
@@ -28,6 +29,7 @@ namespace gl3
         std::shared_ptr<GuiHandler> guiHandler;
         CombatController* combatController = nullptr;
         RenderSystem* renderSystem = nullptr;
+        InstanceManager* instanceManager = nullptr;
 
         void start() override;
         void update(GLFWwindow *window) override;
@@ -44,6 +46,12 @@ namespace gl3
         SoLoud::Soloud audio;
         std::unique_ptr<SoLoud::Wav>(backgroundMusic);
 
+        engine::sceneGraph::Transform* pInf_O = nullptr;
+        engine::sceneGraph::Transform* eInf_O = nullptr;
+        engine::sceneGraph::Transform* pArc_O = nullptr;
+        engine::sceneGraph::Transform* eArc_O = nullptr;
+        engine::sceneGraph::Transform* pCat_O = nullptr;
+        engine::sceneGraph::Transform* eCat_O = nullptr;
 
         float zRotation = 0.0f;
         float rotationSpeed = 120.0f;

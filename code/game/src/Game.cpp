@@ -26,10 +26,11 @@
 #include "components/InstanceBuffer.h"
 #include "components/Model2D.h"
 #include "components/Shader.h"
+#include "components/UnitState.h"
 #include "engine/Texture.h"
 #include "engine/util/VertPresets.h"
 
-
+using gl3::engine::sceneGraph::Transform;
 using namespace gl3;
 
 Game::Game(int width, int height, const std::string &title):
@@ -51,6 +52,7 @@ void Game::start()
     tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png");
     terrain_E.addComponent<Model2D>(engine::util::VertPreset::background, engine::util::VertPreset::quadIndices, tempTexID);
     terrain_E.addComponent<Shader>();
+    terrain_E.addComponent<engine::sceneGraph::Transform>(origin, glm::vec3(0,0,-0.91), 0, glm::vec3(2.75,2.75,1));
 
 
     //----- Entities of player's army -----
@@ -61,7 +63,7 @@ void Game::start()
     pInf_E.addComponent<Model2D>(engine::util::VertPreset::quad, engine::util::VertPreset::quadIndices, tempTexID);
     pInf_E.addComponent<InstanceBuffer>();
     pInf_E.addComponent<Shader>();
-    //TODO add position Component
+    pInf_O = &pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.25f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto &pArc_E = engine::Game::entityManager.createEntity();
     auto &pArc_C = pArc_E.addComponent<Archer>(0);
@@ -87,9 +89,14 @@ void Game::start()
 
     guiHandler = std::make_unique<GuiHandler>(*this);
     guiHandler->initialize(*this);
+
     renderSystem = new RenderSystem(*this);
+
+    instanceManager = new InstanceManager(*this);
+
     combatController = new CombatController(*this);
     combatController->init(*this);
+
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     backgroundMusic->setLooping(true);
@@ -102,54 +109,12 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
+    instanceManager->update(*this, pInf_O);
     renderSystem->update(*this);
     elapsedTime += deltaTime;
 }
 
 void Game::draw()
 {
-    std::vector <InstanceData> instances;
-    float yCoord = -1.25;
-    float zCoord = 0.0f;
-    for (int i = 0; i < 5; i++)
-    {
-        yCoord += 0.05f;
-        zCoord -= 0.01f;
-        float xCoord = -2.25;
-        for (int j = 0; j < 10; j++)
-        {
-            xCoord += 0.1f;
-            InstanceData instanceX;
-            instanceX.model = calculateMvpMatrix({xCoord, yCoord ,zCoord}, 0, {0.25, 0.25, 1});
-            instances.push_back(instanceX);
-        }
-        InstanceData instanceY;
-        instanceY.model = calculateMvpMatrix({-2.25,yCoord ,zCoord}, 0, {0.25, 0.25, 1} );
-        instances.push_back(instanceY);
-    }
-    std::vector <InstanceData> backgroundInstances;
-    InstanceData backgroundData;
-    backgroundData.model = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
-    backgroundInstances.push_back(backgroundData);
-    //test end
-    // test new renderer
-    int totalFrames = 4;
-    float frameDuration = 0.1f;
-    int currentFrame = static_cast<int>(elapsedTime / frameDuration) % totalFrames;
-
-    auto& model2DContainer = componentManager.getContainer<Model2D>();
-    for (auto &[owner, _]: model2DContainer)
-    {
-        if (!componentManager.hasComponent<Shader>(owner)) continue;
-        auto shaderProgram = componentManager.getComponent<Shader>(owner).get_shader_program();
-        if (componentManager.hasComponent<InstanceBuffer>(owner))
-        {
-            auto& instanceBuffer_C = componentManager.getComponent<InstanceBuffer>(owner);
-            instanceBuffer_C.instances = instances;
-            instanceBuffer_C.uvOffset = currentFrame * (1.0f / totalFrames);
-        }else
-        {
-        }
-    }
     renderSystem->draw(*this);
 }

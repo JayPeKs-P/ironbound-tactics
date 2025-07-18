@@ -1,13 +1,16 @@
 #include <stdexcept>
 #include "engine/Game.h"
 
+#include "engine/sceneGraph/SceneGraphPruner.h"
+#include "engine/sceneGraph/SceneGraphUpdater.h"
+
 using namespace gl3::engine;
 Game::Game(int width, int height, const std::string& title):
 context(width, height, title),
 componentManager(*this),
 entityManager(componentManager,*this)
 {
-
+    origin = &entityManager.createEntity().addComponent<sceneGraph::Transform>();
 }
 
 Game::~Game()
@@ -15,13 +18,8 @@ Game::~Game()
     context.~Context();
 }
 
-glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, glm::vec3 scale)
+glm::mat4 Game::calculateMvpMatrix(glm::mat4 model)
 {
-    auto model = glm::mat4(1.0f);
-    model = glm::translate(model, position);
-    model = glm::scale(model, scale);
-    model = glm::rotate(model, glm::radians(zRotationDegrees), glm::vec3(0, 0, 1));
-
     glm::mat4 view = glm::lookAt(glm::vec3(0.0, 0.0, 90.0f),
                             glm::vec3(0.0f, 0.0f, 0.0f),
                                 glm::vec3(0.0f, 1.0f, 0.0f));
@@ -34,13 +32,17 @@ glm::mat4 Game::calculateMvpMatrix(glm::vec3 position, float zRotationDegrees, g
 
 void Game::run()
 {
+    sceneGraph::SceneGraphUpdater sceneGraphUpdater(*this);
+    sceneGraph::SceneGraphPruner sceneGraphPruner(*this);
     onStartup.invoke(*this);
     start();
     onAfterStartup.invoke(*this);
+    sceneGraphUpdater.updateTransforms(*this);
     context.run([&](context::Context &gl3CTX)
     {
         onBeforeUpdate.invoke(*this);
         update(getWindow());
+        onUpdate.invoke(*this);
         draw();
         updateDeltaTime();
         onAfterUpdate.invoke(*this);

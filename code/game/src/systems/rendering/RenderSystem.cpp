@@ -67,8 +67,9 @@ namespace gl3 {
                 glDrawElementsInstanced(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr, instanceBuffer_C.instances.size());
             }else
             {
-                auto matrix = engine.calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
-                setMatrix("mvp", matrix, shader_C.get_shader_program());
+                auto model = game.componentManager.getComponent<engine::sceneGraph::Transform>(owner).modelMatrix;
+                auto mvp = engine.calculateMvpMatrix(model);
+                setMatrix("mvp", mvp, shader_C.get_shader_program());
                 glDrawElements(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr);
             }
             glBindVertexArray(0);
@@ -82,7 +83,7 @@ namespace gl3 {
         {
             auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
             glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(InstanceData),instanceBuffer_C.instances.data());
+            glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(glm::mat4),instanceBuffer_C.instances.data());
         }
     }
 
@@ -151,11 +152,12 @@ namespace gl3 {
                 // Instance VBO vorbereiten
                 glGenBuffers(1, &instanceBuffer_C.VBO);
                 glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
-                glBufferData(GL_ARRAY_BUFFER, 60 * sizeof(InstanceData), nullptr, GL_DYNAMIC_DRAW);
+                int maxInstancePerEntity = 60;
+                glBufferData(GL_ARRAY_BUFFER, maxInstancePerEntity * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
                 glBindVertexArray(model2D_C.VAO);
                 for (int i = 0; i < 4; ++i)
                 {
-                    glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(InstanceData), (void*)(i * sizeof(glm::vec4)));
+                    glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(i * sizeof(glm::vec4)));
                     glEnableVertexAttribArray(3 + i);
                     glVertexAttribDivisor(3 + i, 1);
                 }
