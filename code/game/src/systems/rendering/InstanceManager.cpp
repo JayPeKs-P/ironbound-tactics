@@ -7,6 +7,10 @@
 #include "../../components/InstanceBuffer.h"
 #include "../../components/UnitState.h"
 #include "../../components/Shader.h"
+#include "../../components/unitTypes/Infantry.h"
+#include "../../components/unitTypes/Archer.h"
+#include "../../components/unitTypes/Catapult.h"
+
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
     InstanceManager::InstanceManager(engine::Game& game):
@@ -22,14 +26,26 @@ namespace gl3 {
     {
         game.componentManager.forEachComponent<Transform>([&](Transform &transform)
         {
+            int createdInstances = 0;
+            int maxInstances = 0;
+            if (game.componentManager.hasComponent<Infantry>(transform.entity()))
+            {
+                maxInstances = game.componentManager.getComponent<Infantry>(transform.entity()).lifetimeMaxAmount;
+            }else if (game.componentManager.hasComponent<Archer>(transform.entity()))
+            {
+                maxInstances = game.componentManager.getComponent<Archer>(transform.entity()).lifetimeMaxAmount;
+            } else if (game.componentManager.hasComponent<Catapult>(transform.entity()))
+            {
+                maxInstances = game.componentManager.getComponent<Catapult>(transform.entity()).lifetimeMaxAmount;
+            }
             if (game.componentManager.hasComponent<InstanceBuffer>(transform.entity()))
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(transform.entity());
                 auto rootLocation = transform.localPosition;
                 auto rootScale = transform.localScale;
-                for (int i = 0 ; i < 5 ; i++)
+                for (int j = 0 ; j < 10 && createdInstances < maxInstances; j++)
                 {
-                    for (int j = 0 ; j < 10; j++)
+                    for (int i = 0 ; i < 5 && createdInstances < maxInstances; i++)
                     {
                         auto instance_E = game.entityManager.createEntity();
                         instance_E.addComponent<Transform>(&transform,
@@ -37,6 +53,8 @@ namespace gl3 {
                             0,
                             glm::vec3(rootScale.x, rootScale.y, rootScale.z));
                         instance_E.addComponent<UnitState>();
+
+                        createdInstances++;
                     }
                 }
             }
@@ -57,6 +75,6 @@ namespace gl3 {
                 instanceBuffer_C.uvOffset = currentFrame * (1.0f / totalFrames);
             }
         });
-
+//TODO add pop and push function to trigger when unit dies or is added
     }
 } // gl3
