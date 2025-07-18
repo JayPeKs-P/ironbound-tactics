@@ -20,27 +20,27 @@ namespace gl3 {
 
     void InstanceManager::init(engine::Game &game)
     {
-    game.componentManager.forEachComponent<Transform>([&](Transform &transform)
-    {
-        if (game.componentManager.hasComponent<InstanceBuffer>(transform.entity()))
+        game.componentManager.forEachComponent<Transform>([&](Transform &transform)
         {
-            auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(transform.entity());
-            auto rootLocation = transform.localPosition;
-            auto rootScale = transform.localScale;
-            for (int i = 0 ; i < 5 ; i++)
+            if (game.componentManager.hasComponent<InstanceBuffer>(transform.entity()))
             {
-                for (int j = 0 ; j < 10; j++)
+                auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(transform.entity());
+                auto rootLocation = transform.localPosition;
+                auto rootScale = transform.localScale;
+                for (int i = 0 ; i < 5 ; i++)
                 {
-                    auto instance_E = game.entityManager.createEntity();
-                    instance_E.addComponent<Transform>(&transform,
-                        glm::vec3(rootLocation.x + j * 0.1f, rootLocation.y + i * 0.05, rootLocation.z),
-                        0,
-                        glm::vec3(rootScale.x, rootScale.y, rootScale.z));
-                    instance_E.addComponent<UnitState>();
+                    for (int j = 0 ; j < 10; j++)
+                    {
+                        auto instance_E = game.entityManager.createEntity();
+                        instance_E.addComponent<Transform>(&transform,
+                            glm::vec3(rootLocation.x + j * 0.1f, rootLocation.y + i * 0.05, rootLocation.z),
+                            0,
+                            glm::vec3(rootScale.x, rootScale.y, rootScale.z));
+                        instance_E.addComponent<UnitState>();
+                    }
                 }
             }
-        }
-    });
+        });
     }
 
     void InstanceManager::update(engine::Game& game, Transform* root)

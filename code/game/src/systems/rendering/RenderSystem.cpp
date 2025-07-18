@@ -89,8 +89,8 @@ namespace gl3 {
 
     void RenderSystem::initShaders(engine::Game& game)
     {
-        batchVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/vertexShader.vert" );
-        batchFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/fragmentShader.frag");
+        batchVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/batch/vertexShader.vert" );
+        batchFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/batch/fragmentShader.frag");
         batchProgram = glCreateProgram();
         glAttachShader(batchProgram, batchVertexShader);
         glAttachShader(batchProgram, batchFragmentShader);
@@ -98,8 +98,8 @@ namespace gl3 {
         glDetachShader(batchProgram, batchVertexShader);
         glDetachShader(batchProgram, batchFragmentShader);
 
-        singleVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/shaded/vertexShader.vert");
-        singleFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/shaded/fragmentShader.frag");
+        singleVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/single/vertexShader.vert");
+        singleFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/single/fragmentShader.frag");
         singleProgram = glCreateProgram();
         glAttachShader(singleProgram, singleVertexShader);
         glAttachShader(singleProgram, singleFragmentShader);

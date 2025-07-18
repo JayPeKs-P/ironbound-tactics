@@ -7,13 +7,21 @@
 
 namespace gl3::engine::util::VertPreset
 {
-    static std::vector<float> quad =
+    static std::vector<float> pQuad =
         {
             //positions                  // colors                  // texture coords
              0.25f,   0.25f,   0.0f,      1.0f,   0.0f,   0.0f,       0.25f,   0.5f,
              0.25f,  -0.25f,   0.0f,      0.0f,   1.0f,   0.0f,       0.25f,   0.25f,
             -0.25f,  -0.25f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.25f,
             -0.25f,   0.25f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   0.5f
+        };
+    static std::vector<float> eQuad =
+        {
+            //positions                  // colors                  // texture coords
+             0.25f,   0.25f,   0.0f,      1.0f,   0.0f,   0.0f,       0.25f,   0.75f,
+             0.25f,  -0.25f,   0.0f,      0.0f,   1.0f,   0.0f,       0.25f,   0.5f,
+            -0.25f,  -0.25f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.5f,
+            -0.25f,   0.25f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   0.75f
         };
     static std::vector<unsigned int> quadIndices = {0,1,3,1,2,3};
 

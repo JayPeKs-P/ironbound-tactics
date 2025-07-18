@@ -60,7 +60,7 @@ void Game::start()
     auto &pInf_C = pInf_E.addComponent<Infantry>(0);
     pInf_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png");
-    pInf_E.addComponent<Model2D>(engine::util::VertPreset::quad, engine::util::VertPreset::quadIndices, tempTexID);
+    pInf_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pInf_E.addComponent<InstanceBuffer>();
     pInf_E.addComponent<Shader>();
     pInf_O = &pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.25f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
@@ -68,6 +68,11 @@ void Game::start()
     auto &pArc_E = engine::Game::entityManager.createEntity();
     auto &pArc_C = pArc_E.addComponent<Archer>(0);
     pArc_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png");
+    pArc_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    pArc_E.addComponent<InstanceBuffer>();
+    pArc_E.addComponent<Shader>();
+    pArc_O = &pArc_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.5f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto &pCat_E = engine::Game::entityManager.createEntity();
     auto &pCat_C = pCat_E.addComponent<Catapult>(0);
@@ -82,6 +87,11 @@ void Game::start()
     auto &eArc_E = engine::Game::entityManager.createEntity();
     auto &eArc_C = eArc_E.addComponent<Archer>(0);
     eArc_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_03_Idle.png");
+    eArc_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    eArc_E.addComponent<InstanceBuffer>();
+    eArc_E.addComponent<Shader>();
+    eArc_O = &eArc_E.addComponent<Transform>(origin, glm::vec3(1.5f, 0.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto &eCat_E = engine::Game::entityManager.createEntity();
     auto &eCat_C = eCat_E.addComponent<Catapult>(0);
@@ -110,6 +120,8 @@ void Game::update(GLFWwindow *window)
     }
     combatController->handleTurn();
     instanceManager->update(*this, pInf_O);
+    instanceManager->update(*this, pArc_O);
+    instanceManager->update(*this, eArc_O);
     renderSystem->update(*this);
     elapsedTime += deltaTime;
 }
