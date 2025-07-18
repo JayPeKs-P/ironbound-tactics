@@ -41,12 +41,11 @@ namespace gl3 {
             initShaders(game);
             initBuffers(game);
         });
-    }
-
-    RenderSystem::~RenderSystem()
-    {
-        deleteBuffers();
-        deleteShader();
+        engine.onShutdown.addListener([&](engine::Game& game)
+        {
+            deleteBuffers(game);
+            deleteShader(game);
+        });
     }
 
     void RenderSystem::draw(engine::Game &game)
@@ -64,49 +63,60 @@ namespace gl3 {
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
+                setFloat("uvOffset", instanceBuffer_C.uvOffset, shader_C.get_shader_program());
                 glDrawElementsInstanced(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr, instanceBuffer_C.instances.size());
             }else
             {
-            glDrawElements(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr);
+                auto matrix = engine.calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
+                setMatrix("mvp", matrix, shader_C.get_shader_program());
+                glDrawElements(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr);
             }
             glBindVertexArray(0);
         }
     }
 
-    void RenderSystem::update(InstanceBuffer instanceBuffer_C)
+    void RenderSystem::update(engine::Game& game)
     {
-        glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(InstanceData),instanceBuffer_C.instances.data());
+        auto& instanceBufferContainer = game.componentManager.getContainer<InstanceBuffer>();
+        for (auto &[owner, _]: instanceBufferContainer)
+        {
+            auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
+            glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(InstanceData),instanceBuffer_C.instances.data());
+        }
     }
 
     void RenderSystem::initShaders(engine::Game& game)
     {
+        batchVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/vertexShader.vert" );
+        batchFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/fragmentShader.frag");
+        batchProgram = glCreateProgram();
+        glAttachShader(batchProgram, batchVertexShader);
+        glAttachShader(batchProgram, batchFragmentShader);
+        glLinkProgram(batchProgram);
+        glDetachShader(batchProgram, batchVertexShader);
+        glDetachShader(batchProgram, batchFragmentShader);
+
+        singleVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/shaded/vertexShader.vert");
+        singleFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/shaded/fragmentShader.frag");
+        singleProgram = glCreateProgram();
+        glAttachShader(singleProgram, singleVertexShader);
+        glAttachShader(singleProgram, singleFragmentShader);
+        glLinkProgram(singleProgram);
+        glDetachShader(singleProgram, singleVertexShader);
+        glDetachShader(singleProgram, singleFragmentShader);
+
         auto& shaderContainer = game.componentManager.getContainer<Shader>();
         for (auto &[owner, _]: shaderContainer)
         {
             auto& shader_C = game.componentManager.getComponent<Shader>(owner);
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
-                auto shaderData = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/vertexShader.vert");
-                shader_C.set_vertex_shader(shaderData);
-                shaderData = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/fragmentShader.frag");
-                shader_C.set_fragment_shader(shaderData);
+                shader_C.set_shader_program(batchProgram);
             }else
             {
-                auto shaderData = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/shaded/vertexShader.vert");
-                shader_C.set_vertex_shader(shaderData);
-                shaderData = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/shaded/fragmentShader.frag");
-                shader_C.set_fragment_shader(shaderData);
+                shader_C.set_shader_program(singleProgram);
             }
-            shader_C.set_shader_program(glCreateProgram());
-            auto vertexShader = shader_C.get_vertex_shader();
-            auto fragmentShader = shader_C.get_fragment_shader();
-            auto program = shader_C.get_shader_program();
-            glAttachShader(program, vertexShader);
-            glAttachShader(program, fragmentShader);
-            glLinkProgram(program);
-            glDetachShader(program, vertexShader);
-            glDetachShader(program, fragmentShader);
         }
     }
 
@@ -154,32 +164,25 @@ namespace gl3 {
         }
     }
 
-    void RenderSystem::deleteBuffers()
+    void RenderSystem::deleteBuffers(engine::Game& game)
     {
-        auto& model2DContainer = engine.componentManager.getContainer<Model2D>();
+        auto& model2DContainer = game.componentManager.getContainer<Model2D>();
         for (auto &[owner, _]: model2DContainer)
         {
-            auto& model2D_C = engine.componentManager.getComponent<Model2D>(owner);
+            auto& model2D_C = game.componentManager.getComponent<Model2D>(owner);
             glDeleteBuffers(1, &model2D_C.VBO);
             glDeleteBuffers(1, &model2D_C.EBO);
-            if (engine.componentManager.hasComponent<InstanceBuffer>(owner))
+            if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
-                auto& instanceBuffer_C = engine.componentManager.getComponent<InstanceBuffer>(owner);
+                auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
                 glDeleteBuffers(1, &instanceBuffer_C.VBO);
             }
             glDeleteVertexArrays(1, &model2D_C.VAO);
         }
     }
 
-    void RenderSystem::deleteShader()
+    void RenderSystem::deleteShader(engine::Game& game)
     {
-        auto& shaderContainer = engine.componentManager.getContainer<Shader>();
-        for (auto &[owner, _]: shaderContainer)
-        {
-            auto& shader_C = engine.componentManager.getComponent<Shader>(owner);
-            glDeleteShader(shader_C.get_vertex_shader());
-            glDeleteShader(shader_C.get_fragment_shader());
-        }
     }
 
     void RenderSystem::setMatrix(const std::string& uniformName, glm::mat4 matrix, GLuint shaderProgram)

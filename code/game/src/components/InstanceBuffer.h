@@ -26,6 +26,7 @@ struct InstanceBuffer: Component
     }
     unsigned int VBO = 0;
     std::vector <InstanceData> instances;
+    float uvOffset = 0.0f;
 private:
     explicit InstanceBuffer(guid_t owner):
     Component(owner) {}

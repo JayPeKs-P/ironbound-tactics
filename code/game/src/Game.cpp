@@ -33,28 +33,7 @@
 using namespace gl3;
 
 Game::Game(int width, int height, const std::string &title):
-engine::Game(width, height, title),
-shader("shaders/vertexShader.vert", "shaders/fragmentShader.frag"),
-mesh({
-                    //positions                  // colors                  // texture coords
-                     0.25f,   0.25f,   0.0f,      1.0f,   0.0f,   0.0f,       0.25f,   0.5f,
-                     0.25f,  -0.25f,   0.0f,      0.0f,   1.0f,   0.0f,       0.25f,   0.25f,
-                    -0.25f,  -0.25f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.25f,
-                    -0.25f,   0.25f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   0.5f
-                 },
-                 {0, 1, 3,
-                  1, 2, 3},
-                  engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_03_Idle.png")),
-background({
-                    //positions                  // colors                  // texture coords
-                     1.0f,   0.574f,  -0.1f,      1.0f,   0.0f,   0.0f,       1.0f,   1.0f,     //top right
-                     1.0f,  -0.574f,  -0.1f,      0.0f,   1.0f,   0.0f,       1.0f,   0.0f,     //bottom right
-                    -1.0f,  -0.574f,  -0.1f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,     //bottom left
-                    -1.0f,   0.574f,  -0.1f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f      //top left
-                 },
-                 {0, 1, 3,
-                  1, 2, 3},
-                  engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png"))
+engine::Game(width, height, title)
 {
     // audio.init();
     // audio.setGlobalVolume(0.1f);
@@ -62,52 +41,27 @@ background({
 
 void Game::start()
 {
-    // unsigned int VAO;
-    // glGenVertexArrays(1, &VAO);
-    // glBindVertexArray(VAO);
-
-    std::mt19937 randomNumberEngine{       //Mersenne Twister generates 32-bit unsigned integers
-        std::random_device{}()};       // Seed our Mersenne Twister using with a random number from the OS
-    std::uniform_real_distribution positionDist{-2.0f,2.0f};
-    std::uniform_real_distribution scaleDist{0.05f,0.2f};
-    std::uniform_real_distribution colorDist{0.0f,1.0f};
-    // for(auto i = 0; i < 100; ++i) {
-    //     glm::vec3 randomPosition = {positionDist(randomNumberEngine) * 1.5f,
-    //                                 positionDist(randomNumberEngine) * 1.5f,
-    //                                 0.0f};
-    //     float randomScale = scaleDist(randomNumberEngine);
-    //     auto rgbValue = colorDist(randomNumberEngine);      //Used to guarantee, that all planets are a shade of grey.
-    //     glm::vec4 randomColor = {rgbValue,
-    //                              rgbValue,
-    //                              rgbValue,
-    //                              1.0};
-    //
-    //     auto entity = std::make_unique<Planet>(randomPosition, randomScale, randomColor);
-    //     entities.push_back(std::move(entity));
-    // }
-
-    // auto spaceShip = std::make_unique<Ship>(glm::vec3(-2, 1, 0));
-    // ship = spaceShip.get();
-    // entities.push_back(std::move(spaceShip));
-    //
-    // auto enemy = std::make_unique<Enemy>(glm::vec3(2, -1, 0), -90.0f, 0.25f);
-    // entities.push_back(std::move(enemy));
-
     unsigned int tempTexID = -1;
     //---- Entities ----
-    auto &guiSceneEntity = engine::Game::entityManager.createEntity();
-    guiSceneEntity.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
-    guiSceneEntity.addComponent<CombatSelection<GuiCombat>>();
+    auto &guiScene_E = engine::Game::entityManager.createEntity();
+    guiScene_E.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
+    guiScene_E.addComponent<CombatSelection<GuiCombat>>();
+
+    auto &terrain_E = engine::Game::entityManager.createEntity();
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png");
+    terrain_E.addComponent<Model2D>(engine::util::VertPreset::background, engine::util::VertPreset::quadIndices, tempTexID);
+    terrain_E.addComponent<Shader>();
 
 
     //----- Entities of player's army -----
     auto &pInf_E = engine::Game::entityManager.createEntity();
     auto &pInf_C = pInf_E.addComponent<Infantry>(0);
     pInf_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png");
-    pInf_E.addComponent<Model2D>(tempTexID, engine::util::VertPreset::quad, engine::util::VertPreset::quadIndices);
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png");
+    pInf_E.addComponent<Model2D>(engine::util::VertPreset::quad, engine::util::VertPreset::quadIndices, tempTexID);
     pInf_E.addComponent<InstanceBuffer>();
     pInf_E.addComponent<Shader>();
+    //TODO add position Component
 
     auto &pArc_E = engine::Game::entityManager.createEntity();
     auto &pArc_C = pArc_E.addComponent<Archer>(0);
@@ -133,6 +87,7 @@ void Game::start()
 
     guiHandler = std::make_unique<GuiHandler>(*this);
     guiHandler->initialize(*this);
+    renderSystem = new RenderSystem(*this);
     combatController = new CombatController(*this);
     combatController->init(*this);
     backgroundMusic = std::make_unique<SoLoud::Wav>();
@@ -147,6 +102,7 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
+    renderSystem->update(*this);
     elapsedTime += deltaTime;
 }
 
@@ -164,32 +120,36 @@ void Game::draw()
         {
             xCoord += 0.1f;
             InstanceData instanceX;
-            instanceX.modelMatrix = calculateMvpMatrix({xCoord, yCoord ,zCoord}, 0, {0.25, 0.25, 1});
+            instanceX.model = calculateMvpMatrix({xCoord, yCoord ,zCoord}, 0, {0.25, 0.25, 1});
             instances.push_back(instanceX);
         }
         InstanceData instanceY;
-        instanceY.modelMatrix = calculateMvpMatrix({-2.25,yCoord ,zCoord}, 0, {0.25, 0.25, 1} );
+        instanceY.model = calculateMvpMatrix({-2.25,yCoord ,zCoord}, 0, {0.25, 0.25, 1} );
         instances.push_back(instanceY);
     }
     std::vector <InstanceData> backgroundInstances;
     InstanceData backgroundData;
-    backgroundData.modelMatrix = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
+    backgroundData.model = calculateMvpMatrix({0,0,0}, 0, {2.75,2.75,1});
     backgroundInstances.push_back(backgroundData);
     //test end
-    auto mvpMatrix = calculateMvpMatrix({-2.25,-1.25,0}, 0, {0.25, 0.25, 1} );
-
-    shader.use();
-    shader.setFloat("uvOffset", 0.0f);
-    background.update(backgroundInstances);
-    background.draw(1);
-    shader.use();
-    // shader.setMatrix("mvp", mvpMatrix);
-    shader.setMatrix("mvp", glm::mat4(1.0f));
-    mesh.update(instances);
+    // test new renderer
     int totalFrames = 4;
-    float frameDuration = 0.2f;
+    float frameDuration = 0.1f;
     int currentFrame = static_cast<int>(elapsedTime / frameDuration) % totalFrames;
-    float uvOffset = currentFrame * (1.0f / totalFrames);
-    shader.setFloat("uvOffset", uvOffset);
-    mesh.draw(instances.size());
+
+    auto& model2DContainer = componentManager.getContainer<Model2D>();
+    for (auto &[owner, _]: model2DContainer)
+    {
+        if (!componentManager.hasComponent<Shader>(owner)) continue;
+        auto shaderProgram = componentManager.getComponent<Shader>(owner).get_shader_program();
+        if (componentManager.hasComponent<InstanceBuffer>(owner))
+        {
+            auto& instanceBuffer_C = componentManager.getComponent<InstanceBuffer>(owner);
+            instanceBuffer_C.instances = instances;
+            instanceBuffer_C.uvOffset = currentFrame * (1.0f / totalFrames);
+        }else
+        {
+        }
+    }
+    renderSystem->draw(*this);
 }

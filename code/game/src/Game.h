@@ -10,9 +10,7 @@
 
 #include "systems/CombatController.h"
 #include "systems/GuiHandler.h"
-
-#include "rendering/Shader.h"
-#include "rendering/Mesh.h"
+#include "systems/rendering/RenderSystem.h"
 
 
 namespace gl3
@@ -29,6 +27,7 @@ namespace gl3
     private:
         std::shared_ptr<GuiHandler> guiHandler;
         CombatController* combatController = nullptr;
+        RenderSystem* renderSystem = nullptr;
 
         void start() override;
         void update(GLFWwindow *window) override;
@@ -45,9 +44,6 @@ namespace gl3
         SoLoud::Soloud audio;
         std::unique_ptr<SoLoud::Wav>(backgroundMusic);
 
-        Shader shader;
-        Mesh mesh;
-        Mesh background;
 
         float zRotation = 0.0f;
         float rotationSpeed = 120.0f;
