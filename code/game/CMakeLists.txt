@@ -26,6 +26,8 @@ set(SOURCE_FILES src/main.cpp
         src/components/UnitState.h
         src/systems/rendering/InstanceManager.cpp
         src/systems/rendering/InstanceManager.h
+        src/logic/CombatFunctions.cpp
+        src/logic/CombatFunctions.h
 )
 
 # set executable name
