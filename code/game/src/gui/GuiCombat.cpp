@@ -10,6 +10,8 @@
 /* Included to use snprintf() in void drawUnitActions()
  * - needed for now to show cast amountOfTroups to char for nk_label
  */
+#include "../components/unitTypes/Unit.h"
+#include "../components/unitTypes/SiegeEngine.h"
 
 using namespace gl3;
 //TODO add events to this class and let the functions in CombatController subscribe to those
@@ -34,52 +36,48 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
 
 void GuiCombat::getComponents(engine::Game &game)
 {
-    auto &infContainer = game.componentManager.getContainer<Infantry>();
-    auto &arcContainer = game.componentManager.getContainer<Archer>();
-    auto &catContainer = game.componentManager.getContainer<Catapult>();
-    for (auto &[owner, _] : infContainer)
+
+    game.componentManager.forEachComponent<Unit>([&](Unit &unit)
     {
-        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
-        if (tagComponent == Tag::PLAYER)
+        auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
+        if (tag == Tag::PLAYER)
         {
-            pInf_C = &game.componentManager.getComponent<Infantry>(owner);
-        }
-        else
+            if (unit.category == UnitCategory::INFANTRY)
+            {
+                pInfU_C = &unit;
+            }else if (unit.category == UnitCategory::ARCHER)
+            {
+                pArcU_C = &unit;
+            }
+            else if (unit.category == UnitCategory::CATAPULT)
+            {
+                pCatU_C = &unit;
+                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+            }
+        }else if (tag == Tag::ENEMY)
         {
-            eInf_C = &game.componentManager.getComponent<Infantry>(owner);
+            if (unit.category == UnitCategory::INFANTRY)
+            {
+                eInfU_C = &unit;
+            }else if (unit.category == UnitCategory::ARCHER)
+            {
+                eArcU_C = &unit;
+            }
+            else if (unit.category == UnitCategory::CATAPULT)
+            {
+                eCatU_C = &unit;
+                eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+            }
         }
-    }
-    for (auto &[owner, _] : arcContainer)
-    {
-        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
-        if (tagComponent == Tag::PLAYER)
-        {
-            pArc_C = &game.componentManager.getComponent<Archer>(owner);
-        }
-        else
-        {
-            eArc_C = &game.componentManager.getComponent<Archer>(owner);
-        }
-    }
-    for (auto &[owner, _] : catContainer)
-    {
-        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
-        if (tagComponent == Tag::PLAYER)
-        {
-            pCat_C = &game.componentManager.getComponent<Catapult>(owner);
-        }
-        else
-        {
-            eCat_C = &game.componentManager.getComponent<Catapult>(owner);
-        }
-    }
+    });
+
 }
 
 void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
 {
-    auto pInfHP = static_cast<unsigned long long>(100.0 * pInf_C->totalAmount / pInf_C->lifetimeMaxAmount);
-    auto pArcHP = static_cast<unsigned long long>(100.0 * pArc_C->totalAmount / pArc_C->lifetimeMaxAmount);
-    auto pCatHP = static_cast<unsigned long long>(100.0 * pCat_C->useableAmount / pCat_C->lifetimeMaxAmount);
+    auto pInfHP = static_cast<unsigned long long>(100.0 * pInfU_C->totalAmount / pInfU_C->lifetimeMaxAmount);
+    auto pArcHP = static_cast<unsigned long long>(100.0 * pArcU_C->totalAmount / pArcU_C->lifetimeMaxAmount);
+    auto pCatHP = static_cast<unsigned long long>(100.0 * pCatSE_C->useableAmount / pCatU_C->lifetimeMaxAmount);
 
     nk_layout_row_dynamic(ctx, windowHeight/30, 3);
     nk_label(ctx, "Infantry", NK_TEXT_LEFT);
@@ -97,9 +95,9 @@ void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
     nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
     NK_WINDOW_TITLE|NK_WINDOW_BORDER))
     {
-        auto eInfHP = static_cast<unsigned long long>(100 * eInf_C->totalAmount / eInf_C->lifetimeMaxAmount);
-        auto eArcHP = static_cast<unsigned long long>(100 * eArc_C->totalAmount / eArc_C->lifetimeMaxAmount);
-        auto eCatHP = static_cast<unsigned long long>(100 * eCat_C->useableAmount / eCat_C->lifetimeMaxAmount);
+        auto eInfHP = static_cast<unsigned long long>(100 * eInfU_C->totalAmount / eInfU_C->lifetimeMaxAmount);
+        auto eArcHP = static_cast<unsigned long long>(100 * eArcU_C->totalAmount / eArcU_C->lifetimeMaxAmount);
+        auto eCatHP = static_cast<unsigned long long>(100 * eCatSE_C->useableAmount / eCatU_C->lifetimeMaxAmount);
 
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
         nk_progress(ctx, &eInfHP, 100, NK_FIXED);
@@ -108,7 +106,7 @@ void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
 
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
         const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
-        Category enemyCategories[] = { Category::INFANTRY, Category::ARCHER, Category::CATAPULT };
+        UnitCategory enemyCategories[] = { UnitCategory::INFANTRY, UnitCategory::ARCHER, UnitCategory::CATAPULT };
 
         for (int i = 0; i < 3; i++)
         {
@@ -138,8 +136,8 @@ void GuiCombat::drawUnitSelectionMenu(int windowWidth, int windowHeight)
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
 
         const char* unitNames[] = { "Infantry", "Archer", "Catapult" };
-        Category unitCategories[] = { Category::INFANTRY, Category::ARCHER, Category::CATAPULT };
-        int unitTroops[] = { pInf_C->availableAmount, pArc_C->availableAmount, pCat_C->availableAmount };
+        UnitCategory unitCategories[] = { UnitCategory::INFANTRY, UnitCategory::ARCHER, UnitCategory::CATAPULT };
+        int unitTroops[] = { pInfU_C->availableAmount, pArcU_C->availableAmount, pCatU_C->availableAmount };
 
         for (int i = 0; i < 3; i++)
         {
@@ -170,8 +168,8 @@ void GuiCombat::drawUnitActions()
     if (!selectedOne.has_value()) return;
 
     nk_layout_row_dynamic(ctx, 26, 3);
-    nk_label(ctx, (selectedOne == Category::INFANTRY) ? "Infantry" :
-                   (selectedOne == Category::ARCHER) ? "Archer" : "Siege", NK_TEXT_LEFT);
+    nk_label(ctx, (selectedOne == UnitCategory::INFANTRY) ? "Infantry" :
+                   (selectedOne == UnitCategory::ARCHER) ? "Archer" : "Siege", NK_TEXT_LEFT);
     nk_label(ctx, "Available  Units: ", NK_TEXT_LEFT);
 
     char amountLabel[16];
@@ -199,7 +197,7 @@ void GuiCombat::drawUnitActions()
             char amountLabel[16];
             snprintf(amountLabel, sizeof(amountLabel), "%d", value);
             nk_label(ctx, amountLabel, NK_TEXT_LEFT);
-        } else if (selectedTwo == Category::CATAPULT)
+        } else if (selectedTwo == UnitCategory::CATAPULT)
         {
             if (nk_button_label(ctx, "Use Catapult"))
             {
@@ -212,12 +210,12 @@ void GuiCombat::drawUnitActions()
                 }
                 resetSelection();
             }
-            if(pCat_C->totalAmount*pCat_C->cost <= pInf_C->totalAmount)
+            if(pCatU_C->totalAmount*pCatSE_C->cost <= pInfU_C->totalAmount)
             {
-                nk_slider_int(ctx, 0, &value, pCat_C->totalAmount-pCat_C->useableAmount, 1);
+                nk_slider_int(ctx, 0, &value, pCatU_C->totalAmount-pCatSE_C->useableAmount, 1);
             }else
             {
-                nk_slider_int(ctx, 0, &value, amountOfTroups / pCat_C->cost, 1);
+                nk_slider_int(ctx, 0, &value, amountOfTroups / pCatSE_C->cost, 1);
             }
             if (nk_button_label(ctx, "(!)Use Assault Cover"))
             {
@@ -232,19 +230,19 @@ void GuiCombat::drawUnitActions()
                 resetSelection();
             }
             nk_slider_int(ctx, 0, &valueAssaultCover, amountOfTroups, 1);
-        } else if (selectedTwo == Category::ARCHER)
+        } else if (selectedTwo == UnitCategory::ARCHER)
         {
             if (nk_button_label(ctx, "Protect"))
             {
-                if (selectedOne == Category::SIEGE) amountOfTroups = 6;
+                if (selectedOne == UnitCategory::SIEGE) amountOfTroups = 6;
 
             }
             nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
-        } else if (selectedTwo == Category::INFANTRY)
+        } else if (selectedTwo == UnitCategory::INFANTRY)
         {
             if (nk_button_label(ctx, "Protect"))
             {
-                if (selectedOne == Category::SIEGE) amountOfTroups = 0;
+                if (selectedOne == UnitCategory::SIEGE) amountOfTroups = 0;
             }
             nk_slider_int(ctx, 0, &valueDefendInf, amountOfTroups, 1);
         }

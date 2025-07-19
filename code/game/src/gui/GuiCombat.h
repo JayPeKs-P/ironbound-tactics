@@ -7,10 +7,8 @@
 #include "engine/ecs/Gui.h"
 #include "../components/TagComponent.h"
 #include "../components/CombatSelection.h"
-#include "../components/unitTypes/Infantry.h"
-#include "../components/unitTypes/Archer.h"
-#include "../components/unitTypes/Catapult.h"
-
+struct Unit;
+struct SiegeEngine;
 using gl3::engine::ecs::Gui;
 
 class GuiCombat: public Gui {
@@ -33,8 +31,8 @@ private:
     // TEMPORARILY USED VARIABLES
     //---
     std::optional<gl3::Tag> owner;
-    std::optional<Category> selectedOne;
-    std::optional<Category> selectedTwo;
+    std::optional<UnitCategory> selectedOne;
+    std::optional<UnitCategory> selectedTwo;
 
     int amountOfTroups = 0;
     int value = 0;
@@ -60,13 +58,15 @@ private:
     void setStyleSlider(nk_style* style);
     void setStyleText(nk_style* style);
 
-    Infantry* pInf_C = nullptr;
-    Archer* pArc_C = nullptr;
-    Catapult* pCat_C = nullptr;
+    Unit* pInfU_C = nullptr;
+    Unit* pArcU_C = nullptr;
+    Unit* pCatU_C = nullptr;
+    SiegeEngine* pCatSE_C = nullptr;
 
-    Infantry* eInf_C = nullptr;
-    Archer* eArc_C = nullptr;
-    Catapult* eCat_C = nullptr;
+    Unit* eInfU_C = nullptr;
+    Unit* eArcU_C = nullptr;
+    Unit* eCatU_C = nullptr;
+    SiegeEngine* eCatSE_C = nullptr;
 
 
 

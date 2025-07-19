@@ -5,11 +5,9 @@
 #include "InstanceManager.h"
 #include "engine/sceneGraph/Transform.h"
 #include "../../components/InstanceBuffer.h"
+#include "../../components/unitTypes/Unit.h"
 #include "../../components/UnitState.h"
 #include "../../components/Shader.h"
-#include "../../components/unitTypes/Infantry.h"
-#include "../../components/unitTypes/Archer.h"
-#include "../../components/unitTypes/Catapult.h"
 
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
@@ -28,15 +26,9 @@ namespace gl3 {
         {
             int createdInstances = 0;
             int maxInstances = 0;
-            if (game.componentManager.hasComponent<Infantry>(transform.entity()))
+            if (game.componentManager.hasComponent<Unit>(transform.entity()))
             {
-                maxInstances = game.componentManager.getComponent<Infantry>(transform.entity()).lifetimeMaxAmount;
-            }else if (game.componentManager.hasComponent<Archer>(transform.entity()))
-            {
-                maxInstances = game.componentManager.getComponent<Archer>(transform.entity()).lifetimeMaxAmount;
-            } else if (game.componentManager.hasComponent<Catapult>(transform.entity()))
-            {
-                maxInstances = game.componentManager.getComponent<Catapult>(transform.entity()).lifetimeMaxAmount;
+                maxInstances = game.componentManager.getComponent<Unit>(transform.entity()).lifetimeMaxAmount;
             }
             if (game.componentManager.hasComponent<InstanceBuffer>(transform.entity()))
             {
@@ -64,21 +56,12 @@ namespace gl3 {
     {
         int amount = 0;
         int amountLastFrame = 0;
-            if (game.componentManager.hasComponent<Infantry>(root->entity()))
-            {
-                amount = game.componentManager.getComponent<Infantry>(root->entity()).totalAmount;
-                amountLastFrame = game.componentManager.getComponent<Infantry>(root->entity()).totalAmountLastFrame;
-                game.componentManager.getComponent<Infantry>(root->entity()).totalAmountLastFrame = amount;;
-            }else if (game.componentManager.hasComponent<Archer>(root->entity()))
-            {
-                amount = game.componentManager.getComponent<Archer>(root->entity()).totalAmount;
-                amountLastFrame = game.componentManager.getComponent<Archer>(root->entity()).totalAmountLastFrame;
-            } else if (game.componentManager.hasComponent<Catapult>(root->entity()))
-            {
-                amount = game.componentManager.getComponent<Catapult>(root->entity()).totalAmount;
-                amountLastFrame = game.componentManager.getComponent<Catapult>(root->entity()).totalAmountLastFrame;
-                game.componentManager.getComponent<Catapult>(root->entity()).totalAmountLastFrame = amount;
-            }
+        if (game.componentManager.hasComponent<Unit>(root->entity()))
+        {
+            amount = game.componentManager.getComponent<Unit>(root->entity()).totalAmount;
+            amountLastFrame = game.componentManager.getComponent<Unit>(root->entity()).totalAmountLastFrame;
+            game.componentManager.getComponent<Unit>(root->entity()).totalAmountLastFrame = amount;;
+        }
         int totalFrames = 4;
         float frameDuration = 0.1f;
         int currentFrame = static_cast<int>(game.elapsedTime / frameDuration) % totalFrames;

@@ -13,6 +13,6 @@ struct UnitState: Component
     friend ComponentManager;
     friend Entity;
 private:
-    explicit UnitState(guid_t ownder):
-    Component(ownder) {}
+    explicit UnitState(guid_t owner):
+    Component(owner) {}
 };

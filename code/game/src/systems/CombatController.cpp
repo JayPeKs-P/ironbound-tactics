@@ -23,32 +23,32 @@ CombatController::CombatController(engine::Game &game):
         if (game.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
         {
             auto& selectionEvent = engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner);
-            selectionEvent.attack.addListener([&](Category selP, int amount, Category selE)
+            selectionEvent.attack.addListener([&](UnitCategory selP, int amount, UnitCategory selE)
             {
-                if (selP == Category::INFANTRY)
+                if (selP == UnitCategory::INFANTRY)
                 {
-                    chooseAttackTarget(pInf_C, selE, amount);
-                }else if (selP == Category::ARCHER)
+                    chooseAttackTarget(pInfU_C, selE, amount);
+                }else if (selP == UnitCategory::ARCHER)
                 {
-                    chooseAttackTarget(pArc_C, selE, amount);
-                }else if (selP == Category::CATAPULT)
+                    chooseAttackTarget(pArcU_C, selE, amount);
+                }else if (selP == UnitCategory::CATAPULT)
                 {
-                    chooseAttackTarget(pCat_C, selE, amount);
+                    chooseAttackTarget(pCatU_C, selE, amount);
                 }
             });
-            selectionEvent.use.addListener([&](Category selP, int amount, Category selPTarget)
+            selectionEvent.use.addListener([&](UnitCategory selP, int amount, UnitCategory selPTarget)
             {
-                if (selP == Category::INFANTRY)
+                if (selP == UnitCategory::INFANTRY)
                 {
-                    if (selPTarget == Category::CATAPULT)
+                    if (selPTarget == UnitCategory::CATAPULT)
                     {
-                        CombatFunctions::use(amount, pInf_C, pCat_C);
+                        CombatFunctions::use(amount, pInfU_C, pCatSE_C);
                         std::cout << "Catapult" << std::endl;
                         engine.actionRegister.scheduleAction(1,[=]()
                         {
-                            CombatFunctions::reset(pCat_C, amount);
+                            CombatFunctions::reset(pCatU_C, amount);
                         });
-                    }else if (selPTarget == Category::ASSAULT_COVER)
+                    }else if (selPTarget == UnitCategory::ASSAULT_COVER)
                     {
 
                     }
@@ -66,120 +66,109 @@ CombatController::~CombatController()
 
 void CombatController::init(engine::Game &game)
 {
-    auto &infContainer = game.componentManager.getContainer<Infantry>();
-    auto &arcContainer = game.componentManager.getContainer<Archer>();
-    auto &catContainer = game.componentManager.getContainer<Catapult>();
-    for (auto &[owner, _] : infContainer)
+    game.componentManager.forEachComponent<Unit>([&](Unit &unit)
     {
-        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
-        if (tagComponent == Tag::PLAYER)
+        auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
+        if (tag == Tag::PLAYER)
         {
-            pInf_C = &game.componentManager.getComponent<Infantry>(owner);
-            CombatFunctions::setAmount(pInf_C, 10);
-        }
-        else
+            if (unit.category == UnitCategory::INFANTRY)
+            {
+                pInfU_C = &unit;
+                CombatFunctions::setAmount(pInfU_C, 20);
+            }else if (unit.category == UnitCategory::ARCHER)
+            {
+                pArcU_C = &unit;
+                CombatFunctions::setAmount(pArcU_C, 20);
+            }
+            else if (unit.category == UnitCategory::CATAPULT)
+            {
+                pCatU_C = &unit;
+                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+                CombatFunctions::setAmount(pCatU_C, 5);
+            }
+        }else if (tag == Tag::ENEMY)
         {
-            eInf_C = &game.componentManager.getComponent<Infantry>(owner);
-            CombatFunctions::setAmount(eInf_C, 20);
+            if (unit.category == UnitCategory::INFANTRY)
+            {
+                eInfU_C = &unit;
+                CombatFunctions::setAmount(eInfU_C, 20);
+            }else if (unit.category == UnitCategory::ARCHER)
+            {
+                eArcU_C = &unit;
+                CombatFunctions::setAmount(eArcU_C, 20);
+            }
+            else if (unit.category == UnitCategory::CATAPULT)
+            {
+                eCatU_C = &unit;
+                eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+                CombatFunctions::setAmount(eCatU_C, 5);
+            }
         }
-    }
-    for (auto &[owner, _] : arcContainer)
-    {
-        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
-        if (tagComponent == Tag::PLAYER)
-        {
-            pArc_C = &game.componentManager.getComponent<Archer>(owner);
-            CombatFunctions::setAmount(pArc_C, 15);
-        }
-        else
-        {
-            eArc_C = &game.componentManager.getComponent<Archer>(owner);
-            CombatFunctions::setAmount(eArc_C, 10);
-        }
-    }
-    for (auto &[owner, _] : catContainer)
-    {
-        auto &tagComponent = game.componentManager.getComponent<TagComponent>(owner).value;
-        if (tagComponent == Tag::PLAYER)
-        {
-            pCat_C = &game.componentManager.getComponent<Catapult>(owner);
-            CombatFunctions::setAmount(pCat_C, 5);
-        }
-        else
-        {
-            eCat_C = &game.componentManager.getComponent<Catapult>(owner);
-            CombatFunctions::setAmount(eCat_C, 3);
-        }
-    }
+    });
 }
 
-void CombatController::chooseAttackTarget(Unit* unit, Category selection, int amount)
+void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount)
 {
-        if (selection == Category::INFANTRY)
+        if (target == UnitCategory::INFANTRY)
         {
-            engine.actionRegister.scheduleAction(unit->speed,
-                [=] ()
-            {
-                CombatFunctions::takeDamage(eInf_C, CombatFunctions::attack(unit, amount));
-                CombatFunctions::reset(unit, amount);
-            });
+            scheduleAttack(attacker, eInfU_C, amount);
         }
-        if (selection == Category::ARCHER)
+        if (target == UnitCategory::ARCHER)
         {
-            engine.actionRegister.scheduleAction(unit->speed,
-                [=] ()
-            {
-                CombatFunctions::takeDamage(eArc_C, CombatFunctions::attack(unit, amount));
-                CombatFunctions::reset(unit, amount);
-            });
+            scheduleAttack(attacker, eArcU_C, amount);
         }
-        if (selection == Category::CATAPULT)
+        if (target == UnitCategory::CATAPULT)
         {
-            engine.actionRegister.scheduleAction(unit->speed,
-                [=] ()
-            {
-                CombatFunctions::takeDamage(eCat_C, CombatFunctions::attack(unit, amount));
-                CombatFunctions::reset(unit, amount);
-            });
+            scheduleAttack(attacker, eCatU_C, amount);
         }
-    unit->availableAmount -= amount;
+    attacker->availableAmount -= amount;
 }
 
-void CombatController::chooseAttackTarget(SiegeEngine* siege, Category selection, int amount)
+void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
 {
-        if (selection == Category::INFANTRY)
-        {
-            engine.actionRegister.scheduleAction(siege->speed,
-                [=] ()
-            {
-                CombatFunctions::takeDamage(eInf_C, CombatFunctions::attack(siege, amount));
-                CombatFunctions::reset(siege, amount);
-            });
-        }
-        if (selection == Category::ARCHER)
-        {
-            engine.actionRegister.scheduleAction(siege->speed,
-                [=] ()
-            {
-                CombatFunctions::takeDamage(eArc_C, CombatFunctions::attack(siege, amount));
-                CombatFunctions::reset(siege, amount);
-            });
-        }
-        if (selection == Category::CATAPULT)
-        {
-            engine.actionRegister.scheduleAction(siege->speed,
-                [=] ()
-            {
-                CombatFunctions::takeDamage(eCat_C, CombatFunctions::attack(siege, amount));
-                CombatFunctions::reset(siege, amount);
-            });
-        }
-    siege->availableAmount -= amount;
+    engine.actionRegister.scheduleAction(attacker->speed,[=] ()
+    {
+        CombatFunctions::takeDamage(target, CombatFunctions::attack(attacker, amount));
+        CombatFunctions::reset(attacker, amount);
+    });
 }
+
+//
+// void CombatController::chooseAttackTarget(SiegeEngine* siege, UnitCategory selection, int amount)
+// {
+//         if (selection == UnitCategory::INFANTRY)
+//         {
+//             engine.actionRegister.scheduleAction(siege->speed,
+//                 [=] ()
+//             {
+//                 CombatFunctions::takeDamage(eInf_C, CombatFunctions::attack(siege, amount));
+//                 CombatFunctions::reset(siege, amount);
+//             });
+//         }
+//         if (selection == UnitCategory::ARCHER)
+//         {
+//             engine.actionRegister.scheduleAction(siege->speed,
+//                 [=] ()
+//             {
+//                 CombatFunctions::takeDamage(eArc_C, CombatFunctions::attack(siege, amount));
+//                 CombatFunctions::reset(siege, amount);
+//             });
+//         }
+//         if (selection == UnitCategory::CATAPULT)
+//         {
+//             engine.actionRegister.scheduleAction(siege->speed,
+//                 [=] ()
+//             {
+//                 CombatFunctions::takeDamage(eCat_C, CombatFunctions::attack(siege, amount));
+//                 CombatFunctions::reset(siege, amount);
+//             });
+//         }
+//     siege->availableAmount -= amount;
+// }
 
 void CombatController::handleTurn()
 {
-    if (pInf_C->availableAmount == 0 && pArc_C->availableAmount == 0 && pCat_C->availableAmount == 0)
+    if (pInfU_C->availableAmount == 0 && pArcU_C->availableAmount == 0 && pCatU_C->availableAmount == 0)
     {
         engine.actionRegister.advance();
     }

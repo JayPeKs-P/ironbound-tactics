@@ -8,9 +8,7 @@
 #include "engine/Events.h"
 
 #include "../components/CombatSelection.h"
-#include "../components/unitTypes/Archer.h"
-#include "../components//unitTypes/Infantry.h"
-#include "../components/unitTypes/Catapult.h"
+#include "../components/unitTypes/SiegeEngine.h"
 
 #include "../components/unitTypes/Unit.h"
 
@@ -26,15 +24,18 @@ public:
     void handleTurn();
     void init(engine::Game &game);
 private:
-    void chooseAttackTarget(Unit* unit, Category selection, int amount);
-    void chooseAttackTarget(SiegeEngine *siege, Category selection, int amount);
-    Infantry* pInf_C = nullptr;
-    Archer* pArc_C = nullptr;
-    Catapult* pCat_C = nullptr;
+    void chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount);
+    void scheduleAttack(Unit* attacker, Unit* target, int amount);
 
-    Infantry* eInf_C = nullptr;
-    Archer* eArc_C = nullptr;
-    Catapult* eCat_C = nullptr;
+    Unit* pInfU_C = nullptr;
+    Unit* pArcU_C = nullptr;
+    Unit* pCatU_C = nullptr;
+    SiegeEngine* pCatSE_C = nullptr;
+
+    Unit* eInfU_C = nullptr;
+    Unit* eArcU_C = nullptr;
+    Unit* eCatU_C = nullptr;
+    SiegeEngine* eCatSE_C = nullptr;
 
 };
 

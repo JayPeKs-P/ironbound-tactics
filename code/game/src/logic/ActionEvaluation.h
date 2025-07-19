@@ -3,21 +3,18 @@
 //
 
 #pragma once
-#include "../components/CombatSelection.h"
+#include <vector>
+#include "../components/unitTypes/UnitCategory.h"
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 
-struct Catapult;
-struct Archer;
-struct Infantry;
 
 namespace gl3
 {
     struct Option
     {
-        Unit* actorUnit;
-        SiegeEngine* actorSiege;
-        Category targetType;
+        Unit* actor;
+        Unit* target;
         int amount;
         float score;
     };
@@ -33,23 +30,22 @@ namespace gl3
         // static Catapult* eCat_C;
     private:
         float getTargetHP(Unit* unit);
-        float getTargetHP(SiegeEngine* siege);
-        static float getCategoryPriority(Category category)
+        static float getCategoryPriority(UnitCategory category)
         {
             switch (category)
             {
-            case Category::INFANTRY: return 1.0f;
-            case Category::ARCHER: return 1.8f;
-            case Category::SIEGE: return 1.5f;
+            case UnitCategory::INFANTRY: return 1.0f;
+            case UnitCategory::ARCHER: return 1.8f;
+            case UnitCategory::SIEGE: return 1.5f;
             default: return 1.0f;
             }
         }
-    Infantry* pInf_C = nullptr;
-    Archer* pArc_C = nullptr;
-    Catapult* pCat_C = nullptr;
+    Unit* pInfU_C = nullptr;
+    Unit* pArcU_C = nullptr;
+    Unit* pCatU_C = nullptr;
 
-    Infantry* eInf_C = nullptr;
-    Archer* eArc_C = nullptr;
-    Catapult* eCat_C = nullptr;
+    Unit* eInfU_C = nullptr;
+    Unit* eArcU_C = nullptr;
+    Unit* eCatU_C = nullptr;
     };
 }

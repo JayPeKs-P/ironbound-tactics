@@ -3,8 +3,18 @@
 //
 
 #pragma once
+#include "engine/ecs/Component.h"
+#include "UnitCategory.h"
 
-struct Unit{
+using gl3::engine::ecs::Component;
+using gl3::engine::ecs::ComponentManager;
+using gl3::engine::ecs::guid_t;
+using gl3::engine::ecs::Entity;
+
+struct Unit: Component {
+    friend ComponentManager;
+    friend Entity;
+
     float hpValue;
     float armorValue;
     float attackValue;
@@ -16,9 +26,12 @@ struct Unit{
     int totalAmountLastFrame;
     int availableAmount;
     int speed;
+    UnitCategory category;
 protected:
-    Unit (float hp, float def, float atk, int acc, int critc, int amount, int speed)
-        :hpValue(hp),
+    Unit (guid_t owner, UnitCategory category, float hp, float def, float atk, int acc, int critc, int amount, int speed):
+        Component(owner),
+        category(category),
+        hpValue(hp),
         armorValue(def),
         attackValue(atk),
         accuracy(acc),

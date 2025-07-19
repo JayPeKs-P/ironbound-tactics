@@ -6,19 +6,19 @@
 
 #include "engine/ecs/Component.h"
 #include "engine/Events.h"
+#include"unitTypes/UnitCategory.h"
 
 using gl3::engine::ecs::Component;
 using gl3::engine::ecs::ComponentManager;
 using gl3::engine::ecs::guid_t;
 using gl3::engine::ecs::Entity;
 //TODO create GuiSelection Parent Interface, that stores events of any kind
-enum class Category {INFANTRY, ARCHER, SIEGE, CATAPULT, ASSAULT_COVER};
 template <typename G>
 struct CombatSelection : Component {
     friend ComponentManager;
     friend Entity;
 
-    using event_t = gl3::engine::events::Event<G, Category, int, Category>;
+    using event_t = gl3::engine::events::Event<G, UnitCategory, int, UnitCategory>;
     event_t attack;
     event_t defend;
     event_t use;
