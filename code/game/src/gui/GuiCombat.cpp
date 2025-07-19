@@ -36,7 +36,6 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
 
 void GuiCombat::getComponents(engine::Game &game)
 {
-
     game.componentManager.forEachComponent<Unit>([&](Unit &unit)
     {
         auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
@@ -70,7 +69,6 @@ void GuiCombat::getComponents(engine::Game &game)
             }
         }
     });
-
 }
 
 void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)

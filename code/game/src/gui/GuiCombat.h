@@ -36,9 +36,6 @@ private:
 
     int amountOfTroups = 0;
     int value = 0;
-    // int value = 0;
-    // int value = 0;
-    // int value = 0;
     int valueAssaultCover = 0;
     int valueDefendInf = 0;
     //---

@@ -138,10 +138,6 @@ void Game::update(GLFWwindow *window)
     {
         instanceManager->update(*this, transform_C);
     }
-    // instanceManager->update(*this, pInf_O);
-    // instanceManager->update(*this, pArc_O);
-    // instanceManager->update(*this, eArc_O);
-    // instanceManager->update(*this, pCat_O);
     renderSystem->update(*this);
     elapsedTime += deltaTime;
 }

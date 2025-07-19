@@ -4,6 +4,7 @@
 
 #include "CombatController.h"
 #include "../logic/CombatFunctions.h"
+#include "../logic/ActionEvaluation.h"
 
 #include <iostream>
 #include <ostream>
@@ -58,12 +59,6 @@ CombatController::CombatController(engine::Game &game):
     }
 }
 
-CombatController::~CombatController()
-{
-}
-
-
-
 void CombatController::init(engine::Game &game)
 {
     game.componentManager.forEachComponent<Unit>([&](Unit &unit)
@@ -105,23 +100,38 @@ void CombatController::init(engine::Game &game)
             }
         }
     });
+    ActionEvaluation::setPointers(game);
+    runEnemyTurn();
 }
 
 void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount)
 {
-        if (target == UnitCategory::INFANTRY)
-        {
+    switch (target)
+    {
+        case UnitCategory::INFANTRY:
             scheduleAttack(attacker, eInfU_C, amount);
-        }
-        if (target == UnitCategory::ARCHER)
-        {
+            break;
+        case UnitCategory::ARCHER:
             scheduleAttack(attacker, eArcU_C, amount);
-        }
-        if (target == UnitCategory::CATAPULT)
-        {
+            break;
+        case UnitCategory::CATAPULT:
             scheduleAttack(attacker, eCatU_C, amount);
-        }
+            break;
+    }
     attacker->availableAmount -= amount;
+}
+
+void CombatController::runEnemyTurn()
+{
+    auto attackOptions = ActionEvaluation::generateAttackOptions();
+    for (auto& option: attackOptions)
+    {
+        if (option.actor->availableAmount >= option.amount)
+        {
+            std::cout << option.amount << std::endl;
+            scheduleAttack(option.actor, option.target, option.amount);
+        }
+    }
 }
 
 void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
@@ -133,43 +143,11 @@ void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
     });
 }
 
-//
-// void CombatController::chooseAttackTarget(SiegeEngine* siege, UnitCategory selection, int amount)
-// {
-//         if (selection == UnitCategory::INFANTRY)
-//         {
-//             engine.actionRegister.scheduleAction(siege->speed,
-//                 [=] ()
-//             {
-//                 CombatFunctions::takeDamage(eInf_C, CombatFunctions::attack(siege, amount));
-//                 CombatFunctions::reset(siege, amount);
-//             });
-//         }
-//         if (selection == UnitCategory::ARCHER)
-//         {
-//             engine.actionRegister.scheduleAction(siege->speed,
-//                 [=] ()
-//             {
-//                 CombatFunctions::takeDamage(eArc_C, CombatFunctions::attack(siege, amount));
-//                 CombatFunctions::reset(siege, amount);
-//             });
-//         }
-//         if (selection == UnitCategory::CATAPULT)
-//         {
-//             engine.actionRegister.scheduleAction(siege->speed,
-//                 [=] ()
-//             {
-//                 CombatFunctions::takeDamage(eCat_C, CombatFunctions::attack(siege, amount));
-//                 CombatFunctions::reset(siege, amount);
-//             });
-//         }
-//     siege->availableAmount -= amount;
-// }
-
 void CombatController::handleTurn()
 {
     if (pInfU_C->availableAmount == 0 && pArcU_C->availableAmount == 0 && pCatU_C->availableAmount == 0)
     {
         engine.actionRegister.advance();
+        runEnemyTurn();
     }
 }

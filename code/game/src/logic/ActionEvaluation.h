@@ -11,6 +11,11 @@
 
 namespace gl3
 {
+    namespace engine
+    {
+        class Game;
+    }
+
     struct Option
     {
         Unit* actor;
@@ -20,16 +25,19 @@ namespace gl3
     };
     class ActionEvaluation {
     public:
-        std::vector<Option> generateAttackOptions();
-        // static Infantry* pInf_C;
-        // static Archer* pArc_C;
-        // static Catapult* pCat_C;
-        //
-        // static Infantry* eInf_C;
-        // static Archer* eArc_C;
-        // static Catapult* eCat_C;
+        static void setPointers(engine::Game& game);
+        static std::vector<Option> generateAttackOptions();
+        static Unit* pInfU_C;
+        static Unit* pArcU_C;
+        static Unit* pCatU_C;
+        static SiegeEngine* pCatSE_C;
+
+        static Unit* eInfU_C;
+        static Unit* eArcU_C;
+        static Unit* eCatU_C;
+        static SiegeEngine* eCatSE_C;
     private:
-        float getTargetHP(Unit* unit);
+        static float getTargetHP(Unit* unit);
         static float getCategoryPriority(UnitCategory category)
         {
             switch (category)
@@ -40,12 +48,5 @@ namespace gl3
             default: return 1.0f;
             }
         }
-    Unit* pInfU_C = nullptr;
-    Unit* pArcU_C = nullptr;
-    Unit* pCatU_C = nullptr;
-
-    Unit* eInfU_C = nullptr;
-    Unit* eArcU_C = nullptr;
-    Unit* eCatU_C = nullptr;
     };
 }

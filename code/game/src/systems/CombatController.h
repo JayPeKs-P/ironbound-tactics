@@ -19,12 +19,12 @@ class CombatController: public engine::ecs::System
 public:
     // TODO: check if this typedef needs to add <..., CombatController&> like in wp3 engine/game.h
     CombatController(engine::Game &game );
-    ~CombatController();
 
     void handleTurn();
     void init(engine::Game &game);
 private:
     void chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount);
+    void runEnemyTurn();
     void scheduleAttack(Unit* attacker, Unit* target, int amount);
 
     Unit* pInfU_C = nullptr;
