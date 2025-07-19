@@ -18,10 +18,7 @@ struct CombatSelection : Component {
     friend ComponentManager;
     friend Entity;
 
-    using event_t = gl3::engine::events::Event<G,
-    Category,
-    int,
-    Category>;
+    using event_t = gl3::engine::events::Event<G, Category, int, Category>;
     event_t attack;
     event_t defend;
     event_t use;

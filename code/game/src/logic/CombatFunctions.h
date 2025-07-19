@@ -3,11 +3,24 @@
 //
 
 #pragma once
+#include <random>
+#include "../components/unitTypes/Unit.h"
+#include "../components/unitTypes/SiegeEngine.h"
+
 
 namespace gl3 {
 
 class CombatFunctions {
-
+public:
+    static void setAmount(Unit* unit,  int value);
+    static void setAmount(SiegeEngine *siege, int value);
+    static float attack(Unit* unit, int amount);
+    static float attack(SiegeEngine *siege, int amount);
+    static void takeDamage(Unit* unit, float damage);
+    static void takeDamage(SiegeEngine*, float damage);
+    static void use(int amount, Unit* unit, SiegeEngine* siege);
+    static void reset(Unit* unit, int amount);
+    static void reset(SiegeEngine* siege, int amount);
 };
 
 } // gl3
