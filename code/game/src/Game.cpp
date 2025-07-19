@@ -63,7 +63,7 @@ void Game::start()
     pInf_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pInf_E.addComponent<InstanceBuffer>();
     pInf_E.addComponent<Shader>();
-    pInf_O = &pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
+    unitTransforms.push_back(&pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &pArc_E = engine::Game::entityManager.createEntity();
     auto &pArc_C = pArc_E.addComponent<Archer>(0);
@@ -72,17 +72,27 @@ void Game::start()
     pArc_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pArc_E.addComponent<InstanceBuffer>();
     pArc_E.addComponent<Shader>();
-    pArc_O = &pArc_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.25f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
+    unitTransforms.push_back(&pArc_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.25f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &pCat_E = engine::Game::entityManager.createEntity();
     auto &pCat_C = pCat_E.addComponent<Catapult>(0);
     pCat_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png");
+    pCat_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    pCat_E.addComponent<InstanceBuffer>();
+    pCat_E.addComponent<Shader>();
+    unitTransforms.push_back(&pCat_E.addComponent<Transform>(origin, glm::vec3(-2.25f, 0.5f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
 
     //----- Entities of enemy's army -----
     auto &eInf_E = engine::Game::entityManager.createEntity();
     auto &eInf_C = eInf_E.addComponent<Infantry>(0);
     eInf_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_03_Idle.png");
+    eInf_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    eInf_E.addComponent<InstanceBuffer>();
+    eInf_E.addComponent<Shader>();
+    unitTransforms.push_back(&eInf_E.addComponent<Transform>(origin, glm::vec3(1.75f, -0.75f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &eArc_E = engine::Game::entityManager.createEntity();
     auto &eArc_C = eArc_E.addComponent<Archer>(0);
@@ -91,11 +101,16 @@ void Game::start()
     eArc_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     eArc_E.addComponent<InstanceBuffer>();
     eArc_E.addComponent<Shader>();
-    eArc_O = &eArc_E.addComponent<Transform>(origin, glm::vec3(1.5f, 0.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
+    unitTransforms.push_back(&eArc_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &eCat_E = engine::Game::entityManager.createEntity();
     auto &eCat_C = eCat_E.addComponent<Catapult>(0);
     eCat_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_03_Idle.png");
+    eCat_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    eCat_E.addComponent<InstanceBuffer>();
+    eCat_E.addComponent<Shader>();
+    unitTransforms.push_back(&eCat_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.75f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     guiHandler = std::make_unique<GuiHandler>(*this);
     guiHandler->initialize(*this);
@@ -119,9 +134,14 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
-    instanceManager->update(*this, pInf_O);
-    instanceManager->update(*this, pArc_O);
-    instanceManager->update(*this, eArc_O);
+    for (auto& transform_C : unitTransforms)
+    {
+        instanceManager->update(*this, transform_C);
+    }
+    // instanceManager->update(*this, pInf_O);
+    // instanceManager->update(*this, pArc_O);
+    // instanceManager->update(*this, eArc_O);
+    // instanceManager->update(*this, pCat_O);
     renderSystem->update(*this);
     elapsedTime += deltaTime;
 }

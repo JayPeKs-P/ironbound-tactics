@@ -46,12 +46,7 @@ namespace gl3
         SoLoud::Soloud audio;
         std::unique_ptr<SoLoud::Wav>(backgroundMusic);
 
-        engine::sceneGraph::Transform* pInf_O = nullptr;
-        engine::sceneGraph::Transform* eInf_O = nullptr;
-        engine::sceneGraph::Transform* pArc_O = nullptr;
-        engine::sceneGraph::Transform* eArc_O = nullptr;
-        engine::sceneGraph::Transform* pCat_O = nullptr;
-        engine::sceneGraph::Transform* eCat_O = nullptr;
+        std::vector<engine::sceneGraph::Transform*> unitTransforms;
 
         float zRotation = 0.0f;
         float rotationSpeed = 120.0f;
