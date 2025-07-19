@@ -26,20 +26,8 @@ public:
     void handleTurn();
     void init(engine::Game &game);
 private:
-    //TODO extract those functions into seperate CombatHelper file(s), maybe even implement them as templatefunctions
     void chooseAttackTarget(Unit* unit, Category selection, int amount);
     void chooseAttackTarget(SiegeEngine *siege, Category selection, int amount);
-    // void setAmount(Unit* unit,  int value);
-    // void setAmount(SiegeEngine *siege, int value);
-    // float attack(Unit* unit, int amount);
-    // float attack(SiegeEngine *siege, int amount);
-    // void takeDamage(Unit* unit, float damage);
-    // void takeDamage(SiegeEngine*, float damage);
-    // void use(int amount, Unit* unit, SiegeEngine* siege);
-    // void reset(Unit* unit, int amount);
-    // void reset(SiegeEngine* siege, int amount);
-    // std::mt19937 rng{std::random_device{}()};
-    // std::uniform_int_distribution<int> dist{0, 99};
     Infantry* pInf_C = nullptr;
     Archer* pArc_C = nullptr;
     Catapult* pCat_C = nullptr;

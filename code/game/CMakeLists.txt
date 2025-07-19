@@ -28,6 +28,8 @@ set(SOURCE_FILES src/main.cpp
         src/systems/rendering/InstanceManager.h
         src/logic/CombatFunctions.cpp
         src/logic/CombatFunctions.h
+        src/logic/ActionEvaluation.cpp
+        src/logic/ActionEvaluation.h
 )
 
 # set executable name
