@@ -15,6 +15,7 @@ struct SiegeEngine {
     float critMultiplier = 2.0f;
     int lifetimeMaxAmount;
     int totalAmount;
+    int totalAmountLastFrame;
     int availableAmount;
     int useableAmount = 0;
     int cost;
@@ -27,6 +28,7 @@ protected:
         accuracy(acc),
         critChance(critc),
         totalAmount(amount),
+        totalAmountLastFrame(amount),
         availableAmount(amount),
         lifetimeMaxAmount(amount),
         cost(cost),

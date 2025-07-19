@@ -63,7 +63,7 @@ void Game::start()
     pInf_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pInf_E.addComponent<InstanceBuffer>();
     pInf_E.addComponent<Shader>();
-    pInf_O = &pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.25f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
+    pInf_O = &pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto &pArc_E = engine::Game::entityManager.createEntity();
     auto &pArc_C = pArc_E.addComponent<Archer>(0);
@@ -72,7 +72,7 @@ void Game::start()
     pArc_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pArc_E.addComponent<InstanceBuffer>();
     pArc_E.addComponent<Shader>();
-    pArc_O = &pArc_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.5f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
+    pArc_O = &pArc_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.25f ,0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto &pCat_E = engine::Game::entityManager.createEntity();
     auto &pCat_C = pCat_E.addComponent<Catapult>(0);

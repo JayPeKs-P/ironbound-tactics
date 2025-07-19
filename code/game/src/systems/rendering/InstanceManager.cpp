@@ -49,10 +49,9 @@ namespace gl3 {
                     {
                         auto instance_E = game.entityManager.createEntity();
                         instance_E.addComponent<Transform>(&transform,
-                            glm::vec3(rootLocation.x + j * 0.1f, rootLocation.y + i * 0.05, rootLocation.z),
+                            glm::vec3(rootLocation.x + j * 0.1f, rootLocation.y - i * 0.05, rootLocation.z),
                             0,
                             glm::vec3(rootScale.x, rootScale.y, rootScale.z));
-                        instance_E.addComponent<UnitState>();
 
                         createdInstances++;
                     }
@@ -63,18 +62,45 @@ namespace gl3 {
 
     void InstanceManager::update(engine::Game& game, Transform* root)
     {
+        int amount = 0;
+        int amountLastFrame = 0;
+            if (game.componentManager.hasComponent<Infantry>(root->entity()))
+            {
+                amount = game.componentManager.getComponent<Infantry>(root->entity()).totalAmount;
+                amountLastFrame = game.componentManager.getComponent<Infantry>(root->entity()).totalAmountLastFrame;
+                game.componentManager.getComponent<Infantry>(root->entity()).totalAmountLastFrame = amount;;
+            }else if (game.componentManager.hasComponent<Archer>(root->entity()))
+            {
+                amount = game.componentManager.getComponent<Archer>(root->entity()).totalAmount;
+                amountLastFrame = game.componentManager.getComponent<Archer>(root->entity()).totalAmountLastFrame;
+            } else if (game.componentManager.hasComponent<Catapult>(root->entity()))
+            {
+                amount = game.componentManager.getComponent<Catapult>(root->entity()).totalAmount;
+                amountLastFrame = game.componentManager.getComponent<Catapult>(root->entity()).totalAmountLastFrame;
+                game.componentManager.getComponent<Catapult>(root->entity()).totalAmountLastFrame = amount;
+            }
         int totalFrames = 4;
         float frameDuration = 0.1f;
         int currentFrame = static_cast<int>(game.elapsedTime / frameDuration) % totalFrames;
-        game.componentManager.forEachComponent<Transform>([&](Transform &transform)
+        auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(root->entity());
+        instanceBuffer_C.instances.clear();
+        game.componentManager.forEachComponentRevers<Transform>([&](Transform &transform)
         {
             if (transform.getParent() == root)
             {
-                auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(root->entity());
-                instanceBuffer_C.instances.push_back(game.calculateMvpMatrix(transform.modelMatrix));
-                instanceBuffer_C.uvOffset = currentFrame * (1.0f / totalFrames);
+                if (amount < amountLastFrame)
+                {
+                    game.entityManager.deleteEntity(game.entityManager.getEntity(transform.entity()));
+                    amountLastFrame--;
+                }else if (amountLastFrame < amount)
+                {
+                }else
+                {
+                    instanceBuffer_C.instances.push_back(game.calculateMvpMatrix(transform.modelMatrix));
+                }
             }
         });
-//TODO add pop and push function to trigger when unit dies or is added
+        instanceBuffer_C.uvOffset = currentFrame * (1.0f / totalFrames);
+//TODO add push function to trigger when unit dies or is added
     }
 } // gl3

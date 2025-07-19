@@ -13,6 +13,7 @@ struct Unit{
     float critMultiplier = 2.0f;
     int lifetimeMaxAmount;
     int totalAmount;
+    int totalAmountLastFrame;
     int availableAmount;
     int speed;
 protected:
@@ -23,6 +24,7 @@ protected:
         accuracy(acc),
         critChance(critc),
         totalAmount(amount),
+        totalAmountLastFrame(amount),
         availableAmount(amount),
         lifetimeMaxAmount(amount),
         speed(speed) { };

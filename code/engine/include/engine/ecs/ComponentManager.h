@@ -50,6 +50,15 @@ namespace gl3::engine::ecs {
                 f(*reinterpret_cast<C*>(component.get()));
             }
         }
+        template<typename C>
+        void forEachComponentRevers(std::function<void(C&)> f)
+        {
+            auto &container = containers.at(typeid(C).hash_code());
+            for (auto key = container.rbegin(); key != container.rend(); key++)
+            {
+                f(*reinterpret_cast<C*>(key->second.get()));
+            }
+        }
 
         template<typename C>
         void removeComponent(guid_t entityID) {

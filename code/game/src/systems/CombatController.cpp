@@ -179,6 +179,7 @@ void CombatController::chooseAttackTarget(SiegeEngine* siege, Category selection
 void CombatController::setAmount(Unit* unit, int value)
 {
     unit->totalAmount = value;
+    unit->totalAmountLastFrame = value;
     unit->lifetimeMaxAmount = value;
     unit->availableAmount = value;
 }
@@ -186,6 +187,7 @@ void CombatController::setAmount(Unit* unit, int value)
 void CombatController::setAmount(SiegeEngine* siege, int value)
 {
     siege->totalAmount = value;
+    siege->totalAmountLastFrame = value;
     siege->lifetimeMaxAmount = value;
 }
 
