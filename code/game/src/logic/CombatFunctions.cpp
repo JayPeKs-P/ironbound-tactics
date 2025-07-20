@@ -50,6 +50,7 @@ void CombatFunctions::takeDamage(Unit* unit, float damage)
 {
     float amountDead = damage/unit->hpValue;
     unit->totalAmount -= static_cast<int>(amountDead);
+    if (unit->totalAmount <= 0) unit->totalAmount = 0;
     // float differenceAD = damage - armorValue;
     // armorValue -= damage/20;
     // if (differenceAD > 0)
@@ -68,9 +69,13 @@ void CombatFunctions::use(int amount, Unit* unit, SiegeEngine* siege)
 
 void CombatFunctions::reset(Unit* unit, int amount)
 {
-    for (int i = 0; i < amount && unit->availableAmount < unit->totalAmount; i++)
+    if (amount > unit->totalAmount)
     {
-        unit->availableAmount += i;
+        unit->availableAmount = unit->totalAmount;
+    }
+    else
+    {
+        unit->availableAmount = amount;
     }
 }
 } // gl3

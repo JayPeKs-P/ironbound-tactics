@@ -64,13 +64,13 @@ void ActionEvaluation::setPointers(engine::Game& game)
 std::vector<Option> ActionEvaluation::generateAttackOptions()
 {
     std::vector<Option> options;
-    auto calcOption = [&](Unit* attacker, UnitCategory targetType, Unit* target, int amount)
+    auto calcOption = [&](Unit* attacker,Unit* target, int amount)
     {
         if (attacker->availableAmount < amount) return;
 
         float predictedDamage = CombatFunctions::attack(attacker, amount)/attacker->speed;
         float targetHP = getTargetHP(target);
-        float priority = getCategoryPriority(targetType);
+        float priority = getCategoryPriority(target->category);
         float score = (predictedDamage / targetHP) * priority;
 
         options.push_back({attacker, target, amount, score});
@@ -80,25 +80,25 @@ std::vector<Option> ActionEvaluation::generateAttackOptions()
     {
         int amount = eInfU_C->availableAmount * percent / 100;
         if (amount == 0) continue;
-        calcOption(eInfU_C, UnitCategory::INFANTRY, pInfU_C, amount);
-        calcOption(eInfU_C, UnitCategory::ARCHER, pArcU_C, amount);
-        calcOption(eInfU_C, UnitCategory::CATAPULT, pCatU_C, amount);
+        calcOption(eInfU_C,pInfU_C, amount);
+        calcOption(eInfU_C,pArcU_C, amount);
+        calcOption(eInfU_C,pCatU_C, amount);
     }
     for (int percent : {100, 90, 80, 70, 60, 50, 40, 30, 20, 10})
     {
         int amount = eArcU_C->availableAmount * percent / 100;
         if (amount == 0) continue;
-        calcOption(eArcU_C, UnitCategory::INFANTRY, pInfU_C, amount);
-        calcOption(eArcU_C, UnitCategory::ARCHER, pArcU_C, amount);
-        calcOption(eArcU_C, UnitCategory::CATAPULT, pCatU_C, amount);
+        calcOption(eArcU_C,pInfU_C, amount);
+        calcOption(eArcU_C,pArcU_C, amount);
+        calcOption(eArcU_C,pCatU_C, amount);
     }
     for (int percent = 5; percent < 100; percent+=5)
     {
         int amount = eCatU_C->availableAmount * percent / 100;
         if (amount == 0) continue;
-        calcOption(eCatU_C, UnitCategory::INFANTRY, pInfU_C, amount);
-        calcOption(eCatU_C, UnitCategory::ARCHER, pArcU_C, amount);
-        calcOption(eCatU_C, UnitCategory::CATAPULT, pCatU_C, amount);
+        calcOption(eCatU_C,pInfU_C, amount);
+        calcOption(eCatU_C,pArcU_C, amount);
+        calcOption(eCatU_C,pCatU_C, amount);
     }
     std::sort(options.begin(), options.end(), [](const Option& a, const Option& b)
     {

@@ -12,6 +12,7 @@
 #include "../gui/GuiCombat.h"
 #include "../components/TagComponent.h"
 #include "engine/logic/ActionRegistry.h"
+#include "engine/util/Debug.h"
 
 
 using namespace gl3;
@@ -19,6 +20,10 @@ using namespace gl3;
 CombatController::CombatController(engine::Game &game):
     System(game)
 {
+    turnStart.addListener([=]()
+    {
+        runEnemyTurn();
+    });
     for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
     {
         if (game.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
@@ -44,11 +49,15 @@ CombatController::CombatController(engine::Game &game):
                     if (selPTarget == UnitCategory::CATAPULT)
                     {
                         CombatFunctions::use(amount, pInfU_C, pCatSE_C);
-                        std::cout << "Catapult" << std::endl;
-                        engine.actionRegister.scheduleAction(1,[=]()
-                        {
+                        std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
+                        *handle = turnEnd.addListener([=](){
                             CombatFunctions::reset(pCatU_C, amount);
+                            turnEnd.removeListener(*handle);
                         });
+                        // engine.actionRegister.scheduleAction(1,[=]()
+                        // {
+                        //     CombatFunctions::reset(pCatU_C, amount);
+                        // });
                     }else if (selPTarget == UnitCategory::ASSAULT_COVER)
                     {
 
@@ -101,7 +110,6 @@ void CombatController::init(engine::Game &game)
         }
     });
     ActionEvaluation::setPointers(game);
-    runEnemyTurn();
 }
 
 void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount)
@@ -118,6 +126,7 @@ void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &ta
             scheduleAttack(attacker, eCatU_C, amount);
             break;
     }
+    DEBUG_LOG("Player schedules attack: " << unitCategory_to_string(attacker->category) <<" targets "<< unitCategory_to_string(target)<< " with " << amount);
     attacker->availableAmount -= amount;
 }
 
@@ -128,8 +137,9 @@ void CombatController::runEnemyTurn()
     {
         if (option.actor->availableAmount >= option.amount)
         {
-            std::cout << option.amount << std::endl;
+            DEBUG_LOG("AI schedules attack: " << unitCategory_to_string(option.actor->category) <<" targets "<< unitCategory_to_string(option.target->category)<< " with " << option.amount);
             scheduleAttack(option.actor, option.target, option.amount);
+            option.actor->availableAmount -= option.amount;
         }
     }
 }
@@ -139,15 +149,37 @@ void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
     engine.actionRegister.scheduleAction(attacker->speed,[=] ()
     {
         CombatFunctions::takeDamage(target, CombatFunctions::attack(attacker, amount));
-        CombatFunctions::reset(attacker, amount);
+        std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
+        *handle = turnEnd.addListener([=](){
+            CombatFunctions::reset(attacker, amount);
+            turnEnd.removeListener(*handle);
+        });
+        DEBUG_LOG(unitCategory_to_string(attacker->category) <<" attacked "<< unitCategory_to_string(target->category)<< " with " << amount);
     });
 }
 
 void CombatController::handleTurn()
 {
+    if (endOfTurn)
+    {
+        DEBUG_LOG("=======| This is turn: " << turnCount << " |=======");
+        turnStart.invoke();
+        endOfTurn = false;
+    }
     if (pInfU_C->availableAmount == 0 && pArcU_C->availableAmount == 0 && pCatU_C->availableAmount == 0)
     {
         engine.actionRegister.advance();
-        runEnemyTurn();
+        endOfTurn = true;
+    }
+    if (endOfTurn)
+    {
+        turnEnd.invoke();
+
+        std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
+        *handle = turnStart.addListener([=](){
+            runEnemyTurn();
+            turnStart.removeListener(*handle);
+        });
+        turnCount++;
     }
 }

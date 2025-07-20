@@ -17,6 +17,9 @@ namespace gl3 {
 class CombatController: public engine::ecs::System
 {
 public:
+    using event_t = engine::events::Event<CombatController>;
+    event_t turnStart;
+    event_t turnEnd;
     // TODO: check if this typedef needs to add <..., CombatController&> like in wp3 engine/game.h
     CombatController(engine::Game &game );
 
@@ -26,6 +29,9 @@ private:
     void chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount);
     void runEnemyTurn();
     void scheduleAttack(Unit* attacker, Unit* target, int amount);
+
+    bool endOfTurn = true;
+    int turnCount = 0;
 
     Unit* pInfU_C = nullptr;
     Unit* pArcU_C = nullptr;
