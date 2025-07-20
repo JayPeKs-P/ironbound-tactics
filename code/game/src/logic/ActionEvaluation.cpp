@@ -61,10 +61,10 @@ void ActionEvaluation::setPointers(engine::Game& game)
     });
 }
 
-std::vector<Option> ActionEvaluation::generateAttackOptions()
+std::vector<Option> ActionEvaluation::generateOptions()
 {
     std::vector<Option> options;
-    auto calcOption = [&](Unit* attacker,Unit* target, int amount)
+    auto calcOptionAttack = [&](Unit* attacker,Unit* target, int amount)
     {
         if (attacker->availableAmount < amount) return;
 
@@ -73,32 +73,48 @@ std::vector<Option> ActionEvaluation::generateAttackOptions()
         float priority = getCategoryPriority(target->category);
         float score = (predictedDamage / targetHP) * priority;
 
-        options.push_back({attacker, target, amount, score});
+        options.push_back({attacker, target, nullptr, amount, score});
+    };
+    auto calcOptionUse = [&](Unit* actor, Unit* targetU, SiegeEngine* targetSE, int amount)
+    {
+        int unusedTargets;
+        if (actor->availableAmount < amount) return;
+        if(targetU->totalAmount*targetSE->cost <= amount)
+        {
+            unusedTargets = pCatU_C->totalAmount-pCatSE_C->useableAmount;
+        }else
+        {
+            unusedTargets = actor->availableAmount / pCatSE_C->cost;
+        }
+        float predictedDamage = CombatFunctions::attack(targetU, unusedTargets) / targetU->speed;
+        float score = predictedDamage;
+        options.push_back( {actor, targetU, targetSE, amount, score} );
     };
 
     for (int percent : {100, 90, 80, 70, 60, 50, 40, 30, 20, 10})
     {
         int amount = eInfU_C->availableAmount * percent / 100;
         if (amount == 0) continue;
-        calcOption(eInfU_C,pInfU_C, amount);
-        calcOption(eInfU_C,pArcU_C, amount);
-        calcOption(eInfU_C,pCatU_C, amount);
+        calcOptionAttack(eInfU_C,pInfU_C, amount);
+        calcOptionAttack(eInfU_C,pArcU_C, amount);
+        calcOptionAttack(eInfU_C,pCatU_C, amount);
+        calcOptionUse(eInfU_C, eCatU_C, eCatSE_C, amount);
     }
     for (int percent : {100, 90, 80, 70, 60, 50, 40, 30, 20, 10})
     {
         int amount = eArcU_C->availableAmount * percent / 100;
         if (amount == 0) continue;
-        calcOption(eArcU_C,pInfU_C, amount);
-        calcOption(eArcU_C,pArcU_C, amount);
-        calcOption(eArcU_C,pCatU_C, amount);
+        calcOptionAttack(eArcU_C,pInfU_C, amount);
+        calcOptionAttack(eArcU_C,pArcU_C, amount);
+        calcOptionAttack(eArcU_C,pCatU_C, amount);
     }
     for (int percent = 5; percent < 100; percent+=5)
     {
         int amount = eCatU_C->availableAmount * percent / 100;
         if (amount == 0) continue;
-        calcOption(eCatU_C,pInfU_C, amount);
-        calcOption(eCatU_C,pArcU_C, amount);
-        calcOption(eCatU_C,pCatU_C, amount);
+        calcOptionAttack(eCatU_C,pInfU_C, amount);
+        calcOptionAttack(eCatU_C,pArcU_C, amount);
+        calcOptionAttack(eCatU_C,pCatU_C, amount);
     }
     std::sort(options.begin(), options.end(), [](const Option& a, const Option& b)
     {

@@ -132,14 +132,21 @@ void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &ta
 
 void CombatController::runEnemyTurn()
 {
-    auto attackOptions = ActionEvaluation::generateAttackOptions();
-    for (auto& option: attackOptions)
+    auto options = ActionEvaluation::generateOptions();
+    for (auto& option: options)
     {
         if (option.actor->availableAmount >= option.amount)
         {
-            DEBUG_LOG("AI schedules attack: " << unitCategory_to_string(option.actor->category) <<" targets "<< unitCategory_to_string(option.target->category)<< " with " << option.amount);
-            scheduleAttack(option.actor, option.target, option.amount);
-            option.actor->availableAmount -= option.amount;
+            if (option.siege != nullptr)
+            {
+                DEBUG_LOG("AI uses: " << option.amount/option.siege->cost << " of " << unitCategory_to_string(option.target->category));
+                CombatFunctions::use(option.amount/option.siege->cost, option.actor, option.siege);
+            }else
+            {
+                DEBUG_LOG("AI schedules attack: " << unitCategory_to_string(option.actor->category) <<" targets "<< unitCategory_to_string(option.target->category)<< " with " << option.amount);
+                scheduleAttack(option.actor, option.target, option.amount);
+                option.actor->availableAmount -= option.amount;
+            }
         }
     }
 }

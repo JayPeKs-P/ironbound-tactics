@@ -20,13 +20,20 @@ namespace gl3
     {
         Unit* actor;
         Unit* target;
+        SiegeEngine* siege;
+        int amount;
+        float score;
+    };
+    struct OptionUse
+    {
+        Unit* actor;
         int amount;
         float score;
     };
     class ActionEvaluation {
     public:
         static void setPointers(engine::Game& game);
-        static std::vector<Option> generateAttackOptions();
+        static std::vector<Option> generateOptions();
         static Unit* pInfU_C;
         static Unit* pArcU_C;
         static Unit* pCatU_C;
