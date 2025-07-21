@@ -29,6 +29,8 @@ set(SOURCE_FILES src/main.cpp
         src/logic/ActionEvaluation.h
         src/components/unitTypes/UnitCategory.h
         src/systems/SelectionSystem.h
+        src/gui/GuiUnitSelection.cpp
+        src/gui/GuiUnitSelection.h
 )
 
 # set executable name

@@ -33,6 +33,21 @@ private:
     void restoreGameState();
     void selectCurrentScene(engine::Game &game);
     void renderGUI(engine::Game &game);
+
+    struct nk_image getTileImage(
+    int tileX,
+    int tileY,
+    int tileWidth,
+    int tileHeight,
+    int atlasWidth,
+    int atlasHeight);
+
+    void setStyleWindow(nk_style* style);
+    void setStyleButton(nk_style* style);
+    void setStyleOptionLabel(nk_style* style);
+    void setStyleProgressBar(nk_style* style);
+    void setStyleSlider(nk_style* style);
+    void setStyleText(nk_style* style);
     //-----GUI Szenen-----
     GuiState *activeScene = nullptr;
     std::shared_ptr<engine::ecs::Gui> combatGUI = nullptr;

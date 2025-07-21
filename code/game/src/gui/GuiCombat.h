@@ -3,9 +3,7 @@
 //
 
 #pragma once
-#include <optional>
 #include "engine/ecs/Gui.h"
-#include "../components/TagComponent.h"
 #include "../components/CombatSelection.h"
 struct Unit;
 struct SiegeEngine;
@@ -18,24 +16,9 @@ public:
     void GuiCombat::renderGUI() override;
 
 private:
-    struct nk_image GuiCombat::getTileImage(
-    int tileX,
-    int tileY,
-    int tileWidth,
-    int tileHeight,
-    int atlasWidth,
-    int atlasHeight);
-
     void getComponents(gl3::engine::Game& game);
     void drawTopRow();
     void drawActions();
-
-    void setStyleWindow(nk_style* style);
-    void setStyleButton(nk_style* style);
-    void setStyleOptionLabel(nk_style* style);
-    void setStyleProgressBar(nk_style* style);
-    void setStyleSlider(nk_style* style);
-    void setStyleText(nk_style* style);
 
     CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 
