@@ -139,8 +139,13 @@ void CombatController::runEnemyTurn()
         {
             if (option.siege != nullptr)
             {
-                DEBUG_LOG("AI uses: " << option.amount/option.siege->cost << " of " << unitCategory_to_string(option.target->category));
+                DEBUG_LOG("AI uses: " << option.amount << " of " << unitCategory_to_string(option.actor->category) << " for " << option.amount / option.siege->cost << " of " << unitCategory_to_string(option.target->category));
                 CombatFunctions::use(option.amount/option.siege->cost, option.actor, option.siege);
+                std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
+                *handle = turnEnd.addListener([=](){
+                    CombatFunctions::reset(option.target, option.amount / option.siege->cost);
+                    turnEnd.removeListener(*handle);
+                });
             }else
             {
                 DEBUG_LOG("AI schedules attack: " << unitCategory_to_string(option.actor->category) <<" targets "<< unitCategory_to_string(option.target->category)<< " with " << option.amount);

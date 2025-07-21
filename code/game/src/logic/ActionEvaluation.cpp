@@ -68,10 +68,13 @@ std::vector<Option> ActionEvaluation::generateOptions()
     {
         if (attacker->availableAmount < amount) return;
 
-        float predictedDamage = CombatFunctions::attack(attacker, amount)/attacker->speed;
         float targetHP = getTargetHP(target);
+        if (targetHP <= 0) return;
+
+        float predictedDamage = CombatFunctions::attack(attacker, amount)/attacker->speed;
         float priority = getCategoryPriority(target->category);
-        float score = (predictedDamage / targetHP) * priority;
+        if (targetHP*1.1 < predictedDamage) priority = 0.9;
+        float score = (targetHP / predictedDamage ) * priority;
 
         options.push_back({attacker, target, nullptr, amount, score});
     };
@@ -79,6 +82,7 @@ std::vector<Option> ActionEvaluation::generateOptions()
     {
         int unusedTargets;
         if (actor->availableAmount < amount) return;
+        if (amount < targetSE->cost) return;
         if(targetU->totalAmount*targetSE->cost <= amount)
         {
             unusedTargets = pCatU_C->totalAmount-pCatSE_C->useableAmount;
@@ -108,7 +112,7 @@ std::vector<Option> ActionEvaluation::generateOptions()
         calcOptionAttack(eArcU_C,pArcU_C, amount);
         calcOptionAttack(eArcU_C,pCatU_C, amount);
     }
-    for (int percent = 5; percent < 100; percent+=5)
+    for (int percent : {100, 90, 80, 70, 60, 50, 40, 30, 20, 10})
     {
         int amount = eCatU_C->availableAmount * percent / 100;
         if (amount == 0) continue;
