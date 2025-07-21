@@ -44,7 +44,7 @@ void Game::start()
     //---- Entities ----
     auto &guiScene_E = engine::Game::entityManager.createEntity();
     guiScene_E.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
-    auto &combatSelection_C = guiScene_E.addComponent<CombatSelection<GuiCombat>>();
+    combatSelection_C = &guiScene_E.addComponent<CombatSelection<GuiCombat>>();
 
     auto &terrain_E = engine::Game::entityManager.createEntity();
     tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png");
@@ -129,11 +129,25 @@ void Game::start()
     backgroundMusic->setLooping(true);
     audio.playBackground(*backgroundMusic);
 }
+struct MouseInput
+{
+    bool pressed = false;
+    bool clicked = false;
 
+    void update(GLFWwindow* window, int GLFW_BUTTON)
+    {
+        bool current = glfwGetMouseButton(window, GLFW_BUTTON) == GLFW_PRESS;
+        clicked = (current && !pressed);
+        pressed = current;
+    }
+};
+
+MouseInput left;
+MouseInput right;
 void Game::update(GLFWwindow *window)
 {
-    int leftclick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-    if (leftclick == GLFW_PRESS)
+    left.update(window, GLFW_MOUSE_BUTTON_LEFT);
+    if (left.clicked)
     {
         Transform* selection = nullptr;
         selection = selectionSystem->select(*this, 0.1f);
@@ -147,8 +161,21 @@ void Game::update(GLFWwindow *window)
                 DEBUG_LOG(
                     << unitCategory_to_string(unit.category)
                     );
+                if (combatSelection_C->selectionOne == nullptr)
+                {
+                    combatSelection_C->selectionOne = std::make_shared<Unit>(unit);
+                }else
+                {
+                    combatSelection_C->selectionTwo = std::make_shared<Unit>(unit);
+                }
             }
         }
+    }
+    right.update(window, GLFW_MOUSE_BUTTON_RIGHT);
+    if(right.clicked)
+    {
+        combatSelection_C->selectionOne = nullptr;
+        combatSelection_C->selectionTwo = nullptr;
     }
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);

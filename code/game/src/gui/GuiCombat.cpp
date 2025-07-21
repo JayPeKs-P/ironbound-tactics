@@ -6,15 +6,44 @@
 #include "engine/util/Debug.h"
 #include <cstdio>
 #include <iostream>
-#include <ostream>
 /* Included to use snprintf() in void drawUnitActions()
  * - needed for now to show cast amountOfTroups to char for nk_label
  */
+
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 
 using namespace gl3;
-//TODO add events to this class and let the functions in CombatController subscribe to those
+
+std::string getType(Unit &unit)
+{
+    switch (unit.category)
+    {
+    case UnitCategory::INFANTRY:
+        return "Infantry";
+    case UnitCategory::ARCHER:
+        return "Archer";
+    case UnitCategory::CATAPULT:
+        return "Catapult";
+    case UnitCategory::ASSAULT_COVER:
+        return "Asset Cover";
+    default:
+        return "Unknown";
+    }
+}
+std::string getOwner(Tag tag)
+{
+    switch (tag)
+    {
+    case Tag::PLAYER:
+        return "Player";
+    case Tag::ENEMY:
+        return "Enemy";
+    default:
+        return "Unknown";
+    }
+}
+
 
 GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureID)
     : Gui(game, ctx,textureID)
@@ -69,9 +98,13 @@ void GuiCombat::getComponents(engine::Game &game)
             }
         }
     });
+    game.componentManager.forEachComponent<CombatSelection<GuiCombat>>([&] (CombatSelection<GuiCombat> &sel)
+    {
+        combatSelection_C = &sel;
+    });
 }
 
-void GuiCombat::drawTopRow(int windowHeight)
+void GuiCombat::drawTopRow()
 {
     float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.3, 0.2, 0.1 };
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 7, ratio);
@@ -81,7 +114,7 @@ void GuiCombat::drawTopRow(int windowHeight)
 
     }
 
-    nk_label(ctx, "", NK_TEXT_CENTERED);
+    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
     auto currentInf = pInfU_C->totalAmount;
     auto currentArc = pArcU_C->totalAmount;
@@ -92,7 +125,7 @@ void GuiCombat::drawTopRow(int windowHeight)
     nk_label(ctx, "Player", NK_TEXT_LEFT);
     nk_progress(ctx, &hp, 100, NK_FIXED);
 
-    nk_label(ctx, "", NK_TEXT_CENTERED);
+    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
     currentInf = eInfU_C->totalAmount;
     currentArc = eArcU_C->totalAmount;
@@ -103,236 +136,149 @@ void GuiCombat::drawTopRow(int windowHeight)
     nk_progress(ctx, &hp, 100, NK_FIXED);
     nk_label(ctx, "Enemy", NK_TEXT_RIGHT);
 }
-
-void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
+void GuiCombat::drawActions()
 {
-    auto currentInf = pInfU_C->totalAmount;
-    auto currentArc = pArcU_C->totalAmount;
-    auto currentCat = pCatSE_C->useableAmount * pCatSE_C->cost;
-    auto currenTotal = currentInf + currentArc + currentCat;
-    auto maxAmount = pInfU_C->lifetimeMaxAmount + pArcU_C->lifetimeMaxAmount;
-    auto hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
-    // auto pInfHP = static_cast<unsigned long long>(100.0 * pInfU_C->totalAmount / pInfU_C->lifetimeMaxAmount);
-    // auto pArcHP = static_cast<unsigned long long>(100.0 * pArcU_C->totalAmount / pArcU_C->lifetimeMaxAmount);
-    // auto pCatHP = static_cast<unsigned long long>(100.0 * pCatSE_C->useableAmount / pCatU_C->lifetimeMaxAmount);
+    auto unitOne = combatSelection_C->selectionOne;
+    auto tagSelectionOne = engine.componentManager.getComponent<TagComponent>(unitOne->entity()).value;
 
-    nk_layout_row_dynamic(ctx, windowHeight/20, 2);
-    nk_label(ctx, "Player", NK_TEXT_LEFT);
-    // nk_label(ctx, "Infantry", NK_TEXT_LEFT);
-    // nk_label(ctx, "Archer", NK_TEXT_LEFT);
-    // nk_label(ctx, "Siege", NK_TEXT_LEFT);
-    // nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-    nk_progress(ctx, &hp, 100, NK_FIXED);
-    // nk_progress(ctx, &pInfHP, 100, NK_FIXED);
-    // nk_progress(ctx, &pArcHP, 100, NK_FIXED);
-    // nk_progress(ctx, &pCatHP, 100, NK_FIXED);
-}
+    auto unitTwo = combatSelection_C->selectionTwo;
 
-void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
-{
-    if (nk_begin(ctx, "Health",
-    nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
-    // NK_WINDOW_TITLE |
-    NK_WINDOW_BORDER))
+    nk_layout_row_dynamic(ctx, windowHeight/20, 4);
+    nk_label(ctx, "Type: ", NK_TEXT_LEFT);
+    nk_label_colored(ctx, getType(*unitOne).c_str(), NK_TEXT_LEFT, highlightColor);
+    nk_label(ctx, "Owner: ", NK_TEXT_LEFT);
+    if (tagSelectionOne == Tag::PLAYER)
     {
-        auto currentInf = eInfU_C->totalAmount;
-        auto currentArc = eArcU_C->totalAmount;
-        auto currentCat = eCatSE_C->useableAmount * eCatSE_C->cost;
-        auto currenTotal = currentInf + currentArc + currentCat;
-        auto maxAmount = eInfU_C->lifetimeMaxAmount + eArcU_C->lifetimeMaxAmount;
-        auto eHp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
-        // auto eInfHP = static_cast<unsigned long long>(100 * eInfU_C->totalAmount / eInfU_C->lifetimeMaxAmount);
-        // auto eArcHP = static_cast<unsigned long long>(100 * eArcU_C->totalAmount / eArcU_C->lifetimeMaxAmount);
-        // auto eCatHP = static_cast<unsigned long long>(100 * eCatSE_C->useableAmount / eCatU_C->lifetimeMaxAmount);
-
-        // nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-        float ratio[] = {0.4,0.25};
-        nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 2, ratio);
-        nk_progress(ctx, &eHp, 100, NK_FIXED);
-        nk_label(ctx, "Enemy", NK_TEXT_RIGHT);
-        // nk_progress(ctx, &eInfHP, 100, NK_FIXED);
-        // nk_progress(ctx, &eArcHP, 100, NK_FIXED);
-        // nk_progress(ctx, &eCatHP, 100, NK_FIXED);
-
-        nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-        const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
-        UnitCategory enemyCategories[] = { UnitCategory::INFANTRY, UnitCategory::ARCHER, UnitCategory::CATAPULT };
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (nk_option_label(ctx,
-            enemyNames[i],
-                    owner == Tag::ENEMY &&
-                    selectedTwo == enemyCategories[i]) &&
-                selectedOne.has_value())
-            {
-                if (owner != Tag::ENEMY) owner = Tag::ENEMY;
-                if (selectedTwo != enemyCategories[i]) selectedTwo = enemyCategories[i];
-            }
-        }
+        nk_label_colored(ctx, getOwner(tagSelectionOne).c_str(), NK_TEXT_LEFT, playerColor);
+    }else
+    {
+        nk_label_colored(ctx, getOwner(tagSelectionOne).c_str(), NK_TEXT_LEFT, enemyColor);
     }
-    nk_end(ctx);
-}
 
-void GuiCombat::drawUnitSelectionMenu(int windowWidth, int windowHeight)
-{
-    if (nk_begin(ctx, "Units",
-    nk_rect(windowWidth / 4,
-        windowHeight - windowHeight / 2,
-        windowWidth / 2, windowHeight/12),
-        NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BORDER))
+    nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
+    nk_label_colored(ctx, std::to_string(unitOne->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
+    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+
+    nk_layout_row_dynamic(ctx, windowHeight/30, 6);
+    nk_label(ctx, "HP: ",NK_TEXT_LEFT);
+    nk_label_colored(ctx, std::to_string(static_cast<int>(unitOne->hpValue)).c_str(), NK_TEXT_LEFT, numberColor);
+    nk_label(ctx, "Atk: ", NK_TEXT_LEFT);
+    nk_label_colored(ctx, std::to_string(static_cast<int>(unitOne->attackValue)).c_str(), NK_TEXT_LEFT, numberColor);
+    nk_label(ctx, "Acc: ", NK_TEXT_LEFT);
+    nk_label_colored(ctx, std::to_string(unitOne->accuracy).c_str(), NK_TEXT_LEFT, numberColor);
+
+    float ratio[] = {0.15, 0.4, 0.05, 0.1 };
+    nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 4, ratio);
+    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+    if (tagSelectionOne == Tag::PLAYER)
     {
-
-        nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-
-        const char* unitNames[] = { "Infantry", "Archer", "Catapult" };
-        UnitCategory unitCategories[] = { UnitCategory::INFANTRY, UnitCategory::ARCHER, UnitCategory::CATAPULT };
-        int unitTroops[] = { pInfU_C->availableAmount, pArcU_C->availableAmount, pCatU_C->availableAmount };
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (nk_button_label(ctx, unitNames[i]))
-            {
-                if (!selectedOne.has_value())
-                {
-                    selectedOne = unitCategories[i];
-                    amountOfTroups = unitTroops[i];
-                } else if (selectedOne != unitCategories[i])
-                {
-                    selectedTwo = unitCategories[i];
-                    owner = Tag::PLAYER;
-                } else
-                {
-                    selectedOne.reset();
-                    selectedTwo.reset();
-                    owner.reset();
-                }
-            }
-        }
+        nk_label(ctx, "Left  this  turn: ", NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(unitOne->availableAmount).c_str(), NK_TEXT_LEFT, playerColor);
     }
-    nk_end(ctx);
-}
 
-void GuiCombat::drawUnitActions()
-{
-    if (!selectedOne.has_value()) return;
 
-    nk_layout_row_dynamic(ctx, 26, 3);
-    nk_label(ctx, (selectedOne == UnitCategory::INFANTRY) ? "Infantry" :
-                   (selectedOne == UnitCategory::ARCHER) ? "Archer" : "Siege", NK_TEXT_LEFT);
-    nk_label(ctx, "Available  Units: ", NK_TEXT_LEFT);
-
-    char amountLabel[16];
-    snprintf(amountLabel, sizeof(amountLabel), "%d", amountOfTroups);
-    nk_label(ctx, amountLabel, NK_TEXT_LEFT);
-
-    if (nk_tree_push(ctx, NK_TREE_TAB, "Available  Actions", NK_MAXIMIZED))
+    if (unitTwo != nullptr)
     {
-        nk_layout_row_dynamic(ctx, 36, 2);
-
-        if (owner == Tag::ENEMY && selectedTwo.has_value())
+        auto tagSelectionTwo = engine.componentManager.getComponent<TagComponent>(unitTwo->entity()).value;
+        if (tagSelectionOne == Tag::ENEMY)
         {
+            combatSelection_C->selectionOne = unitTwo;
+            combatSelection_C->selectionTwo = nullptr;
+            return;
+        }
+        if (tagSelectionTwo == Tag::ENEMY && unitOne->availableAmount != 0)
+        {
+            nk_layout_row_dynamic(ctx, windowHeight/20, 3);
             if (nk_button_label(ctx, "Attack"))
             {
-                for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
-                {
-                    if (engine.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
-                    {
-                        engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner).attack.invoke(selectedOne.value(), value, selectedTwo.value());
-                    }
-                }
-                resetSelection();
+                combatSelection_C->attack.invoke(unitOne->category, value, unitTwo->category);
+                combatSelection_C->selectionOne = nullptr;
+                combatSelection_C->selectionTwo = nullptr;
+                value = 0;
             }
-            nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
-            char amountLabel[16];
-            snprintf(amountLabel, sizeof(amountLabel), "%d", value);
-            nk_label(ctx, amountLabel, NK_TEXT_LEFT);
-        } else if (selectedTwo == UnitCategory::CATAPULT)
+            int availableTroups = unitOne->availableAmount;
+            nk_slider_int(ctx, 0, &value, availableTroups, 1);
+            nk_label_colored(ctx, getType(*unitTwo).c_str(), NK_TEXT_CENTERED, enemyColor);
+            nk_layout_row_dynamic(ctx, windowHeight/30, 3);
+
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+            nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+        }else if (tagSelectionTwo == Tag::PLAYER && unitOne->availableAmount != 0)
         {
-            if (nk_button_label(ctx, "Use Catapult"))
+            if (!engine.componentManager.hasComponent<SiegeEngine>(unitTwo->entity()))
             {
-                for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
-                {
-                    if (engine.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
-                    {
-                        engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner).use.invoke(selectedOne.value(), value, selectedTwo.value());
-                    }
-                }
-                resetSelection();
+                combatSelection_C->selectionOne = unitTwo;
+                combatSelection_C->selectionTwo = nullptr;
+                return;
             }
-            if(pCatU_C->totalAmount*pCatSE_C->cost <= pInfU_C->totalAmount)
+            auto siege_C = engine.componentManager.getComponent<SiegeEngine>(unitTwo->entity());
+            auto cost = siege_C.cost;
+
+            nk_layout_row_dynamic(ctx, windowHeight/20, 3);
+            if (nk_button_label(ctx, "Use"))
             {
-                nk_slider_int(ctx, 0, &value, pCatU_C->totalAmount-pCatSE_C->useableAmount, 1);
+                combatSelection_C->use.invoke(unitOne->category, value, unitTwo->category);
+                combatSelection_C->selectionOne = nullptr;
+                combatSelection_C->selectionTwo = nullptr;
+                value = 0;
+            }
+
+            if(unitTwo->totalAmount*cost <= unitOne->totalAmount)
+            {
+                auto unusedAmount = unitTwo->totalAmount - siege_C.useableAmount;
+                nk_slider_int(ctx, 0, &value, unusedAmount, 1);
             }else
             {
-                nk_slider_int(ctx, 0, &value, amountOfTroups / pCatSE_C->cost, 1);
+                int canUseAmount = unitOne->availableAmount / cost;
+                nk_slider_int(ctx, 0, &value, canUseAmount, 1);
             }
-            if (nk_button_label(ctx, "(!)Use Assault Cover"))
-            {
-                //TODO change selected two back to siege from catapult here and in unitSelection()
-                for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
-                {
-                    if (engine.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
-                    {
-                        engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner).use.invoke(selectedOne.value(), value, selectedTwo.value());
-                    }
-                }
-                resetSelection();
-            }
-            nk_slider_int(ctx, 0, &valueAssaultCover, amountOfTroups, 1);
-        } else if (selectedTwo == UnitCategory::ARCHER)
-        {
-            if (nk_button_label(ctx, "Protect"))
-            {
-                if (selectedOne == UnitCategory::SIEGE) amountOfTroups = 6;
+            nk_label_colored(ctx, getType(*unitTwo).c_str(), NK_TEXT_CENTERED, playerColor);
 
-            }
-            nk_slider_int(ctx, 0, &value, amountOfTroups, 1);
-        } else if (selectedTwo == UnitCategory::INFANTRY)
+            nk_layout_row_dynamic(ctx, windowHeight/30, 3);
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+            nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+
+        }else
         {
-            if (nk_button_label(ctx, "Protect"))
-            {
-                if (selectedOne == UnitCategory::SIEGE) amountOfTroups = 0;
-            }
-            nk_slider_int(ctx, 0, &valueDefendInf, amountOfTroups, 1);
+            combatSelection_C->selectionOne = unitTwo;
+            combatSelection_C->selectionTwo = nullptr;
         }
-        nk_tree_pop(ctx);
     }
 }
 
-void GuiCombat::renderGUI(int windowWidth, int windowHeight) {
-    drawUnitSelectionMenu(windowWidth, windowHeight);
+void GuiCombat::renderGUI() {
     if (nk_begin(ctx, "Top Row",
         nk_rect(0, 0,
             windowWidth, windowHeight / 13),
             NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR))
     {
-        drawTopRow(windowHeight);
+        drawTopRow();
     }
     nk_end(ctx);
 
-    if (nk_begin(ctx, "UnitsGroup",
-        nk_rect(windowWidth / 4,
-                windowHeight - windowHeight / 3,
-                windowWidth / 2,
-                windowHeight / 3),
-            NK_WINDOW_BORDER|NK_WINDOW_NO_SCROLLBAR))
+    if (combatSelection_C->selectionOne != nullptr)
     {
-        drawPlayerHealthBars(windowWidth, windowHeight);
-        drawUnitActions();
+        if (combatSelection_C->selectionTwo == nullptr)
+        {
+            actionbounds = nk_rect(
+            windowWidth / 4, windowHeight - windowHeight / 4,
+            windowWidth / 2, windowHeight / 4);
+        }else
+        {
+            actionbounds = nk_rect(
+            windowWidth / 4, windowHeight - windowHeight / 3,
+            windowWidth / 2, windowHeight / 3);
+        }
+        if (nk_begin(ctx, "Actions",
+            actionbounds,
+            NK_WINDOW_BORDER | NK_WINDOW_SCROLL_AUTO_HIDE))
+        {
+            drawActions();
+            nk_end(ctx);
+        }
     }
-    nk_end(ctx);
-
-    // drawEnemyHealthBars(windowWidth, windowHeight);
-
-}
-
-void GuiCombat::resetSelection()
-{
-    value = 0;
-    owner.reset();
-    selectedOne.reset();
-    selectedTwo.reset();
 }
 
 void GuiCombat::setStyleWindow(nk_style* style)

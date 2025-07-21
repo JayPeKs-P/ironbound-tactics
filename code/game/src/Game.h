@@ -15,6 +15,8 @@
 #include "systems/rendering/RenderSystem.h"
 
 
+class GuiCombat;
+
 namespace gl3
 {
     class Game: public engine::Game {
@@ -32,6 +34,8 @@ namespace gl3
         RenderSystem* renderSystem = nullptr;
         InstanceManager* instanceManager = nullptr;
         SelectionSystem* selectionSystem = nullptr;
+
+        CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 
         void start() override;
         void update(GLFWwindow *window) override;

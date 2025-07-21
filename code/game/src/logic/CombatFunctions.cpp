@@ -62,7 +62,7 @@ void CombatFunctions::takeDamage(Unit* unit, float damage)
 
 void CombatFunctions::use(int amount, Unit* unit, SiegeEngine* siege)
 {
-    siege->useableAmount += amount;
+    siege->useableAmount += amount;     //TODO refactor to  unused amount
     unit->totalAmount -= amount * siege->cost;
     unit->availableAmount -= amount * siege->cost;
 }

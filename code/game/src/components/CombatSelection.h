@@ -8,6 +8,7 @@
 #include "engine/Events.h"
 #include"unitTypes/UnitCategory.h"
 
+struct Unit;
 using gl3::engine::ecs::Component;
 using gl3::engine::ecs::ComponentManager;
 using gl3::engine::ecs::guid_t;
@@ -17,6 +18,9 @@ template <typename G>
 struct CombatSelection : Component {
     friend ComponentManager;
     friend Entity;
+
+    std::shared_ptr<Unit> selectionOne;
+    std::shared_ptr<Unit> selectionTwo;
 
     using event_t = gl3::engine::events::Event<G, UnitCategory, int, UnitCategory>;
     event_t attack;

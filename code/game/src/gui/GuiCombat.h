@@ -15,8 +15,7 @@ class GuiCombat: public Gui {
 public:
     GuiCombat(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
 
-    void GuiCombat::renderGUI(int windowWidth, int windowHeight);
-    void resetSelection();
+    void GuiCombat::renderGUI() override;
 
 private:
     struct nk_image GuiCombat::getTileImage(
@@ -27,27 +26,9 @@ private:
     int atlasWidth,
     int atlasHeight);
 
-
-    // TEMPORARILY USED VARIABLES
-    //---
-    std::optional<gl3::Tag> owner;
-    std::optional<UnitCategory> selectedOne;
-    std::optional<UnitCategory> selectedTwo;
-
-    int amountOfTroups = 0;
-    int value = 0;
-    int valueAssaultCover = 0;
-    int valueDefendInf = 0;
-    //---
-
-
     void getComponents(gl3::engine::Game& game);
-    void drawTopRow(int windowHeight);
-
-    void drawPlayerHealthBars(int windowWidth, int windowHeight);
-    void drawEnemyHealthBars(int windowWidth, int windowHeight);
-    void drawUnitSelectionMenu(int windowWidth, int windowHeight);
-    void drawUnitActions();  //selectedOne was an enum class in Game.cpp. might become a normal enum
+    void drawTopRow();
+    void drawActions();
 
     void setStyleWindow(nk_style* style);
     void setStyleButton(nk_style* style);
@@ -55,6 +36,8 @@ private:
     void setStyleProgressBar(nk_style* style);
     void setStyleSlider(nk_style* style);
     void setStyleText(nk_style* style);
+
+    CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 
     Unit* pInfU_C = nullptr;
     Unit* pArcU_C = nullptr;
@@ -65,6 +48,14 @@ private:
     Unit* eArcU_C = nullptr;
     Unit* eCatU_C = nullptr;
     SiegeEngine* eCatSE_C = nullptr;
+
+    struct nk_rect actionbounds;
+    nk_color highlightColor = nk_rgba(255, 250, 200, 255);
+    nk_color playerColor = nk_rgba(100, 255, 100, 255);
+    nk_color enemyColor = nk_rgba(255, 100, 100, 255);
+    nk_color numberColor = nk_rgba(100, 200, 255, 255);
+
+    int value = 0;
 
 
 

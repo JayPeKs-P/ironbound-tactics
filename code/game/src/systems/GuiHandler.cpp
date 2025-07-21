@@ -102,14 +102,11 @@ namespace gl3 {
             case GuiScene::MAIN_MENU:
                 break;
             case GuiScene::COMBAT_MENU:
-                combatGUI->renderGUI(windowWidth, windowHeight);
+                combat_gui()->updateMargins(windowWidth, windowHeight);
+                combatGUI->renderGUI();
                 break;
             case GuiScene::UNIT_SELECTION:
                 break;
-        }
-        if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-        {
-            // gui.resetSelection();
         }
     }
 } // gl3

@@ -15,8 +15,10 @@ namespace gl3::engine::ecs
         Gui(Gui &&) = delete;
         Gui(const Gui &) = delete;
         virtual ~Gui() = default;
-        virtual void renderGUI(int windowWidth, int windowHeigh) = 0;
+        virtual void renderGUI() = 0;
+        void updateMargins(int newWidth, int newHeight){windowWidth = newWidth; windowHeight = newHeight;};
     protected:
+        int windowWidth, windowHeight;
         Game &engine;
         nk_context *ctx;
         nk_uint textureID;
