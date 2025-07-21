@@ -136,7 +136,7 @@ void Game::update(GLFWwindow *window)
     if (leftclick == GLFW_PRESS)
     {
         Transform* selection = nullptr;
-        selection = selectionSystem->select(*this);
+        selection = selectionSystem->select(*this, 0.1f);
         if (selection != nullptr)
         {
             auto root = selection->getParent();
