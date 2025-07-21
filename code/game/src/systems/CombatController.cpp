@@ -225,6 +225,11 @@ void CombatController::handleTurn()
             runEnemyTurn();
             turnStart.removeListener(*handle);
         });
+        DEBUG_LOG(
+            << "=======| End of turn: "
+            << turnCount
+            << " |======="
+            );
         turnCount++;
     }
 }
