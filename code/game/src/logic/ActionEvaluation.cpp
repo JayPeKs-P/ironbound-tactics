@@ -91,7 +91,7 @@ std::vector<Option> ActionEvaluation::generateOptions()
             unusedTargets = actor->availableAmount / pCatSE_C->cost;
         }
         float predictedDamage = CombatFunctions::attack(targetU, unusedTargets) / targetU->speed;
-        float score = predictedDamage;
+        float score = predictedDamage; //TODO COMPARE WITH DAMAGE UNITS WOULD DEAL ON THEIR OWN
         options.push_back( {actor, targetU, targetSE, amount, score} );
     };
 

@@ -42,6 +42,7 @@ private:
 
 
     void getComponents(gl3::engine::Game& game);
+    void drawTopRow(int windowHeight);
 
     void drawPlayerHealthBars(int windowWidth, int windowHeight);
     void drawEnemyHealthBars(int windowWidth, int windowHeight);

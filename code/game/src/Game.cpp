@@ -18,8 +18,6 @@
 #include "systems/GuiHandler.h"
 #include "components/CombatSelection.h"
 #include "gui/GuiCombat.h"
-// #include "entities/Enemy.h"
-// #include "entities/Planet.h"
 #include "components/InstanceBuffer.h"
 #include "components/Model2D.h"
 #include "components/Shader.h"
@@ -27,6 +25,8 @@
 #include "components/unitTypes/SiegeEngine.h"
 #include "engine/Texture.h"
 #include "engine/util/VertPresets.h"
+
+#include "engine/util/Debug.h"
 
 using gl3::engine::sceneGraph::Transform;
 using namespace gl3;
@@ -44,7 +44,7 @@ void Game::start()
     //---- Entities ----
     auto &guiScene_E = engine::Game::entityManager.createEntity();
     guiScene_E.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
-    guiScene_E.addComponent<CombatSelection<GuiCombat>>();
+    auto &combatSelection_C = guiScene_E.addComponent<CombatSelection<GuiCombat>>();
 
     auto &terrain_E = engine::Game::entityManager.createEntity();
     tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png");
@@ -122,6 +122,8 @@ void Game::start()
     combatController = new CombatController(*this);
     combatController->init(*this);
 
+    selectionSystem = new SelectionSystem(*this);
+
     backgroundMusic = std::make_unique<SoLoud::Wav>();
     backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     backgroundMusic->setLooping(true);
@@ -130,6 +132,24 @@ void Game::start()
 
 void Game::update(GLFWwindow *window)
 {
+    int leftclick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    if (leftclick == GLFW_PRESS)
+    {
+        Transform* selection = nullptr;
+        selection = selectionSystem->select(*this);
+        if (selection != nullptr)
+        {
+            auto root = selection->getParent();
+            auto entity = root->entity();
+            if (componentManager.hasComponent<Unit>(entity))
+            {
+                auto &unit = componentManager.getComponent<Unit>(entity);
+                DEBUG_LOG(
+                    << unitCategory_to_string(unit.category)
+                    );
+            }
+        }
+    }
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }

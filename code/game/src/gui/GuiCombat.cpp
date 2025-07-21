@@ -3,7 +3,7 @@
 //
 
 #include "GuiCombat.h"
-
+#include "engine/util/Debug.h"
 #include <cstdio>
 #include <iostream>
 #include <ostream>
@@ -71,36 +71,88 @@ void GuiCombat::getComponents(engine::Game &game)
     });
 }
 
+void GuiCombat::drawTopRow(int windowHeight)
+{
+    float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.3, 0.2, 0.1 };
+    nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 7, ratio);
+
+    if (nk_button_label(ctx, "esc"))
+    {
+
+    }
+
+    nk_label(ctx, "", NK_TEXT_CENTERED);
+
+    auto currentInf = pInfU_C->totalAmount;
+    auto currentArc = pArcU_C->totalAmount;
+    auto currentCat = pCatSE_C->useableAmount * pCatSE_C->cost;
+    auto currenTotal = currentInf + currentArc + currentCat;
+    auto maxAmount = pInfU_C->lifetimeMaxAmount + pArcU_C->lifetimeMaxAmount;
+    auto hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
+    nk_label(ctx, "Player", NK_TEXT_LEFT);
+    nk_progress(ctx, &hp, 100, NK_FIXED);
+
+    nk_label(ctx, "", NK_TEXT_CENTERED);
+
+    currentInf = eInfU_C->totalAmount;
+    currentArc = eArcU_C->totalAmount;
+    currentCat = eCatSE_C->useableAmount * eCatSE_C->cost;
+    currenTotal = currentInf + currentArc + currentCat;
+    maxAmount = eInfU_C->lifetimeMaxAmount + eArcU_C->lifetimeMaxAmount;
+    hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
+    nk_progress(ctx, &hp, 100, NK_FIXED);
+    nk_label(ctx, "Enemy", NK_TEXT_RIGHT);
+}
+
 void GuiCombat::drawPlayerHealthBars(int windowWidth, int windowHeight)
 {
-    auto pInfHP = static_cast<unsigned long long>(100.0 * pInfU_C->totalAmount / pInfU_C->lifetimeMaxAmount);
-    auto pArcHP = static_cast<unsigned long long>(100.0 * pArcU_C->totalAmount / pArcU_C->lifetimeMaxAmount);
-    auto pCatHP = static_cast<unsigned long long>(100.0 * pCatSE_C->useableAmount / pCatU_C->lifetimeMaxAmount);
+    auto currentInf = pInfU_C->totalAmount;
+    auto currentArc = pArcU_C->totalAmount;
+    auto currentCat = pCatSE_C->useableAmount * pCatSE_C->cost;
+    auto currenTotal = currentInf + currentArc + currentCat;
+    auto maxAmount = pInfU_C->lifetimeMaxAmount + pArcU_C->lifetimeMaxAmount;
+    auto hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
+    // auto pInfHP = static_cast<unsigned long long>(100.0 * pInfU_C->totalAmount / pInfU_C->lifetimeMaxAmount);
+    // auto pArcHP = static_cast<unsigned long long>(100.0 * pArcU_C->totalAmount / pArcU_C->lifetimeMaxAmount);
+    // auto pCatHP = static_cast<unsigned long long>(100.0 * pCatSE_C->useableAmount / pCatU_C->lifetimeMaxAmount);
 
-    nk_layout_row_dynamic(ctx, windowHeight/30, 3);
-    nk_label(ctx, "Infantry", NK_TEXT_LEFT);
-    nk_label(ctx, "Archer", NK_TEXT_LEFT);
-    nk_label(ctx, "Siege", NK_TEXT_LEFT);
-    nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-    nk_progress(ctx, &pInfHP, 100, NK_FIXED);
-    nk_progress(ctx, &pArcHP, 100, NK_FIXED);
-    nk_progress(ctx, &pCatHP, 100, NK_FIXED);
+    nk_layout_row_dynamic(ctx, windowHeight/20, 2);
+    nk_label(ctx, "Player", NK_TEXT_LEFT);
+    // nk_label(ctx, "Infantry", NK_TEXT_LEFT);
+    // nk_label(ctx, "Archer", NK_TEXT_LEFT);
+    // nk_label(ctx, "Siege", NK_TEXT_LEFT);
+    // nk_layout_row_dynamic(ctx, windowHeight/20, 3);
+    nk_progress(ctx, &hp, 100, NK_FIXED);
+    // nk_progress(ctx, &pInfHP, 100, NK_FIXED);
+    // nk_progress(ctx, &pArcHP, 100, NK_FIXED);
+    // nk_progress(ctx, &pCatHP, 100, NK_FIXED);
 }
 
 void GuiCombat::drawEnemyHealthBars(int windowWidth, int windowHeight)
 {
-    if (nk_begin(ctx, "Enemy",
+    if (nk_begin(ctx, "Health",
     nk_rect(windowWidth / 4, 0, windowWidth / 2, windowHeight / 4),
-    NK_WINDOW_TITLE|NK_WINDOW_BORDER))
+    // NK_WINDOW_TITLE |
+    NK_WINDOW_BORDER))
     {
-        auto eInfHP = static_cast<unsigned long long>(100 * eInfU_C->totalAmount / eInfU_C->lifetimeMaxAmount);
-        auto eArcHP = static_cast<unsigned long long>(100 * eArcU_C->totalAmount / eArcU_C->lifetimeMaxAmount);
-        auto eCatHP = static_cast<unsigned long long>(100 * eCatSE_C->useableAmount / eCatU_C->lifetimeMaxAmount);
+        auto currentInf = eInfU_C->totalAmount;
+        auto currentArc = eArcU_C->totalAmount;
+        auto currentCat = eCatSE_C->useableAmount * eCatSE_C->cost;
+        auto currenTotal = currentInf + currentArc + currentCat;
+        auto maxAmount = eInfU_C->lifetimeMaxAmount + eArcU_C->lifetimeMaxAmount;
+        auto eHp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
+        // auto eInfHP = static_cast<unsigned long long>(100 * eInfU_C->totalAmount / eInfU_C->lifetimeMaxAmount);
+        // auto eArcHP = static_cast<unsigned long long>(100 * eArcU_C->totalAmount / eArcU_C->lifetimeMaxAmount);
+        // auto eCatHP = static_cast<unsigned long long>(100 * eCatSE_C->useableAmount / eCatU_C->lifetimeMaxAmount);
 
-        nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-        nk_progress(ctx, &eInfHP, 100, NK_FIXED);
-        nk_progress(ctx, &eArcHP, 100, NK_FIXED);
-        nk_progress(ctx, &eCatHP, 100, NK_FIXED);
+        // nk_layout_row_dynamic(ctx, windowHeight/20, 3);
+        float ratio[] = {0.4,0.25};
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 2, ratio);
+        nk_progress(ctx, &eHp, 100, NK_FIXED);
+        nk_label(ctx, "Enemy", NK_TEXT_RIGHT);
+        // nk_progress(ctx, &eInfHP, 100, NK_FIXED);
+        // nk_progress(ctx, &eArcHP, 100, NK_FIXED);
+        // nk_progress(ctx, &eCatHP, 100, NK_FIXED);
 
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
         const char* enemyNames[] = { "Infantry", "Archer", "Siege" };
@@ -250,6 +302,14 @@ void GuiCombat::drawUnitActions()
 
 void GuiCombat::renderGUI(int windowWidth, int windowHeight) {
     drawUnitSelectionMenu(windowWidth, windowHeight);
+    if (nk_begin(ctx, "Top Row",
+        nk_rect(0, 0,
+            windowWidth, windowHeight / 13),
+            NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR))
+    {
+        drawTopRow(windowHeight);
+    }
+    nk_end(ctx);
 
     if (nk_begin(ctx, "UnitsGroup",
         nk_rect(windowWidth / 4,
@@ -263,7 +323,7 @@ void GuiCombat::renderGUI(int windowWidth, int windowHeight) {
     }
     nk_end(ctx);
 
-    drawEnemyHealthBars(windowWidth, windowHeight);
+    // drawEnemyHealthBars(windowWidth, windowHeight);
 
 }
 
@@ -277,7 +337,8 @@ void GuiCombat::resetSelection()
 
 void GuiCombat::setStyleWindow(nk_style* style)
 {
-    style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));
+    // style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));
+    style->window.fixed_background = nk_style_item_color(nk_rgba(0,0,0,120));
     style->window.border = 10.0f;
     style->window.border_color = nk_rgba(120, 58, 58, 163);
     style->window.header.label_normal = nk_rgba(120, 58, 58, 210);

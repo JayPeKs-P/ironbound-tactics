@@ -10,6 +10,7 @@
 
 #include "systems/CombatController.h"
 #include "systems/GuiHandler.h"
+#include "systems/SelectionSystem.h"
 #include "systems/rendering/InstanceManager.h"
 #include "systems/rendering/RenderSystem.h"
 
@@ -30,6 +31,7 @@ namespace gl3
         CombatController* combatController = nullptr;
         RenderSystem* renderSystem = nullptr;
         InstanceManager* instanceManager = nullptr;
+        SelectionSystem* selectionSystem = nullptr;
 
         void start() override;
         void update(GLFWwindow *window) override;
