@@ -31,7 +31,7 @@ private:
     void scheduleAttack(Unit* attacker, Unit* target, int amount);
 
     bool endOfTurn = true;
-    int turnCount = 0;
+    int turnCount = 1;
 
     Unit* pInfU_C = nullptr;
     Unit* pArcU_C = nullptr;

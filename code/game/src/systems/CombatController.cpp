@@ -126,7 +126,14 @@ void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &ta
             scheduleAttack(attacker, eCatU_C, amount);
             break;
     }
-    DEBUG_LOG("Player schedules attack: " << unitCategory_to_string(attacker->category) <<" targets "<< unitCategory_to_string(target)<< " with " << amount);
+    DEBUG_LOG(
+        << "Player schedules attack: "
+        << unitCategory_to_string(attacker->category)
+        <<" targets "
+        << unitCategory_to_string(target)
+        << " with "
+        << amount
+        );
     attacker->availableAmount -= amount;
 }
 
@@ -139,7 +146,16 @@ void CombatController::runEnemyTurn()
         {
             if (option.siege != nullptr)
             {
-                DEBUG_LOG("AI uses: " << option.amount << " of " << unitCategory_to_string(option.actor->category) << " for " << option.amount / option.siege->cost << " of " << unitCategory_to_string(option.target->category));
+                DEBUG_LOG(
+                    << "AI uses: "
+                    << option.amount
+                    << " of "
+                    << unitCategory_to_string(option.actor->category)
+                    << " for "
+                    << option.amount / option.siege->cost
+                    << " of "
+                    << unitCategory_to_string(option.target->category)
+                    );
                 CombatFunctions::use(option.amount/option.siege->cost, option.actor, option.siege);
                 std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
                 *handle = turnEnd.addListener([=](){
@@ -148,7 +164,14 @@ void CombatController::runEnemyTurn()
                 });
             }else
             {
-                DEBUG_LOG("AI schedules attack: " << unitCategory_to_string(option.actor->category) <<" targets "<< unitCategory_to_string(option.target->category)<< " with " << option.amount);
+                DEBUG_LOG(
+                    << "AI schedules attack: "
+                    << unitCategory_to_string(option.actor->category)
+                    << " targets "
+                    << unitCategory_to_string(option.target->category)
+                    << " with "
+                    << option.amount
+                    );
                 scheduleAttack(option.actor, option.target, option.amount);
                 option.actor->availableAmount -= option.amount;
             }
@@ -166,7 +189,13 @@ void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
             CombatFunctions::reset(attacker, amount);
             turnEnd.removeListener(*handle);
         });
-        DEBUG_LOG(unitCategory_to_string(attacker->category) <<" attacked "<< unitCategory_to_string(target->category)<< " with " << amount);
+        DEBUG_LOG(
+            << unitCategory_to_string(attacker->category)
+            <<" attacked "
+            << unitCategory_to_string(target->category)
+            << " with "
+            << amount
+            );
     });
 }
 
@@ -174,7 +203,11 @@ void CombatController::handleTurn()
 {
     if (endOfTurn)
     {
-        DEBUG_LOG("=======| This is turn: " << turnCount << " |=======");
+        DEBUG_LOG(
+            << "=======| This is turn: "
+            << turnCount
+            << " |======="
+            );
         turnStart.invoke();
         endOfTurn = false;
     }
