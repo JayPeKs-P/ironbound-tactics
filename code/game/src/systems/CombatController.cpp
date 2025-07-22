@@ -85,6 +85,8 @@ CombatController::CombatController(engine::Game &game):
                     if (selPTarget == UnitCategory::CATAPULT)
                     {
                         CombatFunctions::use(amount, pInfU_C, pCatSE_C);
+                        onUse.invoke(amount, pInfU_C, pCatSE_C);
+
                         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
                         *handle = turnEnd.addListener([=](){
                             CombatFunctions::reset(pCatU_C, amount);
