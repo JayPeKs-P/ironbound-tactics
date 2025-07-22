@@ -20,10 +20,10 @@ public:
     event_t turnEnd;
 
     using eventAttack_t = engine::events::Event<CombatController, Unit*, Unit*, int >;
-    eventAttack_t onBeforeAttack;
-    eventAttack_t onAttack;
-    eventAttack_t onAfterAttack;
-    engine::events::Event<CombatController, int, Unit*, SiegeEngine*> onUse;
+    static eventAttack_t onBeforeAttack;
+    static eventAttack_t onAttack;
+    static eventAttack_t onAfterAttack;
+    static engine::events::Event<CombatController, int, Unit*, SiegeEngine*> onUse;
 
     CombatController(engine::Game &game );
 

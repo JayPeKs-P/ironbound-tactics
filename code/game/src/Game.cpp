@@ -160,9 +160,13 @@ void Game::update(GLFWwindow *window)
             if (componentManager.hasComponent<Unit>(entity))
             {
                 auto &unit = componentManager.getComponent<Unit>(entity);
+
+////////////////////////////////////////////////////////////////////////
                 DEBUG_LOG(
                     << unitCategory_to_string(unit.category)
                     );
+////////////////////////////////////////////////////////////////////////
+
                 if (combatSelection_C->selectionOne == nullptr)
                 {
                     combatSelection_C->selectionOne = std::make_shared<Unit>(unit);
@@ -183,7 +187,7 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
-    movementSystem->moveTo(*this, origin->localPosition,deltaTime);
+    movementSystem->moveTo(*this, deltaTime);
     for (auto& transform_C : unitTransforms)
     {
         instanceManager->update(*this, transform_C);

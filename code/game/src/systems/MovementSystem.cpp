@@ -4,71 +4,105 @@
 
 #include "MovementSystem.h"
 
-#include <iostream>
+#include "CombatController.h"
+#include "../components/unitTypes/UnitCategory.h"
+#include "engine/util/Debug.h"
 
+
+#include "../components/TagComponent.h"
 #include "../components/UnitState.h"
 #include "engine/sceneGraph/Transform.h"
 #include "../components/unitTypes/Unit.h"
 
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
+    MovementSystem::event_t MovementSystem::finishedAnimation;
 
     MovementSystem::MovementSystem(engine::Game& game):
     System(game)
     {
+////////////////////////////////////////////////////////////////////////
+#ifdef DEBUG_MODE
+        finishedAnimation.addListener([&](bool state)
+        {
+            DEBUG_LOG(
+                << "TRIGGERED EVENT: 'finishedAnimation'"
+                );
+        });
+#endif
+///////////////////////////////////////////////////////////////////////
+
+        CombatController::onBeforeAttack.addListener([&](Unit* unit, Unit* unused, int amount)
+        {
+            switch (unit->category)
+            {
+            case UnitCategory::INFANTRY:
+                auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
+                auto& tag = engine.componentManager.getComponent<TagComponent>(unit->entity()).value;
+                if (tag == Tag::PLAYER)
+                {
+                    setMoving(root, playerPendingPosition, amount);
+                }else if (tag == Tag::ENEMY)
+                {
+                    setMoving(root, enemyPendingPosition, amount);
+                }
+                break;
+
+            }
+        });
+        CombatController::onAttack.addListener([&](Unit* unit, Unit* target, int amount)
+        {
+
+        });
+        CombatController::onAfterAttack.addListener([&](Unit* unit, Unit* unused, int amount)
+        {
+
+        });
     }
 
-    void MovementSystem::moveTo(engine::Game& game, glm::vec3 goalPositon, float deltaTime)
+    void MovementSystem::moveTo(engine::Game& game, float deltaTime)
     {
         game.componentManager.forEachComponent<Transform>([&](Transform &transform)
         {
-            if (game.componentManager.hasComponent<Unit>(transform.entity()))
+            if (game.componentManager.hasComponent<UnitState>(transform.entity()))
             {
-                auto unitCategory = game.componentManager.getComponent<Unit>(transform.entity()).category;
-                if (unitCategory == UnitCategory::INFANTRY)
+                auto root = transform.getParent();
+                auto unitState_C = game.componentManager.getComponent<UnitState>(transform.entity());
+
+                if (unitState_C.state == State::MOVING)
                 {
-                    glm::vec3 direction = goalPositon - transform.localPosition;
-                    bool finished = false;
-                    // finished = moveStraight(transform, direction, deltaTime);
-                    finished = moveCurved(transform, glm::vec3(1.75f, 0.0f ,0.0f), 1.0f, deltaTime);
-                    if (finished)
-                    {
-                        std::cout << "finished"<<std::endl;
-                        finished = false;
-                    }
+                    glm::vec3 direction = unitState_C.goal - root->localPosition;
+                    moveStraight(transform, direction, deltaTime);
                 }
+                // // if (unitCategory == UnitCategory::INFANTRY)
+                // // {
+                // //     glm::vec3 direction = goalPositon - transform.localPosition;
+                // //     // finished = moveStraight(transform, direction, deltaTime);
+                // //     moveCurved(transform, glm::vec3(1.75f, 0.0f ,0.0f), 1.0f, deltaTime);
+                // }
             }
         });
     }
 
-    bool MovementSystem::moveStraight(Transform& root, glm::vec3 direction, float deltatime)
+    void MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime)
     {
-        bool reached = false;
         float distanceToGoal = glm::length(direction);
-        auto children = root.getChildTransforms();
-        for (auto& childTransform : children)
-        {
-            auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
-            if (unitState_C.state != State::MOVING) continue;
-            auto speed = unitState_C.movementSpeed;
+        auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
+        auto speed = unitState_C.movementSpeed;
 
-            if (distanceToGoal - unitState_C.traveledDistance >= 0)
-            {
-                childTransform->localPosition += speed * deltatime * direction;
-                unitState_C.traveledDistance += 2* deltatime * speed;
-            }else
-            {
-                unitState_C.state = State::IDLE;
-                reached = true;
-            }
+        if (distanceToGoal - unitState_C.traveledDistance >= 0)
+        {
+            transform.localPosition += speed * deltatime * direction;
+            unitState_C.traveledDistance += 2* deltatime * speed;
+        }else
+        {
+            unitState_C.state = State::MOVED;
+            finishedAnimation.invoke(true);
         }
-        return reached;
     }
 
-    bool MovementSystem::moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime)
+    void MovementSystem::moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime)
     {
-        bool reached = false;
-
         glm::vec3 start = root.localPosition;
         glm::vec3 forward = glm::normalize(goal - start);
         glm::vec3 worldUp = glm::vec3(0, 1, 0);
@@ -107,9 +141,40 @@ namespace gl3 {
             }else
             {
                 unitState_C.state = State::IDLE;
-                reached = true;
+                finishedAnimation.invoke(true);
             }
         }
-        return reached;
+    }
+
+    void MovementSystem::setMoving(Transform& root, glm::vec3 goalPosition, int amount)
+    {
+        int counter = 0;
+        for (auto& childTransform : root.getChildTransforms())
+        {
+            auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
+            if (unitState_C.state == State::IDLE)
+            {
+                std::cout << counter << std::endl;
+                unitState_C.goal = goalPosition;
+                unitState_C.state = State::MOVING;
+
+                counter++;
+                if (counter >= amount) break;
+            }
+        }
+    }
+
+    void MovementSystem::setAttacking(Transform& root, glm::vec3 targetPosition, int amount)
+    {
+        int counter = 0;
+        for (auto& childTransform : root.getChildTransforms())
+        {
+            auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
+            if (unitState_C.state == State::IDLE && counter < amount)
+            {
+                unitState_C.state = State::ATTACKING;
+                counter++;
+            }
+        }
     }
 } // gl3

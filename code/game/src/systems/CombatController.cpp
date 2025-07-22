@@ -12,14 +12,22 @@
 #include "../gui/GuiCombat.h"
 #include "../components/TagComponent.h"
 #include "engine/logic/ActionRegistry.h"
+
+#include "../components/unitTypes/UnitCategory.h"
 #include "engine/util/Debug.h"
 
 
 using namespace gl3;
 
+CombatController::eventAttack_t CombatController::onBeforeAttack;
+CombatController::eventAttack_t CombatController::onAttack;
+CombatController::eventAttack_t CombatController::onAfterAttack;
+engine::events::Event<CombatController, int, Unit*, SiegeEngine*> CombatController::onUse;
+
 CombatController::CombatController(engine::Game &game):
     System(game)
 {
+////////////////////////////////////////////////////////////////////////
 #ifdef DEBUG_LOG
     onBeforeAttack.addListener([&](Unit* unit, Unit* other, int i)
     {
@@ -46,6 +54,8 @@ CombatController::CombatController(engine::Game &game):
             );
     });
 #endif
+////////////////////////////////////////////////////////////////////////
+
     turnStart.addListener([=]()
     {
         runEnemyTurn();
@@ -152,6 +162,8 @@ void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &ta
             scheduleAttack(attacker, eCatU_C, amount);
             break;
     }
+
+////////////////////////////////////////////////////////////////////////
     DEBUG_LOG(
         << "Player schedules attack: "
         << unitCategory_to_string(attacker->category)
@@ -160,6 +172,8 @@ void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &ta
         << " with "
         << amount
         );
+////////////////////////////////////////////////////////////////////////
+
     attacker->availableAmount -= amount;
 }
 
@@ -172,6 +186,8 @@ void CombatController::runEnemyTurn()
         {
             if (option.siege != nullptr)
             {
+
+////////////////////////////////////////////////////////////////////////
                 DEBUG_LOG(
                     << "AI uses: "
                     << option.amount
@@ -182,6 +198,7 @@ void CombatController::runEnemyTurn()
                     << " of "
                     << unitCategory_to_string(option.target->category)
                     );
+////////////////////////////////////////////////////////////////////////
 
                 onUse.invoke(option.amount, option.actor, option.siege);
                 CombatFunctions::use(option.amount/option.siege->cost, option.actor, option.siege);
@@ -193,6 +210,7 @@ void CombatController::runEnemyTurn()
                 });
             }else
             {
+////////////////////////////////////////////////////////////////////////
                 DEBUG_LOG(
                     << "AI schedules attack: "
                     << unitCategory_to_string(option.actor->category)
@@ -201,6 +219,7 @@ void CombatController::runEnemyTurn()
                     << " with "
                     << option.amount
                     );
+////////////////////////////////////////////////////////////////////////
 
                 scheduleAttack(option.actor, option.target, option.amount);
                 option.actor->availableAmount -= option.amount;
@@ -225,6 +244,7 @@ void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
             turnEnd.removeListener(*handle);
         });
 
+////////////////////////////////////////////////////////////////////////
         DEBUG_LOG(
             << unitCategory_to_string(attacker->category)
             <<" attacked "
@@ -232,6 +252,7 @@ void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
             << " with "
             << amount
             );
+////////////////////////////////////////////////////////////////////////
     });
 }
 
@@ -239,11 +260,14 @@ void CombatController::handleTurn()
 {
     if (endOfTurn)
     {
+////////////////////////////////////////////////////////////////////////
         DEBUG_LOG(
             << "=======| This is turn: "
             << turnCount
             << " |======="
             );
+////////////////////////////////////////////////////////////////////////
+
         turnStart.invoke();
         endOfTurn = false;
     }
@@ -261,11 +285,15 @@ void CombatController::handleTurn()
             runEnemyTurn();
             turnStart.removeListener(*handle);
         });
+
+////////////////////////////////////////////////////////////////////////
         DEBUG_LOG(
             << "=======| End of turn: "
             << turnCount
             << " |======="
             );
+////////////////////////////////////////////////////////////////////////
+
         turnCount++;
     }
 }

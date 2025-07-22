@@ -6,6 +6,7 @@
 #include "engine/util/Debug.h"
 #include <iostream>
 
+#include "../components/unitTypes/UnitCategory.h"
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 #include "../components/TagComponent.h"
