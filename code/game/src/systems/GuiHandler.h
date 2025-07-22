@@ -25,10 +25,10 @@ public:
     GuiHandler(engine::Game &game );
     ~GuiHandler();
     void initialize(engine::Game &game);
-    [[nodiscard]] std::shared_ptr<engine::ecs::Gui> combat_gui() const
-    {
-        return combatGUI;
-    }
+    // [[nodiscard]] std::shared_ptr<engine::ecs::Gui> combat_gui() const
+    // {
+    //     return combatGUI;
+    // }
 private:
     void restoreGameState();
     void selectCurrentScene(engine::Game &game);

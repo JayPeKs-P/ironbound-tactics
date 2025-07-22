@@ -8,6 +8,7 @@
 
 
 #include "../components/GuiState.h"
+#include "../gui/GuiUnitSelection.h"
 #include "../gui/GuiCombat.h"
 
 
@@ -56,7 +57,8 @@ namespace gl3 {
         setStyleSlider(style);
         setStyleText(style);
 
-        combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
+        combatGUI = std::make_unique<GuiUnitSelection>(game, nkCTX, textureAtlasID);
+        // combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
         for (auto& [owner, _] : game.componentManager.getContainer<GuiState>())
         {
             if (game.componentManager.hasComponent<GuiState>(owner))
@@ -109,7 +111,7 @@ namespace gl3 {
             case GuiScene::MAIN_MENU:
                 break;
             case GuiScene::COMBAT_MENU:
-                combat_gui()->updateMargins(windowWidth, windowHeight);
+                combatGUI->updateMargins(windowWidth, windowHeight);
                 combatGUI->renderGUI();
                 break;
             case GuiScene::UNIT_SELECTION:
@@ -122,12 +124,15 @@ namespace gl3 {
         style->window.fixed_background = nk_style_item_color(nk_rgba(0,0,0,120));
         style->window.border = 10.0f;
         style->window.border_color = nk_rgba(120, 58, 58, 163);
-        style->window.header.label_normal = nk_rgba(120, 58, 58, 210);
-        style->window.header.label_hover = nk_rgba(120, 58, 58, 210);
-        style->window.header.label_active = nk_rgba(120, 58, 58, 210);
-        style->window.header.normal = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
-        style->window.header.hover = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
-        style->window.header.active = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
+        style->window.header.label_normal = nk_rgba(255, 250, 200, 255);
+        style->window.header.label_hover = nk_rgba(255, 250, 200, 255);
+        style->window.header.label_active = nk_rgba(255, 250, 200, 255);
+        style->window.header.normal = nk_style_item_color(nk_rgba(0,0,0,200));
+        style->window.header.hover = nk_style_item_color(nk_rgba(0,0,0,200));
+        style->window.header.active = nk_style_item_color(nk_rgba(0,0,0,200));
+        // style->window.header.normal = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
+        // style->window.header.hover = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
+        // style->window.header.active = nk_style_item_image(getTileImage(22, 1, 1, 1, 3072, 3072));
     }
 
     void GuiHandler::setStyleButton(nk_style* style)

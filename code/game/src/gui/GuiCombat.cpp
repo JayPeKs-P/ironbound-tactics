@@ -52,45 +52,37 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
 
 }
 
-void GuiCombat::getComponents(engine::Game &game)
-{
-    game.componentManager.forEachComponent<Unit>([&](Unit &unit)
+void GuiCombat::renderGUI() {
+    if (nk_begin(ctx, "Top Row",
+        nk_rect(0, 0,
+            windowWidth, windowHeight / 13),
+            NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR))
     {
-        auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
-        if (tag == Tag::PLAYER)
+        drawTopRow();
+    }
+    nk_end(ctx);
+
+    if (combatSelection_C->selectionOne != nullptr)
+    {
+        if (combatSelection_C->selectionTwo == nullptr)
         {
-            if (unit.category == UnitCategory::INFANTRY)
-            {
-                pInfU_C = &unit;
-            }else if (unit.category == UnitCategory::ARCHER)
-            {
-                pArcU_C = &unit;
-            }
-            else if (unit.category == UnitCategory::CATAPULT)
-            {
-                pCatU_C = &unit;
-                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
-            }
-        }else if (tag == Tag::ENEMY)
+            actionBounds = nk_rect(
+            windowWidth / 4, windowHeight - windowHeight / 4,
+            windowWidth / 2, windowHeight / 4);
+        }else
         {
-            if (unit.category == UnitCategory::INFANTRY)
-            {
-                eInfU_C = &unit;
-            }else if (unit.category == UnitCategory::ARCHER)
-            {
-                eArcU_C = &unit;
-            }
-            else if (unit.category == UnitCategory::CATAPULT)
-            {
-                eCatU_C = &unit;
-                eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
-            }
+            actionBounds = nk_rect(
+            windowWidth / 4, windowHeight - windowHeight / 3,
+            windowWidth / 2, windowHeight / 3);
         }
-    });
-    game.componentManager.forEachComponent<CombatSelection<GuiCombat>>([&] (CombatSelection<GuiCombat> &sel)
-    {
-        combatSelection_C = &sel;
-    });
+        if (nk_begin(ctx, "Actions",
+            actionBounds,
+            NK_WINDOW_BORDER | NK_WINDOW_SCROLL_AUTO_HIDE))
+        {
+            drawActions();
+            nk_end(ctx);
+        }
+    }
 }
 
 void GuiCombat::drawTopRow()
@@ -125,6 +117,7 @@ void GuiCombat::drawTopRow()
     nk_progress(ctx, &hp, 100, NK_FIXED);
     nk_label(ctx, "Enemy", NK_TEXT_RIGHT);
 }
+
 void GuiCombat::drawActions()
 {
     auto unitOne = combatSelection_C->selectionOne;
@@ -237,35 +230,43 @@ void GuiCombat::drawActions()
     }
 }
 
-void GuiCombat::renderGUI() {
-    if (nk_begin(ctx, "Top Row",
-        nk_rect(0, 0,
-            windowWidth, windowHeight / 13),
-            NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR))
+void GuiCombat::getComponents(engine::Game &game)
+{
+    game.componentManager.forEachComponent<Unit>([&](Unit &unit)
     {
-        drawTopRow();
-    }
-    nk_end(ctx);
-
-    if (combatSelection_C->selectionOne != nullptr)
+        auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
+        if (tag == Tag::PLAYER)
+        {
+            if (unit.category == UnitCategory::INFANTRY)
+            {
+                pInfU_C = &unit;
+            }else if (unit.category == UnitCategory::ARCHER)
+            {
+                pArcU_C = &unit;
+            }
+            else if (unit.category == UnitCategory::CATAPULT)
+            {
+                pCatU_C = &unit;
+                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+            }
+        }else if (tag == Tag::ENEMY)
+        {
+            if (unit.category == UnitCategory::INFANTRY)
+            {
+                eInfU_C = &unit;
+            }else if (unit.category == UnitCategory::ARCHER)
+            {
+                eArcU_C = &unit;
+            }
+            else if (unit.category == UnitCategory::CATAPULT)
+            {
+                eCatU_C = &unit;
+                eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+            }
+        }
+    });
+    game.componentManager.forEachComponent<CombatSelection<GuiCombat>>([&] (CombatSelection<GuiCombat> &sel)
     {
-        if (combatSelection_C->selectionTwo == nullptr)
-        {
-            actionbounds = nk_rect(
-            windowWidth / 4, windowHeight - windowHeight / 4,
-            windowWidth / 2, windowHeight / 4);
-        }else
-        {
-            actionbounds = nk_rect(
-            windowWidth / 4, windowHeight - windowHeight / 3,
-            windowWidth / 2, windowHeight / 3);
-        }
-        if (nk_begin(ctx, "Actions",
-            actionbounds,
-            NK_WINDOW_BORDER | NK_WINDOW_SCROLL_AUTO_HIDE))
-        {
-            drawActions();
-            nk_end(ctx);
-        }
-    }
+        combatSelection_C = &sel;
+    });
 }

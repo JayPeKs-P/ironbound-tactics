@@ -16,9 +16,9 @@ public:
     void GuiCombat::renderGUI() override;
 
 private:
-    void getComponents(gl3::engine::Game& game);
     void drawTopRow();
     void drawActions();
+    void getComponents(gl3::engine::Game& game);
 
     CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 
@@ -32,7 +32,7 @@ private:
     Unit* eCatU_C = nullptr;
     SiegeEngine* eCatSE_C = nullptr;
 
-    struct nk_rect actionbounds;
+    struct nk_rect actionBounds;
     nk_color highlightColor = nk_rgba(255, 250, 200, 255);
     nk_color playerColor = nk_rgba(100, 255, 100, 255);
     nk_color enemyColor = nk_rgba(255, 100, 100, 255);
