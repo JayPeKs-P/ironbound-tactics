@@ -3,14 +3,12 @@
 //
 
 #pragma once
-#include <random>
 #include "engine/ecs/System.h"
 #include "engine/Events.h"
 
-#include "../components/CombatSelection.h"
-#include "../components/unitTypes/SiegeEngine.h"
 
 #include "../components/unitTypes/Unit.h"
+#include "../components/unitTypes/SiegeEngine.h"
 
 namespace gl3 {
 
@@ -20,7 +18,13 @@ public:
     using event_t = engine::events::Event<CombatController>;
     event_t turnStart;
     event_t turnEnd;
-    // TODO: check if this typedef needs to add <..., CombatController&> like in wp3 engine/game.h
+
+    using eventAttack_t = engine::events::Event<CombatController, Unit*, Unit*, int >;
+    eventAttack_t onBeforeAttack;
+    eventAttack_t onAttack;
+    eventAttack_t onAfterAttack;
+    engine::events::Event<CombatController, int, Unit*, SiegeEngine*> onUse;
+
     CombatController(engine::Game &game );
 
     void handleTurn();

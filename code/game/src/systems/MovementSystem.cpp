@@ -85,6 +85,7 @@ namespace gl3 {
         for (auto& childTransform : children)
         {
             auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
+            if (unitState_C.state != State::MOVING) continue;
             auto speed = 3.0f;
 
             float t = unitState_C.traveledDistance / totalDistance;

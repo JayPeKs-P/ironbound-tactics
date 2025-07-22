@@ -20,6 +20,32 @@ using namespace gl3;
 CombatController::CombatController(engine::Game &game):
     System(game)
 {
+#ifdef DEBUG_LOG
+    onBeforeAttack.addListener([&](Unit* unit, Unit* other, int i)
+    {
+        DEBUG_LOG(
+            << "TRIGGERED EVENT: 'onBeforeAttack'"
+            );
+    });
+    onAttack.addListener([&](Unit* unit, Unit* other, int i)
+    {
+        DEBUG_LOG(
+            << "TRIGGERED EVENT: 'onAttack'"
+            );
+    });
+    onAfterAttack.addListener([&](Unit* unit, Unit* other, int i)
+    {
+        DEBUG_LOG(
+            << "TRIGGERED EVENT: 'onAfterAttack'"
+            );
+    });
+    onUse.addListener([&](int i, Unit* unit, SiegeEngine* other)
+    {
+        DEBUG_LOG(
+            << "TRIGGERED EVENT: 'onUse'"
+            );
+    });
+#endif
     turnStart.addListener([=]()
     {
         runEnemyTurn();
@@ -156,7 +182,10 @@ void CombatController::runEnemyTurn()
                     << " of "
                     << unitCategory_to_string(option.target->category)
                     );
+
+                onUse.invoke(option.amount, option.actor, option.siege);
                 CombatFunctions::use(option.amount/option.siege->cost, option.actor, option.siege);
+
                 std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
                 *handle = turnEnd.addListener([=](){
                     CombatFunctions::reset(option.target, option.amount / option.siege->cost);
@@ -172,6 +201,7 @@ void CombatController::runEnemyTurn()
                     << " with "
                     << option.amount
                     );
+
                 scheduleAttack(option.actor, option.target, option.amount);
                 option.actor->availableAmount -= option.amount;
             }
@@ -181,14 +211,20 @@ void CombatController::runEnemyTurn()
 
 void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
 {
+    onBeforeAttack.invoke(attacker, nullptr, amount);
     engine.actionRegister.scheduleAction(attacker->speed,[=] ()
     {
+        onAttack.invoke(attacker, target, amount);
         CombatFunctions::takeDamage(target, CombatFunctions::attack(attacker, amount));
+
         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
         *handle = turnEnd.addListener([=](){
             CombatFunctions::reset(attacker, amount);
+            onAfterAttack.invoke(attacker, nullptr, amount);
+
             turnEnd.removeListener(*handle);
         });
+
         DEBUG_LOG(
             << unitCategory_to_string(attacker->category)
             <<" attacked "
