@@ -57,7 +57,7 @@ void GuiUnitSelection::drawSelectionFrame()
     nk_image(ctx, unitImage);
     nk_label(ctx, "", NK_TEXT_LEFT);
     nk_label(ctx, "Infantry", NK_TEXT_LEFT);
-    nk_slider_int(ctx, 0, &value, canUseAmount, 1);
+    // nk_slider_int(ctx, 0, &value, canUseAmount, 1);
 }
 
 void GuiUnitSelection::getComponents(engine::Game& game)
