@@ -15,6 +15,8 @@ struct UnitState: Component
     friend Entity;
     public:
     State state = State::IDLE;
+    glm::vec3 oldPos;
+    glm::vec3 relativeVec;
     glm::vec3 goal;
     float movementSpeed = 0.2;
     float traveledDistance = 0;
