@@ -44,6 +44,7 @@ namespace gl3 {
                             glm::vec3(rootLocation.x + j * 0.1f, rootLocation.y - i * 0.05, rootLocation.z),
                             0,
                             glm::vec3(rootScale.x, rootScale.y, rootScale.z));
+                        instance_E.addComponent<UnitState>();
 
                         createdInstances++;
                     }

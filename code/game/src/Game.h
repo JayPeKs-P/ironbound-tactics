@@ -10,6 +10,7 @@
 
 #include "systems/CombatController.h"
 #include "systems/GuiHandler.h"
+#include "systems/MovementSystem.h"
 #include "systems/SelectionSystem.h"
 #include "systems/rendering/InstanceManager.h"
 #include "systems/rendering/RenderSystem.h"
@@ -34,6 +35,7 @@ namespace gl3
         RenderSystem* renderSystem = nullptr;
         InstanceManager* instanceManager = nullptr;
         SelectionSystem* selectionSystem = nullptr;
+        MovementSystem* movementSystem = nullptr;
 
         CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 

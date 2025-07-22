@@ -119,6 +119,8 @@ void Game::start()
 
     instanceManager = new InstanceManager(*this);
 
+    movementSystem = new MovementSystem(*this);
+
     combatController = new CombatController(*this);
     combatController->init(*this);
 
@@ -181,6 +183,7 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
+    movementSystem->moveTo(*this, origin->localPosition,deltaTime);
     for (auto& transform_C : unitTransforms)
     {
         instanceManager->update(*this, transform_C);
