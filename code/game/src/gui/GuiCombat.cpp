@@ -12,6 +12,7 @@
 #include "../components/TagComponent.h"
 
 using namespace gl3;
+GuiCombat::event_t GuiCombat::startRound;
 
 std::string getType(Unit &unit)
 {
@@ -51,6 +52,10 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
 
 void GuiCombat::render()
 {
+    if (countdownStartRound >= 0)
+    {
+        drawStartRoundWindow();
+    }
     if (nk_begin(ctx, "Top Row",
         nk_rect(0, 0,
             windowWidth, windowHeight / 13),
@@ -85,6 +90,32 @@ void GuiCombat::render()
 
 void GuiCombat::triggerEvent()
 {
+}
+
+void GuiCombat::drawStartRoundWindow()
+{
+    if (justStarted)
+    {
+        startRound.invoke();
+        justStarted = false;
+    }
+    if (nk_begin(ctx, "Background",
+        nk_rect(0, 0,
+            windowWidth, windowHeight),
+        NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
+    if (nk_begin(ctx, "Round ",
+        nk_rect(windowWidth / 4,  windowHeight / 4,
+            windowWidth / 2, windowHeight/ 2),
+            NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+    {
+        nk_layout_row_dynamic(ctx, windowHeight/5, 2);
+        nk_label(ctx, "Round", NK_TEXT_CENTERED);
+        nk_label(ctx, std::to_string(currentRound).c_str(), NK_TEXT_CENTERED);
+        nk_layout_row_dynamic(ctx, windowHeight/5, 1);
+        nk_label(ctx, std::to_string(static_cast<int>(countdownStartRound)).c_str(), NK_TEXT_CENTERED);
+    }
+    nk_end(ctx);
+    countdownStartRound -=  engine.getDeltaTime();
 }
 
 void GuiCombat::drawTopRow()

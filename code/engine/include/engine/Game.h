@@ -21,6 +21,7 @@ namespace gl3::engine {
         virtual void run();
         static glm::mat4 calculateMvpMatrix(glm::mat4 model);
         GLFWwindow *getWindow() {return context.getWindow();}
+        float getDeltaTime() {return deltaTime;}
 
         // List of core events
         event_t onStartup;

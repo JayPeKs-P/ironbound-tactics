@@ -10,6 +10,7 @@
 #include <ostream>
 
 #include "../gui/GuiCombat.h"
+#include "../gui/GuiUnitSelection.h"
 #include "../components/TagComponent.h"
 #include "engine/logic/ActionRegistry.h"
 
@@ -27,7 +28,8 @@ engine::events::Event<CombatController, int, Unit*, SiegeEngine*> CombatControll
 CombatController::CombatController(engine::Game &game):
     System(game)
 {
-////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+{
 #ifdef DEBUG_LOG
     onBeforeAttack.addListener([&](Unit* unit, Unit* other, int i)
     {
@@ -54,8 +56,13 @@ CombatController::CombatController(engine::Game &game):
             );
     });
 #endif
+}
 ////////////////////////////////////////////////////////////////////////
 
+    GuiUnitSelection::onAccept.addListener([&](int amountInf, int amountArc, int amountCat)
+    {
+        init(game, amountInf, amountArc, amountCat);
+    });
     turnStart.addListener([=]()
     {
         // runEnemyTurn();
@@ -106,7 +113,7 @@ CombatController::CombatController(engine::Game &game):
     }
 }
 
-void CombatController::init(engine::Game &game)
+void CombatController::init(engine::Game &game, int amountInf, int amountArc, int amountCat)
 {
     game.componentManager.forEachComponent<Unit>([&](Unit &unit)
     {
@@ -116,17 +123,17 @@ void CombatController::init(engine::Game &game)
             if (unit.category == UnitCategory::INFANTRY)
             {
                 pInfU_C = &unit;
-                CombatFunctions::setAmount(pInfU_C, 20);
+                CombatFunctions::setAmount(pInfU_C, amountInf);
             }else if (unit.category == UnitCategory::ARCHER)
             {
                 pArcU_C = &unit;
-                CombatFunctions::setAmount(pArcU_C, 20);
+                CombatFunctions::setAmount(pArcU_C, amountArc);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
                 pCatU_C = &unit;
                 pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
-                CombatFunctions::setAmount(pCatU_C, 5);
+                CombatFunctions::setAmount(pCatU_C, amountCat);
             }
         }else if (tag == Tag::ENEMY)
         {

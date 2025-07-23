@@ -28,7 +28,7 @@ public:
     CombatController(engine::Game &game );
 
     void handleTurn();
-    void init(engine::Game &game);
+    void init(engine::Game &game, int amountInf, int amountArc, int amountCat);
 private:
     void chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount);
     void runEnemyTurn();

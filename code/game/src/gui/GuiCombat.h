@@ -10,13 +10,16 @@ struct SiegeEngine;
 using gl3::engine::ecs::Gui;
 
 class GuiCombat: public Gui {
+    using event_t = gl3::engine::events::Event<GuiCombat>;
 public:
+    static event_t startRound;
     GuiCombat(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
 
 
 private:
     void render() override;
     void triggerEvent() override;
+    void drawStartRoundWindow();
     void drawTopRow();
     void drawActions();
     void getComponents(gl3::engine::Game& game);
@@ -40,6 +43,10 @@ private:
     nk_color numberColor = nk_rgba(100, 200, 255, 255);
 
     int value = 0;
+
+    bool justStarted = true;
+    int currentRound = 1;
+    float countdownStartRound = 3.0f;
 
 
 

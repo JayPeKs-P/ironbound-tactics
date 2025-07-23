@@ -10,6 +10,7 @@
 #include "../components/TagComponent.h"
 #include "../logic/CombatFunctions.h"
 #include "engine/Texture.h"
+#include "engine/util/Debug.h"
 
 using namespace gl3;
 GuiUnitSelection::event_t GuiUnitSelection::onAccept;
@@ -17,6 +18,12 @@ GuiUnitSelection::GuiUnitSelection(engine::Game& game, nk_context* ctx, nk_uint&
 Gui(game, ctx, textureID),
 amountToSpare(50)
 {
+    onAccept.addListener([&](int a, int b, int c)
+    {
+        DEBUG_LOG(
+            << "TRIGGERED: 'onAccept'"
+            );
+    });
     getComponents(game);
     pInfTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
     pArcTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
@@ -129,28 +136,3 @@ void GuiUnitSelection::getComponents(engine::Game& game)
     });
 }
 
-void GuiUnitSelection::initUnits(engine::Game& game)
-{
-    game.componentManager.forEachComponent<Unit>([&](Unit &unit)
-    {
-        auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
-        if (tag == Tag::PLAYER)
-        {
-            if (unit.category == UnitCategory::INFANTRY)
-            {
-                pInfU_C = &unit;
-                CombatFunctions::setAmount(pInfU_C, 20);
-            }else if (unit.category == UnitCategory::ARCHER)
-            {
-                pArcU_C = &unit;
-                CombatFunctions::setAmount(pArcU_C, 20);
-            }
-            else if (unit.category == UnitCategory::CATAPULT)
-            {
-                pCatU_C = &unit;
-                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
-                CombatFunctions::setAmount(pCatU_C, 5);
-            }
-        }
-    });
-}

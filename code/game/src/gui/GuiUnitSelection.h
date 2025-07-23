@@ -25,7 +25,6 @@ private:
 
     void drawSelectionFrame();
     void getComponents(gl3::engine::Game& game);
-    void initUnits(gl3::engine::Game& game);
 
     CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 

@@ -8,15 +8,16 @@
 #include "../../components/unitTypes/Unit.h"
 #include "../../components/UnitState.h"
 #include "../../components/Shader.h"
+#include "../../gui/GuiCombat.h"
 
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
     InstanceManager::InstanceManager(engine::Game& game):
     System(game)
     {
-        game.onAfterStartup.addListener([&](engine::Game &game)
+        GuiCombat::startRound.addListener([&]()
         {
-            init(game);
+            init(engine);
         });
     }
 
