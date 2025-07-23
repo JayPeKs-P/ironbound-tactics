@@ -10,9 +10,12 @@
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 #include "../components/TagComponent.h"
+#include "../systems/CombatController.h"
+#include "../systems/GuiHandler.h"
 
 using namespace gl3;
 GuiCombat::event_t GuiCombat::startRound;
+GuiCombat::event_t GuiCombat::startEndOfTurn;
 
 std::string getType(Unit &unit)
 {
@@ -48,6 +51,36 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
     : Gui(game, ctx,textureID)
 {
     getComponents(game);
+
+    CombatController::turnStart.addListener([&]()
+    {
+        justEndedTurn = false;
+        currentTurn++;
+    });
+    startRound.addListener([&]()
+    {
+////////////////////////////////////////////////////////////////////////
+{
+#ifdef DEBUG_MODE
+    DEBUG_LOG(
+        << "TRIGGERED EVENT: 'startRound'"
+        );
+#endif
+}
+////////////////////////////////////////////////////////////////////////
+    });
+    startEndOfTurn.addListener([&]()
+    {
+////////////////////////////////////////////////////////////////////////
+{
+#ifdef DEBUG_MODE
+    DEBUG_LOG(
+        << "TRIGGERED EVENT: 'startEndOfTurn'"
+        );
+#endif
+}
+////////////////////////////////////////////////////////////////////////
+    });
 }
 
 void GuiCombat::render()
@@ -56,7 +89,20 @@ void GuiCombat::render()
     {
         drawStartRoundWindow();
     }
-    if (nk_begin(ctx, "Top Row",
+    else
+    {
+        if (nk_begin(ctx, "End Turn Window",
+            nk_rect(2 * windowWidth / 5, windowHeight / 13,
+                windowWidth / 5, windowHeight / 13),
+                NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
+        {
+            drawEndTurnWindow();
+        }
+        nk_end(ctx);
+    }
+
+
+    if (nk_begin(ctx, "Top Row Window",
         nk_rect(0, 0,
             windowWidth, windowHeight / 13),
             NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR))
@@ -64,6 +110,7 @@ void GuiCombat::render()
         drawTopRow();
     }
     nk_end(ctx);
+
 
     if (combatSelection_C->selectionOne != nullptr)
     {
@@ -88,7 +135,7 @@ void GuiCombat::render()
     }
 }
 
-void GuiCombat::triggerEvent()
+void GuiCombat::invokeSceneChange()
 {
 }
 
@@ -135,8 +182,8 @@ void GuiCombat::drawTopRow()
     auto hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
     nk_label(ctx, "Player", NK_TEXT_LEFT);
     nk_progress(ctx, &hp, 100, NK_FIXED);
-
-    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+    std::string roundLabel = "Round  " + std::to_string(currentRound);
+    nk_label_colored(ctx, roundLabel.c_str(), NK_TEXT_CENTERED, highlightColor);
 
     currentInf = eInfU_C->totalAmount;
     currentArc = eArcU_C->totalAmount;
@@ -146,6 +193,21 @@ void GuiCombat::drawTopRow()
     hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
     nk_progress(ctx, &hp, 100, NK_FIXED);
     nk_label(ctx, "Enemy", NK_TEXT_RIGHT);
+}
+
+void GuiCombat::drawEndTurnWindow()
+{
+    float ratio[] = {0.5, 0.4};
+    nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 2, ratio);
+    std::string turnLabel =  "Turn  " + std::to_string(currentTurn);
+    nk_label(ctx, turnLabel.c_str(), NK_TEXT_LEFT);
+    // struct nk_image skip = GuiHandler::getTileImage(textureID, 9, 5, 1, 1, 3072, 3072);
+    // nk_button_image(ctx, skip);
+    if (nk_button_label(ctx, "Next") && !justEndedTurn)
+    {
+        justEndedTurn = true;
+        startEndOfTurn.invoke();
+    }
 }
 
 void GuiCombat::drawActions()

@@ -16,8 +16,8 @@ class CombatController: public engine::ecs::System
 {
 public:
     using event_t = engine::events::Event<CombatController>;
-    event_t turnStart;
-    event_t turnEnd;
+    static event_t turnStart;
+    static event_t turnEnd;
 
     using eventAttack_t = engine::events::Event<CombatController, Unit*, Unit*, int >;
     static eventAttack_t onBeforeAttack;
@@ -34,7 +34,8 @@ private:
     void runEnemyTurn();
     void scheduleAttack(Unit* attacker, Unit* target, int amount);
 
-    bool endOfTurn = true;
+    bool newTurn = false;
+    bool endOfTurn = false;
     int turnCount = 1;
 
     Unit* pInfU_C = nullptr;

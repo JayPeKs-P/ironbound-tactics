@@ -20,13 +20,13 @@ namespace gl3::engine::ecs
             if (!endScene) render();
             else
             {
-                triggerEvent();
+                invokeSceneChange();
                 endScene = false;
             }
         }
         void updateMargins(int newWidth, int newHeight){windowWidth = newWidth; windowHeight = newHeight;};
     protected:
-        virtual void triggerEvent() = 0;
+        virtual void invokeSceneChange() = 0;
         virtual void render() = 0;
         int windowWidth, windowHeight;
         bool endScene = false;

@@ -17,7 +17,7 @@ namespace gl3::engine::combat {
 
     }
 
-    void ActionRegistry::advance()
+    bool ActionRegistry::advance()
     {
         for (auto iter = actions.begin(); iter != actions.end();)
         {
@@ -31,5 +31,6 @@ namespace gl3::engine::combat {
                 ++iter;
             }
         }
+        return false;
     }
 } // gl3

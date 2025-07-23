@@ -17,11 +17,12 @@ class GuiUnitSelection: public Gui {
 public:
     static event_t onAccept;
     GuiUnitSelection(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
+    ~GuiUnitSelection();
 
     int amountToSpare;
 private:
     void render() override;
-    void triggerEvent() override;
+    void invokeSceneChange() override;
 
     void drawSelectionFrame();
     void getComponents(gl3::engine::Game& game);

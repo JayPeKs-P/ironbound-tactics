@@ -34,6 +34,11 @@ public:
     GuiHandler(engine::Game &game );
     ~GuiHandler();
     void initialize(engine::Game &game);
+    static struct nk_image getTileImage(
+        GLuint texID, int tileX,
+        int tileY, int tileWidth,
+        int tileHeight, int atlasWidth, int atlasHeight
+    );
     // [[nodiscard]] std::shared_ptr<engine::ecs::Gui> combat_gui() const
     // {
     //     return combatGUI;
@@ -43,13 +48,6 @@ private:
     void selectCurrentScene(engine::Game &game);
     void renderGUI(engine::Game &game);
 
-    struct nk_image getTileImage(
-    int tileX,
-    int tileY,
-    int tileWidth,
-    int tileHeight,
-    int atlasWidth,
-    int atlasHeight);
 
     void setStyleWindow(nk_style* style);
     void setStyleButton(nk_style* style);

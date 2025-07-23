@@ -30,6 +30,13 @@ amountToSpare(50)
     pCatTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
 }
 
+GuiUnitSelection::~GuiUnitSelection()
+{
+    glDeleteTextures(1, &pInfTexID);
+    glDeleteTextures(1, &pArcTexID);
+    glDeleteTextures(1, &pCatTexID);
+}
+
 void GuiUnitSelection::render()
 {
     if (nk_begin(ctx, "Background",
@@ -46,7 +53,7 @@ void GuiUnitSelection::render()
     }
 }
 
-void GuiUnitSelection::triggerEvent()
+void GuiUnitSelection::invokeSceneChange()
 {
     onAccept.invoke(valueSlider1, valueSlider2, valueSlider3);
 }
