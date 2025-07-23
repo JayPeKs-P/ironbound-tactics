@@ -46,14 +46,11 @@ std::string getOwner(Tag tag)
 GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureID)
     : Gui(game, ctx,textureID)
 {
-    engine.onAfterStartup.addListener([&](engine::Game& game)
-    {
-        getComponents(game);
-    });
-
+    getComponents(game);
 }
 
-void GuiCombat::renderGUI() {
+void GuiCombat::render()
+{
     if (nk_begin(ctx, "Top Row",
         nk_rect(0, 0,
             windowWidth, windowHeight / 13),
@@ -86,15 +83,16 @@ void GuiCombat::renderGUI() {
     }
 }
 
+void GuiCombat::triggerEvent()
+{
+}
+
 void GuiCombat::drawTopRow()
 {
     float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.3, 0.2, 0.1 };
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 7, ratio);
 
-    if (nk_button_label(ctx, "esc"))
-    {
-
-    }
+    if (nk_button_label(ctx, "esc")) endScene = true;
 
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 

@@ -12,7 +12,6 @@ set(SOURCE_FILES src/main.cpp
         src/gui/guiCombat.h
         src/systems/GuiHandler.cpp
         src/systems/GuiHandler.h
-        src/components/GuiState.h
         src/components/CombatSelection.h
         src/components/unitTypes/SiegeEngine.h
         src/components/Model2D.h

@@ -7,19 +7,20 @@
 #include <iostream>
 
 
-#include "../components/GuiState.h"
 #include "../gui/GuiUnitSelection.h"
 #include "../gui/GuiCombat.h"
 
 
 namespace gl3 {
+    GuiHandler::event_t GuiHandler::onChangeToCombatScene;
+
     GuiHandler::GuiHandler(engine::Game& game):
     System(game),
     window(game.getWindow())
     {
         engine.onAfterStartup.addListener([&](engine::Game &game)
         {
-            selectCurrentScene(game);
+            initialize(game);
         });
         engine.onBeforeUpdate.addListener([&](engine::Game &game)
         {
@@ -57,15 +58,14 @@ namespace gl3 {
         setStyleSlider(style);
         setStyleText(style);
 
-        combatGUI = std::make_unique<GuiUnitSelection>(game, nkCTX, textureAtlasID);
-        // combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
-        for (auto& [owner, _] : game.componentManager.getContainer<GuiState>())
+        activeGui = std::make_unique<GuiUnitSelection>(game, nkCTX, textureAtlasID);
+        activeScene = GuiScene::UNIT_SELECTION;
+        GuiUnitSelection::onAccept.addListener([&](int a, int b, int c)
         {
-            if (game.componentManager.hasComponent<GuiState>(owner))
-            {
-                activeScene = &game.componentManager.getComponent<GuiState>(owner);
-            }
-        }
+            onChangeToCombatScene.invoke();
+            activeScene = GuiScene::COMBAT_MENU;
+            activeGui = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
+        });
     }
 
     void GuiHandler::restoreGameState()
@@ -81,6 +81,7 @@ namespace gl3 {
 
     void GuiHandler::selectCurrentScene(engine::Game& game)
     {
+
 
     }
 
@@ -106,15 +107,22 @@ namespace gl3 {
         nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
             MAX_VERTEX_BUFFER,
             MAX_ELEMENT_BUFFER);
-        switch (activeScene->current)
+        GuiUnitSelection::onAccept.addListener([&](int a, int b, int c)
+        {
+            onChangeToCombatScene.invoke();
+            activeScene = GuiScene::COMBAT_MENU;
+        });
+        switch (activeScene)
         {
             case GuiScene::MAIN_MENU:
                 break;
             case GuiScene::COMBAT_MENU:
-                combatGUI->updateMargins(windowWidth, windowHeight);
-                combatGUI->renderGUI();
+                activeGui->updateMargins(windowWidth, windowHeight);
+                activeGui->update();
                 break;
             case GuiScene::UNIT_SELECTION:
+                activeGui->updateMargins(windowWidth, windowHeight);
+                activeGui->update();
                 break;
         }
     }

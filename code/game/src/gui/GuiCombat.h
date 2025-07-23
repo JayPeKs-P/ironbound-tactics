@@ -13,9 +13,10 @@ class GuiCombat: public Gui {
 public:
     GuiCombat(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
 
-    void GuiCombat::renderGUI() override;
 
 private:
+    void render() override;
+    void triggerEvent() override;
     void drawTopRow();
     void drawActions();
     void getComponents(gl3::engine::Game& game);

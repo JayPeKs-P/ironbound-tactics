@@ -12,6 +12,7 @@
 #include "engine/Texture.h"
 
 using namespace gl3;
+GuiUnitSelection::event_t GuiUnitSelection::onAccept;
 GuiUnitSelection::GuiUnitSelection(engine::Game& game, nk_context* ctx, nk_uint& textureID):
 Gui(game, ctx, textureID),
 amountToSpare(50)
@@ -22,7 +23,7 @@ amountToSpare(50)
     pCatTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
 }
 
-void GuiUnitSelection::renderGUI()
+void GuiUnitSelection::render()
 {
     if (nk_begin(ctx, "Background",
         nk_rect(0, 0,
@@ -38,15 +39,20 @@ void GuiUnitSelection::renderGUI()
     }
 }
 
+void GuiUnitSelection::triggerEvent()
+{
+    onAccept.invoke(valueSlider1, valueSlider2, valueSlider3);
+}
+
 void GuiUnitSelection::drawSelectionFrame()
 {
 
-    nk_layout_row_dynamic(ctx, windowHeight / 20, 2);
+    nk_layout_row_dynamic(ctx, windowHeight / 10, 2);
     nk_label(ctx, "Free  Slots  ", NK_TEXT_RIGHT);
-    nk_label_colored(ctx, std::to_string(100).c_str(), NK_TEXT_LEFT, playerColor);
+    nk_label_colored(ctx, std::to_string(maxCP).c_str(), NK_TEXT_LEFT, playerColor);
 
-    float ratio[] = {0.01, 0.05, 0.01,  0.2, 0.5, 0.2, 0.1, 0.01};
-    nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 20, 7, ratio);
+    float ratio[] = {0.01, 0.1, 0.01,  0.2, 0.5, 0.2, 0.1, 0.01};
+    nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 7, ratio);
 
     float frameDuration = 0.1f;
     int totalFrames = 4;
@@ -58,7 +64,42 @@ void GuiUnitSelection::drawSelectionFrame()
     nk_image(ctx, unitImage);
     nk_label(ctx, "", NK_TEXT_LEFT);
     nk_label(ctx, "Infantry", NK_TEXT_LEFT);
-    // nk_slider_int(ctx, 0, &value, canUseAmount, 1);
+    int canUseAmount1 = maxCP - valueSlider2 - valueSlider3;
+    if (canUseAmount1 < valueSlider1) valueSlider1 = canUseAmount1;
+    nk_slider_int(ctx, 0, &valueSlider1, canUseAmount1, 1);
+    nk_label_colored(ctx, std::to_string(valueSlider1).c_str(), NK_TEXT_CENTERED, numberColor);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+
+    unitImage = nk_subimage_id(pArcTexID, 192, 192,
+        nk_rect(currentFrame * 48, 0, 48, 48));
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_image(ctx, unitImage);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "Archer", NK_TEXT_LEFT);
+    int canUseAmount2 = maxCP - valueSlider1 - valueSlider3;
+    if (canUseAmount2 < valueSlider2) valueSlider2 = canUseAmount1;
+    nk_slider_int(ctx, 0, &valueSlider2, canUseAmount2, 1);
+    nk_label_colored(ctx, std::to_string(valueSlider2).c_str(), NK_TEXT_CENTERED, numberColor);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+
+    unitImage = nk_subimage_id(pCatTexID, 192, 192,
+        nk_rect(currentFrame * 48, 0, 48, 48));
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_image(ctx, unitImage);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "Catapult", NK_TEXT_LEFT);
+    int canUseAmount3 = maxCP - valueSlider1 - valueSlider2;
+    if (canUseAmount3 < valueSlider3) valueSlider3 = canUseAmount1;
+    nk_slider_int(ctx, 0, &valueSlider3, canUseAmount3, pCatSE_C->cost);
+    nk_label_colored(ctx, std::to_string(valueSlider3).c_str(), NK_TEXT_CENTERED, numberColor);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+
+    nk_layout_row_dynamic(ctx, windowHeight / 20, 3);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    if (nk_button_label(ctx, "Accept")) endScene = true;
 }
 
 void GuiUnitSelection::getComponents(engine::Game& game)

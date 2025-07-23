@@ -58,7 +58,7 @@ CombatController::CombatController(engine::Game &game):
 
     turnStart.addListener([=]()
     {
-        runEnemyTurn();
+        // runEnemyTurn();
     });
     for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
     {

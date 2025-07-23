@@ -14,7 +14,6 @@
 #include "Assets.h"
 
 #include "components/TagComponent.h"
-#include "components/GuiState.h"
 #include "systems/GuiHandler.h"
 #include "components/CombatSelection.h"
 #include "gui/GuiCombat.h"
@@ -43,7 +42,6 @@ void Game::start()
     unsigned int tempTexID = -1;
     //---- Entities ----
     auto &guiScene_E = engine::Game::entityManager.createEntity();
-    guiScene_E.addComponent<GuiState>(GuiScene{GuiScene::COMBAT_MENU});
     combatSelection_C = &guiScene_E.addComponent<CombatSelection<GuiCombat>>();
 
     auto &terrain_E = engine::Game::entityManager.createEntity();
@@ -113,7 +111,6 @@ void Game::start()
     unitTransforms.push_back(&eCat_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.75f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     guiHandler = std::make_unique<GuiHandler>(*this);
-    guiHandler->initialize(*this);
 
     renderSystem = new RenderSystem(*this);
 
@@ -122,7 +119,7 @@ void Game::start()
     movementSystem = new MovementSystem(*this);
 
     combatController = new CombatController(*this);
-    combatController->init(*this);
+    // combatController->init(*this);
 
     selectionSystem = new SelectionSystem(*this);
 
@@ -186,7 +183,7 @@ void Game::update(GLFWwindow *window)
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
-    combatController->handleTurn();
+    // combatController->handleTurn();
     movementSystem->moveTo(*this, deltaTime);
     for (auto& transform_C : unitTransforms)
     {

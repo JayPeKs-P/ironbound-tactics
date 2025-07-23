@@ -5,6 +5,7 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "engine/Events.h"
 
 
 #define NK_INCLUDE_STANDARD_IO
@@ -16,11 +17,19 @@
 #include "engine/ecs/System.h"
 #include "engine/ecs/Gui.h"
 
-struct GuiState;
+enum class GuiScene
+{
+    MAIN_MENU,
+    UNIT_SELECTION,
+    COMBAT_MENU,
+    LOADING
+};
 
 namespace gl3 {
 
 class GuiHandler: public engine::ecs::System {
+    using event_t = engine::events::Event<GuiHandler>;
+    static event_t onChangeToCombatScene;
 public:
     GuiHandler(engine::Game &game );
     ~GuiHandler();
@@ -49,8 +58,8 @@ private:
     void setStyleSlider(nk_style* style);
     void setStyleText(nk_style* style);
     //-----GUI Szenen-----
-    GuiState *activeScene = nullptr;
-    std::shared_ptr<engine::ecs::Gui> combatGUI = nullptr;
+    GuiScene activeScene;
+    std::shared_ptr<engine::ecs::Gui> activeGui = nullptr;
 
     int windowWidth, windowHeight= 0;
     int currentW, currentH = 720;
