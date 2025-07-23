@@ -55,28 +55,28 @@ void Game::start()
 
     //----- Entities of player's army -----
     auto &pInf_E = engine::Game::entityManager.createEntity();
-    auto &pInfU_C = pInf_E.addComponent<Unit>(UnitCategory::INFANTRY, 100, 30, 50, 99, 10, 0, 2);
+    auto &pInfU_C = pInf_E.addComponent<Unit>("pInfantry");
     pInf_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png");
+    tempTexID = engine::util::Texture::load(pInfU_C.texturePath.c_str());
     pInf_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pInf_E.addComponent<InstanceBuffer>();
     pInf_E.addComponent<Shader>();
     unitTransforms.push_back(&pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &pArc_E = engine::Game::entityManager.createEntity();
-    auto &pArcU_C = pArc_E.addComponent<Unit>(UnitCategory::ARCHER, 80, 20, 40, 85, 8, 0, 1);
+    auto &pArcU_C = pArc_E.addComponent<Unit>("pArcher");
     pArc_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png");
+    tempTexID = engine::util::Texture::load(pArcU_C.texturePath.c_str());
     pArc_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pArc_E.addComponent<InstanceBuffer>();
     pArc_E.addComponent<Shader>();
     unitTransforms.push_back(&pArc_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.25f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &pCat_E = engine::Game::entityManager.createEntity();
-    auto &pCatU_C = pCat_E.addComponent<Unit>(UnitCategory::CATAPULT, 400, 20, 150, 80, 12, 0, 3);
+    auto &pCatU_C = pCat_E.addComponent<Unit>("pCatapult");
     auto &pCatSE_C = pCat_E.addComponent<SiegeEngine>(5);
     pCat_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png");
+    tempTexID = engine::util::Texture::load(pCatU_C.texturePath.c_str());
     pCat_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     pCat_E.addComponent<InstanceBuffer>();
     pCat_E.addComponent<Shader>();
@@ -85,28 +85,28 @@ void Game::start()
 
     //----- Entities of enemy's army -----
     auto &eInf_E = engine::Game::entityManager.createEntity();
-    auto &eInfU_C = eInf_E.addComponent<Unit>(UnitCategory::INFANTRY, 100, 30, 50, 99, 10, 0, 2);
+    auto &eInfU_C = eInf_E.addComponent<Unit>("eInfantry");
     eInf_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_03_Idle.png");
+    tempTexID = engine::util::Texture::load(eInfU_C.texturePath.c_str());
     eInf_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     eInf_E.addComponent<InstanceBuffer>();
     eInf_E.addComponent<Shader>();
     unitTransforms.push_back(&eInf_E.addComponent<Transform>(origin, glm::vec3(1.75f, -0.75f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &eArc_E = engine::Game::entityManager.createEntity();
-    auto &eArcU_C = eArc_E.addComponent<Unit>(UnitCategory::ARCHER, 80, 20, 40, 85, 8, 0, 1);
+    auto &eArcU_C = eArc_E.addComponent<Unit>("eArcher");
     eArc_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_03_Idle.png");
+    tempTexID = engine::util::Texture::load(eArcU_C.texturePath.c_str());
     eArc_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     eArc_E.addComponent<InstanceBuffer>();
     eArc_E.addComponent<Shader>();
     unitTransforms.push_back(&eArc_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &eCat_E = engine::Game::entityManager.createEntity();
-    auto &eCatU_C = eCat_E.addComponent<Unit>(UnitCategory::CATAPULT, 400, 20, 150, 80, 12, 0, 3);
+    auto &eCatU_C = eCat_E.addComponent<Unit>("eCatapult");
     auto &eCatSE_C = eCat_E.addComponent<SiegeEngine>(5);
     eCat_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_03_Idle.png");
+    tempTexID = engine::util::Texture::load(eCatU_C.texturePath.c_str());
     eCat_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     eCat_E.addComponent<InstanceBuffer>();
     eCat_E.addComponent<Shader>();

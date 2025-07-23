@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <fstream>
 #include "engine/ecs/Component.h"
 #include "UnitCategory.h"
 
@@ -27,19 +28,8 @@ struct Unit: Component {
     int availableAmount;
     int speed;
     UnitCategory category;
+    std::string texturePath;
 protected:
-    Unit (guid_t owner, UnitCategory category, float hp, float def, float atk, int acc, int critc, int amount, int speed):
-        Component(owner),
-        category(category),
-        hpValue(hp),
-        armorValue(def),
-        attackValue(atk),
-        accuracy(acc),
-        critChance(critc),
-        totalAmount(amount),
-        totalAmountLastFrame(amount),
-        availableAmount(amount),
-        lifetimeMaxAmount(amount),
-        speed(speed) { };
+    Unit (guid_t owner, const std::string& preset);
 
 };

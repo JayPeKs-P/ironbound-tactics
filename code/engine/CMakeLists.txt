@@ -31,7 +31,8 @@ target_link_libraries(${ENGINE_NAME} PUBLIC glad
         soloud
         nuklear_impl
         stb
-json)
+)
 
-target_include_directories(${ENGINE_NAME} PUBLIC include/)
+target_include_directories(${ENGINE_NAME} PUBLIC include/
+        ${CMAKE_SOURCE_DIR}/extern/nlohmann)
 

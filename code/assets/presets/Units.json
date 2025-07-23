@@ -11,7 +11,8 @@
     "totalAmount": 0,
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
-    "speed": 2
+    "speed": 2,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png"
   },
   "pArcher": {
     "category": "ARCHER",
@@ -25,7 +26,8 @@
     "totalAmount": 0,
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
-    "speed": 1
+    "speed": 1,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png"
   },
   "pCatapult": {
     "category": "CATAPULT",
@@ -39,6 +41,52 @@
     "totalAmount": 0,
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
-    "speed": 3
+    "speed": 3,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png"
+  },
+  "eInfantry": {
+  "category": "INFANTRY",
+  "hpValue": 100,
+  "armorValue": 30,
+  "attackValue": 50,
+  "accuracyValue": 99,
+  "critChance": 10,
+  "critMultiplier": 2.0,
+  "lifeTimeMaxAmount": 0,
+  "totalAmount": 0,
+  "totalAmountLastFrame": 0,
+  "availableAmount": 0,
+  "speed": 2,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_03_Idle.png"
+},
+  "eArcher": {
+    "category": "ARCHER",
+    "hpValue": 80,
+    "armorValue": 20,
+    "attackValue": 40,
+    "accuracyValue": 80,
+    "critChance": 8,
+    "critMultiplier": 2.0,
+    "lifeTimeMaxAmount": 0,
+    "totalAmount": 0,
+    "totalAmountLastFrame": 0,
+    "availableAmount": 0,
+    "speed": 1,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_03_Idle.png"
+  },
+  "eCatapult": {
+    "category": "CATAPULT",
+    "hpValue": 300,
+    "armorValue": 20,
+    "attackValue": 160,
+    "accuracyValue": 80,
+    "critChance": 12,
+    "critMultiplier": 2.0,
+    "lifeTimeMaxAmount": 0,
+    "totalAmount": 0,
+    "totalAmountLastFrame": 0,
+    "availableAmount": 0,
+    "speed": 3,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_03_Idle.png"
   }
 }
