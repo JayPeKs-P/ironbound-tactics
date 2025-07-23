@@ -32,13 +32,14 @@ namespace gl3 {
 #endif
 ///////////////////////////////////////////////////////////////////////
 
-        CombatController::onBeforeAttack.addListener([&](Unit* unit, Unit* unused, int amount)
+        CombatController::onBeforeAttack.addListener([&](guid_t unit, guid_t unused, int amount)
         {
-            switch (unit->category)
-            {
-            case UnitCategory::INFANTRY:
-                auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
-                auto& tag = engine.componentManager.getComponent<TagComponent>(unit->entity()).value;
+            if (!checkIfEntityHasComponent<Unit>(unit)) throw("MovementSystem::MovementSystem() onBeforeAttack.addListener missing unit_C");
+            auto unit_C = &engine.componentManager.getComponent<Unit>(unit);
+
+            if (unit_C->category == UnitCategory::INFANTRY){
+                auto& root = engine.componentManager.getComponent<Transform>(unit);
+                auto& tag = engine.componentManager.getComponent<TagComponent>(unit).value;
                 if (tag == Tag::PLAYER)
                 {
                     setMoving(root, playerPendingPosition, amount, State::IDLE);
@@ -46,21 +47,22 @@ namespace gl3 {
                 {
                     setMoving(root, enemyPendingPosition, amount, State::IDLE);
                 }
-                break;
             }
         });
-        CombatController::onAttack.addListener([&](Unit* unit, Unit* target, int amount)
+        CombatController::onAttack.addListener([&](guid_t unit, guid_t target, int amount)
         {
-            switch (unit->category)
+            if (!checkIfEntityHasComponent<Unit>(unit, target)) throw("MovementSystem::MovementSystem() onAttack.addListener missing unit_C");
+            auto unit_C = &engine.componentManager.getComponent<Unit>(unit);
+            switch (unit_C->category)
             {
             case UnitCategory::INFANTRY:
-                auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
-                auto targetPos = engine.componentManager.getComponent<Transform>(target->entity()).localPosition;
+                auto& root = engine.componentManager.getComponent<Transform>(unit);
+                auto targetPos = engine.componentManager.getComponent<Transform>(target).localPosition;
                     setMoved(root, targetPos, amount, State::PREPARING);
                 break;
             }
         });
-        CombatController::onAfterAttack.addListener([&](Unit* unit, Unit* unused, int amount)
+        CombatController::onAfterAttack.addListener([&](guid_t unit, guid_t unused, int amount)
         {
 
         });

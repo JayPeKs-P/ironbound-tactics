@@ -18,31 +18,23 @@ namespace gl3
 
     struct Option
     {
-        Unit* actor;
-        Unit* target;
-        SiegeEngine* siege;
-        int amount;
-        float score;
-    };
-    struct OptionUse
-    {
-        Unit* actor;
+        guid_t actor;
+        guid_t target;
         int amount;
         float score;
     };
     class ActionEvaluation {
     public:
-        static void setPointers(engine::Game& game);
-        static std::vector<Option> generateOptions();
-        static Unit* pInfU_C;
-        static Unit* pArcU_C;
-        static Unit* pCatU_C;
-        static SiegeEngine* pCatSE_C;
+        static void setGuids(engine::Game& game);
+        static std::vector<Option> generateOptions(engine::Game &game);
 
-        static Unit* eInfU_C;
-        static Unit* eArcU_C;
-        static Unit* eCatU_C;
-        static SiegeEngine* eCatSE_C;
+        static guid_t pInf_E;
+        static guid_t pArc_E;
+        static guid_t pCat_E;
+
+        static guid_t eInf_E;
+        static guid_t eArc_E;
+        static guid_t eCat_E;
     private:
         static float getTargetHP(Unit* unit);
         static float getCategoryPriority(UnitCategory category)

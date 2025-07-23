@@ -22,11 +22,13 @@ using namespace gl3;
 
 CombatController::event_t CombatController::turnStart;
 CombatController::event_t CombatController::turnEnd;
+CombatController::event_t CombatController::playerDead;
+CombatController::event_t CombatController::enemyDead;
 
-CombatController::eventAttack_t CombatController::onBeforeAttack;
-CombatController::eventAttack_t CombatController::onAttack;
-CombatController::eventAttack_t CombatController::onAfterAttack;
-engine::events::Event<CombatController, int, Unit*, SiegeEngine*> CombatController::onUse;
+CombatController::eventAction_t CombatController::onBeforeAttack;
+CombatController::eventAction_t CombatController::onAttack;
+CombatController::eventAction_t CombatController::onAfterAttack;
+CombatController::eventAction_t CombatController::onUse;
 
 CombatController::CombatController(engine::Game &game):
     System(game)
@@ -34,25 +36,25 @@ CombatController::CombatController(engine::Game &game):
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG_LOG
-    onBeforeAttack.addListener([&](Unit* unit, Unit* other, int i)
+    onBeforeAttack.addListener([&](guid_t attacker, guid_t target, int amount)
     {
         DEBUG_LOG(
             << "TRIGGERED EVENT: 'onBeforeAttack'"
             );
     });
-    onAttack.addListener([&](Unit* unit, Unit* other, int i)
+    onAttack.addListener([&](guid_t attacker, guid_t target, int amount)
     {
         DEBUG_LOG(
             << "TRIGGERED EVENT: 'onAttack'"
             );
     });
-    onAfterAttack.addListener([&](Unit* unit, Unit* other, int i)
+    onAfterAttack.addListener([&](guid_t attacker, guid_t target, int amount)
     {
         DEBUG_LOG(
             << "TRIGGERED EVENT: 'onAfterAttack'"
             );
     });
-    onUse.addListener([&](int i, Unit* unit, SiegeEngine* other)
+    onUse.addListener([&](guid_t actor , guid_t object, int amount)
     {
         DEBUG_LOG(
             << "TRIGGERED EVENT: 'onUse'"
@@ -65,12 +67,18 @@ CombatController::CombatController(engine::Game &game):
     GuiUnitSelection::onAccept.addListener([&](int amountInf, int amountArc, int amountCat)
     {
         init(game, amountInf, amountArc, amountCat);
+        setEnemy(game);
     });
 
 
     GuiCombat::startRound.addListener([&]()
     {
+        *handle = engine.onBeforeUpdate.addListener([&](engine::Game &game)
+        {
+            handleTurn();
+        });
         turnStart.invoke();
+        justDied = false;
     });
 
     turnStart.addListener([=]()
@@ -114,6 +122,10 @@ DEBUG_LOG(
 ////////////////////////////////////////////////////////////////////////
         newTurn = true;
     });
+    playerDead.addListener([&]()
+    {
+        engine.onBeforeUpdate.removeListener(*handle);
+    });
 
     for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
     {
@@ -124,13 +136,13 @@ DEBUG_LOG(
             {
                 if (selP == UnitCategory::INFANTRY)
                 {
-                    chooseAttackTarget(pInfU_C, selE, amount);
+                    chooseAttackTarget(pInf_E, selE, amount);
                 }else if (selP == UnitCategory::ARCHER)
                 {
-                    chooseAttackTarget(pArcU_C, selE, amount);
+                    chooseAttackTarget(pArc_E, selE, amount);
                 }else if (selP == UnitCategory::CATAPULT)
                 {
-                    chooseAttackTarget(pCatU_C, selE, amount);
+                    chooseAttackTarget(pCat_E, selE, amount);
                 }
             });
             selectionEvent.use.addListener([&](UnitCategory selP, int amount, UnitCategory selPTarget)
@@ -139,8 +151,13 @@ DEBUG_LOG(
                 {
                     if (selPTarget == UnitCategory::CATAPULT)
                     {
+                        if (!checkIfEntityHasComponent<Unit>(pInf_E, pCat_E)) throw("CombatController::use() Missing unit_C");
+                        if (!checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
+                        auto pInfU_C = &engine.componentManager.getComponent<Unit>(pInf_E);
+                        auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
+                        auto pCatSE_C = &engine.componentManager.getComponent<SiegeEngine>(pCat_E);
                         CombatFunctions::use(amount, pInfU_C, pCatSE_C);
-                        onUse.invoke(amount, pInfU_C, pCatSE_C);
+                        onUse.invoke(pInf_E, pCat_E, amount);
 
                         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
                         *handle = turnEnd.addListener([=](){
@@ -170,62 +187,91 @@ void CombatController::init(engine::Game &game, int amountInf, int amountArc, in
         {
             if (unit.category == UnitCategory::INFANTRY)
             {
-                pInfU_C = &unit;
+                pInf_E = unit.entity();
+                auto pInfU_C = &engine.componentManager.getComponent<Unit>(pInf_E);
                 CombatFunctions::setAmount(pInfU_C, amountInf);
             }else if (unit.category == UnitCategory::ARCHER)
             {
-                pArcU_C = &unit;
+                pArc_E = unit.entity();
+                auto pArcU_C = &engine.componentManager.getComponent<Unit>(pArc_E);
                 CombatFunctions::setAmount(pArcU_C, amountArc);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
-                pCatU_C = &unit;
-                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
-                CombatFunctions::setAmount(pCatU_C, amountCat);
+                pCat_E = unit.entity();
+                auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
+                auto pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(pCat_E);
+                CombatFunctions::setAmount(pCatU_C, amountCat / pCatSE_C->cost);
             }
         }else if (tag == Tag::ENEMY)
         {
             if (unit.category == UnitCategory::INFANTRY)
             {
-                eInfU_C = &unit;
+                eInf_E = unit.entity();
+            }else if (unit.category == UnitCategory::ARCHER)
+            {
+                eArc_E = unit.entity();
+            }
+            else if (unit.category == UnitCategory::CATAPULT)
+            {
+                eCat_E = unit.entity();
+            }
+        }
+    });
+    ActionEvaluation::setGuids(game);
+}
+
+void CombatController::setEnemy(engine::Game& game)
+{
+    if (!checkIfEntityHasComponent<Unit>(eInf_E)) engine.componentManager.addComponent<Unit>(eInf_E, "eInfantry");
+    if (!checkIfEntityHasComponent<Unit>(eArc_E)) engine.componentManager.addComponent<Unit>(eArc_E, "eArcher");
+    if (!checkIfEntityHasComponent<Unit>(eCat_E)) engine.componentManager.addComponent<Unit>(eCat_E, "eCatapult");
+    if (!checkIfEntityHasComponent<SiegeEngine>(eCat_E)) engine.componentManager.addComponent<SiegeEngine>(eCat_E, 5);
+    game.componentManager.forEachComponent<Unit>([&](Unit &unit)
+    {
+        auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
+        if (tag == Tag::ENEMY)
+        {
+            if (unit.category == UnitCategory::INFANTRY)
+            {
+                auto eInfU_C = &engine.componentManager.getComponent<Unit>(eInf_E);
                 CombatFunctions::setAmount(eInfU_C, 20);
             }else if (unit.category == UnitCategory::ARCHER)
             {
-                eArcU_C = &unit;
+                auto eArcU_C = &engine.componentManager.getComponent<Unit>(eArc_E);
                 CombatFunctions::setAmount(eArcU_C, 20);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
-                eCatU_C = &unit;
-                eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+                auto eCatU_C = &engine.componentManager.getComponent<Unit>(eCat_E);
                 CombatFunctions::setAmount(eCatU_C, 5);
             }
         }
     });
-    ActionEvaluation::setPointers(game);
 }
 
-void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount)
+void CombatController::chooseAttackTarget(guid_t attacker, const UnitCategory &target, const int &amount)
 {
+    auto attackerUnit_C = &engine.componentManager.getComponent<Unit>(attacker);
     switch (target)
     {
         case UnitCategory::INFANTRY:
-            scheduleAttack(attacker, eInfU_C, amount);
+            scheduleAttack(attacker, eInf_E, amount);
             break;
         case UnitCategory::ARCHER:
-            scheduleAttack(attacker, eArcU_C, amount);
+            scheduleAttack(attacker, eArc_E, amount);
             break;
         case UnitCategory::CATAPULT:
-            scheduleAttack(attacker, eCatU_C, amount);
+            scheduleAttack(attacker, eCat_E, amount);
             break;
     }
-    attacker->availableAmount -= amount;
+    attackerUnit_C->availableAmount -= amount;
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "Player schedules attack: "
-        << unitCategory_to_string(attacker->category)
+        << unitCategory_to_string(attackerUnit_C->category)
         <<" targets "
         << unitCategory_to_string(target)
         << " with "
@@ -238,13 +284,20 @@ void CombatController::chooseAttackTarget(Unit* attacker, const UnitCategory &ta
 
 void CombatController::runEnemyTurn()
 {
-    auto options = ActionEvaluation::generateOptions();
+    auto options = ActionEvaluation::generateOptions(engine);
     for (auto& option: options)
     {
-        if (option.actor->availableAmount >= option.amount)
+        if (!checkIfEntityHasComponent<Unit>(option.actor, option.target))
         {
-            if (option.siege != nullptr)
+            throw("CombatController::runEnemyTurn missing unit_C");
+        }
+        auto actorU_C = &engine.componentManager.getComponent<Unit>(option.actor);
+        auto targetU_C = &engine.componentManager.getComponent<Unit>(option.target);
+        if (actorU_C->availableAmount >= option.amount)
+        {
+            if (engine.componentManager.hasComponent<SiegeEngine>(option.target))
             {
+                auto targetSE_C = &engine.componentManager.getComponent<SiegeEngine>(option.target);
 
 ////////////////////////////////////////////////////////////////////////
 {
@@ -253,22 +306,22 @@ void CombatController::runEnemyTurn()
         << "AI uses: "
         << option.amount
         << " of "
-        << unitCategory_to_string(option.actor->category)
+        << unitCategory_to_string(actorU_C->category)
         << " for "
-        << option.amount / option.siege->cost
+        << option.amount / targetSE_C->cost
         << " of "
-        << unitCategory_to_string(option.target->category)
+        << unitCategory_to_string(targetU_C->category)
         );
 #endif
 }
 ////////////////////////////////////////////////////////////////////////
 
-                onUse.invoke(option.amount, option.actor, option.siege);
-                CombatFunctions::use(option.amount/option.siege->cost, option.actor, option.siege);
+                onUse.invoke(option.actor, option.target, option.amount);
+                CombatFunctions::use(option.amount/targetSE_C->cost, actorU_C, targetSE_C);
 
                 std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
                 *handle = turnEnd.addListener([=](){
-                    CombatFunctions::reset(option.target, option.amount / option.siege->cost);
+                    CombatFunctions::reset(targetU_C, option.amount / targetSE_C->cost);
                     turnEnd.removeListener(*handle);
                 });
             }else
@@ -278,9 +331,9 @@ void CombatController::runEnemyTurn()
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "AI schedules attack: "
-        << unitCategory_to_string(option.actor->category)
+        << unitCategory_to_string(actorU_C->category)
         << " targets "
-        << unitCategory_to_string(option.target->category)
+        << unitCategory_to_string(targetU_C->category)
         << " with "
         << option.amount
         );
@@ -289,24 +342,28 @@ void CombatController::runEnemyTurn()
 ////////////////////////////////////////////////////////////////////////
 
                 scheduleAttack(option.actor, option.target, option.amount);
-                option.actor->availableAmount -= option.amount;
+                actorU_C->availableAmount -= option.amount;
             }
         }
     }
 }
 
-void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
+void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount)
 {
-    onBeforeAttack.invoke(attacker, nullptr, amount);
-    engine.actionRegister.scheduleAction(attacker->speed,[=] ()
+    if (!checkIfEntityHasComponent<Unit>(attacker, target)) throw("CombatController::scheduleAttack Missing unit_C");
+    auto attackerU_C = &engine.componentManager.getComponent<Unit>(attacker);
+    auto targetU_C = &engine.componentManager.getComponent<Unit>(target);
+
+    onBeforeAttack.invoke(attacker, target, amount);
+    engine.actionRegister.scheduleAction(attackerU_C->speed,[=] ()
     {
         onAttack.invoke(attacker, target, amount);
-        CombatFunctions::takeDamage(target, CombatFunctions::attack(attacker, amount));
+        CombatFunctions::takeDamage(targetU_C, CombatFunctions::attack(attackerU_C, amount));
 
         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
         *handle = turnEnd.addListener([=](){
-            CombatFunctions::reset(attacker, amount);
-            onAfterAttack.invoke(attacker, nullptr, amount);
+            CombatFunctions::reset(attackerU_C, amount);
+            onAfterAttack.invoke(attacker, target, amount);
 
             turnEnd.removeListener(*handle);
         });
@@ -315,9 +372,9 @@ void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
 {
 #ifdef DEBUG_MODE
     DEBUG_LOG(
-        << unitCategory_to_string(attacker->category)
+        << unitCategory_to_string(attackerU_C->category)
         <<" attacked "
-        << unitCategory_to_string(target->category)
+        << unitCategory_to_string(targetU_C->category)
         << " with "
         << amount
         );
@@ -329,6 +386,13 @@ void CombatController::scheduleAttack(Unit* attacker, Unit* target, int amount)
 
 void CombatController::handleTurn()
 {
+    for (auto guid : {pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E})
+    {
+        if (!engine.componentManager.hasComponent<Unit>(guid))
+        {
+
+        }
+    }
     if (newTurn)
     {
         turnStart.invoke();
@@ -337,5 +401,26 @@ void CombatController::handleTurn()
     if (endOfTurn)
     {
         endOfTurn = engine.actionRegister.advance();
+    }
+    if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
+    if (!justDied)
+    {
+        auto pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
+        auto pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
+        auto pCatU_C = engine.componentManager.getComponent<Unit>(pCat_E);
+
+        auto eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
+        auto eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
+        auto eCatU_C = engine.componentManager.getComponent<Unit>(eCat_E);
+
+        if (pInfU_C.totalAmount <= 0 && pArcU_C.totalAmount <= 0 && pCatU_C.totalAmount <= 0)
+        {
+            justDied = true;
+            playerDead.invoke();
+        }else if (eInfU_C.totalAmount <= 0 && eArcU_C.totalAmount <= 0 && eCatU_C.totalAmount <= 0)
+        {
+            justDied = true;
+            enemyDead.invoke();
+        }
     }
 }

@@ -9,6 +9,7 @@
 #include "../../components/UnitState.h"
 #include "../../components/Shader.h"
 #include "../../gui/GuiCombat.h"
+#include "../../systems/CombatController.h"
 
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
@@ -18,6 +19,14 @@ namespace gl3 {
         GuiCombat::startRound.addListener([&]()
         {
             init(engine);
+        });
+        CombatController::enemyDead.addListener([&]()
+        {
+            terminate(engine);
+        });
+        CombatController::playerDead.addListener([&]()
+        {
+            terminate(engine);
         });
     }
 
@@ -50,6 +59,18 @@ namespace gl3 {
                         createdInstances++;
                     }
                 }
+            }
+        });
+    }
+
+    void InstanceManager::terminate(engine::Game& game)
+    {
+        game.componentManager.forEachComponent<Transform>([&](Transform &transform)
+        {
+            if (game.componentManager.hasComponent<Unit>(transform.entity()))
+            {
+                auto& transform_E = game.entityManager.getEntity(transform.entity());
+                game.entityManager.deleteEntity(transform_E);
             }
         });
     }

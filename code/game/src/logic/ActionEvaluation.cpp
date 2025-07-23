@@ -11,17 +11,21 @@
 #include "engine/Game.h"
 
 using namespace gl3;
-Unit* ActionEvaluation::pInfU_C = nullptr;
-Unit* ActionEvaluation::pArcU_C = nullptr;
-Unit* ActionEvaluation::pCatU_C = nullptr;
-SiegeEngine* ActionEvaluation::pCatSE_C = nullptr;
+guid_t ActionEvaluation::pInf_E = -1;
+guid_t ActionEvaluation::pArc_E = -1;
+guid_t ActionEvaluation::pCat_E = -1;
 
-Unit* ActionEvaluation::eInfU_C = nullptr;
-Unit* ActionEvaluation::eArcU_C = nullptr;
-Unit* ActionEvaluation::eCatU_C = nullptr;
-SiegeEngine* ActionEvaluation::eCatSE_C = nullptr;
+guid_t ActionEvaluation::eInf_E = -1;
+guid_t ActionEvaluation::eArc_E = -1;
+guid_t ActionEvaluation::eCat_E = -1;
 
-void ActionEvaluation::setPointers(engine::Game& game)
+template<typename T, typename ...Guids>
+bool checkIfEntityHasComponent(engine::Game &game, Guids... guids)
+{
+    return (... && game.componentManager.hasComponent<T>((guids)));
+}
+
+void ActionEvaluation::setGuids(engine::Game& game)
 {
     game.componentManager.forEachComponent<Unit>([&](Unit &unit)
     {
@@ -31,14 +35,13 @@ void ActionEvaluation::setPointers(engine::Game& game)
             switch (unit.category)
             {
             case UnitCategory::INFANTRY:
-                pInfU_C = &unit;
+                pInf_E = unit.entity();
                 break;
             case UnitCategory::ARCHER:
-                pArcU_C = &unit;
+                pArc_E = unit.entity();
                 break;
             case UnitCategory::CATAPULT:
-                pCatU_C = &unit;
-                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+                pCat_E = unit.entity();
                 break;
             }
         }
@@ -47,25 +50,43 @@ void ActionEvaluation::setPointers(engine::Game& game)
             switch (unit.category)
             {
             case UnitCategory::INFANTRY:
-                eInfU_C = &unit;
+                eInf_E = unit.entity();
                 break;
             case UnitCategory::ARCHER:
-                eArcU_C = &unit;
+                eArc_E = unit.entity();
                 break;
             case UnitCategory::CATAPULT:
-                eCatU_C = &unit;
-                eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+                eCat_E = unit.entity();
                 break;
             }
         }
     });
+    if (!checkIfEntityHasComponent<Unit>(game, pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E))
+    {
+        throw("ActionEvaluation::checkIfEntityHasComponent failed");
+    }
 }
 
-std::vector<Option> ActionEvaluation::generateOptions()
+std::vector<Option> ActionEvaluation::generateOptions(engine::Game &game)
 {
+    if (!checkIfEntityHasComponent<Unit>(game, pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E))
+    {
+        throw("ActionEvaluation::checkIfEntityHasComponent failed");
+    }
+    auto pInfU_C = &game.componentManager.getComponent<Unit>(pInf_E);
+    auto pArcU_C = &game.componentManager.getComponent<Unit>(pArc_E);
+    auto pCatU_C = &game.componentManager.getComponent<Unit>(pCat_E);
+    auto pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(pCat_E);
+
+    auto eInfU_C = &game.componentManager.getComponent<Unit>(eInf_E);
+    auto eArcU_C = &game.componentManager.getComponent<Unit>(eArc_E);
+    auto eCatU_C = &game.componentManager.getComponent<Unit>(eCat_E);
+    auto eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(eCat_E);
+
     std::vector<Option> options;
     auto calcOptionAttack = [&](Unit* attacker,Unit* target, int amount)
     {
+
         if (attacker->availableAmount < amount) return;
 
         float targetHP = getTargetHP(target);
@@ -76,7 +97,7 @@ std::vector<Option> ActionEvaluation::generateOptions()
         if (targetHP*1.1 < predictedDamage) priority = 0.9;
         float score = (targetHP / predictedDamage ) * priority;
 
-        options.push_back({attacker, target, nullptr, amount, score});
+        options.push_back({attacker->entity(), target->entity(), amount, score});
     };
     auto calcOptionUse = [&](Unit* actor, Unit* targetU, SiegeEngine* targetSE, int amount)
     {
@@ -92,7 +113,7 @@ std::vector<Option> ActionEvaluation::generateOptions()
         }
         float predictedDamage = CombatFunctions::attack(targetU, unusedTargets) / targetU->speed;
         float score = predictedDamage; //TODO COMPARE WITH DAMAGE UNITS WOULD DEAL ON THEIR OWN
-        options.push_back( {actor, targetU, targetSE, amount, score} );
+        options.push_back( {actor->entity(), targetU->entity() , amount, score} );
     };
 
     for (int percent : {100, 90, 80, 70, 60, 50, 40, 30, 20, 10})

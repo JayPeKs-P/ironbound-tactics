@@ -15,5 +15,11 @@ namespace gl3::engine::ecs {
 
     protected:
         engine::Game &engine;
+
+        template <typename T, typename... Guids>
+        bool checkIfEntityHasComponent(Guids... guids)
+        {
+            return (... && engine.componentManager.hasComponent<T>((guids)));
+        }
     };
 }

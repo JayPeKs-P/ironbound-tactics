@@ -26,6 +26,11 @@ namespace gl3::engine::ecs
         }
         void updateMargins(int newWidth, int newHeight){windowWidth = newWidth; windowHeight = newHeight;};
     protected:
+        template <typename T, typename... Guids>
+        bool checkIfEntityHasComponent(Guids... guids)
+        {
+            return (... && engine.componentManager.hasComponent<T>((guids)));
+        }
         virtual void invokeSceneChange() = 0;
         virtual void render() = 0;
         int windowWidth, windowHeight;

@@ -52,8 +52,8 @@ namespace gl3
 
         // BattleMenu* battleMenu = nullptr;
 
-        SoLoud::Soloud audio;
-        std::unique_ptr<SoLoud::Wav>(backgroundMusic);
+        // SoLoud::Soloud audio;
+        // std::unique_ptr<SoLoud::Wav>(backgroundMusic);
 
         std::vector<engine::sceneGraph::Transform*> unitTransforms;
 

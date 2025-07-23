@@ -18,36 +18,39 @@ public:
     using event_t = engine::events::Event<CombatController>;
     static event_t turnStart;
     static event_t turnEnd;
+    static event_t playerDead;
+    static event_t enemyDead;
 
-    using eventAttack_t = engine::events::Event<CombatController, Unit*, Unit*, int >;
-    static eventAttack_t onBeforeAttack;
-    static eventAttack_t onAttack;
-    static eventAttack_t onAfterAttack;
-    static engine::events::Event<CombatController, int, Unit*, SiegeEngine*> onUse;
+    using eventAction_t = engine::events::Event<CombatController, guid_t, guid_t, int >;
+    static eventAction_t onBeforeAttack;
+    static eventAction_t onAttack;
+    static eventAction_t onAfterAttack;
+    static eventAction_t onUse;
 
     CombatController(engine::Game &game );
 
     void handleTurn();
-    void init(engine::Game &game, int amountInf, int amountArc, int amountCat);
 private:
-    void chooseAttackTarget(Unit* attacker, const UnitCategory &target, const int &amount);
+    void init(engine::Game &game, int amountInf, int amountArc, int amountCat);
+    void setEnemy(engine::Game &game);
+    void chooseAttackTarget(guid_t attacker, const UnitCategory &target, const int &amount);
     void runEnemyTurn();
-    void scheduleAttack(Unit* attacker, Unit* target, int amount);
+    void scheduleAttack(guid_t attacker, guid_t target, int amount);
 
+    bool justDied = false;
     bool newTurn = false;
     bool endOfTurn = false;
     int turnCount = 1;
 
-    Unit* pInfU_C = nullptr;
-    Unit* pArcU_C = nullptr;
-    Unit* pCatU_C = nullptr;
-    SiegeEngine* pCatSE_C = nullptr;
+    guid_t pInf_E;
+    guid_t pArc_E;
+    guid_t pCat_E;
 
-    Unit* eInfU_C = nullptr;
-    Unit* eArcU_C = nullptr;
-    Unit* eCatU_C = nullptr;
-    SiegeEngine* eCatSE_C = nullptr;
+    guid_t eInf_E;
+    guid_t eArc_E;
+    guid_t eCat_E;
 
+    std::shared_ptr<engine::Game::event_t::handle_t> handle = std::make_shared<engine::Game::event_t::handle_t>();
 };
 
 }

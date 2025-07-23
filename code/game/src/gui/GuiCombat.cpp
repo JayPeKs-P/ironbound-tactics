@@ -167,6 +167,41 @@ void GuiCombat::drawStartRoundWindow()
 
 void GuiCombat::drawTopRow()
 {
+    if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E))
+    {
+////////////////////////////////////////////////////////////////////////
+{
+#ifdef DEBUG_MODE
+    DEBUG_LOG( << "GuiCombat::drawTopRow() Missing unit_C");
+    DEBUG_LOG( << "hasComponent<Unit>(pInf_E): " << engine.componentManager.hasComponent<Unit>(pInf_E));
+    DEBUG_LOG( << "hasComponent<Unit>(pArc_E): " << engine.componentManager.hasComponent<Unit>(pArc_E));
+    DEBUG_LOG( << "hasComponent<Unit>(pCat_E): " << engine.componentManager.hasComponent<Unit>(pCat_E));
+    DEBUG_LOG( << "hasComponent<Unit>(eInf_E): " << engine.componentManager.hasComponent<Unit>(eInf_E));
+    DEBUG_LOG( << "hasComponent<Unit>(eArc_E): " << engine.componentManager.hasComponent<Unit>(eArc_E));
+    DEBUG_LOG( << "hasComponent<Unit>(eCat_E): " << engine.componentManager.hasComponent<Unit>(eCat_E));
+#endif
+}
+////////////////////////////////////////////////////////////////////////
+
+        return;
+    }
+    if (!checkIfEntityHasComponent<SiegeEngine>(pCat_E, eCat_E))
+    {
+////////////////////////////////////////////////////////////////////////
+{
+#ifdef DEBUG_MODE
+    DEBUG_LOG( << "GuiCombat::drawTopRow() Missing siege_C");
+    DEBUG_LOG( << "hasComponent<Unit>(pInf_E): " << engine.componentManager.hasComponent<Unit>(pInf_E));
+    DEBUG_LOG( << "hasComponent<Unit>(pArc_E): " << engine.componentManager.hasComponent<Unit>(pArc_E));
+    DEBUG_LOG( << "hasComponent<Unit>(pCat_E): " << engine.componentManager.hasComponent<Unit>(pCat_E));
+    DEBUG_LOG( << "hasComponent<Unit>(eInf_E): " << engine.componentManager.hasComponent<Unit>(eInf_E));
+    DEBUG_LOG( << "hasComponent<Unit>(eArc_E): " << engine.componentManager.hasComponent<Unit>(eArc_E));
+    DEBUG_LOG( << "hasComponent<Unit>(eCat_E): " << engine.componentManager.hasComponent<Unit>(eCat_E));
+#endif
+}
+////////////////////////////////////////////////////////////////////////
+        return;
+    }
     float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.3, 0.2, 0.1 };
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 7, ratio);
 
@@ -174,22 +209,32 @@ void GuiCombat::drawTopRow()
 
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
-    auto currentInf = pInfU_C->totalAmount;
-    auto currentArc = pArcU_C->totalAmount;
-    auto currentCat = pCatSE_C->useableAmount * pCatSE_C->cost;
+
+    auto& pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
+    auto& pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
+    auto& pCatSE_C = engine.componentManager.getComponent<SiegeEngine>(pCat_E);
+
+    auto currentInf = pInfU_C.totalAmount;
+    auto currentArc = pArcU_C.totalAmount;
+    auto currentCat = pCatSE_C.useableAmount * pCatSE_C.cost;
     auto currenTotal = currentInf + currentArc + currentCat;
-    auto maxAmount = pInfU_C->lifetimeMaxAmount + pArcU_C->lifetimeMaxAmount;
+    auto maxAmount = pInfU_C.lifetimeMaxAmount + pArcU_C.lifetimeMaxAmount;
     auto hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
     nk_label(ctx, "Player", NK_TEXT_LEFT);
     nk_progress(ctx, &hp, 100, NK_FIXED);
     std::string roundLabel = "Round  " + std::to_string(currentRound);
     nk_label_colored(ctx, roundLabel.c_str(), NK_TEXT_CENTERED, highlightColor);
 
-    currentInf = eInfU_C->totalAmount;
-    currentArc = eArcU_C->totalAmount;
-    currentCat = eCatSE_C->useableAmount * eCatSE_C->cost;
+
+    auto& eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
+    auto& eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
+    auto& eCatSE_C = engine.componentManager.getComponent<SiegeEngine>(eCat_E);
+
+    currentInf = eInfU_C.totalAmount;
+    currentArc = eArcU_C.totalAmount;
+    currentCat = eCatSE_C.useableAmount * eCatSE_C.cost;
     currenTotal = currentInf + currentArc + currentCat;
-    maxAmount = eInfU_C->lifetimeMaxAmount + eArcU_C->lifetimeMaxAmount;
+    maxAmount = eInfU_C.lifetimeMaxAmount + eArcU_C.lifetimeMaxAmount;
     hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
     nk_progress(ctx, &hp, 100, NK_FIXED);
     nk_label(ctx, "Enemy", NK_TEXT_RIGHT);
@@ -331,29 +376,27 @@ void GuiCombat::getComponents(engine::Game &game)
         {
             if (unit.category == UnitCategory::INFANTRY)
             {
-                pInfU_C = &unit;
+                pInf_E = unit.entity();
             }else if (unit.category == UnitCategory::ARCHER)
             {
-                pArcU_C = &unit;
+                pArc_E = unit.entity();
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
-                pCatU_C = &unit;
-                pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+                pCat_E = unit.entity();
             }
         }else if (tag == Tag::ENEMY)
         {
             if (unit.category == UnitCategory::INFANTRY)
             {
-                eInfU_C = &unit;
+                eInf_E = unit.entity();
             }else if (unit.category == UnitCategory::ARCHER)
             {
-                eArcU_C = &unit;
+                eArc_E = unit.entity();
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
-                eCatU_C = &unit;
-                eCatSE_C = &game.componentManager.getComponent<SiegeEngine>(unit.entity());
+                eCat_E = unit.entity();
             }
         }
     });
