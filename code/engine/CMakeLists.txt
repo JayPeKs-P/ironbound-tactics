@@ -30,7 +30,8 @@ target_link_libraries(${ENGINE_NAME} PUBLIC glad
         glm
         soloud
         nuklear_impl
-        stb)
+        stb
+json)
 
 target_include_directories(${ENGINE_NAME} PUBLIC include/)
 

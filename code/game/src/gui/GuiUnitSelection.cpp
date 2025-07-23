@@ -13,9 +13,13 @@
 
 using namespace gl3;
 GuiUnitSelection::GuiUnitSelection(engine::Game& game, nk_context* ctx, nk_uint& textureID):
-Gui(game, ctx, textureID)
+Gui(game, ctx, textureID),
+amountToSpare(50)
 {
     getComponents(game);
+    pInfTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
+    pArcTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
+    pCatTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
 }
 
 void GuiUnitSelection::renderGUI()
@@ -36,9 +40,6 @@ void GuiUnitSelection::renderGUI()
 
 void GuiUnitSelection::drawSelectionFrame()
 {
-    pInfTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
-    pArcTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
-    pCatTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
 
     nk_layout_row_dynamic(ctx, windowHeight / 20, 2);
     nk_label(ctx, "Free  Slots  ", NK_TEXT_RIGHT);

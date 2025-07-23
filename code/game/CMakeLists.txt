@@ -33,6 +33,7 @@ set(SOURCE_FILES src/main.cpp
         src/systems/MovementSystem.h
         src/gui/GuiUnitSelection.cpp
         src/gui/GuiUnitSelection.h
+        src/logic/UnitPresets.h
 )
 
 # set executable name

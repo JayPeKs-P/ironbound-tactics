@@ -16,6 +16,7 @@ public:
     GuiUnitSelection(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
 
     void GuiUnitSelection::renderGUI() override;
+    int amountToSpare;
 private:
     void drawSelectionFrame();
     void getComponents(gl3::engine::Game& game);

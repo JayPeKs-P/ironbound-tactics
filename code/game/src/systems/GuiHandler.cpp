@@ -57,8 +57,8 @@ namespace gl3 {
         setStyleSlider(style);
         setStyleText(style);
 
-        // combatGUI = std::make_unique<GuiUnitSelection>(game, nkCTX, textureAtlasID);
-        combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
+        combatGUI = std::make_unique<GuiUnitSelection>(game, nkCTX, textureAtlasID);
+        // combatGUI = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
         for (auto& [owner, _] : game.componentManager.getContainer<GuiState>())
         {
             if (game.componentManager.hasComponent<GuiState>(owner))
