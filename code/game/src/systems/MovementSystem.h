@@ -18,7 +18,7 @@ public:
     explicit MovementSystem(engine::Game &game);
     void moveTo(engine::Game &game, float deltatime);
     void update(engine::Game &game, Transform* root);
-    void moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State state);
+    void moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState);
     void moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime);
 private:
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
@@ -26,7 +26,7 @@ private:
     void setAttacking(Transform& root, glm::vec3 targetPosition, int amount);
     glm::vec3 movementVector;
     glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 0.0);
-    glm::vec3 enemyPendingPosition = glm::vec3(0.3, 0.3, 0.0);
+    glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);
 };
 
 } // gl3

@@ -64,11 +64,11 @@ namespace gl3 {
         {
 
         });
-        CombatController::onUse.addListener([&](int amount, Unit *unit, SiegeEngine *siege){
-            auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
-            auto targetPos = engine.componentManager.getComponent<Transform>(siege->entity()).localPosition;
-            setMoving(root, targetPos, amount, State::IDLE);
-        });
+        // CombatController::onUse.addListener([&](int amount, Unit *unit, SiegeEngine *siege){
+        //     auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
+        //     auto targetPos = engine.componentManager.getComponent<Transform>(siege->entity()).localPosition;
+        //     setMoving(root, targetPos, amount, State::IDLE);
+        // });
     }
 
     void MovementSystem::moveTo(engine::Game& game, float deltaTime)
