@@ -3,6 +3,9 @@
 //
 
 #include "InstanceManager.h"
+
+#include <iostream>
+
 #include "engine/sceneGraph/Transform.h"
 #include "../../components/InstanceBuffer.h"
 #include "../../components/unitTypes/Unit.h"
@@ -69,8 +72,11 @@ namespace gl3 {
         {
             if (game.componentManager.hasComponent<Unit>(transform.entity()))
             {
-                auto& transform_E = game.entityManager.getEntity(transform.entity());
-                game.entityManager.deleteEntity(transform_E);
+                for (auto child : transform.getChildTransforms())
+                {
+                    auto& child_E = game.entityManager.getEntity(child->entity());
+                    game.entityManager.deleteEntity(child_E);
+                }
             }
         });
     }

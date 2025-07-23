@@ -182,6 +182,7 @@ void CombatController::init(engine::Game &game, int amountInf, int amountArc, in
 {
     game.componentManager.forEachComponent<Unit>([&](Unit &unit)
     {
+
         auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
         if (tag == Tag::PLAYER)
         {
