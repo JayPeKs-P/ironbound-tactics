@@ -28,9 +28,12 @@ namespace gl3 {
         });
 ////////////////////////////////////////////////////////////////////////
 #ifdef DEBUG_MODE
-        finishAnimation.addListener([&](float delay)
+        finishAnimation.addListener([&](bool state)
         {
-            countdown = delay;
+            if (state)
+            {
+                countdown = 1;
+            }
             DEBUG_LOG(
                 << "TRIGGERED EVENT: 'finishedAnimation'"
                 );
@@ -72,11 +75,11 @@ namespace gl3 {
         {
 
         });
-        // CombatController::onUse.addListener([&](int amount, guid_t actor, guid_t siege){
-        //     auto& root = engine.componentManager.getComponent<Transform>(actor);
-        //     auto targetPos = engine.componentManager.getComponent<Transform>(siege).localPosition;
-        //     setMoving(root, targetPos, amount, State::IDLE);
-        // });
+        CombatController::onUse.addListener([&](int amount, Unit *unit, SiegeEngine *siege){
+            auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
+            auto targetPos = engine.componentManager.getComponent<Transform>(siege->entity()).localPosition;
+            setMoving(root, targetPos, amount, State::IDLE);
+        });
     }
 
     void MovementSystem::moveTo(engine::Game& game, float deltaTime)
@@ -92,17 +95,17 @@ namespace gl3 {
                 {
                 case State::MOVING:
                     glm::vec3 directionPrep = unitState_C.goal - root->localPosition;
-                    moveStraight(transform, directionPrep, deltaTime, State::PREPARING, 2);
+                    moveStraight(transform, directionPrep, deltaTime, State::PREPARING);
                     break;
                 case State::PREPARING:
                     break;
                 case State::MOVED:
                     glm::vec3 directionMov = unitState_C.goal + unitState_C.relativeVec - unitState_C.oldPos;
-                    moveStraight(transform, directionMov, deltaTime, State::RESETTING, 15);
+                    moveStraight(transform, directionMov, deltaTime, State::RESETTING);
                     break;
                 case State::RESETTING:
                     glm::vec3 directionRes = glm::vec3(unitState_C.oldPos.x - root->localPosition.x, 0 ,0) * 0.8f;
-                    moveStraight(transform, directionRes, deltaTime, State::IDLE, 2);
+                    moveStraight(transform, directionRes, deltaTime, State::IDLE);
                     break;
                 case State::IDLE:
                     break;
@@ -123,7 +126,7 @@ namespace gl3 {
         }
     }
 
-    void MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState, float delay)
+    void MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState)
     {
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
@@ -137,7 +140,7 @@ namespace gl3 {
         {
             unitState_C.oldPos = transform.localPosition;
             unitState_C.state = endState;
-            finishAnimation.invoke(delay);
+            finishAnimation.invoke(true);
                 if (unitState_C.state == State::IDLE)
                 {
                     transform.localPosition = transform.getParent()->localPosition + unitState_C.relativeVec;
