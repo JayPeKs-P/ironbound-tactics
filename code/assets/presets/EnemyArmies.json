@@ -10,7 +10,7 @@
     },
     "2": {
       "Infantry": "eInfEASY",
-      "amountInf": 25,
+      "amountInf": 23,
       "Archer": "eArcEASY",
       "amountArc": 25,
       "Catapult": "eCatEASY",
@@ -18,7 +18,7 @@
     },
     "3": {
       "Infantry": "eInfMEDIUM",
-      "amountInf": 10,
+      "amountInf": 12,
       "Archer": "eArcEASY",
       "amountArc": 20,
       "Catapult": "eCatEASY",
@@ -28,13 +28,13 @@
       "Infantry": "eInfEASY",
       "amountInf": 25,
       "Archer": "eArcMEDIUM",
-      "amountArc": 15,
+      "amountArc": 14,
       "Catapult": "eCatEASY",
       "amountCat": 1
     },
     "5": {
       "Infantry": "eInfEASY",
-      "amountInf": 50,
+      "amountInf": 46,
       "Archer": "eArcMEDIUM",
       "amountArc": 0,
       "Catapult": "eCatEASY",

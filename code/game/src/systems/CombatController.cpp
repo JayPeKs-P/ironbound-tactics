@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <ostream>
+#include <json.hpp>
+using json = nlohmann::json;
 
 #include "../gui/GuiCombat.h"
 #include "../gui/GuiUnitSelection.h"
@@ -35,16 +37,27 @@ int CombatController::turnCount = 0;
 int CombatController::roundCount = 1;
 
 CombatState CombatController::currentState = CombatState::IDLE;
-
+bool done = false;
 void CombatController::handleTurn()
 {
     switch (currentState) {
     case CombatState::IDLE:     // Base state when inactive
         break;
+    case CombatState::RESET_ENEMY:
+        engine.componentManager.removeComponent<Unit>(eInf_E);
+        engine.componentManager.removeComponent<Unit>(eArc_E);
+        engine.componentManager.removeComponent<Unit>(eCat_E);
+        engine.componentManager.getComponent<SiegeEngine>(eCat_E).useableAmount = 0;
+        setState(CombatState::STARTING_NEW_ROUND);
+        break;
     case CombatState::STARTING_NEW_ROUND:
+        if (!done) setEnemy(engine);
+        done = true;
         break;
     case CombatState::INITIALIZING:     // Called once after starting a new round of combat
+        done = false;
         initialize.invoke();
+        ActionEvaluation::setGuids(engine);
         setState(CombatState::BEGIN_TURN);
         break;
     case CombatState::BEGIN_TURN:
@@ -94,17 +107,19 @@ void CombatController::handleTurn()
     }
 
     case CombatState::VICTORY:
-        setEnemy(engine);
-        setState(CombatState::WAIT_NEXT_ROUND);
+        setState(CombatState::PREPARE);
         break;
 
     case CombatState::DEFEAT:
         setState(CombatState::IDLE);
         break;
-
+    case CombatState::PREPARE:
+        setEnemy(engine);
+        setState(CombatState::WAIT_NEXT_ROUND);
+        break;
     case CombatState::WAIT_NEXT_ROUND:
         turnCount = 0;
-        setState(CombatState::STARTING_NEW_ROUND);
+        setState(CombatState::RESET_ENEMY);
         roundCount++;
         break;
     }
@@ -116,12 +131,10 @@ CombatController::CombatController(engine::Game &game):
     GuiUnitSelection::onAccept.addListener([&](int amountInf, int amountArc, int amountCat)
     {
         init(game, amountInf, amountArc, amountCat);
-        setEnemy(game);
-        setState(CombatState::STARTING_NEW_ROUND);
+        setState(CombatState::RESET_ENEMY);
     });
     turnStart.addListener([=]()
     {
-        runEnemyTurn();
     });
     playerDead.addListener([&]()
     {
@@ -254,46 +267,62 @@ void CombatController::init(engine::Game &game, int amountInf, int amountArc, in
             if (unit.category == UnitCategory::INFANTRY)
             {
                 eInf_E = unit.entity();
+                // engine.componentManager.removeComponent<Unit>(eInf_E);
             }else if (unit.category == UnitCategory::ARCHER)
             {
                 eArc_E = unit.entity();
+                // engine.componentManager.removeComponent<Unit>(eArc_E);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
                 eCat_E = unit.entity();
+                // engine.componentManager.removeComponent<Unit>(eCat_E);
             }
         }
     });
-    ActionEvaluation::setGuids(game);
 }
 
 void CombatController::setEnemy(engine::Game& game)
 {
-    if (!checkIfEntityHasComponent<Unit>(eInf_E)) engine.componentManager.addComponent<Unit>(eInf_E, "eInfantry");
-    if (!checkIfEntityHasComponent<Unit>(eArc_E)) engine.componentManager.addComponent<Unit>(eArc_E, "eArcher");
-    if (!checkIfEntityHasComponent<Unit>(eCat_E)) engine.componentManager.addComponent<Unit>(eCat_E, "eCatapult");
-    if (!checkIfEntityHasComponent<SiegeEngine>(eCat_E)) engine.componentManager.addComponent<SiegeEngine>(eCat_E, 5);
-    game.componentManager.forEachComponent<Unit>([&](Unit &unit)
+    static json ArmySetup;
+
+    if (ArmySetup.empty()) {
+        std::ifstream f("assets/presets/EnemyArmies.json");
+        if (!f.is_open()) throw std::runtime_error("Could not open EnemyArmies.json");
+        f >> ArmySetup;
+    }
+
+    // calculate Difficulty depending on won rounds
+    std::string difficulty;
+    if (roundCount >= 10) difficulty = "HARD";
+    else if (roundCount >= 5) difficulty = "MEDIUM";
+    else difficulty = "EASY";
+
+    // get random key for specific army of previously defined difficulty
+    static std::random_device random;
+    static std::mt19937 generate(random());
+    std::uniform_int_distribution<> dist(1, 5);
+    std::string key = std::to_string(dist(generate));
+
+    if (!ArmySetup.contains(difficulty) || !ArmySetup[difficulty].contains(key))
     {
-        auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
-        if (tag == Tag::ENEMY)
-        {
-            if (unit.category == UnitCategory::INFANTRY)
-            {
+        throw std::runtime_error("CombatController::setEnemy() -> Missing enemy for: " + difficulty + " -> " + key);
+    }
+    json enemySetup = ArmySetup[difficulty][key];
+
+
+    engine.componentManager.addComponent<Unit>(eInf_E, enemySetup.at("Infantry"));
+    engine.componentManager.addComponent<Unit>(eArc_E, enemySetup.at("Archer"));
+    engine.componentManager.addComponent<Unit>(eCat_E, enemySetup.at("Catapult"));
+
                 auto eInfU_C = &engine.componentManager.getComponent<Unit>(eInf_E);
-                CombatFunctions::setAmount(eInfU_C, 20);
-            }else if (unit.category == UnitCategory::ARCHER)
-            {
+                CombatFunctions::setAmount(eInfU_C, enemySetup.at("amountInf"));
+
                 auto eArcU_C = &engine.componentManager.getComponent<Unit>(eArc_E);
-                CombatFunctions::setAmount(eArcU_C, 20);
-            }
-            else if (unit.category == UnitCategory::CATAPULT)
-            {
+                CombatFunctions::setAmount(eArcU_C, enemySetup.at("amountArc"));
+
                 auto eCatU_C = &engine.componentManager.getComponent<Unit>(eCat_E);
-                CombatFunctions::setAmount(eCatU_C, 5);
-            }
-        }
-    });
+                CombatFunctions::setAmount(eCatU_C, enemySetup.at("amountCat"));
 }
 
 void CombatController::chooseAttackTarget(guid_t attacker, const UnitCategory &target, const int &amount)

@@ -13,6 +13,7 @@
 namespace gl3 {
 enum class CombatState {
     IDLE,
+    RESET_ENEMY,
     INITIALIZING,
     STARTING_NEW_ROUND,
     BEGIN_TURN,
@@ -22,6 +23,7 @@ enum class CombatState {
     EVALUATE_END,
     VICTORY,
     DEFEAT,
+    PREPARE,
     WAIT_NEXT_ROUND
 };
 
