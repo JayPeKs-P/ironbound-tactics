@@ -15,7 +15,8 @@
 
 using namespace gl3;
 GuiCombat::event_t GuiCombat::startRound;
-GuiCombat::event_t GuiCombat::startEndOfTurn;
+// GuiCombat::event_t GuiCombat::startEndOfTurn;
+float GuiCombat::countdownStartRound = 3.0f;
 
 std::string getType(Unit &unit)
 {
@@ -54,8 +55,7 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
 
     CombatController::turnStart.addListener([&]()
     {
-        justEndedTurn = false;
-        currentTurn++;
+
     });
     startRound.addListener([&]()
     {
@@ -69,27 +69,34 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
 }
 ////////////////////////////////////////////////////////////////////////
     });
-    startEndOfTurn.addListener([&]()
-    {
-////////////////////////////////////////////////////////////////////////
-{
-#ifdef DEBUG_MODE
-    DEBUG_LOG(
-        << "TRIGGERED EVENT: 'startEndOfTurn'"
-        );
-#endif
-}
-////////////////////////////////////////////////////////////////////////
-    });
+//     startEndOfTurn.addListener([&]()
+//     {
+// ////////////////////////////////////////////////////////////////////////
+// {
+// #ifdef DEBUG_MODE
+//     DEBUG_LOG(
+//         << "TRIGGERED EVENT: 'startEndOfTurn'"
+//         );
+// #endif
+// }
+// ////////////////////////////////////////////////////////////////////////
+//     });
+
+    // CombatController::enemyDead.addListener([&]()
+    // {
+    //     countdownStartRound = 3.0f;
+    //     startRound.invoke();
+    //     CombatController::setState(CombatState::WAITNEXTROUND);
+    // });
 }
 
 void GuiCombat::render()
 {
-    if (countdownStartRound >= 0)
+    if (CombatController::getCombatState() == CombatState::STARTING_NEW_ROUND)
     {
         drawStartRoundWindow();
     }
-    else
+    else if (CombatController::getCombatState() == CombatState::MAIN_PHASE)
     {
         if (nk_begin(ctx, "End Turn Window",
             nk_rect(2 * windowWidth / 5, windowHeight / 13,
@@ -141,11 +148,11 @@ void GuiCombat::invokeSceneChange()
 
 void GuiCombat::drawStartRoundWindow()
 {
-    if (justStarted)
-    {
-        startRound.invoke();
-        justStarted = false;
-    }
+    // if (justStarted)    // CombatController getState == ??
+    // {
+    //     startRound.invoke();
+    //     justStarted = false;
+    // }
     if (nk_begin(ctx, "Background",
         nk_rect(0, 0,
             windowWidth, windowHeight),
@@ -157,11 +164,16 @@ void GuiCombat::drawStartRoundWindow()
     {
         nk_layout_row_dynamic(ctx, windowHeight/5, 2);
         nk_label(ctx, "Round", NK_TEXT_CENTERED);
-        nk_label(ctx, std::to_string(currentRound).c_str(), NK_TEXT_CENTERED);
+        nk_label(ctx, std::to_string(CombatController::roundCount).c_str(), NK_TEXT_CENTERED);
         nk_layout_row_dynamic(ctx, windowHeight/5, 1);
         nk_label(ctx, std::to_string(static_cast<int>(countdownStartRound)).c_str(), NK_TEXT_CENTERED);
     }
     nk_end(ctx);
+    if (countdownStartRound <= 0)
+    {
+        CombatController::setState(CombatState::INITIALIZING);
+        countdownStartRound = 3.0f;
+    }
     countdownStartRound -=  engine.getDeltaTime();
 }
 
@@ -219,10 +231,12 @@ void GuiCombat::drawTopRow()
     auto currentCat = pCatSE_C.useableAmount * pCatSE_C.cost;
     auto currenTotal = currentInf + currentArc + currentCat;
     auto maxAmount = pInfU_C.lifetimeMaxAmount + pArcU_C.lifetimeMaxAmount;
+
     auto hp = static_cast<unsigned long long>(100.0f * currenTotal/maxAmount);
     nk_label(ctx, "Player", NK_TEXT_LEFT);
     nk_progress(ctx, &hp, 100, NK_FIXED);
-    std::string roundLabel = "Round  " + std::to_string(currentRound);
+
+    std::string roundLabel = "Round  " + std::to_string(CombatController::roundCount);
     nk_label_colored(ctx, roundLabel.c_str(), NK_TEXT_CENTERED, highlightColor);
 
 
@@ -244,14 +258,13 @@ void GuiCombat::drawEndTurnWindow()
 {
     float ratio[] = {0.5, 0.4};
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 2, ratio);
-    std::string turnLabel =  "Turn  " + std::to_string(currentTurn);
+    std::string turnLabel =  "Turn  " + std::to_string(CombatController::turnCount);
     nk_label(ctx, turnLabel.c_str(), NK_TEXT_LEFT);
     // struct nk_image skip = GuiHandler::getTileImage(textureID, 9, 5, 1, 1, 3072, 3072);
     // nk_button_image(ctx, skip);
-    if (nk_button_label(ctx, "Next") && !justEndedTurn)
+    if (nk_button_label(ctx, "Next") && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
     {
-        justEndedTurn = true;
-        startEndOfTurn.invoke();
+        CombatController::setState(CombatState::DAMAGE_STEP);
     }
 }
 

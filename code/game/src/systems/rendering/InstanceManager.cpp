@@ -21,6 +21,9 @@ namespace gl3 {
     {
         GuiCombat::startRound.addListener([&]()
         {
+        });
+        CombatController::initialize.addListener([&]()
+        {
             init(engine);
         });
         CombatController::enemyDead.addListener([&]()

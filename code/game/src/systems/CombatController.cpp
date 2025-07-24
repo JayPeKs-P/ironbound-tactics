@@ -20,6 +20,7 @@
 
 using namespace gl3;
 
+CombatController::event_t CombatController::initialize;
 CombatController::event_t CombatController::turnStart;
 CombatController::event_t CombatController::turnEnd;
 CombatController::event_t CombatController::playerDead;
@@ -30,12 +31,122 @@ CombatController::eventAction_t CombatController::onAttack;
 CombatController::eventAction_t CombatController::onAfterAttack;
 CombatController::eventAction_t CombatController::onUse;
 
+int CombatController::turnCount = 0;
+int CombatController::roundCount = 1;
+
+CombatState CombatController::currentState = CombatState::IDLE;
+
+void CombatController::handleTurn()
+{
+    switch (currentState) {
+    case CombatState::IDLE:     // Base state when inactive
+        break;
+    case CombatState::STARTING_NEW_ROUND:
+        break;
+    case CombatState::INITIALIZING:     // Called once after starting a new round of combat
+        initialize.invoke();
+        setState(CombatState::BEGIN_TURN);
+        break;
+    case CombatState::BEGIN_TURN:
+        turnCount++;
+        turnStart.invoke();
+        setState(CombatState::ENEMY_TURN);
+        break;
+    case CombatState::ENEMY_TURN:
+        runEnemyTurn();
+        currentState = CombatState::MAIN_PHASE;
+        break;
+    case CombatState::MAIN_PHASE:
+        // Warten auf startRound
+        break;
+    case CombatState::DAMAGE_STEP:
+        if (engine.actionRegister.advance()) {
+            currentState = CombatState::EVALUATE_END;
+        }
+        break;
+
+    case CombatState::EVALUATE_END:
+    {
+        if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
+
+        auto pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
+        auto pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
+        auto pCatU_C = engine.componentManager.getComponent<Unit>(pCat_E);
+
+        auto eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
+        auto eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
+        auto eCatU_C = engine.componentManager.getComponent<Unit>(eCat_E);
+
+        bool playerDeadNow = (pInfU_C.totalAmount <= 0 && pArcU_C.totalAmount <= 0 && pCatU_C.totalAmount <= 0);
+        bool enemyDeadNow  = (eInfU_C.totalAmount <= 0 && eArcU_C.totalAmount <= 0 && eCatU_C.totalAmount <= 0);
+
+        if (playerDeadNow) {
+            currentState = CombatState::DEFEAT;
+            playerDead.invoke();
+        } else if (enemyDeadNow) {
+            currentState = CombatState::VICTORY;
+            enemyDead.invoke();
+        } else {
+            turnEnd.invoke();
+            currentState = CombatState::BEGIN_TURN;
+        }
+        break;
+    }
+
+    case CombatState::VICTORY:
+        setEnemy(engine);
+        setState(CombatState::WAIT_NEXT_ROUND);
+        break;
+
+    case CombatState::DEFEAT:
+        setState(CombatState::IDLE);
+        break;
+
+    case CombatState::WAIT_NEXT_ROUND:
+        turnCount = 0;
+        setState(CombatState::STARTING_NEW_ROUND);
+        roundCount++;
+        break;
+    }
+}
+
 CombatController::CombatController(engine::Game &game):
     System(game)
 {
+    GuiUnitSelection::onAccept.addListener([&](int amountInf, int amountArc, int amountCat)
+    {
+        init(game, amountInf, amountArc, amountCat);
+        setEnemy(game);
+        setState(CombatState::STARTING_NEW_ROUND);
+    });
+    turnStart.addListener([=]()
+    {
+        runEnemyTurn();
+    });
+    playerDead.addListener([&]()
+    {
+    });
+
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG_LOG
+    turnStart.addListener([=]()
+    {
+DEBUG_LOG(
+    << "=======| This is turn: "
+    << turnCount
+    << " |======="
+    );
+    });
+
+    turnEnd.addListener([=]()
+    {
+    DEBUG_LOG(
+        << "=======| End of turn: "
+        << turnCount
+        << " |======="
+        );
+    });
     onBeforeAttack.addListener([&](guid_t attacker, guid_t target, int amount)
     {
         DEBUG_LOG(
@@ -64,68 +175,6 @@ CombatController::CombatController(engine::Game &game):
 }
 ////////////////////////////////////////////////////////////////////////
 
-    GuiUnitSelection::onAccept.addListener([&](int amountInf, int amountArc, int amountCat)
-    {
-        init(game, amountInf, amountArc, amountCat);
-        setEnemy(game);
-    });
-
-
-    GuiCombat::startRound.addListener([&]()
-    {
-        *handle = engine.onBeforeUpdate.addListener([&](engine::Game &game)
-        {
-            handleTurn();
-        });
-        turnStart.invoke();
-        justDied = false;
-    });
-
-    turnStart.addListener([=]()
-    {
-////////////////////////////////////////////////////////////////////////
-{
-#ifdef DEBUG_MODE
-DEBUG_LOG(
-    << "=======| This is turn: "
-    << turnCount
-    << " |======="
-    );
-#endif
-}
-////////////////////////////////////////////////////////////////////////
-        runEnemyTurn();
-    });
-
-    GuiCombat::startEndOfTurn.addListener([&]()
-    {
-        engine.actionRegister.scheduleAction(1, [&]()
-        {
-            turnEnd.invoke();
-        });
-        endOfTurn = true;
-    });
-
-    turnEnd.addListener([=]()
-    {
-////////////////////////////////////////////////////////////////////////
-{
-#ifdef DEBUG_MODE
-    DEBUG_LOG(
-        << "=======| End of turn: "
-        << turnCount
-        << " |======="
-        );
-    turnCount++;
-#endif
-}
-////////////////////////////////////////////////////////////////////////
-        newTurn = true;
-    });
-    playerDead.addListener([&]()
-    {
-        engine.onBeforeUpdate.removeListener(*handle);
-    });
 
     for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
     {
@@ -164,10 +213,6 @@ DEBUG_LOG(
                             CombatFunctions::reset(pCatU_C, amount);
                             turnEnd.removeListener(*handle);
                         });
-                        // engine.actionRegister.scheduleAction(1,[=]()
-                        // {
-                        //     CombatFunctions::reset(pCatU_C, amount);
-                        // });
                     }else if (selPTarget == UnitCategory::ASSAULT_COVER)
                     {
 
@@ -385,43 +430,44 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
     });
 }
 
-void CombatController::handleTurn()
-{
-    for (auto guid : {pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E})
-    {
-        if (!engine.componentManager.hasComponent<Unit>(guid))
-        {
+// void CombatController::handleTurn()
+// {
+//     for (auto guid : {pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E})
+//     {
+//         if (!engine.componentManager.hasComponent<Unit>(guid))
+//         {
+//
+//         }
+//     }
+//     if (newTurn)
+//     {
+//         turnStart.invoke();
+//         newTurn = false;
+//     }
+//     if (endOfTurn)
+//     {
+//         endOfTurn = engine.actionRegister.advance();
+//     }
+//     if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
+//     if (!justDied)
+//     {
+//         auto pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
+//         auto pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
+//         auto pCatU_C = engine.componentManager.getComponent<Unit>(pCat_E);
+//
+//         auto eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
+//         auto eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
+//         auto eCatU_C = engine.componentManager.getComponent<Unit>(eCat_E);
+//
+//         if (pInfU_C.totalAmount <= 0 && pArcU_C.totalAmount <= 0 && pCatU_C.totalAmount <= 0)
+//         {
+//             justDied = true;
+//             playerDead.invoke();
+//         }else if (eInfU_C.totalAmount <= 0 && eArcU_C.totalAmount <= 0 && eCatU_C.totalAmount <= 0)
+//         {
+//             justDied = true;
+//             enemyDead.invoke();
+//         }
+//     }
+// }
 
-        }
-    }
-    if (newTurn)
-    {
-        turnStart.invoke();
-        newTurn = false;
-    }
-    if (endOfTurn)
-    {
-        endOfTurn = engine.actionRegister.advance();
-    }
-    if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
-    if (!justDied)
-    {
-        auto pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
-        auto pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
-        auto pCatU_C = engine.componentManager.getComponent<Unit>(pCat_E);
-
-        auto eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
-        auto eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
-        auto eCatU_C = engine.componentManager.getComponent<Unit>(eCat_E);
-
-        if (pInfU_C.totalAmount <= 0 && pArcU_C.totalAmount <= 0 && pCatU_C.totalAmount <= 0)
-        {
-            justDied = true;
-            playerDead.invoke();
-        }else if (eInfU_C.totalAmount <= 0 && eArcU_C.totalAmount <= 0 && eCatU_C.totalAmount <= 0)
-        {
-            justDied = true;
-            enemyDead.invoke();
-        }
-    }
-}

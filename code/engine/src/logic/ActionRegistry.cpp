@@ -31,6 +31,6 @@ namespace gl3::engine::combat {
                 ++iter;
             }
         }
-        return false;
+        return true;
     }
 } // gl3

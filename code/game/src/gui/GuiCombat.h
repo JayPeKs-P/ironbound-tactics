@@ -11,10 +11,10 @@ class GuiCombat: public Gui {
     using event_t = gl3::engine::events::Event<GuiCombat>;
 public:
     static event_t startRound;
-    static event_t startEndOfTurn;
+    // static event_t startEndOfTurn;
     GuiCombat(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
 
-
+    static float countdownStartRound;
 private:
     void render() override;
     void invokeSceneChange() override;
@@ -42,11 +42,7 @@ private:
 
     int value = 0;
 
-    bool justEndedTurn = false;
     bool justStarted = true;
-    int currentRound = 1;
-    int currentTurn = 0;
-    float countdownStartRound = 3.0f;
 
 
 

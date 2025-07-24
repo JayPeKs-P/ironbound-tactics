@@ -11,11 +11,25 @@
 #include "../components/unitTypes/SiegeEngine.h"
 
 namespace gl3 {
+enum class CombatState {
+    IDLE,
+    INITIALIZING,
+    STARTING_NEW_ROUND,
+    BEGIN_TURN,
+    ENEMY_TURN,
+    MAIN_PHASE,
+    DAMAGE_STEP,
+    EVALUATE_END,
+    VICTORY,
+    DEFEAT,
+    WAIT_NEXT_ROUND
+};
 
 class CombatController: public engine::ecs::System
 {
 public:
     using event_t = engine::events::Event<CombatController>;
+    static  event_t initialize;
     static event_t turnStart;
     static event_t turnEnd;
     static event_t playerDead;
@@ -27,7 +41,18 @@ public:
     static eventAction_t onAfterAttack;
     static eventAction_t onUse;
 
+    static int turnCount;
+    static int roundCount;
+
     CombatController(engine::Game &game );
+    [[nodiscard]] static CombatState getCombatState()
+    {
+        return currentState;
+    }
+    static void setState(CombatState newState)
+    {
+        currentState = newState;
+    }
 
     void handleTurn();
 private:
@@ -37,10 +62,6 @@ private:
     void runEnemyTurn();
     void scheduleAttack(guid_t attacker, guid_t target, int amount);
 
-    bool justDied = false;
-    bool newTurn = false;
-    bool endOfTurn = false;
-    int turnCount = 1;
 
     guid_t pInf_E;
     guid_t pArc_E;
@@ -50,7 +71,8 @@ private:
     guid_t eArc_E;
     guid_t eCat_E;
 
-    std::shared_ptr<engine::Game::event_t::handle_t> handle = std::make_shared<engine::Game::event_t::handle_t>();
+    static CombatState currentState;
+
 };
 
 }
