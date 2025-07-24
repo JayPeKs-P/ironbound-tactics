@@ -237,10 +237,26 @@ DEBUG_LOG(
                             CombatFunctions::reset(pCatU_C, amount);
                             turnEnd.removeListener(*handle);
                         });
-                    }else if (selPTarget == UnitCategory::ASSAULT_COVER)
-                    {
-
                     }
+                }else if (selP == UnitCategory::ARCHER)
+                {
+                    if (selPTarget == UnitCategory::CATAPULT)
+                    {
+                        if (!checkIfEntityHasComponent<Unit>(pArc_E, pCat_E)) throw("CombatController::use() Missing unit_C");
+                        if (!checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
+                        auto pArcU_C = &engine.componentManager.getComponent<Unit>(pArc_E);
+                        auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
+                        auto pCatSE_C = &engine.componentManager.getComponent<SiegeEngine>(pCat_E);
+                        CombatFunctions::use(amount, pArcU_C, pCatSE_C);
+                        onUse.invoke(pArc_E, pCat_E, amount);
+
+                        std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
+                        *handle = turnEnd.addListener([=](){
+                            CombatFunctions::reset(pCatU_C, amount);
+                            turnEnd.removeListener(*handle);
+                        });
+                    }
+
                 }
             });
         }
@@ -441,6 +457,10 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
     auto targetU_C = &engine.componentManager.getComponent<Unit>(target);
 
     onBeforeAttack.invoke(attacker, target, amount);
+    engine.actionRegister.scheduleAction(attackerU_C->speed-1, [=]()
+    {
+        onAttack.invoke(attacker, target, amount);
+    });
     engine.actionRegister.scheduleAction(attackerU_C->speed,[=] ()
     {
         onAttack.invoke(attacker, target, amount);
