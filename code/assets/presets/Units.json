@@ -18,8 +18,8 @@
     "category": "ARCHER",
     "hpValue": 80,
     "armorValue": 20,
-    "attackValue": 40,
-    "accuracyValue": 80,
+    "attackValue": 20,
+    "accuracyValue": 85,
     "critChance": 8,
     "critMultiplier": 2.0,
     "lifeTimeMaxAmount": 0,
@@ -44,11 +44,11 @@
     "speed": 3,
     "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png"
   },
-  "eInfantry": {
+  "eInfEASY": {
   "category": "INFANTRY",
   "hpValue": 100,
   "armorValue": 30,
-  "attackValue": 50,
+  "attackValue": 40,
   "accuracyValue": 99,
   "critChance": 10,
   "critMultiplier": 2.0,
@@ -57,13 +57,13 @@
   "totalAmountLastFrame": 0,
   "availableAmount": 0,
   "speed": 2,
-    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_02_Idle.png"
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_01_Idle.png"
 },
-  "eArcher": {
+  "eArcEASY": {
     "category": "ARCHER",
     "hpValue": 80,
     "armorValue": 20,
-    "attackValue": 40,
+    "attackValue": 20,
     "accuracyValue": 80,
     "critChance": 8,
     "critMultiplier": 2.0,
@@ -72,11 +72,11 @@
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
     "speed": 1,
-    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_02_Idle.png"
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_01_Idle.png"
   },
-  "eCatapult": {
+  "eCatEASY": {
     "category": "CATAPULT",
-    "hpValue": 300,
+    "hpValue": 200,
     "armorValue": 20,
     "attackValue": 160,
     "accuracyValue": 80,
@@ -87,7 +87,7 @@
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
     "speed": 3,
-    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_02_Idle.png"
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_01_Idle.png"
   },
   "eInfMEDIUM": {
     "category": "INFANTRY",
@@ -102,14 +102,14 @@
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
     "speed": 2,
-    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_03_Idle.png"
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_04_Idle.png"
   },
   "eArcMEDIUM": {
     "category": "ARCHER",
     "hpValue": 80,
     "armorValue": 20,
-    "attackValue": 40,
-    "accuracyValue": 80,
+    "attackValue": 20,
+    "accuracyValue": 85,
     "critChance": 8,
     "critMultiplier": 2.0,
     "lifeTimeMaxAmount": 0,
@@ -117,7 +117,7 @@
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
     "speed": 1,
-    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_03_Idle.png"
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_04_Idle.png"
   },
   "eCatMEDIUM": {
     "category": "CATAPULT",
@@ -132,6 +132,51 @@
     "totalAmountLastFrame": 0,
     "availableAmount": 0,
     "speed": 3,
-    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_03_Idle.png"
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_04_Idle.png"
+  },
+  "eInfHARD": {
+    "category": "INFANTRY",
+    "hpValue": 150,
+    "armorValue": 30,
+    "attackValue": 50,
+    "accuracyValue": 99,
+    "critChance": 10,
+    "critMultiplier": 2.0,
+    "lifeTimeMaxAmount": 0,
+    "totalAmount": 0,
+    "totalAmountLastFrame": 0,
+    "availableAmount": 0,
+    "speed": 2,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_02_Idle.png"
+  },
+  "eArcHARD": {
+    "category": "ARCHER",
+    "hpValue": 80,
+    "armorValue": 20,
+    "attackValue": 30,
+    "accuracyValue": 80,
+    "critChance": 8,
+    "critMultiplier": 2.0,
+    "lifeTimeMaxAmount": 0,
+    "totalAmount": 0,
+    "totalAmountLastFrame": 0,
+    "availableAmount": 0,
+    "speed": 1,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_02_Idle.png"
+  },
+  "eCatHARD": {
+    "category": "CATAPULT",
+    "hpValue": 300,
+    "armorValue": 20,
+    "attackValue": 160,
+    "accuracyValue": 80,
+    "critChance": 12,
+    "critMultiplier": 2.0,
+    "lifeTimeMaxAmount": 0,
+    "totalAmount": 0,
+    "totalAmountLastFrame": 0,
+    "availableAmount": 0,
+    "speed": 2,
+    "texturePath": "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_02_Idle.png"
   }
 }

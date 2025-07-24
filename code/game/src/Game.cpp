@@ -82,8 +82,11 @@ void Game::start()
 
 
     //----- Entities of enemy's army -----
+    std::cout << "REMINDER: NEED TO SET ENEMY UNITS" << std::endl;
     auto &eInf_E = engine::Game::entityManager.createEntity();
-    auto &eInfU_C = eInf_E.addComponent<Unit>("eInfantry");
+    auto &eInfU_C = eInf_E.addComponent<Unit>(
+        // "eInfantry"
+        );
     eInf_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
     tempTexID = engine::util::Texture::load(eInfU_C.texturePath.c_str());
     eInf_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
@@ -92,7 +95,9 @@ void Game::start()
     unitTransforms.push_back(&eInf_E.addComponent<Transform>(origin, glm::vec3(1.75f, -0.75f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &eArc_E = engine::Game::entityManager.createEntity();
-    auto &eArcU_C = eArc_E.addComponent<Unit>("eArcher");
+    auto &eArcU_C = eArc_E.addComponent<Unit>(
+        // "eArcher"
+        );
     eArc_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
     tempTexID = engine::util::Texture::load(eArcU_C.texturePath.c_str());
     eArc_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
@@ -101,7 +106,9 @@ void Game::start()
     unitTransforms.push_back(&eArc_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.0f ,0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto &eCat_E = engine::Game::entityManager.createEntity();
-    auto &eCatU_C = eCat_E.addComponent<Unit>("eCatapult");
+    auto &eCatU_C = eCat_E.addComponent<Unit>(
+        // "eCatapult"
+        );
     auto &eCatSE_C = eCat_E.addComponent<SiegeEngine>(5);
     eCat_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
     tempTexID = engine::util::Texture::load(eCatU_C.texturePath.c_str());
