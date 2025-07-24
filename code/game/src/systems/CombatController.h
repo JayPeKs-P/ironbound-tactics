@@ -19,6 +19,7 @@ enum class CombatState {
     BEGIN_TURN,
     ENEMY_TURN,
     MAIN_PHASE,
+    ANIMATION,
     DAMAGE_STEP,
     EVALUATE_END,
     VICTORY,
@@ -33,6 +34,7 @@ public:
     using event_t = engine::events::Event<CombatController>;
     static  event_t initialize;
     static event_t turnStart;
+    static event_t onBeforeDamageStep;
     static event_t turnEnd;
     static event_t playerDead;
     static event_t enemyDead;

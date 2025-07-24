@@ -264,7 +264,7 @@ void GuiCombat::drawEndTurnWindow()
     // nk_button_image(ctx, skip);
     if (nk_button_label(ctx, "Next") && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
     {
-        CombatController::setState(CombatState::DAMAGE_STEP);
+        CombatController::setState(CombatState::ANIMATION);
     }
 }
 

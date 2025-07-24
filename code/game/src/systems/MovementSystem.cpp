@@ -16,15 +16,24 @@
 
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
-    MovementSystem::event_t MovementSystem::finishedAnimation;
+    MovementSystem::event_t MovementSystem::finishAnimation;
+    MovementSystem::event_t MovementSystem::finishedAllAnimations;
 
     MovementSystem::MovementSystem(engine::Game& game):
     System(game)
     {
+        CombatController::onBeforeDamageStep.addListener([&]()
+        {
+            moveTo(engine, engine.getDeltaTime());
+        });
 ////////////////////////////////////////////////////////////////////////
 #ifdef DEBUG_MODE
-        finishedAnimation.addListener([&](bool state)
+        finishAnimation.addListener([&](bool state)
         {
+            if (state)
+            {
+                countdown = 1;
+            }
             DEBUG_LOG(
                 << "TRIGGERED EVENT: 'finishedAnimation'"
                 );
@@ -66,11 +75,11 @@ namespace gl3 {
         {
 
         });
-        // CombatController::onUse.addListener([&](int amount, Unit *unit, SiegeEngine *siege){
-        //     auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
-        //     auto targetPos = engine.componentManager.getComponent<Transform>(siege->entity()).localPosition;
-        //     setMoving(root, targetPos, amount, State::IDLE);
-        // });
+        CombatController::onUse.addListener([&](int amount, Unit *unit, SiegeEngine *siege){
+            auto& root = engine.componentManager.getComponent<Transform>(unit->entity());
+            auto targetPos = engine.componentManager.getComponent<Transform>(siege->entity()).localPosition;
+            setMoving(root, targetPos, amount, State::IDLE);
+        });
     }
 
     void MovementSystem::moveTo(engine::Game& game, float deltaTime)
@@ -109,6 +118,12 @@ namespace gl3 {
                 // }
             }
         });
+        countdown -= deltaTime;
+        if (countdown <= 0)
+        {
+            finishedAllAnimations.invoke(true);
+            countdown = 15.0f;
+        }
     }
 
     void MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState)
@@ -125,7 +140,7 @@ namespace gl3 {
         {
             unitState_C.oldPos = transform.localPosition;
             unitState_C.state = endState;
-            finishedAnimation.invoke(true);
+            finishAnimation.invoke(true);
                 if (unitState_C.state == State::IDLE)
                 {
                     transform.localPosition = transform.getParent()->localPosition + unitState_C.relativeVec;
@@ -173,7 +188,7 @@ namespace gl3 {
             }else
             {
                 unitState_C.state = State::IDLE;
-                finishedAnimation.invoke(true);
+                finishAnimation.invoke(true);
             }
         }
     }

@@ -222,7 +222,7 @@ void Game::update(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
-    movementSystem->moveTo(*this, deltaTime);
+    // movementSystem->moveTo(*this, deltaTime);
     for (auto& transform_C : unitTransforms)
     {
         instanceManager->update(*this, transform_C);

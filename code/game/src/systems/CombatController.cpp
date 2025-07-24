@@ -9,6 +9,8 @@
 #include <iostream>
 #include <ostream>
 #include <json.hpp>
+
+#include "MovementSystem.h"
 using json = nlohmann::json;
 
 #include "../gui/GuiCombat.h"
@@ -25,8 +27,10 @@ using namespace gl3;
 CombatController::event_t CombatController::initialize;
 CombatController::event_t CombatController::turnStart;
 CombatController::event_t CombatController::turnEnd;
+CombatController::event_t CombatController::onBeforeDamageStep;
 CombatController::event_t CombatController::playerDead;
 CombatController::event_t CombatController::enemyDead;
+
 
 CombatController::eventAction_t CombatController::onBeforeAttack;
 CombatController::eventAction_t CombatController::onAttack;
@@ -68,6 +72,9 @@ void CombatController::handleTurn()
     case CombatState::ENEMY_TURN:
         runEnemyTurn();
         currentState = CombatState::MAIN_PHASE;
+        break;
+    case CombatState::ANIMATION:
+        onBeforeDamageStep.invoke();
         break;
     case CombatState::MAIN_PHASE:
         // Warten auf startRound
@@ -132,6 +139,10 @@ CombatController::CombatController(engine::Game &game):
     {
         init(game, amountInf, amountArc, amountCat);
         setState(CombatState::RESET_ENEMY);
+    });
+    MovementSystem::finishedAllAnimations.addListener([&](bool finished)
+    {
+        setState(CombatState::DAMAGE_STEP);
     });
     turnStart.addListener([=]()
     {

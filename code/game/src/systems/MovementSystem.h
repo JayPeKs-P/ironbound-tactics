@@ -13,7 +13,8 @@ namespace gl3 {
 class MovementSystem: public engine::ecs::System{
 public:
     using event_t = gl3::engine::events::Event<MovementSystem, bool>;
-    static event_t finishedAnimation;
+    static event_t finishAnimation;
+    static event_t finishedAllAnimations;
 
     explicit MovementSystem(engine::Game &game);
     void moveTo(engine::Game &game, float deltatime);
@@ -27,6 +28,8 @@ private:
     glm::vec3 movementVector;
     glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 0.0);
     glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);
+
+    float countdown = 15.0f;
 };
 
 } // gl3
