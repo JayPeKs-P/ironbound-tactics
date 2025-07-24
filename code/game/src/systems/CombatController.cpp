@@ -229,7 +229,11 @@ DEBUG_LOG(
                         auto pInfU_C = &engine.componentManager.getComponent<Unit>(pInf_E);
                         auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
                         auto pCatSE_C = &engine.componentManager.getComponent<SiegeEngine>(pCat_E);
-                        CombatFunctions::use(amount, pInfU_C, pCatSE_C);
+                        game.actionRegister.scheduleAction(1, [=]()
+                        {
+                            CombatFunctions::use(amount, pInfU_C, pCatSE_C);
+                        });
+                        pInfU_C->availableAmount -= amount * pCatSE_C->cost;
                         onUse.invoke(pInf_E, pCat_E, amount);
 
                         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
@@ -403,7 +407,11 @@ void CombatController::runEnemyTurn()
 ////////////////////////////////////////////////////////////////////////
 
                 onUse.invoke(option.actor, option.target, option.amount);
-                CombatFunctions::use(option.amount/targetSE_C->cost, actorU_C, targetSE_C);
+                engine.actionRegister.scheduleAction(1, [&]()
+                {
+                    CombatFunctions::use(option.amount/targetSE_C->cost, actorU_C, targetSE_C);
+                });
+                       actorU_C->availableAmount -= option.amount * targetSE_C->cost;
 
                 std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
                 *handle = turnEnd.addListener([=](){
@@ -441,9 +449,12 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
     auto targetU_C = &engine.componentManager.getComponent<Unit>(target);
 
     onBeforeAttack.invoke(attacker, target, amount);
-    engine.actionRegister.scheduleAction(attackerU_C->speed,[=] ()
+    engine.actionRegister.scheduleAction(attackerU_C->speed-1, [=]()
     {
         onAttack.invoke(attacker, target, amount);
+    });
+    engine.actionRegister.scheduleAction(attackerU_C->speed,[=] ()
+    {
         CombatFunctions::takeDamage(targetU_C, CombatFunctions::attack(attackerU_C, amount));
 
         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
@@ -469,45 +480,4 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
 ////////////////////////////////////////////////////////////////////////
     });
 }
-
-// void CombatController::handleTurn()
-// {
-//     for (auto guid : {pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E})
-//     {
-//         if (!engine.componentManager.hasComponent<Unit>(guid))
-//         {
-//
-//         }
-//     }
-//     if (newTurn)
-//     {
-//         turnStart.invoke();
-//         newTurn = false;
-//     }
-//     if (endOfTurn)
-//     {
-//         endOfTurn = engine.actionRegister.advance();
-//     }
-//     if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
-//     if (!justDied)
-//     {
-//         auto pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
-//         auto pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
-//         auto pCatU_C = engine.componentManager.getComponent<Unit>(pCat_E);
-//
-//         auto eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
-//         auto eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
-//         auto eCatU_C = engine.componentManager.getComponent<Unit>(eCat_E);
-//
-//         if (pInfU_C.totalAmount <= 0 && pArcU_C.totalAmount <= 0 && pCatU_C.totalAmount <= 0)
-//         {
-//             justDied = true;
-//             playerDead.invoke();
-//         }else if (eInfU_C.totalAmount <= 0 && eArcU_C.totalAmount <= 0 && eCatU_C.totalAmount <= 0)
-//         {
-//             justDied = true;
-//             enemyDead.invoke();
-//         }
-//     }
-// }
 
