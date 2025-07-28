@@ -16,8 +16,8 @@ set(SOURCE_FILES src/main.cpp
         src/components/unitTypes/SiegeEngine.h
         src/components/Model2D.h
         src/components/Shader.h
-        src/systems/rendering/RenderSystem.cpp
-        src/systems/rendering/RenderSystem.h
+        ../engine/src/rendering/RenderSystem.cpp
+        ../engine/include/engine/rendering/RenderSystem.h
         src/components/InstanceBuffer.h
         src/components/UnitState.h
         src/systems/rendering/InstanceManager.cpp

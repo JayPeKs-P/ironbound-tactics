@@ -2,15 +2,16 @@
 // Created by Julian Kalb on 17/07/2025.
 //
 
-#include "RenderSystem.h"
+#include "engine/rendering/RenderSystem.h"
 #include <fstream>
 #include <sstream>
-#include "../../Assets.h"
+#include "../../../game/src/Assets.h"
+#include "../../../game/src/components/Model2D.h"
 
-#include "../../components/Model2D.h"
-#include "../../components/Shader.h"
+#include "../../../game/src/components/Model2D.h"
+#include "../../../game/src/components/Shader.h"
 
-namespace gl3 {
+namespace gl3::engine::render {
     struct glStatusData
     {
         int success;
@@ -41,6 +42,10 @@ namespace gl3 {
             initShaders(game);
             initBuffers(game);
         });
+        engine.onUpdate.addListener([&](engine::Game& game)
+        {
+            update(game);
+        });
         engine.onShutdown.addListener([&](engine::Game& game)
         {
             deleteBuffers(game);
@@ -50,7 +55,7 @@ namespace gl3 {
 
     void RenderSystem::draw(engine::Game &game)
     {
-        auto& model2DContainer = game.componentManager.getContainer<Model2D>();
+        auto& model2DContainer = game.componentManager.getContainer< Model2D>();
         for (auto &[owner, _]: model2DContainer)
         {
             auto& shader_C = game.componentManager.getComponent<Shader>(owner);

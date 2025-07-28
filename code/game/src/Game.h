@@ -14,7 +14,6 @@
 #include "systems/MovementSystem.h"
 #include "systems/SelectionSystem.h"
 #include "systems/rendering/InstanceManager.h"
-#include "systems/rendering/RenderSystem.h"
 
 
 class GuiCombat;
@@ -33,7 +32,6 @@ namespace gl3
     private:
         std::shared_ptr<GuiHandler> guiHandler;
         CombatController* combatController = nullptr;
-        RenderSystem* renderSystem = nullptr;
         InstanceManager* instanceManager = nullptr;
         SelectionSystem* selectionSystem = nullptr;
         MovementSystem* movementSystem = nullptr;

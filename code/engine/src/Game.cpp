@@ -3,6 +3,7 @@
 
 #include "engine/sceneGraph/SceneGraphPruner.h"
 #include "engine/sceneGraph/SceneGraphUpdater.h"
+#include "engine/rendering/RenderSystem.h"
 
 using namespace gl3::engine;
 Game::Game(int width, int height, const std::string& title):
@@ -34,6 +35,10 @@ void Game::run()
 {
     sceneGraph::SceneGraphUpdater sceneGraphUpdater(*this);
     sceneGraph::SceneGraphPruner sceneGraphPruner(*this);
+
+    render::RenderSystem renderer(*this);
+
+
     onStartup.invoke(*this);
     start();
     onAfterStartup.invoke(*this);
@@ -44,6 +49,7 @@ void Game::run()
         update(getWindow());
         onUpdate.invoke(*this);
         draw();
+        renderer.draw(*this);
         updateDeltaTime();
         onAfterUpdate.invoke(*this);
     });

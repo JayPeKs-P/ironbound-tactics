@@ -10,11 +10,11 @@
 
 #include <glm/glm.hpp>
 #include "engine/ecs/System.h"
-#include "../../components/InstanceBuffer.h"
+#include "../../../game/src/components/InstanceBuffer.h"
 
 namespace fs = std::filesystem;
 
-namespace gl3 {
+namespace gl3::engine::render {
 class RenderSystem: public engine::ecs::System {
     friend class Game;
     explicit RenderSystem(engine::Game &game);

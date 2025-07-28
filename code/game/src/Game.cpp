@@ -126,7 +126,7 @@ void Game::start()
 
     guiHandler = std::make_unique<GuiHandler>(*this);
 
-    renderSystem = new RenderSystem(*this);
+    // renderSystem = new RenderSystem(*this);
 
     instanceManager = new InstanceManager(*this);
 
@@ -227,11 +227,11 @@ void Game::update(GLFWwindow *window)
     {
         instanceManager->update(*this, transform_C);
     }
-    renderSystem->update(*this);
+    // renderSystem->update(*this);
     elapsedTime += deltaTime;
 }
 
 void Game::draw()
 {
-    renderSystem->draw(*this);
+    // renderSystem->draw(*this);
 }
