@@ -7,10 +7,9 @@
 #include <iostream>
 
 #include "engine/sceneGraph/Transform.h"
-#include "../../components/InstanceBuffer.h"
+#include "engine/rendering/InstanceBuffer.h"
 #include "../../components/unitTypes/Unit.h"
 #include "../../components/UnitState.h"
-#include "../../components/Shader.h"
 #include "../../gui/GuiCombat.h"
 #include "../../systems/CombatController.h"
 

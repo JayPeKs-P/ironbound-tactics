@@ -14,11 +14,8 @@ set(SOURCE_FILES src/main.cpp
         src/systems/GuiHandler.h
         src/components/CombatSelection.h
         src/components/unitTypes/SiegeEngine.h
-        src/components/Model2D.h
-        src/components/Shader.h
         ../engine/src/rendering/RenderSystem.cpp
         ../engine/include/engine/rendering/RenderSystem.h
-        src/components/InstanceBuffer.h
         src/components/UnitState.h
         src/systems/rendering/InstanceManager.cpp
         src/systems/rendering/InstanceManager.h

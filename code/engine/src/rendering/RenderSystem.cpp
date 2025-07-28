@@ -6,10 +6,10 @@
 #include <fstream>
 #include <sstream>
 #include "../../../game/src/Assets.h"
-#include "../../../game/src/components/Model2D.h"
 
-#include "../../../game/src/components/Model2D.h"
-#include "../../../game/src/components/Shader.h"
+#include "engine/rendering/Model2D.h"
+#include "engine/rendering/Shader.h"
+#include "engine/rendering/InstanceBuffer.h"
 
 namespace gl3::engine::render {
     struct glStatusData

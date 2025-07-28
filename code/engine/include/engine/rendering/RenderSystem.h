@@ -10,7 +10,6 @@
 
 #include <glm/glm.hpp>
 #include "engine/ecs/System.h"
-#include "../../../game/src/components/InstanceBuffer.h"
 
 namespace fs = std::filesystem;
 
