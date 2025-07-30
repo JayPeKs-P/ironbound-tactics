@@ -55,8 +55,11 @@ namespace gl3::engine {
         ///@return Value of delta-time.
         float getDeltaTime() {return deltaTime;}
 
-        // List of core events
-        /// Core event, triggered before the start() call.
+        /// @defgroup CoreEvents Core Game Events
+        /// @{
+        /// @brief Core event, triggered before the start() call.
+        /// @note Registered Listeners: see grouping.
+        /// @ingroup CoreEvents
         event_t onStartup;
         /// Core event, triggered right after the start() call and before entering the update cycle.
         event_t onAfterStartup;
@@ -72,6 +75,7 @@ namespace gl3::engine {
         event_t onBeforeShutdown;
         /// Core event, triggered at shutdown.
         event_t onShutdown;
+        /// @}
 
         ComponentManager componentManager;
         ecs::EntityManager entityManager;
