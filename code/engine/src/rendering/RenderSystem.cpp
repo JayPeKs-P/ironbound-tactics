@@ -12,21 +12,21 @@
 #include "engine/rendering/InstanceBuffer.h"
 
 namespace gl3::engine::render {
-    struct glStatusData
-    {
+    struct glStatusData {
         int success;
-        const char *shaderName;
+        const char* shaderName;
         char infoLog[GL_INFO_LOG_LENGTH];
     };
 
-    std::string readText(const fs::path &filePath) {
+    std::string readText(const fs::path& filePath) {
         std::ifstream sourceFile(resolveAssetPath(filePath));
         std::stringstream buffer;
         buffer << sourceFile.rdbuf();
         return buffer.str();
     }
-    template<typename T>
-    GLuint createBuffer(GLuint bufferType, const std::vector<T> &bufferData) {
+
+    template <typename T>
+    GLuint createBuffer(GLuint bufferType, const std::vector<T>& bufferData) {
         unsigned int buffer = 0;
         glGenBuffers(1, &buffer);
         glBindBuffer(bufferType, buffer);
@@ -34,9 +34,8 @@ namespace gl3::engine::render {
         return buffer;
     }
 
-    RenderSystem::RenderSystem(engine::Game &game):
-    System(game)
-    {
+    RenderSystem::RenderSystem(engine::Game& game):
+        System(game) {
         engine.onAfterStartup.addListener([&](engine::Game& game)
         {
             initShaders(game);
@@ -53,10 +52,9 @@ namespace gl3::engine::render {
         });
     }
 
-    void RenderSystem::draw(engine::Game &game)
-    {
-        auto& model2DContainer = game.componentManager.getContainer< Model2D>();
-        for (auto &[owner, _]: model2DContainer)
+    void RenderSystem::draw(engine::Game& game) {
+        auto& model2DContainer = game.componentManager.getContainer<Model2D>();
+        for (auto& [owner, _] : model2DContainer)
         {
             auto& shader_C = game.componentManager.getComponent<Shader>(owner);
             glUseProgram(shader_C.get_shader_program());
@@ -69,8 +67,10 @@ namespace gl3::engine::render {
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
                 setFloat("uvOffset", instanceBuffer_C.uvOffset, shader_C.get_shader_program());
-                glDrawElementsInstanced(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr, instanceBuffer_C.instances.size());
-            }else
+                glDrawElementsInstanced(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr,
+                                        instanceBuffer_C.instances.size());
+            }
+            else
             {
                 auto model = game.componentManager.getComponent<engine::sceneGraph::Transform>(owner).modelMatrix;
                 auto mvp = engine.calculateMvpMatrix(model);
@@ -81,21 +81,20 @@ namespace gl3::engine::render {
         }
     }
 
-    void RenderSystem::update(engine::Game& game)
-    {
+    void RenderSystem::update(engine::Game& game) {
         auto& instanceBufferContainer = game.componentManager.getContainer<InstanceBuffer>();
-        for (auto &[owner, _]: instanceBufferContainer)
+        for (auto& [owner, _] : instanceBufferContainer)
         {
             auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
             glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(glm::mat4),instanceBuffer_C.instances.data());
+            glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(glm::mat4),
+                            instanceBuffer_C.instances.data());
         }
     }
 
-    void RenderSystem::initShaders(engine::Game& game)
-    {
-        batchVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/batch/vertexShader.vert" );
-        batchFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER,"shaders/batch/fragmentShader.frag");
+    void RenderSystem::initShaders(engine::Game& game) {
+        batchVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/batch/vertexShader.vert");
+        batchFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/batch/fragmentShader.frag");
         batchProgram = glCreateProgram();
         glAttachShader(batchProgram, batchVertexShader);
         glAttachShader(batchProgram, batchFragmentShader);
@@ -113,23 +112,23 @@ namespace gl3::engine::render {
         glDetachShader(singleProgram, singleFragmentShader);
 
         auto& shaderContainer = game.componentManager.getContainer<Shader>();
-        for (auto &[owner, _]: shaderContainer)
+        for (auto& [owner, _] : shaderContainer)
         {
             auto& shader_C = game.componentManager.getComponent<Shader>(owner);
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
                 shader_C.set_shader_program(batchProgram);
-            }else
+            }
+            else
             {
                 shader_C.set_shader_program(singleProgram);
             }
         }
     }
 
-    void RenderSystem::initBuffers(engine::Game &game)
-    {
+    void RenderSystem::initBuffers(engine::Game& game) {
         auto& model2DContainer = game.componentManager.getContainer<Model2D>();
-        for (auto &[owner, _]: model2DContainer)
+        for (auto& [owner, _] : model2DContainer)
         {
             auto& model2D_C = game.componentManager.getComponent<Model2D>(owner);
             model2D_C.VBO = createBuffer(GL_ARRAY_BUFFER, model2D_C.vertices);
@@ -157,12 +156,12 @@ namespace gl3::engine::render {
                 // Instance VBO vorbereiten
                 glGenBuffers(1, &instanceBuffer_C.VBO);
                 glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
-                int maxInstancePerEntity = 60;
                 glBufferData(GL_ARRAY_BUFFER, maxInstancePerEntity * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
                 glBindVertexArray(model2D_C.VAO);
                 for (int i = 0; i < 4; ++i)
                 {
-                    glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(i * sizeof(glm::vec4)));
+                    glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4),
+                                          (void*)(i * sizeof(glm::vec4)));
                     glEnableVertexAttribArray(3 + i);
                     glVertexAttribDivisor(3 + i, 1);
                 }
@@ -171,10 +170,9 @@ namespace gl3::engine::render {
         }
     }
 
-    void RenderSystem::deleteBuffers(engine::Game& game)
-    {
+    void RenderSystem::deleteBuffers(engine::Game& game) {
         auto& model2DContainer = game.componentManager.getContainer<Model2D>();
-        for (auto &[owner, _]: model2DContainer)
+        for (auto& [owner, _] : model2DContainer)
         {
             auto& model2D_C = game.componentManager.getComponent<Model2D>(owner);
             glDeleteBuffers(1, &model2D_C.VBO);
@@ -188,34 +186,29 @@ namespace gl3::engine::render {
         }
     }
 
-    void RenderSystem::deleteShader(engine::Game& game)
-    {
+    void RenderSystem::deleteShader(engine::Game& game) {
         glDeleteShader(batchVertexShader);
         glDeleteShader(batchFragmentShader);
         glDeleteShader(singleVertexShader);
         glDeleteShader(singleFragmentShader);
     }
 
-    void RenderSystem::setMatrix(const std::string& uniformName, glm::mat4 matrix, GLuint shaderProgram)
-    {
+    void RenderSystem::setMatrix(const std::string& uniformName, glm::mat4 matrix, GLuint shaderProgram) {
         auto uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
         glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
-    void RenderSystem::setVector(const std::string& uniformName, glm::vec4 vector, GLuint shaderProgram)
-    {
+    void RenderSystem::setVector(const std::string& uniformName, glm::vec4 vector, GLuint shaderProgram) {
         int uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
         glUniform4fv(uniformLocation, 1, glm::value_ptr(vector));
     }
 
-    void RenderSystem::setFloat(const std::string& uniformName, float value, GLuint shaderProgram)
-    {
+    void RenderSystem::setFloat(const std::string& uniformName, float value, GLuint shaderProgram) {
         int uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
         glUniform1f(uniformLocation, value);
     }
 
-    unsigned int RenderSystem::loadAndCompileShader(GLuint shaderType, const fs::path& shaderPath)
-    {
+    unsigned int RenderSystem::loadAndCompileShader(GLuint shaderType, const fs::path& shaderPath) {
         auto shaderID = glCreateShader(shaderType);
         auto shaderSource = readText(shaderPath);
         auto source = shaderSource.c_str();
@@ -226,11 +219,12 @@ namespace gl3::engine::render {
         glStatusData compilationStatus{};
         compilationStatus.shaderName = shaderType == GL_VERTEX_SHADER ? "Vertex" : "Fragment";
         glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compilationStatus.success);
-        if(compilationStatus.success == GL_FALSE)
+        if (compilationStatus.success == GL_FALSE)
         {
             glGetShaderInfoLog(shaderID, GL_INFO_LOG_LENGTH, nullptr, compilationStatus.infoLog);
-            throw std::runtime_error("ERROR: " + std::string(compilationStatus.shaderName) + " shader compilation failed.\n" +
-            std::string(compilationStatus.infoLog));
+            throw std::runtime_error(
+                "ERROR: " + std::string(compilationStatus.shaderName) + " shader compilation failed.\n" +
+                std::string(compilationStatus.infoLog));
         }
         return shaderID;
     }

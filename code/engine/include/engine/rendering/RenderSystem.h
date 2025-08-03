@@ -83,6 +83,9 @@ class RenderSystem: public engine::ecs::System {
     /// @param shaderPath The path, were the GLSL shader file is located.
     unsigned int loadAndCompileShader(GLuint shaderType, const fs::path& shaderPath);
 
+    /// The maximum amount of instances a single entity can have.
+    int maxInstancePerEntity = 60;
+
     /// ID of the vertex shader used for instance rendering.
     unsigned int batchVertexShader;
 
