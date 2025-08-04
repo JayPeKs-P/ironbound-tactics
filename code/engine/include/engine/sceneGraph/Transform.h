@@ -15,6 +15,13 @@ using gl3::engine::ecs::Entity;
 using gl3::engine::ecs::guid_t;
 
 namespace gl3::engine::sceneGraph {
+
+    /// @brief Stores all information regarding the transformation (e.g. position, rotation) of an entity.
+    ///
+    /// Transforms are part of the 'Scene Graph'. They are nodes in tree structure. Transforms may have many children
+    /// but only one a single parent. If the parent transform is changed in any way, the effect is applied to all its
+    /// child nodes. Transform is a @ref Component, therefore the constructor is private and can only be called by
+    /// ComponentManager.
     class Transform final : public Component {
         friend ComponentManager;
         friend Entity;
@@ -22,13 +29,21 @@ namespace gl3::engine::sceneGraph {
     public:
         std::set<Transform *> getChildTransforms();
         Transform *getParent();
+
+        /// @brief Sets a pointer to the parent Transform and calls addChild(this) on instance of parent.
+        /// @param parentTransform Pointer to the instance of transform this instance should have as parent.
         void setParent(Transform *parentTransform);
+
+        /// @brief Marks all child transforms as deleted.
         void invalidate();
 
         ~Transform() override;
         Transform(const Transform&) = delete;
         Transform& operator = (const Transform&) = delete;
         Transform& operator = (Transform&&) = delete;
+
+        /// @brief Move constructor, used by ComponentManager in ComponentManager::addComponent() to move a Component to
+        /// its corresponding container.
         Transform(Transform &&other) noexcept;
         glm::vec3 localPosition;
         float localZRotation;
@@ -37,6 +52,8 @@ namespace gl3::engine::sceneGraph {
 
 
     protected:
+
+        ///
         void addChild(Transform *transform);
         void removeChild(Transform *transform);
 

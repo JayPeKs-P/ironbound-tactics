@@ -93,14 +93,14 @@ namespace gl3::engine::render {
     }
 
     void RenderSystem::initShaders(engine::Game& game) {
-        batchVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/batch/vertexShader.vert");
-        batchFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/batch/fragmentShader.frag");
-        batchProgram = glCreateProgram();
-        glAttachShader(batchProgram, batchVertexShader);
-        glAttachShader(batchProgram, batchFragmentShader);
-        glLinkProgram(batchProgram);
-        glDetachShader(batchProgram, batchVertexShader);
-        glDetachShader(batchProgram, batchFragmentShader);
+        instanceVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/batch/vertexShader.vert");
+        instanceFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/batch/fragmentShader.frag");
+        instanceProgram = glCreateProgram();
+        glAttachShader(instanceProgram, instanceVertexShader);
+        glAttachShader(instanceProgram, instanceFragmentShader);
+        glLinkProgram(instanceProgram);
+        glDetachShader(instanceProgram, instanceVertexShader);
+        glDetachShader(instanceProgram, instanceFragmentShader);
 
         singleVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/single/vertexShader.vert");
         singleFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/single/fragmentShader.frag");
@@ -117,7 +117,7 @@ namespace gl3::engine::render {
             auto& shader_C = game.componentManager.getComponent<Shader>(owner);
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
-                shader_C.set_shader_program(batchProgram);
+                shader_C.set_shader_program(instanceProgram);
             }
             else
             {
@@ -187,8 +187,8 @@ namespace gl3::engine::render {
     }
 
     void RenderSystem::deleteShader(engine::Game& game) {
-        glDeleteShader(batchVertexShader);
-        glDeleteShader(batchFragmentShader);
+        glDeleteShader(instanceVertexShader);
+        glDeleteShader(instanceFragmentShader);
         glDeleteShader(singleVertexShader);
         glDeleteShader(singleFragmentShader);
     }
