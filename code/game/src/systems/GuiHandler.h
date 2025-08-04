@@ -39,10 +39,6 @@ public:
         int tileY, int tileWidth,
         int tileHeight, int atlasWidth, int atlasHeight
     );
-    // [[nodiscard]] std::shared_ptr<engine::ecs::Gui> combat_gui() const
-    // {
-    //     return combatGUI;
-    // }
 private:
     void restoreGameState();
     void selectCurrentScene(engine::Game &game);

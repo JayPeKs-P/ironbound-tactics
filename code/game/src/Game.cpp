@@ -11,7 +11,7 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Assets.h"
+#include "engine/util/Assets.h"
 
 #include "components/TagComponent.h"
 #include "systems/GuiHandler.h"
@@ -87,14 +87,12 @@ void Game::start() {
 
 
     //----- Entities of enemy's army -----
-    std::cout << "REMINDER: NEED TO SET ENEMY UNITS" << std::endl;
     auto& eInf_E = engine::Game::entityManager.createEntity();
     eInfID_E = eInf_E.guid();
     auto& eInfU_C = eInf_E.addComponent<Unit>(
         "pInfantry"
     );
     eInf_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    // tempTexID = engine::util::Texture::load(eInfU_C.texturePath.c_str());
     eInf_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     eInf_E.addComponent<InstanceBuffer>();
     eInf_E.addComponent<Shader>();
@@ -107,7 +105,6 @@ void Game::start() {
         "pArcher"
     );
     eArc_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    // tempTexID = engine::util::Texture::load(eArcU_C.texturePath.c_str());
     eArc_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     eArc_E.addComponent<InstanceBuffer>();
     eArc_E.addComponent<Shader>();
@@ -121,7 +118,6 @@ void Game::start() {
     );
     auto& eCatSE_C = eCat_E.addComponent<SiegeEngine>(5);
     eCat_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    // tempTexID = engine::util::Texture::load(eCatU_C.texturePath.c_str());
     eCat_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     eCat_E.addComponent<InstanceBuffer>();
     eCat_E.addComponent<Shader>();
@@ -131,14 +127,11 @@ void Game::start() {
 
     guiHandler = std::make_unique<GuiHandler>(*this);
 
-    // renderSystem = new RenderSystem(*this);
-
     instanceManager = new InstanceManager(*this);
 
     movementSystem = new MovementSystem(*this);
 
     combatController = new CombatController(*this);
-    // combatController->init(*this);
 
     selectionSystem = new SelectionSystem(*this);
 
@@ -228,15 +221,12 @@ void Game::update(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
-    // movementSystem->moveTo(*this, deltaTime);
     for (auto& transform_C : unitTransforms)
     {
         instanceManager->update(*this, transform_C);
     }
-    // renderSystem->update(*this);
     elapsedTime += deltaTime;
 }
 
 void Game::draw() {
-    // renderSystem->draw(*this);
 }

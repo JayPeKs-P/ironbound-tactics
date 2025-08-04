@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.18)
 set(SOURCE_FILES src/main.cpp
         src/Game.cpp
         src/Game.h
-        src/Assets.h
+        ../engine/include/engine/util/Assets.h
         src/components/unitTypes/Unit.h
         src/systems/CombatController.cpp
         src/systems/CombatController.h

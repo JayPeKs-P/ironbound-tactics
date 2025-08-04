@@ -5,7 +5,7 @@
 #include "engine/rendering/RenderSystem.h"
 #include <fstream>
 #include <sstream>
-#include "../../../game/src/Assets.h"
+#include "engine/util/Assets.h"
 
 #include "engine/rendering/Model2D.h"
 #include "engine/rendering/Shader.h"
@@ -136,7 +136,7 @@ namespace gl3::engine::render {
             glGenVertexArrays(1, &model2D_C.VAO);
             glBindVertexArray(model2D_C.VAO);
 
-            // VBO: Vertexdaten
+            // VBO
             glBindBuffer(GL_ARRAY_BUFFER, model2D_C.VBO);
             // Position (location = 0)
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -148,12 +148,11 @@ namespace gl3::engine::render {
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
             glEnableVertexAttribArray(2);
 
-            // EBO: Indexdaten
+            // EBO
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model2D_C.EBO);
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
-                // Instance VBO vorbereiten
                 glGenBuffers(1, &instanceBuffer_C.VBO);
                 glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
                 glBufferData(GL_ARRAY_BUFFER, maxInstancePerEntity * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
