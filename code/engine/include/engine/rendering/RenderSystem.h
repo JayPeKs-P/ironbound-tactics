@@ -13,11 +13,12 @@
 
 namespace fs = std::filesystem;
     /// @defgroup Rendering Components & Systems related to rendering.
-    /// @ingroup Rendering
     ///
     /// The RenderSystem uses OpenGL.
 
 namespace gl3::engine::render {
+
+    /// @ingroup Rendering
     /// @brief Handles OpenGL rendering of 2D models with support for instancing.
     ///
     /// This system draws all entities with a Model2D and optionally InstanceBuffer component using
