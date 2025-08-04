@@ -53,8 +53,12 @@ namespace gl3::engine::sceneGraph {
 
     protected:
 
-        ///
+        /// @brief Adds a pointer to a Transform to children.
+        /// @param transform Pointer to a Transform that will be registered as a child node.
         void addChild(Transform *transform);
+
+        /// @brief Removes a specified Transform from children.
+        /// @param Pointer to a Transform that will be deregistered as a child node.
         void removeChild(Transform *transform);
 
     private:
