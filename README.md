@@ -1,4 +1,4 @@
-# Ironbound Tactics
+# Overview
 
 | General Info       |                                                                  |
 | ------------------ | ---------------------------------------------------------------- |
@@ -52,11 +52,9 @@ git clone --recurse-submodules https://github.com/JayPeKs-P/ironbound-tactics
 
 To compile the source code use the [Visual Studio 2022](https://visualstudio.microsoft.com/vs/features/cplusplus/) compiler and [CMake](https://cmake.org/) **version 3.29** or higher. Select the `root/code` folder as the project root folder in your IDE.
 > [!CAUTION] 
-> **MSVC Compiler is required**
-> This project uses an implementation of the SoLoud library, that **requires** the MSVC compiler. Should you encounter any problems, make sure it is properly set up. (In CLion make sure it is the first entry in the list of compilers in
+> **MSVC Compiler is required** 
+> This project uses an implementation of the SoLoud library, that **requires** the MSVC compiler. Should you encounter any problems, make sure it is properly set up. (In [CLion](https://www.jetbrains.com/clion/) make sure it is the first entry in the list of compilers in
 >  `Settings / Build, Execution, Deployment / Toolchains`)
-
-I built this project in the IDE [CLion](https://www.jetbrains.com/clion/) from jetbrains.  
 
 ## External Dependencies
 
@@ -86,7 +84,3 @@ I built this project in the IDE [CLion](https://www.jetbrains.com/clion/) from j
 - [ ] Refine damage calculation
 ## Documentation
 An explanation on how to play `Ironbound Tactics` is found in the [docs](https://JayPeKs-P.github.io/ironbound-tactics/), as well as a step-by-step guide on how to use the engine codebase to create a new game.
-
-## Repository Usage Guides
-IMPORTANT: This project uses submodules. Use `git clone --recurse-submodules <...>` when cloning. 
-Also this project requires **CMake 3.29** as minimum. Should it not be possible, for whatever reason, to use this version or newer, change `cmake_minimum_required(VERSION 3.28.1)` in engine/CMakeLists.txt and root CMakeLists.txt.
