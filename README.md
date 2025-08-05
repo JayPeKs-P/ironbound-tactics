@@ -14,7 +14,7 @@
 As part of the module *GameLab III*, which is one of the core modules of the bachelors degree *Games Engineering* at Julius-Maximilians-University Würzburg, students are tasked to develop a videogame in *C++* without using existing engines or engine-like
 libraries.
 `Ironbound Tactics` is the game I create in course of this module. It is a turn based endless battler, where the player creates an army by picking their units out of a set pool and then fights the armies of random computer controlled opponents.
-**This project is still Work In Progress as of 
+***This project is still Work In Progress***
 
 ## Project Structure
 
