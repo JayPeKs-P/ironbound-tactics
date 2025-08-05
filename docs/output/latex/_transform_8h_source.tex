@@ -1,0 +1,64 @@
+\doxysection{Transform.\+h}
+\hypertarget{_transform_8h_source}{}\label{_transform_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/sceneGraph/Transform.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/sceneGraph/Transform.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 18/07/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <set>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <glm/vec3.hpp>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <glm/mat4x4.hpp>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/ecs.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/Component.h"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{using\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3::engine::ecs::Component}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{using\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager}{gl3::engine::ecs::ComponentManager}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{using\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity}{gl3::engine::ecs::Entity}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{using\ }gl3::engine::ecs::guid\_t;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace\ }gl3::engine::sceneGraph\ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{class\ }Transform\ final\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_a9d275532e6286deb47eb536740c384a1}{Component}}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ ComponentManager;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ Entity;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ std::set<Transform\ *>\ getChildTransforms();}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ Transform\ *getParent();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_ade2c45ea78a501b1afad94eae5641316}{setParent}}(Transform\ *parentTransform);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_a2904e2b33fcea6c1fb7407d8cc7e5f73}{invalidate}}();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \string~Transform()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ Transform(\textcolor{keyword}{const}\ Transform\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ Transform\&\ operator\ =\ (\textcolor{keyword}{const}\ Transform\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ Transform\&\ operator\ =\ (Transform\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_a1b1a92a1ea8d0cae4a0e857a00325047}{Transform}}(Transform\ \&\&other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ glm::vec3\ localPosition;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ localZRotation;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ glm::vec3\ localScale;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ glm::mat4\ modelMatrix;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_a23eb8642747ef71ffc1d7978e002046e}{addChild}}(Transform\ *transform);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_a403108d0f0ad18dad1d4f95a3076a50e}{removeChild}}(Transform\ *transform);}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Transform(guid\_t\ owner,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Transform\ *parentTransform\ =\ \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ position\ =\ \{0.0f,\ 0.0f,\ 0.0f\},}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ zRotation\ =\ 0,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ scale\ =\ \{1.0f,\ 1.0f,\ 1.0f\});}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{class_transform}{Transform}}\ *parent\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00071\ \ \ \ \ std::set<Transform\ *>\ children;}
+\DoxyCodeLine{00072\ \ \ \ \ \};}
+\DoxyCodeLine{00073\ \}}
+
+\end{DoxyCode}

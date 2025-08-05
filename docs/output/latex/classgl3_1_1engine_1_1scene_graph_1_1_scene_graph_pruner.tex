@@ -1,0 +1,73 @@
+\doxysection{gl3\+::engine\+::scene\+Graph\+::Scene\+Graph\+Pruner Class Reference}
+\hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner}{}\label{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner}\index{gl3::engine::sceneGraph::SceneGraphPruner@{gl3::engine::sceneGraph::SceneGraphPruner}}
+
+
+Handles deletion of \doxylink{class_entity}{Entity} instances that have a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} \doxylink{class_component}{Component} which is marked as deleted.  
+
+
+
+
+{\ttfamily \#include $<$Scene\+Graph\+Pruner.\+h$>$}
+
+Inheritance diagram for gl3\+::engine\+::scene\+Graph\+::Scene\+Graph\+Pruner\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner_a1bc57a7ac63e1e3d525170f7df2864c4}\label{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner_a1bc57a7ac63e1e3d525170f7df2864c4} 
+{\bfseries Scene\+Graph\+Pruner} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}} \&game)
+\begin{DoxyCompactList}\small\item\em Adds \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner_ae77db0be9cd0f5c288a044213e17a125}{prune\+Transforms()} to \doxylink{group___core_events_gadabe3abc66d48e661961ce8ae0be4c44}{engine\+::\+Game\+::on\+Before\+Update} as listener. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner_ae77db0be9cd0f5c288a044213e17a125}{prune\+Transforms}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}} \&game)
+\begin{DoxyCompactList}\small\item\em Marks all \doxylink{class_entity}{Entity} instances with a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} \doxylink{class_component}{Component} which is marked as deleted also as deleted. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{gl3\+::engine\+::ecs\+::\+System}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{System}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}} \&engine)
+\begin{DoxyCompactList}\small\item\em Create a \doxylink{classgl3_1_1engine_1_1ecs_1_1_system}{System} object and store a reference to the game instance. \end{DoxyCompactList}\item 
+{\bfseries System} (\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{System}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Prevent move semantics. \end{DoxyCompactList}\item 
+{\bfseries System} (const \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{System}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Delete copy constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{gl3\+::engine\+::ecs\+::\+System}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T, typename... Guids$>$ }\\bool \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a1a5957e3193843657ded6365117fcbe6}{check\+If\+Entity\+Has\+Component}} (Guids... guids)
+\begin{DoxyCompactList}\small\item\em Function to check, if one or more entities have the specified component. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{gl3\+::engine\+::ecs\+::\+System}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \& {\bfseries engine}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles deletion of \doxylink{class_entity}{Entity} instances that have a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} \doxylink{class_component}{Component} which is marked as deleted. 
+
+\label{doc-func-members}
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner_ae77db0be9cd0f5c288a044213e17a125}\index{gl3::engine::sceneGraph::SceneGraphPruner@{gl3::engine::sceneGraph::SceneGraphPruner}!pruneTransforms@{pruneTransforms}}
+\index{pruneTransforms@{pruneTransforms}!gl3::engine::sceneGraph::SceneGraphPruner@{gl3::engine::sceneGraph::SceneGraphPruner}}
+\doxysubsubsection{\texorpdfstring{pruneTransforms()}{pruneTransforms()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner_ae77db0be9cd0f5c288a044213e17a125} 
+void gl3\+::engine\+::scene\+Graph\+::\+Scene\+Graph\+Pruner\+::prune\+Transforms (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}} \&}]{game}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Marks all \doxylink{class_entity}{Entity} instances with a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} \doxylink{class_component}{Component} which is marked as deleted also as deleted. 
+
+Calls \doxylink{class_component_manager_a02346f78bd371e8acc51c7700be19d02}{Component\+Manager\+::for\+Each\+Component()} and Component\+Manager\+::get\+Entity(). 
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to the core instance of \doxylink{classgl3_1_1engine_1_1_game}{engine\+::\+Game} \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/julia/\+Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/scene\+Graph/Scene\+Graph\+Pruner.\+h\end{DoxyCompactItemize}

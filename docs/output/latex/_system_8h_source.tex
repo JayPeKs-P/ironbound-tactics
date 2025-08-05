@@ -1,0 +1,33 @@
+\doxysection{System.\+h}
+\hypertarget{_system_8h_source}{}\label{_system_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/System.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/System.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 20/06/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}engine/Game.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace\ }gl3::engine::ecs\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{System}}\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{System}}(\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}}\ \&engine)\ :\ engine(engine)\ \{\}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a077ef8846a6c18d6746284519dd746f0}{System}}(\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{System}}\ \&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a56b2a95143d8d76ab3261617b4431354}{System}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{System}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{\string~System}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine::Game}}\ \&engine;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Guids>}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a1a5957e3193843657ded6365117fcbe6}{checkIfEntityHasComponent}}(Guids...\ guids)}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (...\ \&\&\ engine.componentManager.hasComponent<T>((guids)));}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \};}
+\DoxyCodeLine{00046\ \}}
+
+\end{DoxyCode}

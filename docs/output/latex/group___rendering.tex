@@ -1,0 +1,17 @@
+\doxysection{Components \& Systems related to rendering. }
+\hypertarget{group___rendering}{}\label{group___rendering}\index{Components \& Systems related to rendering.@{Components \& Systems related to rendering.}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_instance_buffer}{Instance\+Buffer}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_component}{Component} to store the ID of a separate VBO buffer, that is used for instance rendering. Inherits from \doxylink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3\+::engine\+::ecs\+::\+Component}. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_model2_d}{Model2D}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_component}{Component} that stores the ID of rendering buffers, shape vertices and a texture ID. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system}{gl3\+::engine\+::render\+::\+Render\+System}}
+\begin{DoxyCompactList}\small\item\em Handles Open\+GL rendering of 2D models with support for instancing. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_shader}{Shader}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_component}{Component} for shader data. Stores the ID of a shader program. Inherits from \doxylink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3\+::engine\+::ecs\+::\+Component}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The Render\+System uses Open\+GL. 

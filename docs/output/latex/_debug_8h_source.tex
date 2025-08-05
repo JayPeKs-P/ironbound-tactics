@@ -1,0 +1,41 @@
+\doxysection{Debug.\+h}
+\hypertarget{_debug_8h_source}{}\label{_debug_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/util/Debug.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/util/Debug.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 20/07/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifdef\ DEBUG\_MODE}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ DEBUG\_LOG(x)\ std::cout\ \ x\ <<\ std::endl}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\ \ \ \ \#define\ DEBUG\_LOG(x)}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{inline}\ std::string\ unitCategory\_to\_string\ (UnitCategory\ category)}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#pragma\ warning(push)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#pragma\ warning(default\ :\ 4091)}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordflow}{switch}\ (category)}
+\DoxyCodeLine{00020\ \ \ \ \ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordflow}{case}\ UnitCategory::INFANTRY:}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Infantry"{}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordflow}{case}\ UnitCategory::ARCHER:}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Archer"{}};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordflow}{case}\ UnitCategory::CATAPULT:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Catapult"{}};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordflow}{case}\ UnitCategory::ASSAULT\_COVER:}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Assault\ Cover"{}};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordflow}{case}\ UnitCategory::SIEGE:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Siege"{}};}
+\DoxyCodeLine{00031\ \ \ \ \ \}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#pragma\ warning(pop)}}
+\DoxyCodeLine{00033\ \ \ \ \ assert(\textcolor{keyword}{false});}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}fail"{}};}
+\DoxyCodeLine{00035\ \}}
+
+\end{DoxyCode}

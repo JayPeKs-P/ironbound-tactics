@@ -1,0 +1,176 @@
+\doxysection{gl3\+::engine\+::ecs\+::Component\+Manager Class Reference}
+\hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager}{}\label{classgl3_1_1engine_1_1ecs_1_1_component_manager}\index{gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}}
+
+
+The class that handles the lifetime of \doxylink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3\+::engine\+::ecs\+::\+Component} objects.  
+
+
+
+
+{\ttfamily \#include $<$Component\+Manager.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a79ef56051ef3ee8fb116bbd3491341b3}{Component\+Manager}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&engine)
+\begin{DoxyCompactList}\small\item\em Adds the member function purge\+Components() to \doxylink{group___core_events_ga83abcc955dfd5b51dd98530db82a186f}{gl3\+::engine\+::\+Game\+::on\+After\+Update} as listener. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename C, typename ... Args$>$ }\\C \& \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a9a87e47ebea0508c85ace85b90f09e6c}{add\+Component}} (guid\+\_\+t owner, Args ...args)
+\begin{DoxyCompactList}\small\item\em Create a new component of type \textquotesingle{}C\textquotesingle{} and add it to an entity\textquotesingle{}s associated container. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename C$>$ }\\C \& \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_aa1d3aa19bb93a7a6722d7c25260a78c4}{get\+Component}} (guid\+\_\+t owner)
+\begin{DoxyCompactList}\small\item\em Get a specific component from an entity. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename C$>$ }\\bool \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_ad585885b759439ec8d48e1982c9daad2}{has\+Component}} (const guid\+\_\+t \&owner)
+\begin{DoxyCompactList}\small\item\em Check if an entity has a component of type \textquotesingle{}C\textquotesingle{}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename C$>$ }\\Component\+Container \& \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_ac2c26467828365caea58065865006c22}{get\+Container}} ()
+\begin{DoxyCompactList}\small\item\em Get the reference to the container, where all components of type C are stored in. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename C$>$ }\\void \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a02346f78bd371e8acc51c7700be19d02}{for\+Each\+Component}} (std\+::function$<$ void(C \&)$>$ f)
+\begin{DoxyCompactList}\small\item\em A callback function that operates on all components of the specified type \textquotesingle{}C\textquotesingle{}. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_ad7a4ae35bc7b245dfed74d1233eeffec}\label{classgl3_1_1engine_1_1ecs_1_1_component_manager_ad7a4ae35bc7b245dfed74d1233eeffec} 
+{\footnotesize template$<$typename C$>$ }\\void {\bfseries for\+Each\+Component\+Revers} (std\+::function$<$ void(C \&)$>$ f)
+\begin{DoxyCompactList}\small\item\em Does the same as \doxylink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a02346f78bd371e8acc51c7700be19d02}{gl3\+::engine\+::ecs\+::\+Component\+Manager\+::for\+Each\+Component()}, but backwards. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_abad82c066c4d763eaf324763f51cb531}\label{classgl3_1_1engine_1_1ecs_1_1_component_manager_abad82c066c4d763eaf324763f51cb531} 
+{\footnotesize template$<$typename C$>$ }\\void {\bfseries remove\+Component} (guid\+\_\+t entity\+ID)
+\begin{DoxyCompactList}\small\item\em Adds the specified component to the delete\+List. The component will be erased on\+After\+Update. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_a0e1b75d5a248f1cfc28b59098373e1e6}\label{classgl3_1_1engine_1_1ecs_1_1_component_manager_a0e1b75d5a248f1cfc28b59098373e1e6} 
+void {\bfseries remove\+Components} (guid\+\_\+t entity\+ID)
+\begin{DoxyCompactList}\small\item\em Removes all components that belong to a particular entity. Used whenever an entity is destroyed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The class that handles the lifetime of \doxylink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3\+::engine\+::ecs\+::\+Component} objects. 
+
+An object of this class is member of \doxylink{classgl3_1_1engine_1_1_game}{gl3\+::engine\+::\+Game}. Use it to add components to an \doxylink{classgl3_1_1engine_1_1ecs_1_1_entity}{gl3\+::engine\+::ecs\+::\+Entity}. It adds a unique\+\_\+ptr of a new component to a container, and maps it to their owners ID. For each type of component a new container is created. Because of that, all components of the same type live in sequential memory. 
+
+\label{doc-constructors}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_a79ef56051ef3ee8fb116bbd3491341b3}\index{gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}!ComponentManager@{ComponentManager}}
+\index{ComponentManager@{ComponentManager}!gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}}
+\doxysubsubsection{\texorpdfstring{ComponentManager()}{ComponentManager()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_component_manager_a79ef56051ef3ee8fb116bbd3491341b3} 
+gl3\+::engine\+::ecs\+::\+Component\+Manager\+::\+Component\+Manager (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{engine}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Adds the member function purge\+Components() to \doxylink{group___core_events_ga83abcc955dfd5b51dd98530db82a186f}{gl3\+::engine\+::\+Game\+::on\+After\+Update} as listener. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em engine} & A reference to the base instance of game. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_a9a87e47ebea0508c85ace85b90f09e6c}\index{gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}!addComponent@{addComponent}}
+\index{addComponent@{addComponent}!gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}}
+\doxysubsubsection{\texorpdfstring{addComponent()}{addComponent()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_component_manager_a9a87e47ebea0508c85ace85b90f09e6c} 
+template$<$typename C, typename ... Args$>$ \\
+C \& gl3\+::engine\+::ecs\+::\+Component\+Manager\+::add\+Component (\begin{DoxyParamCaption}\item[{guid\+\_\+t}]{owner}{, }\item[{Args ...}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
+
+
+
+Create a new component of type \textquotesingle{}C\textquotesingle{} and add it to an entity\textquotesingle{}s associated container. 
+
+Creates a new component and moves it into the proper container of its type. If the respective container does not yet exist, it is created.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em C} & The type of the component. \\
+\hline
+{\em Args} & Additional Arguments, that are used in \textquotesingle{}C\textquotesingle{}s constructor. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+A reference to the component we just created. 
+\end{DoxyReturn}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_a02346f78bd371e8acc51c7700be19d02}\index{gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}!forEachComponent@{forEachComponent}}
+\index{forEachComponent@{forEachComponent}!gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}}
+\doxysubsubsection{\texorpdfstring{forEachComponent()}{forEachComponent()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_component_manager_a02346f78bd371e8acc51c7700be19d02} 
+template$<$typename C$>$ \\
+void gl3\+::engine\+::ecs\+::\+Component\+Manager\+::for\+Each\+Component (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(C \&)$>$}]{f}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+A callback function that operates on all components of the specified type \textquotesingle{}C\textquotesingle{}. 
+
+A callback function, that iterates over the 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em C} & The type of the component to iterate over. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em f} & A function object, executed for each component, gets reference to current iteration. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_aa1d3aa19bb93a7a6722d7c25260a78c4}\index{gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}!getComponent@{getComponent}}
+\index{getComponent@{getComponent}!gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}}
+\doxysubsubsection{\texorpdfstring{getComponent()}{getComponent()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_component_manager_aa1d3aa19bb93a7a6722d7c25260a78c4} 
+template$<$typename C$>$ \\
+C \& gl3\+::engine\+::ecs\+::\+Component\+Manager\+::get\+Component (\begin{DoxyParamCaption}\item[{guid\+\_\+t}]{owner}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a specific component from an entity. 
+
+This function uses the component type and owner ID to retrieve the component from its container. It uses the std\+::map\+::at function, so a std\+::out of range exception fires, should the component not exist. 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em C} & The type of the component the function shall return. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em owner} & The ID of the entity the component belongs to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A reference to a component of type \textquotesingle{}C\textquotesingle{}, that belongs to the entity with the specified ID. 
+\end{DoxyReturn}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_ac2c26467828365caea58065865006c22}\index{gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}!getContainer@{getContainer}}
+\index{getContainer@{getContainer}!gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}}
+\doxysubsubsection{\texorpdfstring{getContainer()}{getContainer()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_component_manager_ac2c26467828365caea58065865006c22} 
+template$<$typename C$>$ \\
+Component\+Container \& gl3\+::engine\+::ecs\+::\+Component\+Manager\+::get\+Container (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the reference to the container, where all components of type C are stored in. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the container, that has typeid(\+C) as its key. 
+\end{DoxyReturn}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_component_manager_ad585885b759439ec8d48e1982c9daad2}\index{gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}!hasComponent@{hasComponent}}
+\index{hasComponent@{hasComponent}!gl3::engine::ecs::ComponentManager@{gl3::engine::ecs::ComponentManager}}
+\doxysubsubsection{\texorpdfstring{hasComponent()}{hasComponent()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_component_manager_ad585885b759439ec8d48e1982c9daad2} 
+template$<$typename C$>$ \\
+bool gl3\+::engine\+::ecs\+::\+Component\+Manager\+::has\+Component (\begin{DoxyParamCaption}\item[{const guid\+\_\+t \&}]{owner}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Check if an entity has a component of type \textquotesingle{}C\textquotesingle{}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em C} & The type of the component to check. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em owner} & Const reference to the ID of the entity that is checked to have the component. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if containers has a container of type \textquotesingle{}C\textquotesingle{}, which belongs to \textquotesingle{}owner\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/julia/\+Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/Component\+Manager.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,22 @@
+\doxysection{Action\+Registry.\+h}
+\hypertarget{_action_registry_8h_source}{}\label{_action_registry_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/logic/ActionRegistry.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/logic/ActionRegistry.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ julia\ on\ 14/07/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Action.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }gl3::engine::combat\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgl3_1_1engine_1_1combat_1_1_action_registry}{ActionRegistry}}\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{void}\ scheduleAction(\textcolor{keywordtype}{int}\ delay,\ std::function<\textcolor{keywordtype}{void}()>\ action);}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{bool}\ advance();}
+\DoxyCodeLine{00013\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00014\ \ \ \ \ std::list<Action>\ actions;}
+\DoxyCodeLine{00015\ \};}
+\DoxyCodeLine{00016\ \}}
+
+\end{DoxyCode}

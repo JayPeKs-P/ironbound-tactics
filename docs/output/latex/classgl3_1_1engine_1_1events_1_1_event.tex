@@ -1,0 +1,67 @@
+\doxysection{gl3\+::engine\+::events\+::Event\texorpdfstring{$<$}{<} Owner, Args \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classgl3_1_1engine_1_1events_1_1_event}{}\label{classgl3_1_1engine_1_1events_1_1_event}\index{gl3::engine::events::Event$<$ Owner, Args $>$@{gl3::engine::events::Event$<$ Owner, Args $>$}}
+
+
+{\ttfamily \#include $<$Events.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1events_1_1_event_a8cd4bcea08eb921ea8aed7d75ff17c1e}\label{classgl3_1_1engine_1_1events_1_1_event_a8cd4bcea08eb921ea8aed7d75ff17c1e} 
+using {\bfseries listener\+\_\+t} = typename std\+::function$<$void(Args...)$>$
+\item 
+\Hypertarget{classgl3_1_1engine_1_1events_1_1_event_acb232fdb434a087544897196ec815cfc}\label{classgl3_1_1engine_1_1events_1_1_event_acb232fdb434a087544897196ec815cfc} 
+using {\bfseries container\+\_\+t} = typename std\+::list$<$listener\+\_\+t$>$
+\item 
+\Hypertarget{classgl3_1_1engine_1_1events_1_1_event_ad746d93e4912a13672fc235a75cf36f5}\label{classgl3_1_1engine_1_1events_1_1_event_ad746d93e4912a13672fc235a75cf36f5} 
+using {\bfseries handle\+\_\+t} = typename container\+\_\+t\+::iterator
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+handle\+\_\+t \mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event_a33547812b39082ff77a2fd3471f70f2c}{add\+Listener}} (listener\+\_\+t listener)
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event_a4c41cd6f96a976c941f77cfb2ca33285}{remove\+Listener}} (handle\+\_\+t handle)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Owner, typename ... Args$>$\newline
+class gl3\+::engine\+::events\+::\+Event$<$ Owner, Args $>$}
+Represents an event that listeners can subscribe to. Events have an owner and an arbitrary number of arguments that are passes to the listeners when invoked. Only the owner is allowed to invoke the event. 
+
+\label{doc-func-members}
+\Hypertarget{classgl3_1_1engine_1_1events_1_1_event_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classgl3_1_1engine_1_1events_1_1_event_a33547812b39082ff77a2fd3471f70f2c}\index{gl3::engine::events::Event$<$ Owner, Args $>$@{gl3::engine::events::Event$<$ Owner, Args $>$}!addListener@{addListener}}
+\index{addListener@{addListener}!gl3::engine::events::Event$<$ Owner, Args $>$@{gl3::engine::events::Event$<$ Owner, Args $>$}}
+\doxysubsubsection{\texorpdfstring{addListener()}{addListener()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1events_1_1_event_a33547812b39082ff77a2fd3471f70f2c} 
+template$<$typename Owner, typename ... Args$>$ \\
+handle\+\_\+t \mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{gl3\+::engine\+::events\+::\+Event}}$<$ Owner, Args $>$\+::add\+Listener (\begin{DoxyParamCaption}\item[{listener\+\_\+t}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds an event listener. All registered event listeners are called when the event is invoked. 
+\begin{DoxyParams}{Parameters}
+{\em listener} & An event listener. Its function signature is defined by the {\itshape listener\+\_\+t}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a handle you can pass to the {\itshape remove\+Listener} function use to remove the listener. 
+\end{DoxyReturn}
+\Hypertarget{classgl3_1_1engine_1_1events_1_1_event_a4c41cd6f96a976c941f77cfb2ca33285}\index{gl3::engine::events::Event$<$ Owner, Args $>$@{gl3::engine::events::Event$<$ Owner, Args $>$}!removeListener@{removeListener}}
+\index{removeListener@{removeListener}!gl3::engine::events::Event$<$ Owner, Args $>$@{gl3::engine::events::Event$<$ Owner, Args $>$}}
+\doxysubsubsection{\texorpdfstring{removeListener()}{removeListener()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1events_1_1_event_a4c41cd6f96a976c941f77cfb2ca33285} 
+template$<$typename Owner, typename ... Args$>$ \\
+void \mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{gl3\+::engine\+::events\+::\+Event}}$<$ Owner, Args $>$\+::remove\+Listener (\begin{DoxyParamCaption}\item[{handle\+\_\+t}]{handle}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Removes an event listener. Removed event listeners are no longer called when the event is invoked. 
+\begin{DoxyParams}{Parameters}
+{\em handle} & The handle returned by the {\itshape add\+Listener} function. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/julia/\+Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/Events.\+h\end{DoxyCompactItemize}

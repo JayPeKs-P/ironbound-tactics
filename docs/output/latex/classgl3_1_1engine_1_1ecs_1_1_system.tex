@@ -1,0 +1,95 @@
+\doxysection{gl3\+::engine\+::ecs\+::System Class Reference}
+\hypertarget{classgl3_1_1engine_1_1ecs_1_1_system}{}\label{classgl3_1_1engine_1_1ecs_1_1_system}\index{gl3::engine::ecs::System@{gl3::engine::ecs::System}}
+
+
+Abstract base class for all ECS systems.  
+
+
+
+
+{\ttfamily \#include $<$System.\+h$>$}
+
+Inheritance diagram for gl3\+::engine\+::ecs\+::System\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.347774cm]{classgl3_1_1engine_1_1ecs_1_1_system}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{System}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}} \&engine)
+\begin{DoxyCompactList}\small\item\em Create a \doxylink{classgl3_1_1engine_1_1ecs_1_1_system}{System} object and store a reference to the game instance. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_system_a077ef8846a6c18d6746284519dd746f0}\label{classgl3_1_1engine_1_1ecs_1_1_system_a077ef8846a6c18d6746284519dd746f0} 
+{\bfseries System} (\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{System}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Prevent move semantics. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_system_a56b2a95143d8d76ab3261617b4431354}\label{classgl3_1_1engine_1_1ecs_1_1_system_a56b2a95143d8d76ab3261617b4431354} 
+{\bfseries System} (const \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{System}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Delete copy constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T, typename... Guids$>$ }\\bool \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a1a5957e3193843657ded6365117fcbe6}{check\+If\+Entity\+Has\+Component}} (Guids... guids)
+\begin{DoxyCompactList}\small\item\em Function to check, if one or more entities have the specified component. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_system_a66acd83370acb061d20fd57bab6b1a7a}\label{classgl3_1_1engine_1_1ecs_1_1_system_a66acd83370acb061d20fd57bab6b1a7a} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \& {\bfseries engine}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class for all ECS systems. 
+
+A \doxylink{classgl3_1_1engine_1_1ecs_1_1_system}{System} has access to the ECS context (\doxylink{classgl3_1_1engine_1_1_game}{engine\+::\+Game} object). All custom systems should inherit from this class. 
+
+\label{doc-constructors}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_system_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}\index{gl3::engine::ecs::System@{gl3::engine::ecs::System}!System@{System}}
+\index{System@{System}!gl3::engine::ecs::System@{gl3::engine::ecs::System}}
+\doxysubsubsection{\texorpdfstring{System()}{System()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0} 
+gl3\+::engine\+::ecs\+::\+System\+::\+System (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}} \&}]{engine}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Create a \doxylink{classgl3_1_1engine_1_1ecs_1_1_system}{System} object and store a reference to the game instance. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em engine} & Reference to the core game object. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_system_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classgl3_1_1engine_1_1ecs_1_1_system_a1a5957e3193843657ded6365117fcbe6}\index{gl3::engine::ecs::System@{gl3::engine::ecs::System}!checkIfEntityHasComponent@{checkIfEntityHasComponent}}
+\index{checkIfEntityHasComponent@{checkIfEntityHasComponent}!gl3::engine::ecs::System@{gl3::engine::ecs::System}}
+\doxysubsubsection{\texorpdfstring{checkIfEntityHasComponent()}{checkIfEntityHasComponent()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1ecs_1_1_system_a1a5957e3193843657ded6365117fcbe6} 
+template$<$typename T, typename... Guids$>$ \\
+bool gl3\+::engine\+::ecs\+::\+System\+::check\+If\+Entity\+Has\+Component (\begin{DoxyParamCaption}\item[{Guids...}]{guids}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Function to check, if one or more entities have the specified component. 
+
+This utility function returns true, if all entities, whose IDs are provided, have a \doxylink{classgl3_1_1engine_1_1ecs_1_1_component}{Component} of type T. 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \doxylink{classgl3_1_1engine_1_1ecs_1_1_component}{Component} type to check. \\
+\hline
+{\em Guids} & List of guid\+\_\+t values of the entities to check. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+true if all provided entities have component T, false otherwise. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/julia/\+Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/System.\+h\end{DoxyCompactItemize}

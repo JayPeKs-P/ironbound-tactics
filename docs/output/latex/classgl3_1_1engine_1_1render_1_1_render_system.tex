@@ -1,0 +1,162 @@
+\doxysection{gl3\+::engine\+::render\+::Render\+System Class Reference}
+\hypertarget{classgl3_1_1engine_1_1render_1_1_render_system}{}\label{classgl3_1_1engine_1_1render_1_1_render_system}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+
+
+Handles Open\+GL rendering of 2D models with support for instancing.  
+
+
+
+
+{\ttfamily \#include $<$Render\+System.\+h$>$}
+
+Inheritance diagram for gl3\+::engine\+::render\+::Render\+System\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classgl3_1_1engine_1_1render_1_1_render_system}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system_ae936a553d09aea5aa5da483b1aff2bd1}{Render\+System}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&game)
+\begin{DoxyCompactList}\small\item\em Adds multiple functions to Core \doxylink{classgl3_1_1engine_1_1_game}{Game} Events. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system_a5a70c5162eba72c582699909d7e9f1c5}{draw}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&game)
+\begin{DoxyCompactList}\small\item\em Draws all render-\/able entities Called manually in \doxylink{classgl3_1_1engine_1_1_game_a1500768dce54957f584775e49bea53b0}{engine\+::\+Game\+::run()} after \doxylink{classgl3_1_1engine_1_1render_1_1_render_system_a5a70c5162eba72c582699909d7e9f1c5}{draw()}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{gl3\+::engine\+::ecs\+::\+System}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a585232f0aefa359230a37361d3e977a0}{System}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}} \&engine)
+\begin{DoxyCompactList}\small\item\em Create a \doxylink{classgl3_1_1engine_1_1ecs_1_1_system}{System} object and store a reference to the game instance. \end{DoxyCompactList}\item 
+{\bfseries System} (\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{System}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Prevent move semantics. \end{DoxyCompactList}\item 
+{\bfseries System} (const \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{System}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Delete copy constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system_a5fdce54a1e3246cf59821f64853416fc}{update}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&game)
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system_a35a6fe03c894fc077f7680026b2b69cc}{init\+Shaders}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&game)
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system_a72b3365532d7b6c359b25bbbd505300f}{init\+Buffers}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&game)
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system_ae6046708c3524646594a56b6baaf94fb}{delete\+Buffers}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&game)
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1render_1_1_render_system_afd566a02857647a26f19fdd073f843e3}{delete\+Shader}} (\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&game)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{gl3\+::engine\+::ecs\+::\+System}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T, typename... Guids$>$ }\\bool \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system_a1a5957e3193843657ded6365117fcbe6}{check\+If\+Entity\+Has\+Component}} (Guids... guids)
+\begin{DoxyCompactList}\small\item\em Function to check, if one or more entities have the specified component. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_system}{gl3\+::engine\+::ecs\+::\+System}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \& {\bfseries engine}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles Open\+GL rendering of 2D models with support for instancing. 
+
+This system draws all entities with a \doxylink{struct_model2_d}{Model2D} and optionally \doxylink{struct_instance_buffer}{Instance\+Buffer} component using either instanced or non-\/instanced rendering. All member functions and variables are set to private. \textquotesingle{}\doxylink{classgl3_1_1engine_1_1_game}{Game}\textquotesingle{} is registered as friend class. 
+
+\label{doc-constructors}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_ae936a553d09aea5aa5da483b1aff2bd1}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}!RenderSystem@{RenderSystem}}
+\index{RenderSystem@{RenderSystem}!gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+\doxysubsubsection{\texorpdfstring{RenderSystem()}{RenderSystem()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1render_1_1_render_system_ae936a553d09aea5aa5da483b1aff2bd1} 
+gl3\+::engine\+::render\+::\+Render\+System\+::\+Render\+System (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{game}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Adds multiple functions to Core \doxylink{classgl3_1_1engine_1_1_game}{Game} Events. 
+
+\doxylink{group___core_events_gaaafa6ad994481b953825c42aca2fd41a}{Game\+::on\+After\+Startup} → \doxylink{classgl3_1_1engine_1_1render_1_1_render_system_a35a6fe03c894fc077f7680026b2b69cc}{init\+Shaders()} and \doxylink{classgl3_1_1engine_1_1render_1_1_render_system_a72b3365532d7b6c359b25bbbd505300f}{init\+Buffers()} \doxylink{group___core_events_gac5cdf24e7af93a6924c7ef985751f30e}{Game\+::on\+Update} → \doxylink{classgl3_1_1engine_1_1render_1_1_render_system_a5fdce54a1e3246cf59821f64853416fc}{update()} \doxylink{group___core_events_ga8a87513726cce1d90b8d0781b4ac98e1}{Game\+::on\+Shutdown} → \doxylink{classgl3_1_1engine_1_1render_1_1_render_system_ae6046708c3524646594a56b6baaf94fb}{delete\+Buffers()} and delete\+Shaders() 
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to core game object, used to instantiate \doxylink{classgl3_1_1engine_1_1ecs_1_1_system}{gl3\+::engine\+::ecs\+::\+System}. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_ae6046708c3524646594a56b6baaf94fb}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}!deleteBuffers@{deleteBuffers}}
+\index{deleteBuffers@{deleteBuffers}!gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+\doxysubsubsection{\texorpdfstring{deleteBuffers()}{deleteBuffers()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1render_1_1_render_system_ae6046708c3524646594a56b6baaf94fb} 
+void gl3\+::engine\+::render\+::\+Render\+System\+::delete\+Buffers (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{game}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Deletes Open\+GL buffers (VAO, VBO, EBO). 
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to core \doxylink{classgl3_1_1engine_1_1_game}{Game} object. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_afd566a02857647a26f19fdd073f843e3}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}!deleteShader@{deleteShader}}
+\index{deleteShader@{deleteShader}!gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+\doxysubsubsection{\texorpdfstring{deleteShader()}{deleteShader()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1render_1_1_render_system_afd566a02857647a26f19fdd073f843e3} 
+void gl3\+::engine\+::render\+::\+Render\+System\+::delete\+Shader (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{game}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Delete shader objects. 
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to core \doxylink{classgl3_1_1engine_1_1_game}{Game} object. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_a5a70c5162eba72c582699909d7e9f1c5}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}!draw@{draw}}
+\index{draw@{draw}!gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1render_1_1_render_system_a5a70c5162eba72c582699909d7e9f1c5} 
+void gl3\+::engine\+::render\+::\+Render\+System\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{game}{}\end{DoxyParamCaption})}
+
+
+
+Draws all render-\/able entities Called manually in \doxylink{classgl3_1_1engine_1_1_game_a1500768dce54957f584775e49bea53b0}{engine\+::\+Game\+::run()} after \doxylink{classgl3_1_1engine_1_1render_1_1_render_system_a5a70c5162eba72c582699909d7e9f1c5}{draw()}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to core \doxylink{classgl3_1_1engine_1_1_game}{Game} object. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_a72b3365532d7b6c359b25bbbd505300f}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}!initBuffers@{initBuffers}}
+\index{initBuffers@{initBuffers}!gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+\doxysubsubsection{\texorpdfstring{initBuffers()}{initBuffers()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1render_1_1_render_system_a72b3365532d7b6c359b25bbbd505300f} 
+void gl3\+::engine\+::render\+::\+Render\+System\+::init\+Buffers (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{game}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Generates VAOs and VBOs for each \doxylink{struct_model2_d}{Model2D} component. 
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to core \doxylink{classgl3_1_1engine_1_1_game}{Game} object. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_a35a6fe03c894fc077f7680026b2b69cc}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}!initShaders@{initShaders}}
+\index{initShaders@{initShaders}!gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+\doxysubsubsection{\texorpdfstring{initShaders()}{initShaders()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1render_1_1_render_system_a35a6fe03c894fc077f7680026b2b69cc} 
+void gl3\+::engine\+::render\+::\+Render\+System\+::init\+Shaders (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{game}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Loads shaders and links Open\+GL programs. 
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to core \doxylink{classgl3_1_1engine_1_1_game}{Game} object. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1render_1_1_render_system_a5fdce54a1e3246cf59821f64853416fc}\index{gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}!update@{update}}
+\index{update@{update}!gl3::engine::render::RenderSystem@{gl3::engine::render::RenderSystem}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1render_1_1_render_system_a5fdce54a1e3246cf59821f64853416fc} 
+void gl3\+::engine\+::render\+::\+Render\+System\+::update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine\+::\+Game}} \&}]{game}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Uploads instance buffer data (called each frame). 
+\begin{DoxyParams}{Parameters}
+{\em game} & Reference to core \doxylink{classgl3_1_1engine_1_1_game}{Game} object. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/julia/\+Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/rendering/Render\+System.\+h\end{DoxyCompactItemize}

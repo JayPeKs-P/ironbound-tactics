@@ -1,0 +1,38 @@
+\doxysection{Instance\+Buffer.\+h}
+\hypertarget{_instance_buffer_8h_source}{}\label{_instance_buffer_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/rendering/InstanceBuffer.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/rendering/InstanceBuffer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 17/07/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/Component.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}glm/glm.hpp"{}}}
+\DoxyCodeLine{00008\ \textcolor{keyword}{using\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3::engine::ecs::Component}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{using\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager}{gl3::engine::ecs::ComponentManager}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{using\ }gl3::engine::ecs::guid\_t;}
+\DoxyCodeLine{00011\ \textcolor{keyword}{using\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity}{gl3::engine::ecs::Entity}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_instance_buffer_af6c64b38e519265f995509fefaac22a7}{InstanceBuffer}}:\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_a9d275532e6286deb47eb536740c384a1}{Component}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{friend}\ ComponentManager;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{friend}\ Entity;}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{struct_instance_buffer_af6c64b38e519265f995509fefaac22a7}{InstanceBuffer}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_instance_buffer_af6c64b38e519265f995509fefaac22a7}{InstanceBuffer}}\ \&other)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{struct_instance_buffer_a3e67d7790f7e78a97a868519b2c30edc}{InstanceBuffer}}(\mbox{\hyperlink{struct_instance_buffer_af6c64b38e519265f995509fefaac22a7}{InstanceBuffer}}\ \&\&other)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00023\ \ \ \ \ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ std::swap(this-\/>\mbox{\hyperlink{struct_instance_buffer_a8e723bc3af90a33d6bf3f22908b9ea8f}{VBO}},\ other.VBO);}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{struct_instance_buffer_aca3f0783172dd4b80b46440eb6dd1770}{instances}}\ =\ std::move(other.instances);}
+\DoxyCodeLine{00026\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_instance_buffer_a8e723bc3af90a33d6bf3f22908b9ea8f}{VBO}}\ =\ 0;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00032\ \ \ \ \ std::vector\ <glm::mat4>\ \mbox{\hyperlink{struct_instance_buffer_aca3f0783172dd4b80b46440eb6dd1770}{instances}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_instance_buffer_a75f4169dd674128c361ad6352fa62bea}{uvOffset}}\ =\ 0.0f;}
+\DoxyCodeLine{00036\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{struct_instance_buffer_af6c64b38e519265f995509fefaac22a7}{InstanceBuffer}}(guid\_t\ owner):}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_a9d275532e6286deb47eb536740c384a1}{Component}}(owner)\ \{\}}
+\DoxyCodeLine{00039\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,45 @@
+\doxysection{Entity\+Manager.\+h}
+\hypertarget{_entity_manager_8h_source}{}\label{_entity_manager_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/EntityManager.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/EntityManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 20/06/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/ecs.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/Entity.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/ComponentManager.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }gl3::engine\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}};}
+\DoxyCodeLine{00015\ \}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace\ }gl3::engine::ecs\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_manager_ad5766b40ff0aeab513226e34c0e35221}{EntityManager}}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_manager_ad5766b40ff0aeab513226e34c0e35221}{EntityManager}}(\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager}{ComponentManager}}\ \&componentManager,\ \mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine::Game}}\ \&game);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity}{Entity}}\ \&\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_manager_a7af10cf98012caf1dbf8b5961815a2ca}{createEntity}}();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity}{Entity}}\ \&\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_manager_a1cae3fee58f8f77e62a0b6350564fcd5}{getEntity}}(guid\_t\ guid);}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_manager_a59fa680a59d5a48283b5f8e6f1f0d704}{deleteEntity}}(\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity}{Entity}}\ \&entity);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ purgeEntities();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager}{ComponentManager}}\ \&componentManager;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ std::map<guid\_t,\ std::unique\_ptr<Entity>>\ entities;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ std::vector<guid\_t>\ deleteList;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ entityCounter\ =\ 0;}
+\DoxyCodeLine{00062\ \ \ \ \ \};}
+\DoxyCodeLine{00063\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,87 @@
+\doxysection{Component\+Manager.\+h}
+\hypertarget{_component_manager_8h_source}{}\label{_component_manager_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/ComponentManager.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/ComponentManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 20/06/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <typeinfo>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/ecs.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/Component.h"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }gl3::engine\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}};}
+\DoxyCodeLine{00016\ \}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace\ }gl3::engine::ecs\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_component_manager_a79ef56051ef3ee8fb116bbd3491341b3}{ComponentManager}}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }ComponentContainer\ =\ std::map<guid\_t,\ std::unique\_ptr<Component>>;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a79ef56051ef3ee8fb116bbd3491341b3}{ComponentManager}}(\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{engine::Game}}\ \&engine);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C,\ \textcolor{keyword}{typename}\ ...Args>}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ [[nodiscard]]\ C\ \&\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a9a87e47ebea0508c85ace85b90f09e6c}{addComponent}}(guid\_t\ owner,\ Args\ ...args)\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ C\ component(owner,\ args...);}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ containers[\textcolor{keyword}{typeid}(C).hash\_code()][owner]\ =\ std::make\_unique<C>(std::move(component));}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_aa1d3aa19bb93a7a6722d7c25260a78c4}{getComponent<C>}}(owner);}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ C\ \&\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_aa1d3aa19bb93a7a6722d7c25260a78c4}{getComponent}}(guid\_t\ owner)\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{reinterpret\_cast<}C*\textcolor{keyword}{>}(containers.at(\textcolor{keyword}{typeid}(C).hash\_code()).at(owner).get());}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_ad585885b759439ec8d48e1982c9daad2}{hasComponent}}(\textcolor{keyword}{const}\ guid\_t\ \&owner)\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \&container\ =\ containers[\textcolor{keyword}{typeid}(C).hash\_code()];}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ container.find(owner)\ !=\ container.end();}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ ComponentContainer\ \&\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_ac2c26467828365caea58065865006c22}{getContainer}}()\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ containers[\textcolor{keyword}{typeid}(C).hash\_code()];}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a02346f78bd371e8acc51c7700be19d02}{forEachComponent}}(std::function<\textcolor{keywordtype}{void}(C\&)>\ f)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&[\_,\ component]:\ containers.at(\textcolor{keyword}{typeid}(C).hash\_code()))\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f(*\textcolor{keyword}{reinterpret\_cast<}C*\textcolor{keyword}{>}(component.get()));}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_ad7a4ae35bc7b245dfed74d1233eeffec}{forEachComponentRevers}}(std::function<\textcolor{keywordtype}{void}(C\&)>\ f)}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \&container\ =\ containers.at(\textcolor{keyword}{typeid}(C).hash\_code());}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ key\ =\ container.rbegin();\ key\ !=\ container.rend();\ key++)}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f(*\textcolor{keyword}{reinterpret\_cast<}C*\textcolor{keyword}{>}(key-\/>second.get()));}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_abad82c066c4d763eaf324763f51cb531}{removeComponent}}(guid\_t\ entityID)\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ deleteList.emplace\_back(\ \textcolor{keyword}{typeid}(C).hash\_code(),\ entityID);}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a0e1b75d5a248f1cfc28b59098373e1e6}{removeComponents}}(guid\_t\ entityID);}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ purgeComponents();}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }ComponentContainer\ =\ std::map<guid\_t,\ std::unique\_ptr<Component>>;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ std::map<size\_t,\ ComponentContainer>\ containers;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ std::vector<std::pair<size\_t,\ guid\_t>>\ deleteList;}
+\DoxyCodeLine{00123\ \ \ \ \ \};}
+\DoxyCodeLine{00124\ \}}
+
+\end{DoxyCode}

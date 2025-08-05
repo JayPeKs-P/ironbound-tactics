@@ -1,0 +1,60 @@
+\doxysection{Entity.\+h}
+\hypertarget{_entity_8h_source}{}\label{_entity_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/Entity.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/Entity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 20/06/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ Entity.h}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}ecs.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}engine/ecs/ComponentManager.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }gl3::engine::ecs\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{class\ }Entity\ final\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }EntityManager;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ [[nodiscard]]\ guid\_t\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_abc3a76cbd15bb137ed8c5348bffc12d3}{guid}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ id;\ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_ae1e90cb56b77bccde8180fde782027f4}{isDeleted}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ deleted;\ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C,\ \textcolor{keyword}{typename}\ ...\ Args>}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ [[nodiscard]]\ C\ \&\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_abb15408338c01fc73625f17582b222e7}{addComponent}}(Args\ ...args)\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ componentManager.addComponent<C>(id,\ args...);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ C\ \&\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_a171221e5e39a0f69c42f345ec175694a}{getComponent}}()\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ componentManager.getComponent<C>(id);}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_abc5069a0adb99e7c7e2bd7604f43520b}{removeComponent}}(\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component}{Component}}\ \&component)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ component.deleted\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ componentManager.removeComponent<C>(id);}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ C>}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_a1096fabc2d12686d3faf0d8cf1f280de}{removeComponent}}()\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \&component\ =\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_a171221e5e39a0f69c42f345ec175694a}{getComponent<C>}}();}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_a1096fabc2d12686d3faf0d8cf1f280de}{removeComponent<C>}}(component);}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity}{Entity}}(guid\_t\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager}{ComponentManager}}\ \&componentManager)\ :\ id(id),\ componentManager(componentManager)\ \{\}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ deleteAllComponents()\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ componentManager.\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a0e1b75d5a248f1cfc28b59098373e1e6}{removeComponents}}(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ guid\_t\ \textcolor{keywordtype}{id}\ =\ invalidID;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ deleted\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_component_manager}{ComponentManager}}\ \&componentManager;}
+\DoxyCodeLine{00089\ \ \ \ \ \};}
+\DoxyCodeLine{00090\ \}}
+
+\end{DoxyCode}

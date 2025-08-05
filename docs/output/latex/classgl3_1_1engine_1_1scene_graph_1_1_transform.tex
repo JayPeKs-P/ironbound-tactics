@@ -1,0 +1,145 @@
+\doxysection{gl3\+::engine\+::scene\+Graph\+::Transform Class Reference}
+\hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform}{}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform}\index{gl3::engine::sceneGraph::Transform@{gl3::engine::sceneGraph::Transform}}
+
+
+Stores all information regarding the transformation (e.\+g. position, rotation) of an entity.  
+
+
+
+
+{\ttfamily \#include $<$Transform.\+h$>$}
+
+Inheritance diagram for gl3\+::engine\+::scene\+Graph\+::Transform\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classgl3_1_1engine_1_1scene_graph_1_1_transform}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a59133c2e455a3bd1dd1cad2783541706}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a59133c2e455a3bd1dd1cad2783541706} 
+std\+::set$<$ \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries get\+Child\+Transforms} ()
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a612f2814b83760e6b36b1da3830cc14a}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a612f2814b83760e6b36b1da3830cc14a} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Parent} ()
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_ade2c45ea78a501b1afad94eae5641316}{set\+Parent}} (\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*}parent\+Transform)
+\begin{DoxyCompactList}\small\item\em Sets a pointer to the parent \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} and calls add\+Child(this) on instance of parent. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a2904e2b33fcea6c1fb7407d8cc7e5f73}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a2904e2b33fcea6c1fb7407d8cc7e5f73} 
+void {\bfseries invalidate} ()
+\begin{DoxyCompactList}\small\item\em Marks all child transforms as deleted. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a3e020e48d3e53e8156a7a1e1d1bcaa1d}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a3e020e48d3e53e8156a7a1e1d1bcaa1d} 
+{\bfseries Transform} (const \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \&)=delete
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a127b65b2dd3aaf67250b83ef9bd5e75c}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a127b65b2dd3aaf67250b83ef9bd5e75c} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \& {\bfseries operator=} (const \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \&)=delete
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a93704f87e0b31e3022a50f13d2819c40}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a93704f87e0b31e3022a50f13d2819c40} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \& {\bfseries operator=} (\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \&\&)=delete
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a1b1a92a1ea8d0cae4a0e857a00325047}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a1b1a92a1ea8d0cae4a0e857a00325047} 
+{\bfseries Transform} (\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \&\&other) noexcept
+\begin{DoxyCompactList}\small\item\em Move constructor, used by \doxylink{class_component_manager}{Component\+Manager} in \doxylink{class_component_manager_a9a87e47ebea0508c85ace85b90f09e6c}{Component\+Manager\+::add\+Component()} to move a \doxylink{class_component}{Component} to its corresponding container. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3\+::engine\+::ecs\+::\+Component}}}
+\begin{DoxyCompactItemize}
+\item 
+guid\+\_\+t {\bfseries entity} () const
+\begin{DoxyCompactList}\small\item\em Get the ID of the entity the component belongs to. \end{DoxyCompactList}\item 
+bool {\bfseries is\+Deleted} () const
+\begin{DoxyCompactList}\small\item\em Check if \doxylink{classgl3_1_1engine_1_1ecs_1_1_component}{Component} is scheduled to be deleted during the next call of \doxylink{classgl3_1_1engine_1_1ecs_1_1_component_manager_a0e1b75d5a248f1cfc28b59098373e1e6}{gl3\+::engine\+::ecs\+::\+Component\+Manager\+::remove\+Components()}. This is necessary since systems might delete components that other systems still want to access. Therefore, components are deleted at the end of the update cycle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a6292770ed9f31ca8b4b3b1401dbe5236}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a6292770ed9f31ca8b4b3b1401dbe5236} 
+glm\+::vec3 {\bfseries local\+Position}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a96a2fc1c38dd51896e6fab75286a82bb}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a96a2fc1c38dd51896e6fab75286a82bb} 
+float {\bfseries local\+ZRotation}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a3db6a0e8892334adeff1192e8830af0d}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a3db6a0e8892334adeff1192e8830af0d} 
+glm\+::vec3 {\bfseries local\+Scale}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a878fc6e8a808d64c0f025665b9c35d97}\label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a878fc6e8a808d64c0f025665b9c35d97} 
+glm\+::mat4 {\bfseries model\+Matrix}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_a23eb8642747ef71ffc1d7978e002046e}{add\+Child}} (\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*}transform)
+\begin{DoxyCompactList}\small\item\em Adds a pointer to a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} to children. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform_a403108d0f0ad18dad1d4f95a3076a50e}{remove\+Child}} (\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*}transform)
+\begin{DoxyCompactList}\small\item\em Removes a specified \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} from children. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3\+::engine\+::ecs\+::\+Component}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_a9d275532e6286deb47eb536740c384a1}{Component}} (guid\+\_\+t owner=invalid\+ID)
+\begin{DoxyCompactList}\small\item\em Only called in child classes initializer list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component}{gl3\+::engine\+::ecs\+::\+Component}}}
+\begin{DoxyCompactItemize}
+\item 
+guid\+\_\+t {\bfseries owner}
+\item 
+bool {\bfseries deleted} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Stores all information regarding the transformation (e.\+g. position, rotation) of an entity. 
+
+Transforms are part of the \textquotesingle{}Scene Graph\textquotesingle{}. They are nodes in tree structure. Transforms may have many children but only one a single parent. If the parent transform is changed in any way, the effect is applied to all its child nodes. \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} is a \doxylink{class_component}{Component}, therefore the constructor is private and can only be called by \doxylink{class_component_manager}{Component\+Manager}. 
+
+\label{doc-func-members}
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a23eb8642747ef71ffc1d7978e002046e}\index{gl3::engine::sceneGraph::Transform@{gl3::engine::sceneGraph::Transform}!addChild@{addChild}}
+\index{addChild@{addChild}!gl3::engine::sceneGraph::Transform@{gl3::engine::sceneGraph::Transform}}
+\doxysubsubsection{\texorpdfstring{addChild()}{addChild()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a23eb8642747ef71ffc1d7978e002046e} 
+void gl3\+::engine\+::scene\+Graph\+::\+Transform\+::add\+Child (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*}}]{transform}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Adds a pointer to a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} to children. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em transform} & Pointer to a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} that will be registered as a child node. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_a403108d0f0ad18dad1d4f95a3076a50e}\index{gl3::engine::sceneGraph::Transform@{gl3::engine::sceneGraph::Transform}!removeChild@{removeChild}}
+\index{removeChild@{removeChild}!gl3::engine::sceneGraph::Transform@{gl3::engine::sceneGraph::Transform}}
+\doxysubsubsection{\texorpdfstring{removeChild()}{removeChild()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1scene_graph_1_1_transform_a403108d0f0ad18dad1d4f95a3076a50e} 
+void gl3\+::engine\+::scene\+Graph\+::\+Transform\+::remove\+Child (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*}}]{transform}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Removes a specified \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} from children. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Pointer} & to a \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} that will be deregistered as a child node. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classgl3_1_1engine_1_1scene_graph_1_1_transform_ade2c45ea78a501b1afad94eae5641316}\index{gl3::engine::sceneGraph::Transform@{gl3::engine::sceneGraph::Transform}!setParent@{setParent}}
+\index{setParent@{setParent}!gl3::engine::sceneGraph::Transform@{gl3::engine::sceneGraph::Transform}}
+\doxysubsubsection{\texorpdfstring{setParent()}{setParent()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1scene_graph_1_1_transform_ade2c45ea78a501b1afad94eae5641316} 
+void gl3\+::engine\+::scene\+Graph\+::\+Transform\+::set\+Parent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform}} \texorpdfstring{$\ast$}{*}}]{parent\+Transform}{}\end{DoxyParamCaption})}
+
+
+
+Sets a pointer to the parent \doxylink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{Transform} and calls add\+Child(this) on instance of parent. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent\+Transform} & Pointer to the instance of transform this instance should have as parent. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/julia/\+Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/scene\+Graph/Transform.\+h\end{DoxyCompactItemize}

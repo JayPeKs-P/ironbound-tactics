@@ -1,0 +1,204 @@
+\doxysection{gl3\+::engine\+::Game Class Reference}
+\hypertarget{classgl3_1_1engine_1_1_game}{}\label{classgl3_1_1engine_1_1_game}\index{gl3::engine::Game@{gl3::engine::Game}}
+
+
+Core game class, that manages the main structures the main loop and manages core systems and ECS state.  
+
+
+
+
+{\ttfamily \#include $<$Game.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_a3bc5842e8543a9c325a372fb66041732}\label{classgl3_1_1engine_1_1_game_a3bc5842e8543a9c325a372fb66041732} 
+using {\bfseries event\+\_\+t} = \mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{events\+::\+Event}}$<$\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}}, \mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}}\&$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classgl3_1_1engine_1_1_game_a1500768dce54957f584775e49bea53b0}{run}} ()
+\begin{DoxyCompactList}\small\item\em Starts the main game loop. \end{DoxyCompactList}\item 
+GLFWwindow \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classgl3_1_1engine_1_1_game_a2b56b4198ba9e772ae8d09f80d1d79ec}{get\+Window}} ()
+\begin{DoxyCompactList}\small\item\em Returns the GLFW window instance. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classgl3_1_1engine_1_1_game_aef8ea61be0492d1417e14899c9a73aa9}{get\+Delta\+Time}} ()
+\begin{DoxyCompactList}\small\item\em Returns the current value of the delta-\/time variable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static glm\+::mat4 \mbox{\hyperlink{classgl3_1_1engine_1_1_game_ab168df4ea607109e735ef8498dfc0cbd}{calculate\+Mvp\+Matrix}} (glm\+::mat4 model)
+\begin{DoxyCompactList}\small\item\em Calculates the model-\/view-\/projection matrix. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{event\+\_\+t}} {\bfseries on\+Startup}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{event\+\_\+t}} {\bfseries on\+After\+Startup}
+\begin{DoxyCompactList}\small\item\em Core event, triggered right after the \doxylink{classgl3_1_1engine_1_1_game_af3437e5d763b788eb786c0ee7d298ade}{start()} call and before entering the update cycle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{event\+\_\+t}} {\bfseries on\+Before\+Update}
+\begin{DoxyCompactList}\small\item\em Core event, triggered before every update cycle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{event\+\_\+t}} {\bfseries on\+Update}
+\begin{DoxyCompactList}\small\item\em Core event, triggered after the \doxylink{classgl3_1_1engine_1_1_game_a6f8f88986abef0182a2583421aed0506}{update()} call in the loop. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{event\+\_\+t}} {\bfseries on\+After\+Update}
+\begin{DoxyCompactList}\small\item\em Core event, triggered at the end of the update cycle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{event\+\_\+t}} {\bfseries on\+Before\+Shutdown}
+\begin{DoxyCompactList}\small\item\em Core event, triggered right after leaving the update cycle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1events_1_1_event}{event\+\_\+t}} {\bfseries on\+Shutdown}
+\begin{DoxyCompactList}\small\item\em Core event, triggered at shutdown. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_a790f5b7499b4aa76ce657b4b8328da51}\label{classgl3_1_1engine_1_1_game_a790f5b7499b4aa76ce657b4b8328da51} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_component_manager}{Component\+Manager}} {\bfseries component\+Manager}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_ad3791b68f32063567462a3f1bb62612e}\label{classgl3_1_1engine_1_1_game_ad3791b68f32063567462a3f1bb62612e} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_entity_manager}{ecs\+::\+Entity\+Manager}} {\bfseries entity\+Manager}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_a30be02125cf3565215fcc06aa34d6a1f}\label{classgl3_1_1engine_1_1_game_a30be02125cf3565215fcc06aa34d6a1f} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1scene_graph_1_1_transform}{scene\+Graph\+::\+Transform}} \texorpdfstring{$\ast$}{*} {\bfseries origin} = nullptr
+\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_abd35deed6802e13387644d10278a79d9}\label{classgl3_1_1engine_1_1_game_abd35deed6802e13387644d10278a79d9} 
+\mbox{\hyperlink{classgl3_1_1engine_1_1combat_1_1_action_registry}{engine\+::combat\+::\+Action\+Registry}} {\bfseries action\+Register}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_a1cc9794545b4d672d2dc63363cd551af}\label{classgl3_1_1engine_1_1_game_a1cc9794545b4d672d2dc63363cd551af} 
+float {\bfseries elapsed\+Time} = 0.\+0f
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classgl3_1_1engine_1_1_game_ab230e9924096208d5764c6c48be016c7}{Game}} (int width, int height, const std\+::string \&title)
+\begin{DoxyCompactList}\small\item\em Constructs the game with window dimensions and title. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_af3437e5d763b788eb786c0ee7d298ade}\label{classgl3_1_1engine_1_1_game_af3437e5d763b788eb786c0ee7d298ade} 
+virtual void {\bfseries start} ()
+\begin{DoxyCompactList}\small\item\em Called once at the beginning of the game. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classgl3_1_1engine_1_1_game_a6f8f88986abef0182a2583421aed0506}{update}} (GLFWwindow \texorpdfstring{$\ast$}{*}window)
+\begin{DoxyCompactList}\small\item\em Called every frame to update game logic. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_a0ac5348909051ee9d05a2470cc6c26fd}\label{classgl3_1_1engine_1_1_game_a0ac5348909051ee9d05a2470cc6c26fd} 
+virtual void {\bfseries draw} ()
+\begin{DoxyCompactList}\small\item\em Called every frame to render graphics. \end{DoxyCompactList}\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_a585a5c751e3964cdcb3746bded69782d}\label{classgl3_1_1engine_1_1_game_a585a5c751e3964cdcb3746bded69782d} 
+virtual void {\bfseries update\+Delta\+Time} ()
+\begin{DoxyCompactList}\small\item\em Updates the delta time based on glfw\+Get\+Time(). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classgl3_1_1engine_1_1_game_a6817bc9f2a81d76a8ffcc42f4461e5c8}\label{classgl3_1_1engine_1_1_game_a6817bc9f2a81d76a8ffcc42f4461e5c8} 
+float {\bfseries delta\+Time} = 1.\+0f / 60
+\begin{DoxyCompactList}\small\item\em Time in seconds since the last frame. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Core game class, that manages the main structures the main loop and manages core systems and ECS state. 
+
+This class initializes the core components (context, ECS, rendering, events) and defines the core structure of a games lifecycle and update loop. 
+
+\label{doc-constructors}
+\Hypertarget{classgl3_1_1engine_1_1_game_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classgl3_1_1engine_1_1_game_ab230e9924096208d5764c6c48be016c7}\index{gl3::engine::Game@{gl3::engine::Game}!Game@{Game}}
+\index{Game@{Game}!gl3::engine::Game@{gl3::engine::Game}}
+\doxysubsubsection{\texorpdfstring{Game()}{Game()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1_game_ab230e9924096208d5764c6c48be016c7} 
+gl3\+::engine\+::\+Game\+::\+Game (\begin{DoxyParamCaption}\item[{int}]{width}{, }\item[{int}]{height}{, }\item[{const std\+::string \&}]{title}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Constructs the game with window dimensions and title. 
+
+Initializes \doxylink{class_transform}{Transform} origin. 
+\begin{DoxyParams}{Parameters}
+{\em width} & Width of the window. \\
+\hline
+{\em height} & Height of the window. \\
+\hline
+{\em title} & Title of the game. All parameters are used to initialize context. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classgl3_1_1engine_1_1_game_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classgl3_1_1engine_1_1_game_ab168df4ea607109e735ef8498dfc0cbd}\index{gl3::engine::Game@{gl3::engine::Game}!calculateMvpMatrix@{calculateMvpMatrix}}
+\index{calculateMvpMatrix@{calculateMvpMatrix}!gl3::engine::Game@{gl3::engine::Game}}
+\doxysubsubsection{\texorpdfstring{calculateMvpMatrix()}{calculateMvpMatrix()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1_game_ab168df4ea607109e735ef8498dfc0cbd} 
+glm\+::mat4 gl3\+::engine\+::\+Game\+::calculate\+Mvp\+Matrix (\begin{DoxyParamCaption}\item[{glm\+::mat4}]{model}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates the model-\/view-\/projection matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model} & Local model transformation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Computed MVP matrix. 
+\end{DoxyReturn}
+\Hypertarget{classgl3_1_1engine_1_1_game_aef8ea61be0492d1417e14899c9a73aa9}\index{gl3::engine::Game@{gl3::engine::Game}!getDeltaTime@{getDeltaTime}}
+\index{getDeltaTime@{getDeltaTime}!gl3::engine::Game@{gl3::engine::Game}}
+\doxysubsubsection{\texorpdfstring{getDeltaTime()}{getDeltaTime()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1_game_aef8ea61be0492d1417e14899c9a73aa9} 
+float gl3\+::engine\+::\+Game\+::get\+Delta\+Time (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the current value of the delta-\/time variable. 
+
+\begin{DoxyReturn}{Returns}
+Value of delta-\/time. 
+\end{DoxyReturn}
+\Hypertarget{classgl3_1_1engine_1_1_game_a2b56b4198ba9e772ae8d09f80d1d79ec}\index{gl3::engine::Game@{gl3::engine::Game}!getWindow@{getWindow}}
+\index{getWindow@{getWindow}!gl3::engine::Game@{gl3::engine::Game}}
+\doxysubsubsection{\texorpdfstring{getWindow()}{getWindow()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1_game_a2b56b4198ba9e772ae8d09f80d1d79ec} 
+GLFWwindow \texorpdfstring{$\ast$}{*} gl3\+::engine\+::\+Game\+::get\+Window (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the GLFW window instance. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to GLFWwindow. 
+\end{DoxyReturn}
+\Hypertarget{classgl3_1_1engine_1_1_game_a1500768dce54957f584775e49bea53b0}\index{gl3::engine::Game@{gl3::engine::Game}!run@{run}}
+\index{run@{run}!gl3::engine::Game@{gl3::engine::Game}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1_game_a1500768dce54957f584775e49bea53b0} 
+virtual void gl3\+::engine\+::\+Game\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Starts the main game loop. 
+
+Runs the game. Invokes all core events and alls \doxylink{classgl3_1_1engine_1_1_game_af3437e5d763b788eb786c0ee7d298ade}{start()} function.
+
+This function initializes the rendering system, the updater and pruner of the Scene Graph. It then calls the \doxylink{classgl3_1_1engine_1_1_game_af3437e5d763b788eb786c0ee7d298ade}{start()} function, invokes all {\itshape core} {\itshape events} and enters the core loop via \textquotesingle{}context.\+run()\textquotesingle{}, invoking \doxylink{classgl3_1_1engine_1_1_game_a6f8f88986abef0182a2583421aed0506}{update()} and \doxylink{classgl3_1_1engine_1_1_game_a0ac5348909051ee9d05a2470cc6c26fd}{draw()} and the corresponding core events.
+
+Lifecycle events triggered (in order)\+:
+\begin{DoxyItemize}
+\item on\+Startup
+\item on\+After\+Startup
+\item on\+Before\+Update → \doxylink{classgl3_1_1engine_1_1_game_a6f8f88986abef0182a2583421aed0506}{update()} → on\+Update → \doxylink{classgl3_1_1engine_1_1_game_a0ac5348909051ee9d05a2470cc6c26fd}{draw()} → renderer.\+draw() → update\+Delta\+Time → on\+After\+Update
+\item on\+Before\+Shutdown
+\item on\+Shutdown 
+\end{DoxyItemize}\Hypertarget{classgl3_1_1engine_1_1_game_a6f8f88986abef0182a2583421aed0506}\index{gl3::engine::Game@{gl3::engine::Game}!update@{update}}
+\index{update@{update}!gl3::engine::Game@{gl3::engine::Game}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{classgl3_1_1engine_1_1_game_a6f8f88986abef0182a2583421aed0506} 
+virtual void gl3\+::engine\+::\+Game\+::update (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{window}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Called every frame to update game logic. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em window} & Pointer to a GLFWwindow. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/julia/\+Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/Game.\+h\end{DoxyCompactItemize}

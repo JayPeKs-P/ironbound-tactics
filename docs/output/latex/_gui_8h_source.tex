@@ -1,0 +1,59 @@
+\doxysection{Gui.\+h}
+\hypertarget{_gui_8h_source}{}\label{_gui_8h_source}\index{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/Gui.h@{C:/Users/julia/Git-\/projects/05-\/gl3-\/kalb/code/engine/include/engine/ecs/Gui.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Julian\ Kalb\ on\ 06/07/2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}engine/Game.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <nuklear\_glfw\_gl3.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace\ }gl3::engine::ecs}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_ade6c6eea6f60f928b22720662eca35de}{Gui}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_ade6c6eea6f60f928b22720662eca35de}{Gui}}(\mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}}\ \&engine,\ nk\_context*\ ctx,\ nk\_uint\ textureID)}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ :\ engine(engine),\ ctx(ctx),\ textureID(textureID)\ \{\}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a407af1864aa89eb7e47ef60c29321de3}{Gui}}(\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_ade6c6eea6f60f928b22720662eca35de}{Gui}}\ \&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a93f477cb07d90c67f24c46c5170b9e07}{Gui}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_ade6c6eea6f60f928b22720662eca35de}{Gui}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_ade6c6eea6f60f928b22720662eca35de}{\string~Gui}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_ace9d76dc1048da8b2dbfad8e2b4ba3d1}{update}}()}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!endScene)\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a08e8d89abfc61d14fd52d0d5f735beb5}{render}}();}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a33f22dd5864f78afe6cb2babd47e038d}{invokeSceneChange}}();}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ endScene\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a799195bd273111127bd74412cf5ccf9f}{updateMargins}}(\textcolor{keywordtype}{int}\ newWidth,\ \textcolor{keywordtype}{int}\ newHeight)\{\mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a5318827c2ecd3824b5bda95fbcdf822b}{windowWidth}}\ =\ newWidth;\ windowHeight\ =\ newHeight;\};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Guids>}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a8aa5e3c6ef836b97e56a307f24fb70b8}{checkIfEntityHasComponent}}(Guids...\ guids)}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (...\ \&\&\ engine.componentManager.hasComponent<T>((guids)));}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a33f22dd5864f78afe6cb2babd47e038d}{invokeSceneChange}}()\ =\ 0;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a08e8d89abfc61d14fd52d0d5f735beb5}{render}}()\ =\ 0;}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classgl3_1_1engine_1_1ecs_1_1_gui_a5318827c2ecd3824b5bda95fbcdf822b}{windowWidth}},\ windowHeight;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ endScene\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classgl3_1_1engine_1_1_game}{Game}}\ \&engine;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ nk\_context\ *ctx;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ nk\_uint\ textureID;}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \};}
+\DoxyCodeLine{00084\ \}}
+
+\end{DoxyCode}
