@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['scenegraphpruner_0',['SceneGraphPruner',['../classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_pruner.html#a1bc57a7ac63e1e3d525170f7df2864c4',1,'gl3::engine::sceneGraph::SceneGraphPruner']]],
-  ['scenegraphupdater_1',['SceneGraphUpdater',['../classgl3_1_1engine_1_1scene_graph_1_1_scene_graph_updater.html#a647b78cf116fd650f89bd2905da16b41',1,'gl3::engine::sceneGraph::SceneGraphUpdater']]],
-  ['setparent_2',['setParent',['../classgl3_1_1engine_1_1scene_graph_1_1_transform.html#ade2c45ea78a501b1afad94eae5641316',1,'gl3::engine::sceneGraph::Transform::setParent()'],['../class_transform.html#ade2c45ea78a501b1afad94eae5641316',1,'Transform::setParent()']]],
-  ['shader_3',['Shader',['../struct_shader.html#a5a30d54041b3ca2c5b37507a9f82b668',1,'Shader::Shader(const Shader &amp;shader)=delete'],['../struct_shader.html#aa2d393c5ab924b3ae5dbcf0e11d82c4b',1,'Shader::Shader(Shader &amp;&amp;other) noexcept']]],
-  ['start_4',['start',['../classgl3_1_1engine_1_1_game.html#af3437e5d763b788eb786c0ee7d298ade',1,'gl3::engine::Game::start()'],['../class_game.html#af3437e5d763b788eb786c0ee7d298ade',1,'Game::start()']]],
-  ['system_5',['System',['../classgl3_1_1engine_1_1ecs_1_1_system.html#a585232f0aefa359230a37361d3e977a0',1,'gl3::engine::ecs::System::System(Game &amp;engine)'],['../classgl3_1_1engine_1_1ecs_1_1_system.html#a077ef8846a6c18d6746284519dd746f0',1,'gl3::engine::ecs::System::System(System &amp;&amp;)=delete'],['../classgl3_1_1engine_1_1ecs_1_1_system.html#a56b2a95143d8d76ab3261617b4431354',1,'gl3::engine::ecs::System::System(const System &amp;)=delete'],['../class_system.html#a585232f0aefa359230a37361d3e977a0',1,'System::System(Game &amp;engine)'],['../class_system.html#a077ef8846a6c18d6746284519dd746f0',1,'System::System(System &amp;&amp;)=delete'],['../class_system.html#a56b2a95143d8d76ab3261617b4431354',1,'System::System(const System &amp;)=delete']]]
-];
