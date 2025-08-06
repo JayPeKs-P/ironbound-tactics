@@ -24,10 +24,15 @@
 */
 var NAVTREE =
 [
-  [ "My Project", "index.html", [
+  [ "GLIII: Ironbound Tactics", "index.html", [
     [ "Quick Start", "md_out_2_quick_start.html", null ],
-    [ "How to make a game", "md_wiki_2engine.html", null ],
-    [ "How to play my game", "md_wiki_2game.html", null ],
+    [ "How to make a new game with my codebase", "md_wiki_2engine.html", null ],
+    [ "How to play", "md_wiki_2game.html", [
+      [ "Core Concept", "md_wiki_2game.html#autotoc_md5", [
+        [ "Price of each Unit Type", "md_wiki_2game.html#autotoc_md6", null ],
+        [ "Combat", "md_wiki_2game.html#autotoc_md7", null ]
+      ] ]
+    ] ],
     [ "Topics", "topics.html", "topics" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

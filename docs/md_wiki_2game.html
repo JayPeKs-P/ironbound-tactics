@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: How to play my game</title>
+<title>GLIII: Ironbound Tactics: How to play</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">My Project
+   <div id="projectname">GLIII: Ironbound Tactics
    </div>
   </td>
  </tr>
@@ -88,26 +88,48 @@ $(function(){initNavTree('md_wiki_2game.html','',''); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">How to play my game </div></div>
+  <div class="headertitle"><div class="title">How to play </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="autotoc_md4"></a></p>
-<p>Describe your game here, especially the goal, the mechanics and the input.</p>
-<ol type="1">
-<li>Input</li>
-</ol>
-<ul>
-<li>You need the follwing buttons to play my game and I will explain what they do here ^^</li>
-</ul>
-<ol type="1">
-<li>Core Mechanics</li>
-</ol>
-<ul>
-<li>The core mechanic behind my game is the following ... </li>
-</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
+Core Concept</h1>
+<p>When you start the game, you will see a menu with three sliders. On the top of that menu is a number. This number represents the total amount of <b>Commandpoints</b> you (the player) have available. <br  />
+ At the moment there are three different types of units: Infantry, Archers and Catapults. You are free to select how many units of each type you want to add to your army, mind however that units can have different costs.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+Price of each Unit Type</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Unit Type  </th><th class="markdownTableHeadNone">Cost  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Infantry  </td><td class="markdownTableBodyNone">1 CP  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Archer  </td><td class="markdownTableBodyNone">1CP  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Catapult  </td><td class="markdownTableBodyNone">5CP  </td></tr>
+</table>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+Combat</h2>
+<p>When you are happy with the distribution in your army click accept. A countdown will show up and the firs round of combat will begin. On the left side are your units, on the right those of your opponent.</p>
+<p><span class="tt">Left Click</span> on any unit type to see their individual attributes. <br  />
+ <span class="tt">Left Click</span> your units and then <span class="tt">Left Click</span> again any of your opponent to select how many of them should attack. <br  />
+ <span class="tt">Right Click</span> to unselect. <br  />
+</p>
+<p><b>Catapults</b> can not attack until you send some of your <b>Infantry</b> units to use them. To do this <br  />
+ <span class="tt">Left Click</span> your <b>Infantry</b> units and then <span class="tt">Left Click</span> again your <b>Catapult</b> units.</p>
+<p>As mentioned before units have different attributes. Two very important values are <b>Accuracy</b> and <b>Attack Speed</b>. <b>Catapults</b> for example have lower accuracy then <b>Archers</b> and <b>Infantry</b>, to balance this they deal a lot more damage and have a higher <b>Crit Value</b>. <br  />
+ At first glance this might give them a big advantage over the rest of the units, but compared to <b>Archers</b> who have a <b>Speed value</b> of 1, <b>Catapults</b> only have a <b>Speed Value</b> of 3. This means that <b>Archers</b> will attack their target at the end of the turn you told them to, whereas <b>Catapults</b> will attack at the end of third from last turn.</p>
+<p>When you manage to defeat all your opponents units the next round starts automatically. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
