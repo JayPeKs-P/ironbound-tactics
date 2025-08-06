@@ -61,12 +61,12 @@ void ActionEvaluation::setGuids(engine::Game& game)
             }
         }
     });
-    std::cout << pInf_E << std::endl;
-    std::cout << pArc_E << std::endl;
-    std::cout << pCat_E << std::endl;
-    std::cout << eInf_E << std::endl;
-    std::cout << eArc_E << std::endl;
-    std::cout << eCat_E << std::endl;
+    // std::cout << pInf_E << std::endl;
+    // std::cout << pArc_E << std::endl;
+    // std::cout << pCat_E << std::endl;
+    // std::cout << eInf_E << std::endl;
+    // std::cout << eArc_E << std::endl;
+    // std::cout << eCat_E << std::endl;
     if (!checkIfEntityHasComponent<Unit>(game, pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E))
     {
         throw("ActionEvaluation::checkIfEntityHasComponent failed");

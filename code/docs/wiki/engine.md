@@ -1,5 +1,4 @@
-# How to make a game
+# How to make a new game with my codebase
 
-Explain what your engine is capable of, especially which types of games
-
-Roughly outline the steps to make a new game using your engine :)
+I will add instructions, when files like the `GuiHandler` have been refactored
+and fully implemented into the engine files.
