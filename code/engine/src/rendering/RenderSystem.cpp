@@ -11,6 +11,8 @@
 #include "engine/rendering/Shader.h"
 #include "engine/rendering/InstanceBuffer.h"
 
+#define MAX_INSTANCES 60
+
 namespace gl3::engine::render {
     struct glStatusData {
         int success;
@@ -155,7 +157,7 @@ namespace gl3::engine::render {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
                 glGenBuffers(1, &instanceBuffer_C.VBO);
                 glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
-                glBufferData(GL_ARRAY_BUFFER, maxInstancePerEntity * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, MAX_INSTANCES * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
                 glBindVertexArray(model2D_C.VAO);
                 for (int i = 0; i < 4; ++i)
                 {

@@ -11,6 +11,8 @@
 #include "engine/ecs/EntityManager.h"
 #include "engine/sceneGraph/Transform.h"
 
+#include "engine/fsm/StateMachine.h"
+
 #include "logic/ActionRegistry.h"
 
 
@@ -80,6 +82,8 @@ namespace gl3::engine {
         ComponentManager componentManager;
         ecs::EntityManager entityManager;
         sceneGraph::Transform* origin = nullptr;
+
+        fsm::StateMachine SceneManagerFSM;
 
         engine::combat::ActionRegistry actionRegister;
         float elapsedTime = 0.0f;

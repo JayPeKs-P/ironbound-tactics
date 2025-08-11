@@ -86,10 +86,6 @@ namespace gl3::engine::render {
         /// @param shaderProgram The shader program to target.
         static void setFloat(const std::string& uniformName, float value, GLuint shaderProgram);
 
-
-        /// The maximum amount of instances a single entity can have.
-        int maxInstancePerEntity = 60;
-
         /// ID of the vertex shader used for instance rendering.
         unsigned int instanceVertexShader;
 
