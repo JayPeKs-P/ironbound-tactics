@@ -3,6 +3,7 @@
 //
 
 #include "MovementSystem.h"
+#include "engine/Game.h"
 
 #include "CombatController.h"
 #include "../components/unitTypes/UnitCategory.h"
@@ -40,7 +41,7 @@ namespace gl3 {
 
         CombatController::onBeforeAttack.addListener([&](guid_t unit, guid_t unused, int amount)
         {
-            if (!checkIfEntityHasComponent<Unit>(unit)) throw("MovementSystem::MovementSystem() onBeforeAttack.addListener missing unit_C");
+            if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit)) throw("MovementSystem::MovementSystem() onBeforeAttack.addListener missing unit_C");
             auto unit_C = &engine.componentManager.getComponent<Unit>(unit);
 
             if (unit_C->category == UnitCategory::INFANTRY){
@@ -57,7 +58,7 @@ namespace gl3 {
         });
         CombatController::onAttack.addListener([&](guid_t unit, guid_t target, int amount)
         {
-            if (!checkIfEntityHasComponent<Unit>(unit, target)) throw("MovementSystem::MovementSystem() onAttack.addListener missing unit_C");
+            if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target)) throw("MovementSystem::MovementSystem() onAttack.addListener missing unit_C");
             auto unit_C = &engine.componentManager.getComponent<Unit>(unit);
             switch (unit_C->category)
             {

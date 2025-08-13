@@ -42,6 +42,18 @@ namespace gl3::engine::ecs {
         /// @return Reference to the entity object associated to the passed ID.
         [[nodiscard]] Entity &getEntity(guid_t guid);
 
+        /// @brief Function to check, if one or more entities have the specified component.
+        ///
+        /// This utility function returns true, if all entities, whose IDs are provided, have a Component of type T.
+        /// @tparam  T Component type to check.
+        /// @tparam Guids List of guid_t values of the entities to check.
+        /// @return true if all provided entities have component T, false otherwise.
+        template <typename T, typename... Guids>
+        bool checkIfEntityHasComponent(Guids... guids)
+        {
+            return (... && componentManager.hasComponent<T>((guids)));
+        }
+
         /// @brief Add a specific entity to the @ref gl3::engine::ecs::EntityManager::deleteList
         void deleteEntity(Entity &entity);
 
@@ -57,7 +69,7 @@ namespace gl3::engine::ecs {
         std::map<guid_t, std::unique_ptr<Entity>> entities;
         std::vector<guid_t> deleteList;
 
-        /// @brief Mirrors the amount of total created entities. Used to evaluate the ID of the next created entity.
+        /// @brief Mirrors the amount of total created entities. Used to evaluate the ID of the next created entityg
         int entityCounter = 0;
     };
 }

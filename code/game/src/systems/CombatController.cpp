@@ -87,7 +87,7 @@ void CombatController::handleTurn()
 
     case CombatState::EVALUATE_END:
     {
-        if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
+        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
 
         auto pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
         auto pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
@@ -224,8 +224,8 @@ DEBUG_LOG(
                 {
                     if (selPTarget == UnitCategory::CATAPULT)
                     {
-                        if (!checkIfEntityHasComponent<Unit>(pInf_E, pCat_E)) throw("CombatController::use() Missing unit_C");
-                        if (!checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
+                        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(pInf_E, pCat_E)) throw("CombatController::use() Missing unit_C");
+                        if (!engine.entityManager.checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
                         auto pInfU_C = &engine.componentManager.getComponent<Unit>(pInf_E);
                         auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
                         auto pCatSE_C = &engine.componentManager.getComponent<SiegeEngine>(pCat_E);
@@ -242,8 +242,8 @@ DEBUG_LOG(
                 {
                     if (selPTarget == UnitCategory::CATAPULT)
                     {
-                        if (!checkIfEntityHasComponent<Unit>(pArc_E, pCat_E)) throw("CombatController::use() Missing unit_C");
-                        if (!checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
+                        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(pArc_E, pCat_E)) throw("CombatController::use() Missing unit_C");
+                        if (!engine.entityManager.checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
                         auto pArcU_C = &engine.componentManager.getComponent<Unit>(pArc_E);
                         auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
                         auto pCatSE_C = &engine.componentManager.getComponent<SiegeEngine>(pCat_E);
@@ -389,7 +389,7 @@ void CombatController::runEnemyTurn()
     auto options = ActionEvaluation::generateOptions(engine);
     for (auto& option: options)
     {
-        if (!checkIfEntityHasComponent<Unit>(option.actor, option.target))
+        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(option.actor, option.target))
         {
             throw("CombatController::runEnemyTurn missing unit_C");
         }
@@ -452,7 +452,7 @@ void CombatController::runEnemyTurn()
 
 void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount)
 {
-    if (!checkIfEntityHasComponent<Unit>(attacker, target)) throw("CombatController::scheduleAttack Missing unit_C");
+    if (!engine.entityManager.checkIfEntityHasComponent<Unit>(attacker, target)) throw("CombatController::scheduleAttack Missing unit_C");
     auto attackerU_C = &engine.componentManager.getComponent<Unit>(attacker);
     auto targetU_C = &engine.componentManager.getComponent<Unit>(target);
 

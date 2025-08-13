@@ -5,6 +5,8 @@
 #include "engine/rendering/RenderSystem.h"
 #include <fstream>
 #include <sstream>
+
+#include "engine/Game.h"
 #include "engine/util/Assets.h"
 
 #include "engine/rendering/Model2D.h"

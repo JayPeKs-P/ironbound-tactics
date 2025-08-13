@@ -4,6 +4,7 @@
 #pragma once
 #include "CombatController.h"
 #include "CombatController.h"
+#include "engine/sceneGraph/Transform.h"
 #include "engine/ecs/System.h"
 #include "engine/Events.h"
 

@@ -4,11 +4,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <memory>
+#include <unordered_map>
+#include <typeindex>
+#include <stdexcept>
 
 #include "engine/Context.h"
 #include "engine/Events.h"
 #include "engine/ecs/ComponentManager.h"
 #include "engine/ecs/EntityManager.h"
+#include "engine/ecs/System.h"
+
 #include "engine/sceneGraph/Transform.h"
 
 #include "engine/fsm/StateMachine.h"
@@ -24,7 +30,25 @@ namespace gl3::engine {
     class Game{
     public:
         using event_t = events::Event<Game, Game&>;
+        using SystemContainer = std::unordered_map<std::type_index, std::unique_ptr<ecs::System>>;
 
+
+        template<typename S, typename ...Args>
+        [[nodiscard]] S &addSystem(Args&& ...args) {
+            auto system = std::make_unique<S>(*this, std::forward<Args>(args)...);
+            S& systemRef = *system;
+            systems[std::type_index(typeid(S))] = std::move(system);
+            return systemRef;
+        }
+        template<typename S>
+        S &getSystem() {
+            auto it = systems.find(std::type_index(typeid(S)));
+            if(it == systems.end())
+            {
+                throw std::runtime_error("SystemManager: System not found" + std::type_index(typeid(S)));
+            }
+            return *static_cast<S*>(it->second.get());
+        }
         /// Runs the game. Invokes all core events and alls start() function.
         ///
         /// @brief Starts the main game loop.
@@ -114,6 +138,7 @@ namespace gl3::engine {
         /// @brief Time in seconds since the last frame.
         float deltaTime = 1.0f / 60;
     private:
+        SystemContainer systems;
         context::Context context;
 
         /// @brief Timestamp of the last frame for delta calculation.

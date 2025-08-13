@@ -15,7 +15,6 @@ namespace gl3::engine::sceneGraph {
     /// @brief Handles deletion of Entity instances that have a Transform Component which is marked as deleted.
     class SceneGraphPruner : public System {
     public:
-
         /// Adds pruneTransforms() to @ref engine::Game::onBeforeUpdate as listener.
         explicit SceneGraphPruner(Game &game) : System(game) {
             game.onBeforeUpdate.addListener([&](Game &game) {
@@ -35,5 +34,7 @@ namespace gl3::engine::sceneGraph {
                 }
             });
         }
+    private:
+
     };
 }

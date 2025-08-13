@@ -1,4 +1,3 @@
-#include <stdexcept>
 #include "engine/Game.h"
 
 #include "engine/sceneGraph/SceneGraphPruner.h"
@@ -33,7 +32,8 @@ glm::mat4 Game::calculateMvpMatrix(glm::mat4 model)
 
 void Game::run()
 {
-    sceneGraph::SceneGraphUpdater sceneGraphUpdater(*this);
+    auto sceneGraphUpdater = &addSystem<sceneGraph::SceneGraphUpdater>();
+    // sceneGraph::SceneGraphUpdater sceneGraphUpdater(*this);
     sceneGraph::SceneGraphPruner sceneGraphPruner(*this);
 
     render::RenderSystem renderer(*this);
@@ -42,7 +42,7 @@ void Game::run()
     onStartup.invoke(*this);
     start();
     onAfterStartup.invoke(*this);
-    sceneGraphUpdater.updateTransforms(*this);
+    sceneGraphUpdater->updateTransforms(*this);
     context.run([&](context::Context &gl3CTX)
     {
         onBeforeUpdate.invoke(*this);

@@ -17,17 +17,17 @@ namespace gl3::engine {
 
 namespace gl3::engine::ecs {
 
-    /// @brief The class that handles the lifetime of @ref gl3::engine::ecs::Component objects.
+    /// @brief The class that handles the lifetime of @ref Component objects.
     ///
-    /// An object of this class is member of @ref gl3::engine::Game. Use it to add components to an
-    /// @ref gl3::engine::ecs::Entity. It adds a unique_ptr of a new component to a container, and maps it to their
+    /// An object of this class is member of @ref Game. Use it to add components to an
+    /// @ref Entity. It adds a unique_ptr of a new component to a container, and maps it to their
     /// owners ID. For each type of component a new container is created. Because of that, all components of the same
     /// type live in sequential memory.
     class ComponentManager {
         using ComponentContainer = std::map<guid_t, std::unique_ptr<Component>>;
     public:
 
-        /// @brief Adds the member function purgeComponents() to @ref gl3::engine::Game::onAfterUpdate as listener.
+        /// @brief Adds the member function purgeComponents() to @ref Game::onAfterUpdate as listener.
         ///
         /// @param engine A reference to the base instance of game.
         explicit ComponentManager(engine::Game &engine);

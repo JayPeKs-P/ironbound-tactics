@@ -4,6 +4,7 @@
 
 #pragma once
 #include "engine/ecs/System.h"
+#include "engine/sceneGraph/Transform.h"
 
 namespace gl3 {
 
