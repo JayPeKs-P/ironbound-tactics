@@ -47,7 +47,9 @@ target_compile_features(${EXE_FILE} PRIVATE cxx_std_17)
 
 target_link_libraries(${EXE_FILE} PRIVATE Engine)
 
-target_compile_definitions(${EXE_FILE} PRIVATE ASSET_ROOT=./assets/)
+#target_compile_definitions(
+#        ${EXE_FILE} PRIVATE
+#)
 
 # copy assets to output directory before build
 add_custom_command(TARGET ${EXE_FILE} PRE_BUILD

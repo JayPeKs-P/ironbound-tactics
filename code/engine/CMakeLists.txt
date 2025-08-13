@@ -26,6 +26,8 @@ add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
         include/engine/fsm/State.h
         src/fsm/StateMachine.cpp
         include/engine/fsm/StateMachine.h
+        include/engine/Log.cpp
+        include/engine/Log.h
 )
 
 target_compile_features(${ENGINE_NAME} PRIVATE cxx_std_17)
@@ -37,8 +39,15 @@ target_link_libraries(${ENGINE_NAME} PUBLIC glad
         soloud
         nuklear_impl
         stb
+        spdlog::spdlog
 )
 
 target_include_directories(${ENGINE_NAME} PUBLIC include/
         ${CMAKE_SOURCE_DIR}/extern/nlohmann)
 
+target_compile_definitions(
+        ${ENGINE_NAME} PUBLIC
+        ASSET_ROOT=./assets
+        $<$<CONFIG:Debug>:DEBUG>
+        $<$<CONFIG:Release>:RELEASE>
+)
