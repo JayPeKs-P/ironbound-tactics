@@ -1,3 +1,4 @@
+#include "engine/Log.h"
 #include "engine/Game.h"
 
 #include "engine/sceneGraph/SceneGraphPruner.h"
@@ -10,6 +11,7 @@ context(width, height, title),
 componentManager(*this),
 entityManager(componentManager,*this)
 {
+    Log::init();
     origin = &entityManager.createEntity().addComponent<sceneGraph::Transform>();
 }
 
@@ -34,9 +36,11 @@ void Game::run()
 {
     auto sceneGraphUpdater = &addSystem<sceneGraph::SceneGraphUpdater>();
     // sceneGraph::SceneGraphUpdater sceneGraphUpdater(*this);
-    sceneGraph::SceneGraphPruner sceneGraphPruner(*this);
+    auto sceneGraphPruner = &addSystem<sceneGraph::SceneGraphPruner>();
+    // sceneGraph::SceneGraphPruner sceneGraphPruner(*this);
 
-    render::RenderSystem renderer(*this);
+    auto renderer = &addSystem<render::RenderSystem>();
+    // render::RenderSystem renderer(*this);
 
 
     onStartup.invoke(*this);
@@ -49,7 +53,7 @@ void Game::run()
         update(getWindow());
         onUpdate.invoke(*this);
         draw();
-        renderer.draw(*this);
+        renderer->draw(*this);
         updateDeltaTime();
         onAfterUpdate.invoke(*this);
     });

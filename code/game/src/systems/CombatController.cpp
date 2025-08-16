@@ -1,14 +1,17 @@
 //
 // Created by Julian Kalb on 25/02/2025.
 //
+#include <iostream>
+#include <ostream>
+#include "json.hpp"
 
+#include "engine/Game.h"
 #include "CombatController.h"
+
 #include "../logic/CombatFunctions.h"
 #include "../logic/ActionEvaluation.h"
 
-#include <iostream>
-#include <ostream>
-#include <json.hpp>
+
 
 #include "MovementSystem.h"
 using json = nlohmann::json;

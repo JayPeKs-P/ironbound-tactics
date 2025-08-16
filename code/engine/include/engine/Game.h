@@ -45,7 +45,7 @@ namespace gl3::engine {
             auto it = systems.find(std::type_index(typeid(S)));
             if(it == systems.end())
             {
-                throw std::runtime_error("SystemManager: System not found" + std::type_index(typeid(S)));
+                throw std::runtime_error("SystemManager: System not found" + std::string(typeid(S).name()));
             }
             return *static_cast<S*>(it->second.get());
         }

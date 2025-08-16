@@ -22,10 +22,15 @@
 #include "engine/rendering/Model2D.h"
 #include "components/UnitState.h"
 #include "components/unitTypes/SiegeEngine.h"
+#include "components/unitTypes/Unit.h"
 #include "engine/Texture.h"
 #include "engine/util/VertPresets.h"
 
 #include "engine/util/Debug.h"
+#include "systems/CombatController.h"
+#include "systems/MovementSystem.h"
+#include "systems/SelectionSystem.h"
+#include "systems/rendering/InstanceManager.h"
 
 using gl3::engine::sceneGraph::Transform;
 using namespace gl3;
@@ -34,6 +39,7 @@ Game::Game(int width, int height, const std::string& title):
     engine::Game(width, height, title) {
     // audio.init();
     // audio.setGlobalVolume(0.1f);
+
 }
 
 void Game::start() {
@@ -124,17 +130,11 @@ void Game::start() {
     unitTransforms.push_back(
         &eCat_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
-
-    guiHandler = std::make_unique<GuiHandler>(*this);
-
-    instanceManager = new InstanceManager(*this);
-
-    movementSystem = new MovementSystem(*this);
-
-    combatController = new CombatController(*this);
-
-    selectionSystem = new SelectionSystem(*this);
-
+    auto guiHandler = &addSystem<GuiHandler>();
+    auto instanceManager = &addSystem<InstanceManager>();
+    auto movementSystem = &addSystem<MovementSystem>();
+    auto combatController = &addSystem<CombatController>();
+    auto selectionSystem = &addSystem<SelectionSystem>();
     // backgroundMusic = std::make_unique<SoLoud::Wav>();
     // backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     // backgroundMusic->setLooping(true);
@@ -180,6 +180,9 @@ MouseInput left;
 MouseInput right;
 
 void Game::update(GLFWwindow* window) {
+    auto selectionSystem = &getSystem<SelectionSystem>();
+    auto combatController = &getSystem<CombatController>();
+    auto instanceManager = &getSystem<InstanceManager>();
     left.update(window, GLFW_MOUSE_BUTTON_LEFT);
     if (left.clicked)
     {

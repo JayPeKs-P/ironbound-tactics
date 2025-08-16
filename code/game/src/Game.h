@@ -9,11 +9,6 @@
 #include <soloud_wav.h>
 #include "components/CombatSelection.h"
 
-#include "systems/CombatController.h"
-#include "systems/GuiHandler.h"
-#include "systems/MovementSystem.h"
-#include "systems/SelectionSystem.h"
-#include "systems/rendering/InstanceManager.h"
 
 
 class GuiCombat;
@@ -24,17 +19,17 @@ namespace gl3
     public:
         Game(int width, int height, const std::string& title);
 
-        [[nodiscard]] std::shared_ptr<GuiHandler> gui_handler() const
-        {
-            return guiHandler;
-        }
+        // [[nodiscard]] std::shared_ptr<GuiHandler> gui_handler() const
+        // {
+        //     return guiHandler;
+        // }
 
     private:
-        std::shared_ptr<GuiHandler> guiHandler;
-        CombatController* combatController = nullptr;
-        InstanceManager* instanceManager = nullptr;
-        SelectionSystem* selectionSystem = nullptr;
-        MovementSystem* movementSystem = nullptr;
+        // std::shared_ptr<GuiHandler> guiHandler;
+        // CombatController* combatController = nullptr;
+        // InstanceManager* instanceManager = nullptr;
+        // SelectionSystem* selectionSystem = nullptr;
+        // MovementSystem* movementSystem = nullptr;
 
         CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 
@@ -42,11 +37,6 @@ namespace gl3
         void update(GLFWwindow *window) override;
         void draw() override;
 
-
-
-        // std::vector<std::unique_ptr<Entity>> entities;
-
-//        Ship* ship = nullptr;
 
         // BattleMenu* battleMenu = nullptr;
 

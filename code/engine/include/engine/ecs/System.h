@@ -14,11 +14,8 @@ namespace gl3::engine::ecs {
     /// A System has access to the ECS context (engine::Game object).
     /// All custom systems should inherit from this class.
     class System {
-        friend class gl3::engine::Game;
+        // friend class Game;
     public:
-
-        explicit System(Game &engine) : engine(engine) {}
-
         // /// Prevent move semantics.
         // System(System &&) = delete;
         //
@@ -30,6 +27,7 @@ namespace gl3::engine::ecs {
         /// @brief Create a System object and store a reference to the game instance.
         ///
         /// @param engine Reference to the core game object.
+        explicit System(Game &engine) : engine(engine) {}
 
         engine::Game &engine;
     };

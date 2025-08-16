@@ -35,16 +35,12 @@ namespace gl3::engine {
 
 #ifdef RELEASE
 /// @brief Core log macros
-#define CORE_TRACE
-#define CORE_INFO
-#define CORE_WARN
-#define CORE_ERROR
-#define CORE_FATAL
+#define CORE_TRACE(...) (void)0
+#define CORE_INFO(...)  (void)0
+#define CORE_WARN(...)  (void)0
 
 /// @brief Client log macros
-#define TRACE
-#define INFO
-#define WARN
-#define ERROR
-#define FATAL(...)      gl3::engine::Log::getClientLogger()->fatal(__VA_ARGS__)
+#define TRACE(...)      (void)0
+#define INFO(...)       (void)0
+#define WARN(...)       (void)0
 #endif
