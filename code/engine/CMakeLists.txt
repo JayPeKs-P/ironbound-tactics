@@ -28,6 +28,9 @@ add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
         include/engine/fsm/StateMachine.h
         include/engine/Log.cpp
         include/engine/Log.h
+        include/engine/gui/Gui.h
+        include/engine/gui/GuiManager.cpp
+        include/engine/gui/GuiManager.h
 )
 
 target_compile_features(${ENGINE_NAME} PRIVATE cxx_std_17)
