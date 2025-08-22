@@ -40,8 +40,8 @@ add_executable(${EXE_FILE} ${SOURCE_FILES})
 
 #target_compile_definitions(${EXE_FILE} PRIVATE DEBUG_MODE)
 
-# require C++ 17 compiler
-target_compile_features(${EXE_FILE} PRIVATE cxx_std_17)
+# require C++ 20 compiler
+target_compile_features(${EXE_FILE} PRIVATE cxx_std_20)
 
 
 

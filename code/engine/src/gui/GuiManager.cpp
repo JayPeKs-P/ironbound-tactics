@@ -2,7 +2,7 @@
 // Created by Julian Kalb on 19/08/2025.
 //
 
-#include "GuiManager.h"
+#include "engine/gui/GuiManager.h"
 #include "engine/Game.h"
 #include "engine/Log.h"
 #include "engine/util/Assets.h"

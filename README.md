@@ -6,7 +6,6 @@
 | Student            | `Julian Kalb`, julian.kalb@stud-mail.uni-wuerzburg.de, `s402363` |
 | Target Platform(s) | `Windows`                                                        |
 | Start Date         | `29.10.2024`                                                     |
-| End Date           | `15.08.2025`                                                     |
 | Study Program      | `Games Engineering B.Sc.`                                        |
 | Language           | `C++`                                                            |
 
@@ -67,7 +66,7 @@ To compile the source code use the [Visual Studio 2022](https://visualstudio.mic
 | [STB_Image](https://github.com/nothings/stb)                      | Part of the STB library. Used to load .png textures                                           |
 | [SoLoud](https://github.com/jarikomppa/soloud?tab=readme-ov-file) | Sound effect and background music integration                                                 |
 | [nlohmann_json](https://github.com/nlohmann/json)                 | For .json integration                                                                         |
-
+| [spdlog](https://github.com/gabime/spdlog)                 | For better logging                                                                         |
 ### Assets
 - [Tactical RPG Overworld Pack](https://www.gamedevmarket.net/asset/tactical-rpg-overworld-pack) for units and world textures
 - [Fantasy RPG UI pack](https://www.gamedevmarket.net/asset/rpg-ui-pack) for GUI
