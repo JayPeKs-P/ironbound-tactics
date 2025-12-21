@@ -53,5 +53,4 @@ private:
     int valueSlider1 = 0;
     int valueSlider2 = 0;
     int valueSlider3 = 0;
-
 };
