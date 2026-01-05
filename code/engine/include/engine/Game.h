@@ -22,6 +22,11 @@
 #include "logic/ActionRegistry.h"
 
 
+namespace SoLoud {
+    class Wav;
+    class Soloud;
+}
+
 namespace gl3::engine {
     /// @brief Core game class, that manages the main structures the main loop and manages core systems and ECS state.
     ///
@@ -31,6 +36,14 @@ namespace gl3::engine {
     public:
         using event_t = events::Event<Game, Game&>;
         using SystemContainer = std::unordered_map<std::type_index, std::unique_ptr<ecs::System>>;
+
+        std::unique_ptr<SoLoud::Soloud> m_pAudioPlayer;
+        std::vector<std::unique_ptr<SoLoud::Wav>> m_ListMusic;
+        std::vector<std::unique_ptr<SoLoud::Wav>> m_ListSound;
+
+        void PlaySound();
+
+
 
 
         template<typename S, typename ...Args>

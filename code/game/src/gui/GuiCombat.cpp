@@ -217,7 +217,11 @@ void GuiCombat::drawTopRow()
     float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.3, 0.2, 0.1 };
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 7, ratio);
 
-    if (nk_button_label(ctx, "esc")) endScene = true;
+    if (nk_button_label(ctx, "esc"))
+    {
+        endScene = true;
+        engine.PlaySound();
+    }
 
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 

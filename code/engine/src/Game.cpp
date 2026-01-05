@@ -4,6 +4,9 @@
 #include "engine/sceneGraph/SceneGraphPruner.h"
 #include "engine/sceneGraph/SceneGraphUpdater.h"
 #include "engine/rendering/RenderSystem.h"
+#include "engine/util/Assets.h"
+#include <soloud.h>
+#include <soloud_wav.h>
 
 using namespace gl3::engine;
 Game::Game(int width, int height, const std::string& title):
@@ -13,6 +16,9 @@ entityManager(componentManager,*this)
 {
     Log::init();
     origin = &entityManager.createEntity().addComponent<sceneGraph::Transform>();
+    m_pAudioPlayer = std::make_unique<SoLoud::Soloud>();
+    m_pAudioPlayer->init();
+    m_pAudioPlayer->setGlobalVolume(0.1f);
 }
 
 Game::~Game()
@@ -32,6 +38,11 @@ glm::mat4 Game::calculateMvpMatrix(glm::mat4 model)
     return mvpMatrix;
 }
 
+void Game::PlaySound() {
+    m_pAudioPlayer->play(*m_ListSound[0]);
+
+}
+
 void Game::run()
 {
     auto sceneGraphUpdater = &addSystem<sceneGraph::SceneGraphUpdater>();
@@ -42,6 +53,17 @@ void Game::run()
     auto renderer = &addSystem<render::RenderSystem>();
     // render::RenderSystem renderer(*this);
 
+    auto music = std::make_unique<SoLoud::Wav>();
+    music->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
+    music->setLooping(true);
+    m_ListMusic.push_back(std::move(music));
+
+    auto sound = std::make_unique<SoLoud::Wav>();
+    sound->load(resolveAssetPath("audio/shot.mp3").string().c_str());
+    sound->setSingleInstance(true);
+    m_ListSound.push_back(std::move(sound));
+
+    m_pAudioPlayer->playBackground(*m_ListMusic[0]);
 
     onStartup.invoke(*this);
     start();
