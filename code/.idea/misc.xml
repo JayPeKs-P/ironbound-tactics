@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BackendCodeEditorMiscSettings">
-    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
-    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
-    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
-    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="5" type="long" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/@KeyIndexDefined" value="true" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Applicability/=Live/@EntryIndexedValue" value="true" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Applicability/=Surround/@EntryIndexedValue" value="false" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Description/@EntryValue" value="Adds overhead of generic component class" type="string" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Field/=NAME/@KeyIndexDefined" value="true" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Field/=NAME/Order/@EntryValue" value="0" type="long" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/IsBlessed/@EntryValue" value="true" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Reformat/@EntryValue" value="true" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Scope/=F6696F8185506F41B9C4252540BE9C18/@KeyIndexDefined" value="true" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Scope/=F6696F8185506F41B9C4252540BE9C18/Type/@EntryValue" value="InCppFile" type="string" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Shortcut/@EntryValue" value="component" type="string" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/ShortenQualifiedReferences/@EntryValue" value="true" type="bool" />
-    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=A60FBC367EA78D4BA84FAEAB0426E301/Text/@EntryValue" value="#pragma once&#10;#include &quot;engine/ecs/Component.h&quot;&#10;&#10;using gl3::engine::ecs::Component;&#10;using gl3::engine::ecs::ComponentManager;&#10;using gl3::engine::ecs::guid_t;&#10;using gl3::engine::ecs::Entity;&#10;&#10;struct $NAME$: Component{&#10;    friend ComponentManager;&#10;    friend Entity;&#10;    &#10;private:&#10;    $NAME$(guid_t owner) : ComponentManager(owner) {}&#10;};" type="string" />
-    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
-  </component>
   <component name="CMakePythonSetting">
     <option name="pythonIntegrationState" value="YES" />
   </component>

@@ -10,6 +10,7 @@ project(NUKLEAR C)
 #)
 add_library(nuklear_impl STATIC
         nuklear_impl.cpp
+        NuklearWrapper.h
 )
 
 target_link_libraries(nuklear_impl PUBLIC glfw glad)

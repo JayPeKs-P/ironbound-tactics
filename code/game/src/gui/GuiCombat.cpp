@@ -220,8 +220,9 @@ void GuiCombat::drawTopRow()
     if (nk_button_label(ctx, "esc"))
     {
         endScene = true;
-        engine.PlaySound();
     }
+
+
 
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 

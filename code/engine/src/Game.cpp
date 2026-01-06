@@ -19,6 +19,8 @@ entityManager(componentManager,*this)
     m_pAudioPlayer = std::make_unique<SoLoud::Soloud>();
     m_pAudioPlayer->init();
     m_pAudioPlayer->setGlobalVolume(0.1f);
+    RegisterSound("retro_ui_menu_simple_click_12.wav");
+    RegisterSound("retro_ui_menu_simple_click_03.wav");
 }
 
 Game::~Game()
@@ -38,9 +40,24 @@ glm::mat4 Game::calculateMvpMatrix(glm::mat4 model)
     return mvpMatrix;
 }
 
-void Game::PlaySound() {
-    m_pAudioPlayer->play(*m_ListSound[0]);
+void Game::PlaySound(const char* pFileName) {
+    m_pAudioPlayer->play(*m_ListSound[pFileName]);
+}
 
+void Game::RegisterSound(const char* pFileName) {
+    auto sound = std::make_unique<SoLoud::Wav>();
+    std::string fileName = pFileName;
+    sound->load(resolveAssetPath("audio/" + fileName).string().c_str());
+    sound->setSingleInstance(true);
+    m_ListSound[fileName] = std::move(sound);
+}
+
+void Game::RegisterMusic(const char* pFileName) {
+    auto music = std::make_unique<SoLoud::Wav>();
+    std::string fileName = pFileName;
+    music->load(resolveAssetPath("audio/" + fileName).string().c_str());
+    music->setLooping(true);
+    m_ListMusic[fileName] = std::move(music);
 }
 
 void Game::run()
@@ -53,17 +70,7 @@ void Game::run()
     auto renderer = &addSystem<render::RenderSystem>();
     // render::RenderSystem renderer(*this);
 
-    auto music = std::make_unique<SoLoud::Wav>();
-    music->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
-    music->setLooping(true);
-    m_ListMusic.push_back(std::move(music));
-
-    auto sound = std::make_unique<SoLoud::Wav>();
-    sound->load(resolveAssetPath("audio/shot.mp3").string().c_str());
-    sound->setSingleInstance(true);
-    m_ListSound.push_back(std::move(sound));
-
-    m_pAudioPlayer->playBackground(*m_ListMusic[0]);
+    // m_pAudioPlayer->playBackground(*m_ListMusic[0]);
 
     onStartup.invoke(*this);
     start();

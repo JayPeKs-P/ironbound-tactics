@@ -38,13 +38,12 @@ namespace gl3::engine {
         using SystemContainer = std::unordered_map<std::type_index, std::unique_ptr<ecs::System>>;
 
         std::unique_ptr<SoLoud::Soloud> m_pAudioPlayer;
-        std::vector<std::unique_ptr<SoLoud::Wav>> m_ListMusic;
-        std::vector<std::unique_ptr<SoLoud::Wav>> m_ListSound;
+        std::unordered_map<std::string, std::unique_ptr<SoLoud::Wav>> m_ListMusic;
+        std::unordered_map<std::string, std::unique_ptr<SoLoud::Wav>> m_ListSound;
 
-        void PlaySound();
-
-
-
+        void PlaySound(const char* pFileName);
+        void RegisterSound(const char* pFileName);
+        void RegisterMusic(const char* pFileName);
 
         template<typename S, typename ...Args>
         [[nodiscard]] S &addSystem(Args&& ...args) {

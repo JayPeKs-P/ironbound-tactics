@@ -66,7 +66,8 @@ void GuiUnitSelection::drawSelectionFrame()
     nk_label(ctx, "Free  Slots  ", NK_TEXT_RIGHT);
     nk_label_colored(ctx, std::to_string(maxCP).c_str(), NK_TEXT_LEFT, playerColor);
 
-    float ratio[] = {0.01, 0.1, 0.01,  0.2, 0.5, 0.2, 0.1, 0.01};
+    float ratio[] = {0.01, 0.1, 0.01,  0.2, 0.5, 0.2, 0.1};
+
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 7, ratio);
 
     float frameDuration = 0.1f;
@@ -113,8 +114,12 @@ void GuiUnitSelection::drawSelectionFrame()
 
 
     nk_layout_row_dynamic(ctx, windowHeight / 20, 3);
-    nk_label(ctx, "", NK_TEXT_LEFT);
-    if (nk_button_label(ctx, "Accept")) endScene = true;
+    nk_spacing(ctx,1);
+
+    if (NK_WRAP::button_label(ctx, "Accept", &engine))
+    {
+        endScene = true;
+    }
 }
 
 void GuiUnitSelection::getComponents(engine::Game& game)

@@ -4,7 +4,8 @@
 
 #pragma once
 #include "engine/Game.h"
-#include <nuklear_glfw_gl3.h>
+// #include <nuklear_glfw_gl3.h>
+#include "NuklearWrapper.h"
 
 /// @defgroup GUI GUI scenes
 /// All GUI scenes that can be displayed in GuiHandler. All GUI scenes use the Nuklear library for implementation.
