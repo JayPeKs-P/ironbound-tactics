@@ -25,4 +25,29 @@ namespace NK_WRAP {
         }
         return clicked;
     }
+    static bool slider_int(nk_context* pCtx, int min, int* pVal, int max, int step, const char* pID,
+        std::unordered_map<std::string, bool>& HoverStates, gl3::engine::Game* pCore) {
+        struct nk_rect bounds = nk_widget_bounds(pCtx);
+        bool hovered = nk_input_is_mouse_hovering_rect(&pCtx->input, bounds);
+        bool clicked = nk_input_is_mouse_click_in_rect(&pCtx->input, NK_BUTTON_LEFT, bounds);
+        bool changed = nk_slider_int(pCtx, min, pVal, max, step);
+        bool& bWasHovered = HoverStates[pID];
+
+        if (!pCore) return clicked;
+
+        if ( hovered && !bWasHovered)
+        {
+            pCore->PlaySound("retro_ui_menu_simple_click_03.wav");
+        }
+        bWasHovered = hovered;
+        if (clicked)
+        {
+            pCore->PlaySound("retro_ui_menu_simple_click_12.wav");
+        }
+        if (changed)
+        {
+            pCore->PlaySound("retro_ui_menu_blip_click_20.wav");
+        }
+        return changed;
+    }
 }

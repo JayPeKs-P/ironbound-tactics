@@ -21,6 +21,7 @@ entityManager(componentManager,*this)
     m_pAudioPlayer->setGlobalVolume(0.1f);
     RegisterSound("retro_ui_menu_simple_click_12.wav");
     RegisterSound("retro_ui_menu_simple_click_03.wav");
+    RegisterSound("retro_ui_menu_blip_click_20.wav");
 }
 
 Game::~Game()

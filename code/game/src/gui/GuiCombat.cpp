@@ -334,7 +334,7 @@ void GuiCombat::drawActions()
                 value = 0;
             }
             int availableTroups = unitOne->availableAmount;
-            nk_slider_int(ctx, 0, &value, availableTroups, 1);
+            NK_WRAP::slider_int(ctx, 0, &value, availableTroups, 1, "AttackSlider", m_Hovered, &engine);
             nk_label_colored(ctx, getType(*unitTwo).c_str(), NK_TEXT_CENTERED, enemyColor);
             nk_layout_row_dynamic(ctx, windowHeight/30, 3);
 
@@ -364,11 +364,11 @@ void GuiCombat::drawActions()
             if(unitTwo->totalAmount*cost <= unitOne->totalAmount)
             {
                 auto unusedAmount = unitTwo->totalAmount - siege_C.useableAmount;
-                nk_slider_int(ctx, 0, &value, unusedAmount, 1);
+                NK_WRAP::slider_int(ctx, 0, &value, unusedAmount, 1, "UnusedAmount", m_Hovered, &engine);
             }else
             {
                 int canUseAmount = unitOne->availableAmount / cost;
-                nk_slider_int(ctx, 0, &value, canUseAmount, 1);
+                NK_WRAP::slider_int(ctx, 0, &value, canUseAmount, 1, "CanUseAmount", m_Hovered, &engine);
             }
             nk_label_colored(ctx, getType(*unitTwo).c_str(), NK_TEXT_CENTERED, playerColor);
 

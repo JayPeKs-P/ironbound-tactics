@@ -82,7 +82,7 @@ void GuiUnitSelection::drawSelectionFrame()
     nk_label(ctx, "Infantry", NK_TEXT_LEFT);
     int canUseAmount1 = maxCP - valueSlider2 - valueSlider3;
     if (canUseAmount1 < valueSlider1) valueSlider1 = canUseAmount1;
-    nk_slider_int(ctx, 0, &valueSlider1, canUseAmount1, 1);
+    NK_WRAP::slider_int(ctx, 0, &valueSlider1, canUseAmount1, 1, "Infantry", m_Hovered, &engine);
     nk_label_colored(ctx, std::to_string(valueSlider1).c_str(), NK_TEXT_CENTERED, numberColor);
     nk_label(ctx, "", NK_TEXT_LEFT);
 
@@ -95,7 +95,7 @@ void GuiUnitSelection::drawSelectionFrame()
     nk_label(ctx, "Archer", NK_TEXT_LEFT);
     int canUseAmount2 = maxCP - valueSlider1 - valueSlider3;
     if (canUseAmount2 < valueSlider2) valueSlider2 = canUseAmount1;
-    nk_slider_int(ctx, 0, &valueSlider2, canUseAmount2, 1);
+    NK_WRAP::slider_int(ctx, 0, &valueSlider2, canUseAmount2, 1, "Archer", m_Hovered, &engine);
     nk_label_colored(ctx, std::to_string(valueSlider2).c_str(), NK_TEXT_CENTERED, numberColor);
     nk_label(ctx, "", NK_TEXT_LEFT);
 
@@ -108,7 +108,7 @@ void GuiUnitSelection::drawSelectionFrame()
     nk_label(ctx, "Catapult", NK_TEXT_LEFT);
     int canUseAmount3 = maxCP - valueSlider1 - valueSlider2;
     if (canUseAmount3 < valueSlider3) valueSlider3 = canUseAmount1;
-    nk_slider_int(ctx, 0, &valueSlider3, canUseAmount3, pCatSE_C->cost);
+    NK_WRAP::slider_int(ctx, 0, &valueSlider3, canUseAmount3, pCatSE_C->cost, "Catapult", m_Hovered, &engine);
     nk_label_colored(ctx, std::to_string(valueSlider3).c_str(), NK_TEXT_CENTERED, numberColor);
     nk_label(ctx, "", NK_TEXT_LEFT);
 
