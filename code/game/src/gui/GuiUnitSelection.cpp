@@ -116,7 +116,7 @@ void GuiUnitSelection::drawSelectionFrame()
     nk_layout_row_dynamic(ctx, windowHeight / 20, 3);
     nk_spacing(ctx,1);
 
-    if (NK_WRAP::button_label(ctx, "Accept", &engine))
+    if (NK_WRAP::button_label(ctx, "Accept", m_Hovered, &engine))
     {
         endScene = true;
     }

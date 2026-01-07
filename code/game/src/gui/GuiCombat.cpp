@@ -217,7 +217,7 @@ void GuiCombat::drawTopRow()
     float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.3, 0.2, 0.1 };
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 7, ratio);
 
-    if (nk_button_label(ctx, "esc"))
+    if (NK_WRAP::button_label(ctx, "esc", m_Hovered, &engine))
     {
         endScene = true;
     }
@@ -267,7 +267,7 @@ void GuiCombat::drawEndTurnWindow()
     nk_label(ctx, turnLabel.c_str(), NK_TEXT_LEFT);
     // struct nk_image skip = GuiHandler::getTileImage(textureID, 9, 5, 1, 1, 3072, 3072);
     // nk_button_image(ctx, skip);
-    if (nk_button_label(ctx, "Next") && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
+    if (NK_WRAP::button_label(ctx, "Next", m_Hovered, &engine) && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
     {
         CombatController::setState(CombatState::ANIMATION);
     }
@@ -326,7 +326,7 @@ void GuiCombat::drawActions()
         if (tagSelectionTwo == Tag::ENEMY && unitOne->availableAmount != 0)
         {
             nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-            if (nk_button_label(ctx, "Attack"))
+            if (NK_WRAP::button_label(ctx, "Attack", m_Hovered, &engine))
             {
                 combatSelection_C->attack.invoke(unitOne->category, value, unitTwo->category);
                 combatSelection_C->selectionOne = nullptr;
@@ -353,7 +353,7 @@ void GuiCombat::drawActions()
             auto cost = siege_C.cost;
 
             nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-            if (nk_button_label(ctx, "Use"))
+            if (NK_WRAP::button_label(ctx, "Use", m_Hovered, &engine))
             {
                 combatSelection_C->use.invoke(unitOne->category, value, unitTwo->category);
                 combatSelection_C->selectionOne = nullptr;

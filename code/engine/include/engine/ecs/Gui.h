@@ -76,6 +76,7 @@ namespace gl3::engine::ecs
         /// Store the width and height of the GLFWwindow. Used to calculate relative size of Nuklear objects.
         int windowWidth, windowHeight;
         bool endScene = false;
+        std::unordered_map<std::string, bool> m_Hovered;
         Game &engine;
         nk_context *ctx;
         nk_uint textureID;
