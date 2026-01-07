@@ -22,6 +22,8 @@ entityManager(componentManager,*this)
     RegisterSound("retro_ui_menu_simple_click_12.wav");
     RegisterSound("retro_ui_menu_simple_click_03.wav");
     RegisterSound("retro_ui_menu_blip_click_20.wav");
+    RegisterMusic("Retro Action Game Theme #6 (looped).wav");
+    RegisterMusic("Retro Action Game Theme #8 (looped).wav");
 }
 
 Game::~Game()
@@ -45,6 +47,14 @@ void Game::PlaySound(const char* pFileName) {
     m_pAudioPlayer->play(*m_ListSound[pFileName]);
 }
 
+void Game::PlayMusic(const char* pFileName) {
+    auto& music = m_ListMusic[pFileName];
+    if (music == m_pCurrentMusic) return;
+    if (m_iCurrentMusic > -1) m_pAudioPlayer->stop(m_iCurrentMusic);
+    m_iCurrentMusic = m_pAudioPlayer->play(*m_ListMusic[pFileName]);
+    m_pCurrentMusic = m_ListMusic[pFileName];
+}
+
 void Game::RegisterSound(const char* pFileName) {
     auto sound = std::make_unique<SoLoud::Wav>();
     std::string fileName = pFileName;
@@ -57,6 +67,7 @@ void Game::RegisterMusic(const char* pFileName) {
     auto music = std::make_unique<SoLoud::Wav>();
     std::string fileName = pFileName;
     music->load(resolveAssetPath("audio/" + fileName).string().c_str());
+    music->setSingleInstance(true);
     music->setLooping(true);
     m_ListMusic[fileName] = std::move(music);
 }
@@ -71,7 +82,6 @@ void Game::run()
     auto renderer = &addSystem<render::RenderSystem>();
     // render::RenderSystem renderer(*this);
 
-    // m_pAudioPlayer->playBackground(*m_ListMusic[0]);
 
     onStartup.invoke(*this);
     start();

@@ -88,6 +88,7 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureI
     //     startRound.invoke();
     //     CombatController::setState(CombatState::WAITNEXTROUND);
     // });
+    engine.PlayMusic("Retro Action Game Theme #8 (looped).wav");
 }
 
 void GuiCombat::render()
