@@ -322,13 +322,11 @@ void CombatController::setEnemy(engine::Game& game)
         f >> ArmySetup;
     }
 
-    // calculate Difficulty depending on won rounds
     std::string difficulty;
     if (roundCount >= 10) difficulty = "HARD";
     else if (roundCount >= 5) difficulty = "MEDIUM";
     else difficulty = "EASY";
 
-    // get random key for specific army of previously defined difficulty
     static std::random_device random;
     static std::mt19937 generate(random());
     std::uniform_int_distribution<> dist(1, 5);

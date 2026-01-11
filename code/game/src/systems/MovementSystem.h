@@ -29,8 +29,9 @@ private:
     glm::vec3 movementVector;
     glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 0.0);
     glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);
+    bool m_bAllAnimationsFinished = false;
 
-    float countdown = 15.0f;
+    float countdown = 0.5f;
 };
 
 } // gl3
