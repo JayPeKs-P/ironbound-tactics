@@ -69,13 +69,14 @@ void CombatFunctions::use(int amount, Unit* unit, SiegeEngine* siege)
 
 void CombatFunctions::reset(Unit* unit, int amount)
 {
-    if (amount > unit->totalAmount)
+    int iAmountAddBack = unit->availableAmount + amount;
+    if (iAmountAddBack > unit->totalAmount)
     {
         unit->availableAmount = unit->totalAmount;
     }
     else
     {
-        unit->availableAmount = amount;
+        unit->availableAmount = iAmountAddBack;
     }
 }
 } // gl3

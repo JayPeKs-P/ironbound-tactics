@@ -369,8 +369,6 @@ void CombatController::chooseAttackTarget(guid_t attacker, const UnitCategory &t
             break;
     }
     attackerUnit_C->availableAmount -= amount;
-////////////////////////////////////////////////////////////////////////
-{
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "Player schedules attack: "
@@ -381,8 +379,6 @@ void CombatController::chooseAttackTarget(guid_t attacker, const UnitCategory &t
         << amount
         );
 #endif
-}
-////////////////////////////////////////////////////////////////////////
 }
 
 void CombatController::runEnemyTurn()
@@ -402,8 +398,6 @@ void CombatController::runEnemyTurn()
             {
                 auto targetSE_C = &engine.componentManager.getComponent<SiegeEngine>(option.target);
 
-////////////////////////////////////////////////////////////////////////
-{
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "AI uses: "
@@ -416,8 +410,6 @@ void CombatController::runEnemyTurn()
         << unitCategory_to_string(targetU_C->category)
         );
 #endif
-}
-////////////////////////////////////////////////////////////////////////
 
                 onUse.invoke(option.actor, option.target, option.amount);
                 CombatFunctions::use(option.amount/targetSE_C->cost, actorU_C, targetSE_C);
@@ -429,8 +421,6 @@ void CombatController::runEnemyTurn()
                 });
             }else
             {
-////////////////////////////////////////////////////////////////////////
-{
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "AI schedules attack: "
@@ -441,8 +431,6 @@ void CombatController::runEnemyTurn()
         << option.amount
         );
 #endif
-}
-////////////////////////////////////////////////////////////////////////
 
                 scheduleAttack(option.actor, option.target, option.amount);
                 actorU_C->availableAmount -= option.amount;
@@ -475,8 +463,6 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
             turnEnd.removeListener(*handle);
         });
 
-////////////////////////////////////////////////////////////////////////
-{
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << unitCategory_to_string(attackerU_C->category)
@@ -486,8 +472,6 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
         << amount
         );
 #endif
-}
-////////////////////////////////////////////////////////////////////////
     });
 }
 
