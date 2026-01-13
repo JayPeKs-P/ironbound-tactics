@@ -61,9 +61,9 @@ namespace gl3 {
             switch (unit_C->category)
             {
             case UnitCategory::INFANTRY:
-                auto& root = engine.componentManager.getComponent<Transform>(unit);
-                auto targetPos = engine.componentManager.getComponent<Transform>(target).localPosition;
-                    setMoved(root, targetPos, amount, State::PREPARING);
+                auto& actorRoot = engine.componentManager.getComponent<Transform>(unit);
+                auto& targetRoot = engine.componentManager.getComponent<Transform>(target);
+                    setMoved(actorRoot, targetRoot, amount, State::PREPARING);
                 break;
             }
         });
@@ -92,7 +92,13 @@ namespace gl3 {
                 case State::PREPARING:
                     break;
                 case State::MOVED:
-                    glm::vec3 directionMov = unitState_C.goal + unitState_C.relativeVec - unitState_C.oldPos;
+                    glm::vec3 directionMov;
+                    if (unitState_C.m_iTarget > engine::ecs::invalidID)
+                    {
+                        auto pTargetTransform = &engine.componentManager.getComponent<Transform>(unitState_C.m_iTarget);
+                        directionMov = pTargetTransform->localPosition - transform.localPosition;
+                        unitState_C.goal = pTargetTransform->localPosition;
+                    }
                     moveStraight(transform, directionMov, deltaTime, State::RESETTING, 15);
                     break;
                 case State::RESETTING:
@@ -207,17 +213,36 @@ namespace gl3 {
         }
     }
 
-    void MovementSystem::setMoved(Transform& root, glm::vec3 goalPosition, int amount, State initialState)
+    void MovementSystem::setMoved(Transform& root, Transform& goalPosition, int amount, State initialState)
     {
         int counter = 0;
         for (auto& childTransform : root.getChildTransforms())
         {
-            auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
-            if (unitState_C.state == initialState)
+            auto unitState_C = &engine.componentManager.getComponent<UnitState>(childTransform->entity());
+            if (unitState_C->state == initialState)
             {
-                unitState_C.traveledDistance = 0;
-                unitState_C.goal = goalPosition;
-                unitState_C.state = State::MOVED;
+                size_t currentSmalestSize = 5000;
+                guid_t iTargetEntity = engine::ecs::invalidID;
+                for (auto childTransformTarget : goalPosition.getChildTransforms())
+                {
+                    auto unitStateTarget_C = &engine.componentManager.getComponent<UnitState>(childTransformTarget->entity());
+                    if (unitStateTarget_C->m_TargetedBy.empty())
+                    {
+                        iTargetEntity = childTransformTarget->entity();
+                        break;
+                    }
+                    if (currentSmalestSize > unitStateTarget_C->m_TargetedBy.size())
+                    {
+                        currentSmalestSize = unitStateTarget_C->m_TargetedBy.size();
+                        iTargetEntity = childTransformTarget->entity();
+                    }
+                }
+                auto pTarget = engine.componentManager.getComponent<UnitState>(iTargetEntity);
+                pTarget.m_TargetedBy.push_back(iTargetEntity);
+                unitState_C->m_iTarget = iTargetEntity;
+                unitState_C->traveledDistance = 0;
+                unitState_C->goal = goalPosition.localPosition;
+                unitState_C->state = State::MOVED;
 
                 counter++;
                 if (counter >= amount)

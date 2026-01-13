@@ -24,8 +24,9 @@ public:
     void moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime);
 private:
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
-    void setMoved(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
+    void setMoved(Transform& root, Transform& goalPosition, int amount, State initialState);
     void setAttacking(Transform& root, glm::vec3 targetPosition, int amount);
+
     glm::vec3 movementVector;
     glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 0.0);
     glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);

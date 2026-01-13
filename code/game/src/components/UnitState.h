@@ -18,8 +18,23 @@ struct UnitState: Component
     glm::vec3 oldPos;
     glm::vec3 relativeVec;
     glm::vec3 goal;
+    // gl3::engine::sceneGraph::Transform* m_pTarget = nullptr;
+    // std::vector<UnitState*> m_TargetedBy {};
+    guid_t m_iTarget = gl3::engine::ecs::invalidID;
+    std::vector<guid_t> m_TargetedBy;
+
     float movementSpeed = 0.2;
     float traveledDistance = 0;
+
+    // ~UnitState() override {
+    //     if (!m_TargetedBy.empty())
+    //     {
+    //         for (auto& instance : m_TargetedBy)
+    //         {
+    //             instance->m_pTarget = nullptr;
+    //         }
+    //     }
+    // }
 
 private:
     explicit UnitState(guid_t owner):
