@@ -86,30 +86,46 @@ namespace gl3 {
                 switch (unitState_C.state)
                 {
                 case State::MOVING:
-                    glm::vec3 directionPrep = unitState_C.goal - root->localPosition;
-                    moveStraight(transform, directionPrep, deltaTime, State::PREPARING, 3);
-                    break;
-                case State::PREPARING:
-                    break;
-                case State::MOVED:
-                    glm::vec3 directionMov;
-                    if (unitState_C.m_iTarget > engine::ecs::invalidID)
                     {
-                        auto pTargetTransform = &engine.componentManager.getComponent<Transform>(unitState_C.m_iTarget);
-                        directionMov = pTargetTransform->localPosition - transform.localPosition;
-                        unitState_C.goal = pTargetTransform->localPosition;
+                        glm::vec3 directionPrep = unitState_C.goal - transform.localPosition;
+                        moveStraight(transform, directionPrep, deltaTime, State::PREPARING, 3);
+                        break;
                     }
-                    moveStraight(transform, directionMov, deltaTime, State::RESETTING, 15);
-                    break;
+                case State::PREPARING:
+                    {
+                        break;
+                    }
+                case State::MOVED:
+                    {
+                        glm::vec3 directionMov;
+                        if (unitState_C.m_iTarget > engine::ecs::invalidID)
+                        {
+                            auto pTargetTransform = &engine.componentManager.getComponent<Transform>(unitState_C.m_iTarget);
+                            directionMov = pTargetTransform->localPosition - transform.localPosition;
+                            unitState_C.goal = pTargetTransform->localPosition;
+                        }
+                        moveStraight(transform, directionMov, deltaTime, State::FIGHTING, 15);
+                        break;
+                    }
+                case State::FIGHTING:
+                    {
+                        // unitState_C.state = State::RESETTING;
+                        break;
+                    }
                 case State::RESETTING:
-                    glm::vec3 directionRes = glm::vec3(unitState_C.oldPos.x - root->localPosition.x, 0 ,0) * 0.8f;
-                    moveStraight(transform, directionRes, deltaTime, State::IDLE, 3);
-                    break;
+                    {
+                        glm::vec3 directionRes = glm::vec3(unitState_C.oldPos.x - root->localPosition.x, 0 ,0) * 0.8f;
+                        moveStraight(transform, directionRes, deltaTime, State::IDLE, 3);
+                        break;
+                    }
                 case State::IDLE:
-                    break;
+                    {
+                        break;
+                    }
                 }
             }
         });
+
         if (m_bAllAnimationsFinished)
         {
             countdown -= deltaTime;
@@ -128,16 +144,18 @@ namespace gl3 {
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
         auto speed = unitState_C.movementSpeed;
+        auto directionNormalized = glm::normalize(direction);
 
-        if (distanceToGoal - unitState_C.traveledDistance >= 0)
+        if (distanceToGoal - speed * deltatime > 0.05)
         {
-            transform.localPosition += speed * deltatime * direction;
-            unitState_C.traveledDistance += 2* deltatime * speed;
+            transform.localPosition += speed * deltatime * directionNormalized;
+            unitState_C.traveledDistance += deltatime * speed;
             m_bAllAnimationsFinished = false;
         }else
         {
             unitState_C.oldPos = transform.localPosition;
             unitState_C.state = endState;
+            unitState_C.traveledDistance = 0;
             finishAnimation.invoke(delay);
             if (unitState_C.state == State::IDLE)
             {
@@ -200,8 +218,9 @@ namespace gl3 {
             if (unitState_C.state == initialState)
             {
                 unitState_C.relativeVec = childTransform->localPosition - root.localPosition;
+                auto directionGlobal = goalPosition - root.localPosition;
                 unitState_C.traveledDistance = 0;
-                unitState_C.goal = goalPosition;
+                unitState_C.goal = childTransform->localPosition + directionGlobal;
                 unitState_C.state = State::MOVING;
 
                 counter++;
@@ -237,8 +256,8 @@ namespace gl3 {
                         iTargetEntity = childTransformTarget->entity();
                     }
                 }
-                auto pTarget = engine.componentManager.getComponent<UnitState>(iTargetEntity);
-                pTarget.m_TargetedBy.push_back(iTargetEntity);
+                auto pTarget = &engine.componentManager.getComponent<UnitState>(iTargetEntity);
+                pTarget->m_TargetedBy.push_back(iTargetEntity);
                 unitState_C->m_iTarget = iTargetEntity;
                 unitState_C->traveledDistance = 0;
                 unitState_C->goal = goalPosition.localPosition;
