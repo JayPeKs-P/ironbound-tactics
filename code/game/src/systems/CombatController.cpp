@@ -84,6 +84,8 @@ void CombatController::handleTurn()
         break;
     case CombatState::DAMAGE_STEP:
         if (engine.actionRegister.advance()) {
+            int unused = engine::ecs::invalidID;
+            onAfterAttack.invoke(unused, unused, unused);
             currentState = CombatState::EVALUATE_END;
         }
         break;
@@ -446,6 +448,7 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
     auto targetU_C = &engine.componentManager.getComponent<Unit>(target);
 
     onBeforeAttack.invoke(attacker, target, amount);
+    // Hardcoded for end of turn movement of infantry. need to change that
     engine.actionRegister.scheduleAction(attackerU_C->speed-1, [=]()
     {
         onAttack.invoke(attacker, target, amount);
@@ -458,7 +461,6 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
         *handle = turnEnd.addListener([=](){
             CombatFunctions::reset(attackerU_C, amount);
-            onAfterAttack.invoke(attacker, target, amount);
 
             turnEnd.removeListener(*handle);
         });

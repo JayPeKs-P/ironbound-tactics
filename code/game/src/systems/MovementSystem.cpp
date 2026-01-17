@@ -14,6 +14,8 @@
 #include "../components/UnitState.h"
 #include "engine/sceneGraph/Transform.h"
 #include "../components/unitTypes/Unit.h"
+#include "engine/Game.h"
+#include "engine/Game.h"
 
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
@@ -54,6 +56,7 @@ namespace gl3 {
                 }
             }
         });
+        // Sets units to Moved if they were flagged with Preparing
         CombatController::onAttack.addListener([&](guid_t unit, guid_t target, int amount)
         {
             if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target)) throw("MovementSystem::MovementSystem() onAttack.addListener missing unit_C");
@@ -67,9 +70,15 @@ namespace gl3 {
                 break;
             }
         });
-        CombatController::onAfterAttack.addListener([&](guid_t unit, guid_t unused, int amount)
+        CombatController::onAfterAttack.addListener([&](guid_t unused1, guid_t unused2, int unused3)
         {
-
+            engine.componentManager.forEachComponent<Unit>([&](const Unit& unit_C)
+            {
+                if (unit_C.category == UnitCategory::INFANTRY){
+                    auto& root = engine.componentManager.getComponent<Transform>(unit_C.entity());
+                    SetResetting(root, State::FIGHTING);
+                }
+            });
         });
     }
 
@@ -88,7 +97,7 @@ namespace gl3 {
                 case State::MOVING:
                     {
                         glm::vec3 directionPrep = unitState_C.goal - transform.localPosition;
-                        moveStraight(transform, directionPrep, deltaTime, State::PREPARING, 3);
+                        m_bAllAnimationsFinished = moveStraight(transform, directionPrep, deltaTime, State::PREPARING, 3);
                         break;
                     }
                 case State::PREPARING:
@@ -104,7 +113,12 @@ namespace gl3 {
                             directionMov = pTargetTransform->localPosition - transform.localPosition;
                             unitState_C.goal = pTargetTransform->localPosition;
                         }
-                        moveStraight(transform, directionMov, deltaTime, State::FIGHTING, 15);
+                        else
+                        {
+                            unitState_C.goal = transform.localPosition;
+                            directionMov = {0,0,0};
+                        }
+                        m_bAllAnimationsFinished = moveStraight(transform, directionMov, deltaTime, State::FIGHTING, 15);
                         break;
                     }
                 case State::FIGHTING:
@@ -114,8 +128,8 @@ namespace gl3 {
                     }
                 case State::RESETTING:
                     {
-                        glm::vec3 directionRes = glm::vec3(unitState_C.oldPos.x - root->localPosition.x, 0 ,0) * 0.8f;
-                        moveStraight(transform, directionRes, deltaTime, State::IDLE, 3);
+                        glm::vec3 directionRes = unitState_C.goal - transform.localPosition;
+                        m_bAllAnimationsFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE, 3);
                         break;
                     }
                 case State::IDLE:
@@ -139,8 +153,10 @@ namespace gl3 {
         }
     }
 
-    void MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState, float delay)
+    bool MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState,
+                                      float delay)
     {
+        bool bFinished = true;
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
         auto speed = unitState_C.movementSpeed;
@@ -150,9 +166,10 @@ namespace gl3 {
         {
             transform.localPosition += speed * deltatime * directionNormalized;
             unitState_C.traveledDistance += deltatime * speed;
-            m_bAllAnimationsFinished = false;
+            bFinished = false;
         }else
         {
+            //if (endState == FIGHTING) m_bAllAnimationsFinished = false;
             unitState_C.oldPos = transform.localPosition;
             unitState_C.state = endState;
             unitState_C.traveledDistance = 0;
@@ -162,6 +179,7 @@ namespace gl3 {
                 transform.localPosition = transform.getParent()->localPosition + unitState_C.relativeVec;
             }
         }
+        return bFinished;
     }
 
     // void MovementSystem::moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime)
@@ -268,6 +286,20 @@ namespace gl3 {
                 {
                     break;
                 }
+            }
+        }
+    }
+
+    void MovementSystem::SetResetting(Transform& root, State initialState) const {
+        for (auto& childTransform : root.getChildTransforms())
+        {
+            if (!engine.entityManager.checkIfEntityHasComponent<UnitState>(childTransform->entity())) continue;
+            auto unitState_C = &engine.componentManager.getComponent<UnitState>(childTransform->entity());
+            if (unitState_C->state == initialState)
+            {
+                unitState_C->state = State::RESETTING;
+                unitState_C->goal = root.localPosition + unitState_C->relativeVec;
+                unitState_C->m_TargetedBy.clear();
             }
         }
     }

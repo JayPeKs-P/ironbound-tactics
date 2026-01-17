@@ -20,11 +20,12 @@ public:
     explicit MovementSystem(engine::Game &game);
     void moveTo(engine::Game &game, float deltatime);
     void update(engine::Game &game, Transform* root);
-    void moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState, float delay);
+    bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState, float delay);
     void moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime);
 private:
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
     void setMoved(Transform& root, Transform& goalPosition, int amount, State initialState);
+    void SetResetting(Transform& root, State initialState) const;
     void setAttacking(Transform& root, glm::vec3 targetPosition, int amount);
 
     glm::vec3 movementVector;
