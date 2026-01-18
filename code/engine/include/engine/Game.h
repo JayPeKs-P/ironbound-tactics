@@ -96,6 +96,10 @@ namespace gl3::engine {
         ///@return Value of delta-time.
         float getDeltaTime() {return deltaTime;}
 
+        unsigned int AddTextureToRegistry(const char* pPath, const char* pTextureName = nullptr);
+        unsigned int GetTextureFromRegistry(const char* pKey);
+
+
         /// @defgroup CoreEvents Core Game Events
         /// @{
         /// @brief Core event, triggered before the start() call.
@@ -155,6 +159,8 @@ namespace gl3::engine {
     private:
         SystemContainer systems;
         context::Context context;
+        std::unordered_map<std::string, unsigned int> m_TextureRegistry = {};
+
 
         /// @brief Timestamp of the last frame for delta calculation.
         float lastFrameTime = 1.0f / 60;

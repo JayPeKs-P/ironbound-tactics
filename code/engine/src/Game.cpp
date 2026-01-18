@@ -8,6 +8,8 @@
 #include <soloud.h>
 #include <soloud_wav.h>
 
+#include "engine/Texture.h"
+
 using namespace gl3::engine;
 Game::Game(int width, int height, const std::string& title):
 context(width, height, title),
@@ -41,6 +43,24 @@ glm::mat4 Game::calculateMvpMatrix(glm::mat4 model)
 
     glm::mat4 mvpMatrix = projection * view * model;
     return mvpMatrix;
+}
+
+unsigned int Game::AddTextureToRegistry(const char* pPath, const char* pTextureName) {
+    unsigned int texID = engine::util::Texture::load(pPath);
+    if (pTextureName)
+    {
+        m_TextureRegistry[pTextureName] = texID;
+        return texID;
+    }
+    m_TextureRegistry[pPath] = texID;
+}
+
+unsigned int Game::GetTextureFromRegistry(const char* pKey) {
+    if (m_TextureRegistry.contains(pKey))
+    {
+        return m_TextureRegistry[pKey];
+    }
+    return -1;
 }
 
 void Game::PlaySound(const char* pFileName) {

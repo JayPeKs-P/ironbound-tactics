@@ -95,6 +95,11 @@ namespace gl3::engine::render {
         /// ID of the shader program used for instance rendering.
         unsigned int instanceProgram;
 
+
+        unsigned int inanimateBatchVert;
+        unsigned int inanimateBatchFrag;
+        unsigned int inanimateBatchProgram;
+
         /// ID of the vertex shader used for non-instance rendering.
         unsigned int singleVertexShader;
 

@@ -14,7 +14,13 @@ namespace gl3::engine::ecs {
     }
 
     Entity &EntityManager::createEntity() {
-        auto guid = entityCounter++;
+        guid_t guid;
+        if (m_FreeGUIDs.empty()) guid = entityCounter++;
+        else [[likely]]
+        {
+            guid = m_FreeGUIDs.top();
+            m_FreeGUIDs.pop();
+        }
         Entity entity(guid, componentManager);
         entities[guid] = std::make_unique<Entity>(entity);
         return getEntity(guid);
@@ -33,6 +39,8 @@ namespace gl3::engine::ecs {
     void EntityManager::purgeEntities() {
         for(auto &guid: deleteList) {
             entities.erase(guid);
+            guid_t freeGUID = guid;
+            m_FreeGUIDs.push(freeGUID);
         }
         deleteList.clear();
     }

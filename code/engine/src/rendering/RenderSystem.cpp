@@ -70,7 +70,8 @@ namespace gl3::engine::render {
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
-                setFloat("uvOffset", instanceBuffer_C.uvOffset, shader_C.get_shader_program());
+                auto& uvOffset_C = game.componentManager.getComponent<UvOffset>(owner);
+                setFloat("uvOffset", uvOffset_C.value, shader_C.get_shader_program());
                 glDrawElementsInstanced(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr,
                                         instanceBuffer_C.instances.size());
             }
@@ -106,6 +107,15 @@ namespace gl3::engine::render {
         glDetachShader(instanceProgram, instanceVertexShader);
         glDetachShader(instanceProgram, instanceFragmentShader);
 
+        inanimateBatchVert = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/batch/inanimateBatch.vert");
+        inanimateBatchFrag = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/batch/inanimateBatch.frag");
+        inanimateBatchProgram = glCreateProgram();
+        glAttachShader(inanimateBatchProgram, inanimateBatchVert);
+        glAttachShader(inanimateBatchProgram, inanimateBatchFrag);
+        glLinkProgram(inanimateBatchProgram);
+        glDetachShader(inanimateBatchProgram, inanimateBatchVert);
+        glDetachShader(inanimateBatchProgram, inanimateBatchFrag);
+
         singleVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/single/vertexShader.vert");
         singleFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/single/fragmentShader.frag");
         singleProgram = glCreateProgram();
@@ -119,9 +129,13 @@ namespace gl3::engine::render {
         for (auto& [owner, _] : shaderContainer)
         {
             auto& shader_C = game.componentManager.getComponent<Shader>(owner);
-            if (game.componentManager.hasComponent<InstanceBuffer>(owner))
+            if (game.componentManager.hasComponent<InstanceBuffer>(owner) && game.componentManager.hasComponent<UvOffset>(owner))
             {
                 shader_C.set_shader_program(instanceProgram);
+            }
+            else if (game.componentManager.hasComponent<InstanceBuffer>(owner))
+            {
+                shader_C.set_shader_program(inanimateBatchProgram);
             }
             else
             {

@@ -21,17 +21,24 @@ public:
     void moveTo(engine::Game &game, float deltatime);
     void update(engine::Game &game, Transform* root);
     bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState, float delay);
+    bool CreateProjectiles(Transform& transform, State endState);
+    bool DeleteProjectile(guid_t ID);
+    bool ShootProjectiles(Transform& transform, float deltatime, State endState);
+    bool MoveCurved(Transform& projectileTransform, float deltatime);
     void moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime);
 private:
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
     void setMoved(Transform& root, Transform& goalPosition, int amount, State initialState);
     void SetResetting(Transform& root, State initialState) const;
-    void setAttacking(Transform& root, glm::vec3 targetPosition, int amount);
+    void SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState);
+
 
     glm::vec3 movementVector;
     glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 0.0);
     glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);
     bool m_bAllAnimationsFinished = false;
+    bool m_bMoveAnimsFinished = false;
+    bool m_bAttackAnimsFinished = false;
 
     float countdown = 0.5f;
 };

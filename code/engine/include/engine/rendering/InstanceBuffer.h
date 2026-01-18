@@ -32,8 +32,18 @@ struct InstanceBuffer: Component
     std::vector <glm::mat4> instances;
 
     ///@brief Used for animation if texture has animation frames.
-    float uvOffset = 0.0f;
+    // float uvOffset = 0.0f;
 private:
     explicit InstanceBuffer(guid_t owner):
+    Component(owner) {}
+};
+struct UvOffset: Component {
+    friend ComponentManager;
+    friend Entity;
+
+    float value = 0.0f;
+
+private:
+    explicit UvOffset(guid_t owner):
     Component(owner) {}
 };

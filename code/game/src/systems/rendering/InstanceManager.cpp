@@ -46,7 +46,6 @@ namespace gl3 {
             }
             if (game.componentManager.hasComponent<InstanceBuffer>(transform.entity()))
             {
-                auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(transform.entity());
                 auto rootLocation = transform.localPosition;
                 auto rootScale = transform.localScale;
                 for (int j = 0 ; j < 10 && createdInstances < maxInstances; j++)
@@ -71,13 +70,11 @@ namespace gl3 {
     {
         game.componentManager.forEachComponent<Transform>([&](Transform &transform)
         {
-            if (game.componentManager.hasComponent<Unit>(transform.entity()))
+            if (!game.componentManager.hasComponent<Unit>(transform.entity())) return;
+            for (auto child : transform.getChildTransforms())
             {
-                for (auto child : transform.getChildTransforms())
-                {
-                    auto& child_E = game.entityManager.getEntity(child->entity());
-                    game.entityManager.deleteEntity(child_E);
-                }
+                auto& child_E = game.entityManager.getEntity(child->entity());
+                game.entityManager.deleteEntity(child_E);
             }
         });
     }
@@ -99,21 +96,22 @@ namespace gl3 {
         instanceBuffer_C.instances.clear();
         game.componentManager.forEachComponentRevers<Transform>([&](Transform &transform)
         {
-            if (transform.getParent() == root)
+            if (transform.getParent() != root) return;
+            if (amount < amountLastFrame)
             {
-                if (amount < amountLastFrame)
-                {
-                    game.entityManager.deleteEntity(game.entityManager.getEntity(transform.entity()));
-                    amountLastFrame--;
-                }else if (amountLastFrame < amount)
-                {
-                }else
-                {
-                    instanceBuffer_C.instances.push_back(game.calculateMvpMatrix(transform.modelMatrix));
-                }
+                game.entityManager.deleteEntity(game.entityManager.getEntity(transform.entity()));
+                amountLastFrame--;
+            }else if (amountLastFrame < amount)
+            {
+            }else
+            {
+                instanceBuffer_C.instances.push_back(game.calculateMvpMatrix(transform.modelMatrix));
             }
         });
-        instanceBuffer_C.uvOffset = currentFrame * (1.0f / totalFrames);
+        if (!game.componentManager.hasComponent<UvOffset>(root->entity())) return;
+
+        auto& uvOffset_C = game.componentManager.getComponent<UvOffset>(root->entity());
+        uvOffset_C.value = currentFrame * (1.0f / totalFrames);
 //TODO add push function to trigger when unit dies or is added
     }
 } // gl3

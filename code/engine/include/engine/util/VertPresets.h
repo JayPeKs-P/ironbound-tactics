@@ -23,6 +23,14 @@ namespace gl3::engine::util::VertPreset
             -0.25f,  -0.25f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.5f,
             -0.25f,   0.25f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   0.75f
         };
+    static std::vector<float> QuadInanimate =
+    {
+        //positions                  // colors                  // texture coords
+        0.25f,   0.25f,   0.0f,      1.0f,   0.0f,   0.0f,       1.00f,   1.0f,
+        0.25f,  -0.25f,   0.0f,      0.0f,   1.0f,   0.0f,       1.00f,   0.00f,
+       -0.25f,  -0.25f,   0.0f,      0.0f,   0.0f,   1.0f,       0.0f,   0.00f,
+       -0.25f,   0.25f,   0.0f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f
+   };
     static std::vector<unsigned int> quadIndices = {0,1,3,1,2,3};
 
     static std::vector<float> background =

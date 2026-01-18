@@ -5,6 +5,7 @@
 #pragma once
 #include <map>
 #include <memory>
+#include <stack>
 #include <vector>
 #include "engine/ecs/ecs.h"
 #include "engine/ecs/Entity.h"
@@ -71,5 +72,6 @@ namespace gl3::engine::ecs {
 
         /// @brief Mirrors the amount of total created entities. Used to evaluate the ID of the next created entityg
         int entityCounter = 0;
+        std::stack<guid_t> m_FreeGUIDs {};
     };
 }

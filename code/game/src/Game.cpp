@@ -43,92 +43,99 @@ Game::Game(int width, int height, const std::string& title):
 }
 
 void Game::start() {
+    AddTextureToRegistry("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png", "Terrain");
+    AddTextureToRegistry("assets/textures/entities/Arrow_No_BG.png", "Arrow");
     unsigned int tempTexID = -1;
     //---- Entities ----
     auto& guiScene_E = engine::Game::entityManager.createEntity();
     combatSelection_C = &guiScene_E.addComponent<CombatSelection<GuiCombat>>();
 
-    auto& terrain_E = engine::Game::entityManager.createEntity();
-    tempTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png");
-    terrain_E.addComponent<Model2D>(engine::util::VertPreset::background, engine::util::VertPreset::quadIndices,
-                                    tempTexID);
-    terrain_E.addComponent<Shader>();
-    terrain_E.addComponent<engine::sceneGraph::Transform>(origin, glm::vec3(0, 0, -0.91), 0, glm::vec3(2.75, 2.75, 1));
-
+    // auto& terrain_E = engine::Game::entityManager.createEntity();
+    // tempTexID = GetTextureFromRegistry("Terrain");
+    // terrain_E.addComponent<Model2D>(engine::util::VertPreset::background, engine::util::VertPreset::quadIndices,
+    //                                 tempTexID);
+    // terrain_E.addComponent<Shader>();
+    // terrain_E.addComponent<engine::sceneGraph::Transform>(origin, glm::vec3(0, 0, -0.91), 0, glm::vec3(2.75, 2.75, 1));
 
     //----- Entities of player's army -----
-    auto& pInf_E = engine::Game::entityManager.createEntity();
-    pInfID_E = pInf_E.guid();
-    auto& pInfU_C = pInf_E.addComponent<Unit>("pInfantry");
-    pInf_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = engine::util::Texture::load(pInfU_C.texturePath.c_str());
-    pInf_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
-    pInf_E.addComponent<InstanceBuffer>();
-    pInf_E.addComponent<Shader>();
+    auto& InfPlayer_E = engine::Game::entityManager.createEntity();
+    pInfID_E = InfPlayer_E.guid();
+    auto& pInfU_C = InfPlayer_E.addComponent<Unit>("pInfantry");
+    InfPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    tempTexID = AddTextureToRegistry(pInfU_C.texturePath.c_str(), "pInfantry");
+    InfPlayer_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    InfPlayer_E.addComponent<InstanceBuffer>();
+    InfPlayer_E.addComponent<UvOffset>();
+    InfPlayer_E.addComponent<Shader>();
     unitTransforms.push_back(
-        &pInf_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+        &InfPlayer_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
-    auto& pArc_E = engine::Game::entityManager.createEntity();
-    pArcID_E = pArc_E.guid();
-    auto& pArcU_C = pArc_E.addComponent<Unit>("pArcher");
-    pArc_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    auto& ArcPlayer_E = engine::Game::entityManager.createEntity();
+    pArcID_E = ArcPlayer_E.guid();
+    auto& pArcU_C = ArcPlayer_E.addComponent<Unit>("pArcher");
+    ArcPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     tempTexID = engine::util::Texture::load(pArcU_C.texturePath.c_str());
-    pArc_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
-    pArc_E.addComponent<InstanceBuffer>();
-    pArc_E.addComponent<Shader>();
+    ArcPlayer_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    ArcPlayer_E.addComponent<InstanceBuffer>();
+    ArcPlayer_E.addComponent<UvOffset>();
+    ArcPlayer_E.addComponent<Shader>();
     unitTransforms.push_back(
-        &pArc_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.25f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+        &ArcPlayer_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.25f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
-    auto& pCat_E = engine::Game::entityManager.createEntity();
-    pCatID_E = pCat_E.guid();
-    auto& pCatU_C = pCat_E.addComponent<Unit>("pCatapult");
-    auto& pCatSE_C = pCat_E.addComponent<SiegeEngine>(5);
-    pCat_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
+    auto& CatPlayer_E = engine::Game::entityManager.createEntity();
+    pCatID_E = CatPlayer_E.guid();
+    auto& pCatU_C = CatPlayer_E.addComponent<Unit>("pCatapult");
+    auto& pCatSE_C = CatPlayer_E.addComponent<SiegeEngine>(5);
+    CatPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     tempTexID = engine::util::Texture::load(pCatU_C.texturePath.c_str());
-    pCat_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
-    pCat_E.addComponent<InstanceBuffer>();
-    pCat_E.addComponent<Shader>();
+    CatPlayer_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    CatPlayer_E.addComponent<InstanceBuffer>();
+    CatPlayer_E.addComponent<UvOffset>();
+    CatPlayer_E.addComponent<Shader>();
     unitTransforms.push_back(
-        &pCat_E.addComponent<Transform>(origin, glm::vec3(-2.25f, 0.5f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+        &CatPlayer_E.addComponent<Transform>(origin, glm::vec3(-2.25f, 0.5f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
 
     //----- Entities of enemy's army -----
-    auto& eInf_E = engine::Game::entityManager.createEntity();
-    eInfID_E = eInf_E.guid();
-    auto& eInfU_C = eInf_E.addComponent<Unit>(
+    auto& InfEnemy_E = engine::Game::entityManager.createEntity();
+    eInfID_E = InfEnemy_E.guid();
+    auto& eInfU_C = InfEnemy_E.addComponent<Unit>(
         "pInfantry"
     );
-    eInf_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    eInf_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
-    eInf_E.addComponent<InstanceBuffer>();
-    eInf_E.addComponent<Shader>();
+    InfEnemy_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    InfEnemy_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    InfEnemy_E.addComponent<InstanceBuffer>();
+    InfEnemy_E.addComponent<UvOffset>();
+    InfEnemy_E.addComponent<Shader>();
     unitTransforms.push_back(
-        &eInf_E.addComponent<Transform>(origin, glm::vec3(1.75f, -0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+        &InfEnemy_E.addComponent<Transform>(origin, glm::vec3(1.75f, -0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
-    auto& eArc_E = engine::Game::entityManager.createEntity();
-    eArcID_E = eArc_E.guid();
-    auto& eArcU_C = eArc_E.addComponent<Unit>(
+    auto& ArcEnemy_E = engine::Game::entityManager.createEntity();
+    eArcID_E = ArcEnemy_E.guid();
+    auto& eArcU_C = ArcEnemy_E.addComponent<Unit>(
         "pArcher"
     );
-    eArc_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    eArc_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
-    eArc_E.addComponent<InstanceBuffer>();
-    eArc_E.addComponent<Shader>();
+    ArcEnemy_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    ArcEnemy_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    ArcEnemy_E.addComponent<InstanceBuffer>();
+    ArcEnemy_E.addComponent<UvOffset>();
+    ArcEnemy_E.addComponent<Shader>();
     unitTransforms.push_back(
-        &eArc_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+        &ArcEnemy_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
-    auto& eCat_E = engine::Game::entityManager.createEntity();
-    eCatID_E = eCat_E.guid();
-    auto& eCatU_C = eCat_E.addComponent<Unit>(
+    auto& CatEnemy_E = engine::Game::entityManager.createEntity();
+    eCatID_E = CatEnemy_E.guid();
+    auto& eCatU_C = CatEnemy_E.addComponent<Unit>(
         "pCatapult"
     );
-    auto& eCatSE_C = eCat_E.addComponent<SiegeEngine>(5);
-    eCat_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
-    eCat_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
-    eCat_E.addComponent<InstanceBuffer>();
-    eCat_E.addComponent<Shader>();
+    auto& eCatSE_C = CatEnemy_E.addComponent<SiegeEngine>(5);
+    CatEnemy_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
+    CatEnemy_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    CatEnemy_E.addComponent<InstanceBuffer>();
+    CatEnemy_E.addComponent<UvOffset>();
+    CatEnemy_E.addComponent<Shader>();
     unitTransforms.push_back(
-        &eCat_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+        &CatEnemy_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
 
     auto guiHandler = &addSystem<GuiHandler>();
     auto instanceManager = &addSystem<InstanceManager>();
@@ -141,17 +148,17 @@ void Game::start() {
     // audio.playBackground(*backgroundMusic);
     CombatController::initialize.addListener([&]()
     {
-        auto eInfM2D_C = &componentManager.getComponent<Model2D>(eInfID_E);
-        auto eArcM2D_C = &componentManager.getComponent<Model2D>(eArcID_E);
-        auto eCatM2D_C = &componentManager.getComponent<Model2D>(eCatID_E);
+        auto pInfEnemyM2D_C = &componentManager.getComponent<Model2D>(eInfID_E);
+        auto pArcEnemyM2D_C = &componentManager.getComponent<Model2D>(eArcID_E);
+        auto pCatEnemyM2D_C = &componentManager.getComponent<Model2D>(eCatID_E);
 
-        auto eInfU_C = &componentManager.getComponent<Unit>(eInfID_E);
-        auto eArcU_C = &componentManager.getComponent<Unit>(eArcID_E);
-        auto eCatU_C = &componentManager.getComponent<Unit>(eCatID_E);
+        auto pInfEnemyU_C = &componentManager.getComponent<Unit>(eInfID_E);
+        auto pArcEnemyU_C = &componentManager.getComponent<Unit>(eArcID_E);
+        auto pCatEnemyU_C = &componentManager.getComponent<Unit>(eCatID_E);
 
-        eInfM2D_C->texture = engine::util::Texture::load(eInfU_C->texturePath.c_str());
-        eArcM2D_C->texture = engine::util::Texture::load(eArcU_C->texturePath.c_str());
-        eCatM2D_C->texture = engine::util::Texture::load(eCatU_C->texturePath.c_str());
+        pInfEnemyM2D_C->texture = engine::util::Texture::load(pInfEnemyU_C->texturePath.c_str());
+        pArcEnemyM2D_C->texture = engine::util::Texture::load(pArcEnemyU_C->texturePath.c_str());
+        pCatEnemyM2D_C->texture = engine::util::Texture::load(pCatEnemyU_C->texturePath.c_str());
     });
     CombatController::enemyDead.addListener([&]
     {
