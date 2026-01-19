@@ -60,14 +60,27 @@ void Game::start() {
     // terrain_E.addComponent<engine::sceneGraph::Transform>(origin, glm::vec3(0, 0, -0.91), 0, glm::vec3(2.75, 2.75, 1));
 
     //----- Boilerplate Entities -----
-    auto pProjectile_E = &entityManager.createEntity();
+    auto pArrowPlayer_E = &entityManager.createEntity();
+    int iArrowID = pArrowPlayer_E->guid();
+    auto pProjectilePlayer_C = &pArrowPlayer_E->addComponent<Projectile>(iArrowID);
     tempTexID = GetTextureFromRegistry("Arrow");
-    pProjectile_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
-    pProjectile_E->addComponent<Shader>();
-    pProjectile_E->addComponent<Transform>(origin);
-    pProjectile_E->addComponent<InstanceBuffer>();
-    pProjectile_E->addComponent<InstanceAmount>();
+    pArrowPlayer_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
+    pArrowPlayer_E->addComponent<Shader>();
+    pArrowPlayer_E->addComponent<Transform>(origin);
+    pArrowPlayer_E->addComponent<InstanceBuffer>();
+    pArrowPlayer_E->addComponent<InstanceAmount>();
+    pArrowPlayer_E->addComponent<TagComponent>(Tag{Tag::PLAYER});
 
+    auto pArrowEnemy_E = &entityManager.createEntity();
+    iArrowID = pArrowEnemy_E->guid();
+    auto pProjectileEnemy_C = &pArrowEnemy_E->addComponent<Projectile>(iArrowID);
+    tempTexID = GetTextureFromRegistry("Arrow");
+    pArrowEnemy_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
+    pArrowEnemy_E->addComponent<Shader>();
+    pArrowEnemy_E->addComponent<Transform>(origin);
+    pArrowEnemy_E->addComponent<InstanceBuffer>();
+    pArrowEnemy_E->addComponent<InstanceAmount>();
+    pArrowEnemy_E->addComponent<TagComponent>(Tag{Tag::ENEMY});
 
     //----- Entities of player's army -----
     auto& InfPlayer_E = engine::Game::entityManager.createEntity();
@@ -79,8 +92,8 @@ void Game::start() {
     InfPlayer_E.addComponent<InstanceBuffer>();
     InfPlayer_E.addComponent<UvOffset>();
     InfPlayer_E.addComponent<Shader>();
-    unitTransforms.push_back(
-        &InfPlayer_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -1.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+    &InfPlayer_E.addComponent<Transform>(origin,
+        glm::vec3(-2.25f, -1.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& ArcPlayer_E = engine::Game::entityManager.createEntity();
     pArcID_E = ArcPlayer_E.guid();
@@ -91,8 +104,8 @@ void Game::start() {
     ArcPlayer_E.addComponent<InstanceBuffer>();
     ArcPlayer_E.addComponent<UvOffset>();
     ArcPlayer_E.addComponent<Shader>();
-    unitTransforms.push_back(
-        &ArcPlayer_E.addComponent<Transform>(origin, glm::vec3(-2.25f, -0.25f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+    &ArcPlayer_E.addComponent<Transform>(origin,
+        glm::vec3(-2.25f, -0.25f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& CatPlayer_E = engine::Game::entityManager.createEntity();
     pCatID_E = CatPlayer_E.guid();
@@ -104,8 +117,8 @@ void Game::start() {
     CatPlayer_E.addComponent<InstanceBuffer>();
     CatPlayer_E.addComponent<UvOffset>();
     CatPlayer_E.addComponent<Shader>();
-    unitTransforms.push_back(
-        &CatPlayer_E.addComponent<Transform>(origin, glm::vec3(-2.25f, 0.5f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+    &CatPlayer_E.addComponent<Transform>(origin,
+        glm::vec3(-2.25f, 0.5f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
 
     //----- Entities of enemy's army -----
@@ -119,8 +132,8 @@ void Game::start() {
     InfEnemy_E.addComponent<InstanceBuffer>();
     InfEnemy_E.addComponent<UvOffset>();
     InfEnemy_E.addComponent<Shader>();
-    unitTransforms.push_back(
-        &InfEnemy_E.addComponent<Transform>(origin, glm::vec3(1.75f, -0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+    &InfEnemy_E.addComponent<Transform>(origin,
+        glm::vec3(1.75f, -0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& ArcEnemy_E = engine::Game::entityManager.createEntity();
     eArcID_E = ArcEnemy_E.guid();
@@ -132,8 +145,8 @@ void Game::start() {
     ArcEnemy_E.addComponent<InstanceBuffer>();
     ArcEnemy_E.addComponent<UvOffset>();
     ArcEnemy_E.addComponent<Shader>();
-    unitTransforms.push_back(
-        &ArcEnemy_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+    &ArcEnemy_E.addComponent<Transform>(origin,
+        glm::vec3(1.75f, 0.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& CatEnemy_E = engine::Game::entityManager.createEntity();
     eCatID_E = CatEnemy_E.guid();
@@ -146,8 +159,8 @@ void Game::start() {
     CatEnemy_E.addComponent<InstanceBuffer>();
     CatEnemy_E.addComponent<UvOffset>();
     CatEnemy_E.addComponent<Shader>();
-    unitTransforms.push_back(
-        &CatEnemy_E.addComponent<Transform>(origin, glm::vec3(1.75f, 0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1)));
+    &CatEnemy_E.addComponent<Transform>(origin,
+        glm::vec3(1.75f, 0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto guiHandler = &addSystem<GuiHandler>();
     auto instanceManager = &addSystem<InstanceManager>();

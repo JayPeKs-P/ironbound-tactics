@@ -208,6 +208,8 @@ namespace gl3::engine::render {
     void RenderSystem::deleteShader(engine::Game& game) {
         glDeleteShader(instanceVertexShader);
         glDeleteShader(instanceFragmentShader);
+        glDeleteShader(inanimateBatchVert);
+        glDeleteShader(inanimateBatchFrag);
         glDeleteShader(singleVertexShader);
         glDeleteShader(singleFragmentShader);
     }

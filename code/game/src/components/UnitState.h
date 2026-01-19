@@ -28,6 +28,15 @@ private:
     explicit UnitState(guid_t owner):
     Component(owner) {}
 };
+struct Projectile: Component {
+    friend ComponentManager;
+    friend Entity;
+    guid_t m_iRefComponent;
+private:
+    explicit Projectile(guid_t owner, guid_t iRefEntity = gl3::engine::ecs::invalidID):
+    Component(owner),
+    m_iRefComponent(iRefEntity){}
+};
 struct ProjectileState: Component {
     friend ComponentManager;
     friend Entity;

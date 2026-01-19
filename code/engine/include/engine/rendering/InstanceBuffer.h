@@ -52,9 +52,11 @@ struct InstanceAmount: Component {
     friend Entity;
 
     uint32_t value;
+    uint32_t last;
 
 private:
     explicit InstanceAmount(guid_t owner, uint32_t initialAmount = 0):
     Component(owner),
-    value(initialAmount){}
+    value(initialAmount),
+    last(initialAmount){}
 };

@@ -84,7 +84,7 @@ namespace gl3 {
         });
     }
 
-    void InstanceManager::update(engine::Game& game)
+    void InstanceManager::update(Game& game)
     {
         int amount = 0;
         int amountLastFrame = 0;
@@ -92,7 +92,7 @@ namespace gl3 {
             auto iRootEntity = instanceBuffer.entity();
             if (!engine.componentManager.hasComponent<Transform>(iRootEntity)) return;
 
-            auto pUnitRootTransform_C = &engine.componentManager.getComponent<Transform>(iRootEntity);
+            auto pRootTransform_C = &engine.componentManager.getComponent<Transform>(iRootEntity);
 
             if (engine.componentManager.hasComponent<Unit>(iRootEntity))
             {
@@ -100,9 +100,13 @@ namespace gl3 {
                 amountLastFrame = engine.componentManager.getComponent<Unit>(iRootEntity).totalAmountLastFrame;
                 engine.componentManager.getComponent<Unit>(iRootEntity).totalAmountLastFrame = amount;;
             }
+            else if (engine.componentManager.hasComponent<InstanceAmount>(iRootEntity))
+            {
+
+            }
 
             instanceBuffer.instances.clear();
-            for (auto pInstanceTransform: pUnitRootTransform_C->getChildTransforms())
+            for (auto pInstanceTransform: pRootTransform_C->getChildTransforms())
             {
                 if (amount < amountLastFrame)
                 {

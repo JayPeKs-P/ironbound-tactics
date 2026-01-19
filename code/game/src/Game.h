@@ -51,7 +51,6 @@ namespace gl3
         guid_t eArcID_E = -1;
         guid_t eCatID_E = -1;
 
-        std::vector<engine::sceneGraph::Transform*> unitTransforms;
 
         float zRotation = 0.0f;
         float rotationSpeed = 120.0f;

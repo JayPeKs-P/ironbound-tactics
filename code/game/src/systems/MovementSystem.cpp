@@ -179,7 +179,7 @@ namespace gl3 {
                             }
                         case::State::AIMING:
                             {
-                                m_bAttackAnimsFinished = CreateProjectiles(transform, State::IDLE);
+                                m_bMoveAnimsFinished = CreateProjectiles(transform, State::IDLE);
                                 break;
                             }
                         case State::FIGHTING:
@@ -272,29 +272,47 @@ namespace gl3 {
     // Maybe just add a central arrow entity to game and add instances to it through this function
     // Might not render, because mvp matrix is empty
     bool MovementSystem::CreateProjectiles(Transform& transform, State endState) {
-        if (transform.getChildTransforms().empty())
+        auto iShooterID = transform.entity();
+        if (engine.componentManager.hasComponent<Projectile>(iShooterID)) return true;
+
+        auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(transform.entity());
+
+        auto pTargetTransform = &engine.componentManager.getComponent<Transform>(pUnitState_C->m_iTarget);
+        int iRootProjectile = engine::ecs::invalidID;
+        engine.componentManager.forEachComponent<Projectile>([&](Projectile& projectile)
         {
-            auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
-            auto& targetTransform = engine.componentManager.getComponent<Transform>(unitState_C.m_iTarget);
-            auto projectile = &engine.entityManager.createEntity();
-            auto tempTexID = engine.GetTextureFromRegistry("Arrow");
-            auto model2D = &projectile->addComponent<Model2D>(engine::util::VertPreset::QuadInanimate,
-                                                              engine::util::VertPreset::quadIndices, tempTexID);
-            auto shader = &projectile->addComponent<Shader>();
-            // auto instanceBuffer = &projectile->addComponent<InstanceBuffer>();  Will not work out of the box. Instance buffer needs to be filled which happens hardcoded in Instancemanager
-            auto projectileTransform = &projectile->addComponent<Transform>(
-                &transform, transform.localPosition, transform.localZRotation, transform.localScale);
-            auto projectileState_C = &projectile->addComponent<ProjectileState>();
-            projectileState_C->startPos = projectileTransform->localPosition;
-            projectileState_C->lastPos = projectileTransform->localPosition;
-            projectileState_C->endPos = targetTransform.localPosition;
-            unitState_C.state = endState;
-            unitState_C.m_iTarget = engine::ecs::invalidID;
-        }
+            if (iRootProjectile != engine::ecs::invalidID) return;
+            if (projectile.entity() == projectile.m_iRefComponent)
+            {
+                iRootProjectile = projectile.m_iRefComponent;
+            }
+        });
+        auto pRootArrowTransform_C = &engine.componentManager.getComponent<Transform>(iRootProjectile);
+
+        auto pProjectile_E = &engine.entityManager.createEntity();
+        auto pProjectile_C = &engine.componentManager.addComponent<Projectile>(pProjectile_E->guid());
+
+        auto pProjectileTransform_C = &pProjectile_E->addComponent<Transform>(
+            pRootArrowTransform_C, transform.localPosition, transform.localZRotation, transform.localScale);
+        auto pProjectileState_C = &pProjectile_E->addComponent<ProjectileState>();
+        pProjectileState_C->startPos = pProjectileTransform_C->localPosition;
+        pProjectileState_C->lastPos = pProjectileTransform_C->localPosition;
+        pProjectileState_C->endPos = pTargetTransform->localPosition;
+
+        pUnitState_C->state = endState;
+        pUnitState_C->m_iTarget = engine::ecs::invalidID;
+        auto pProjectileAmount_C = &engine.componentManager.getComponent<InstanceAmount>(iRootProjectile);
+        pProjectileAmount_C->value++;
+
         return false;
     }
 
     bool MovementSystem::DeleteProjectile(guid_t ID) {
+        engine.componentManager.forEachComponent<Projectile>([&](Projectile& projectile)
+        {
+            if (projectile.m_iRefComponent == projectile.entity()) return;
+            engine.componentManager.removeComponent<Projectile>(projectile.entity());
+        });
         auto projectile = engine.entityManager.getEntity(ID);
         engine.entityManager.deleteEntity(projectile);
         return true;
@@ -324,7 +342,7 @@ namespace gl3 {
         glm::vec3 baseForward = glm::normalize(endPos - startPos);
         glm::vec3 worldUp = glm::vec3(0, 1, 0);
         glm::vec3 right = glm::normalize(glm::cross(worldUp, baseForward));
-        glm::vec3 baseUp = glm::normalize(glm::cross(right, baseForward));
+        glm::vec3 baseUp = glm::normalize(glm::cross(baseForward, right));
 
         glm::vec3 horizontalDirection = endPos - startPos;
         float xEnd = glm::dot(horizontalDirection, baseForward);
@@ -397,20 +415,16 @@ namespace gl3 {
         for (auto& childTransform : root.getChildTransforms())
         {
             auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
-            if (unitState_C.state == initialState)
-            {
-                unitState_C.relativeVec = childTransform->localPosition - root.localPosition;
-                auto directionGlobal = goalPosition - root.localPosition;
-                unitState_C.traveledDistance = 0;
-                unitState_C.goal = childTransform->localPosition + directionGlobal;
-                unitState_C.state = State::MOVING;
+            if (unitState_C.state != initialState) continue;
 
-                counter++;
-                if (counter >= amount)
-                {
-                    break;
-                }
-            }
+            unitState_C.relativeVec = childTransform->localPosition - root.localPosition;
+            auto directionGlobal = goalPosition - root.localPosition;
+            unitState_C.traveledDistance = 0;
+            unitState_C.goal = childTransform->localPosition + directionGlobal;
+            unitState_C.state = State::MOVING;
+
+            counter++;
+            if (counter >= amount) break;
         }
     }
 
@@ -446,17 +460,12 @@ namespace gl3 {
                 unitState_C->state = State::MOVED;
 
                 counter++;
-                if (counter >= amount)
-                {
-                    break;
-                }
+                if (counter >= amount) break;
             }
         }
     }
 
     void MovementSystem::SetResetting(Transform& unitTransform, State initialState) const {
-        // for (auto& childTransform : root.getChildTransforms())
-        // {
         if (!engine.entityManager.checkIfEntityHasComponent<UnitState>(unitTransform.entity())) return;
         auto unitState_C = &engine.componentManager.getComponent<UnitState>(unitTransform.entity());
         auto parrentTransform = unitTransform.getParent();
@@ -466,11 +475,9 @@ namespace gl3 {
             unitState_C->goal = parrentTransform->localPosition + unitState_C->relativeVec;
             unitState_C->m_TargetedBy.clear();
         }
-        // }
     }
 
     void MovementSystem::SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState) {
-        // Content should be similar to setMoved() i guess
         int counter = 0;
         for (auto& childTransform : root.getChildTransforms())
         {
