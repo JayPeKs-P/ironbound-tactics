@@ -26,9 +26,11 @@ struct InstanceBuffer: Component
     // }
     /// @brief Stores the MVP matrices of each instance.
     std::vector <glm::mat4> instances;
+    std::vector <glm::vec2> instanceUVs;
 
     /// @brief ID of the VBO used for instance rendering.
     unsigned int VBO = 0;
+    unsigned int uvVBO = 0;
 
 
     ///@brief Used for animation if texture has animation frames.
@@ -37,15 +39,22 @@ private:
     explicit InstanceBuffer(guid_t owner):
     Component(owner) {}
 };
+enum UnitDirection : uint8_t{DOWN, LEFT, RIGHT, UP};
+enum UnitAffiliation : uint8_t{PLAYER = RIGHT, ENEMY = LEFT};
 struct UvOffset: Component {
     friend ComponentManager;
     friend Entity;
 
-    float value = 0.0f;
+    float u = 0.0f;
+    float v = 0.0f;
+
+    const float originalV;
 
 private:
-    explicit UvOffset(guid_t owner):
-    Component(owner) {}
+    explicit UvOffset(guid_t owner, float v):
+    Component(owner),
+    originalV(v),
+    v(v){}
 };
 struct InstanceAmount: Component {
     friend ComponentManager;

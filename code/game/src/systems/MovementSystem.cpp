@@ -245,6 +245,26 @@ namespace gl3 {
         auto speed = unitState_C.movementSpeed;
         if (unitState_C.state == State::RESETTING) speed *= 2.5;
         auto directionNormalized = glm::normalize(direction);
+        auto directionAngle = glm::degrees(std::atan2(directionNormalized.x, directionNormalized.y));
+        auto iUnit = transform.entity();
+
+        auto pUvOffset = &engine.componentManager.getComponent<UvOffset>(iUnit);
+        if ( (directionAngle < 45) || 315 <= directionAngle)
+        {
+            pUvOffset->v = LEFT;
+        }
+        else if (directionAngle < 135)
+        {
+            pUvOffset->v = RIGHT;
+        }
+        else if (directionAngle < 225)
+        {
+           pUvOffset->v = UP;
+        }
+        else
+        {
+            pUvOffset->v = DOWN;
+        }
 
         if (distanceToGoal - speed * deltatime > 0.05)
         {
@@ -262,6 +282,7 @@ namespace gl3 {
             if (unitState_C.state == State::IDLE)
             {
                 transform.localPosition = transform.getParent()->localPosition + unitState_C.relativeVec;
+                pUvOffset->v = pUvOffset->originalV;
             }
         }
         return bFinished;

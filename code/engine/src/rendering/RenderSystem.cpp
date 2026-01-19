@@ -70,10 +70,6 @@ namespace gl3::engine::render {
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
-                if (game.componentManager.hasComponent<UvOffset>(owner)) {
-                    auto& uvOffset_C = game.componentManager.getComponent<UvOffset>(owner);
-                    setFloat("uvOffset", uvOffset_C.value, shader_C.get_shader_program());
-                }
                 glDrawElementsInstanced(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr,
                                         instanceBuffer_C.instances.size());
             }
@@ -96,6 +92,12 @@ namespace gl3::engine::render {
             glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.VBO);
             glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instances.size() * sizeof(glm::mat4),
                             instanceBuffer_C.instances.data());
+            if (instanceBuffer_C.instances.size() != instanceBuffer_C.instanceUVs.size())
+            {
+                continue;
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.uvVBO);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, instanceBuffer_C.instanceUVs.size() * sizeof(glm::vec2), instanceBuffer_C.instanceUVs.data());
         }
     }
 
@@ -170,7 +172,9 @@ namespace gl3::engine::render {
 
             // EBO
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model2D_C.EBO);
-            if (game.componentManager.hasComponent<InstanceBuffer>(owner))
+            bool bHasInstance = game.componentManager.hasComponent<InstanceBuffer>(owner);
+            bool bHasUv = game.componentManager.hasComponent<UvOffset>(owner);
+            if (bHasInstance)
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
                 glGenBuffers(1, &instanceBuffer_C.VBO);
@@ -184,7 +188,18 @@ namespace gl3::engine::render {
                     glEnableVertexAttribArray(3 + i);
                     glVertexAttribDivisor(3 + i, 1);
                 }
+                if (bHasUv)
+                {
+                    glGenBuffers(1, &instanceBuffer_C.uvVBO);
+                    glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer_C.uvVBO);
+                    glBufferData(GL_ARRAY_BUFFER, MAX_INSTANCES * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
+
+                    glVertexAttribPointer(7, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
+                    glEnableVertexAttribArray(7);
+                    glVertexAttribDivisor(7, 1);
+                }
             }
+
             glBindVertexArray(0);
         }
     }

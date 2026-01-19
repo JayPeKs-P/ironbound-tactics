@@ -51,6 +51,7 @@ namespace gl3 {
             if (game.componentManager.hasComponent<Unit>(transform.entity()))
             {
                 maxInstances = game.componentManager.getComponent<Unit>(transform.entity()).lifetimeMaxAmount;
+                auto vOffset = game.componentManager.getComponent<UvOffset>(transform.entity()).originalV;
                 auto rootLocation = transform.localPosition;
                 auto rootScale = transform.localScale;
                 for (int j = 0 ; j < 10 && createdInstances < maxInstances; j++)
@@ -63,6 +64,7 @@ namespace gl3 {
                             0,
                             glm::vec3(rootScale.x, rootScale.y, rootScale.z));
                         instance_E.addComponent<UnitState>();
+                        instance_E.addComponent<UvOffset>(vOffset);
 
                         createdInstances++;
                     }
@@ -106,6 +108,7 @@ namespace gl3 {
             }
 
             instanceBuffer.instances.clear();
+            instanceBuffer.instanceUVs.clear();
             for (auto pInstanceTransform: pRootTransform_C->getChildTransforms())
             {
                 if (amount < amountLastFrame)
@@ -120,16 +123,26 @@ namespace gl3 {
                 else
                 {
                     instanceBuffer.instances.push_back(engine.calculateMvpMatrix(pInstanceTransform->modelMatrix));
+
+                    if (!engine.componentManager.hasComponent<UvOffset>(pInstanceTransform->entity())) continue;
+
+                    int totalFrames = 4;
+                    float frameDuration = 0.1f;
+                    int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
+
+                    auto uvOffset_C = &engine.componentManager.getComponent<UvOffset>(pInstanceTransform->entity());
+                    uvOffset_C->u = currentFrame;
+                    instanceBuffer.instanceUVs.push_back(glm::vec2(uvOffset_C->u, uvOffset_C->v));
                 }
             }
-            if (!engine.componentManager.hasComponent<UvOffset>(iRootEntity)) return;
-
-            int totalFrames = 4;
-            float frameDuration = 0.1f;
-            int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
-
-            auto& uvOffset_C = engine.componentManager.getComponent<UvOffset>(iRootEntity);
-            uvOffset_C.value = currentFrame * (1.0f / totalFrames);
+            // if (!engine.componentManager.hasComponent<UvOffset>(iRootEntity)) return;
+            //
+            // int totalFrames = 4;
+            // float frameDuration = 0.1f;
+            // int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
+            //
+            // auto& uvOffset_C = engine.componentManager.getComponent<UvOffset>(iRootEntity);
+            // uvOffset_C.u = currentFrame;
         });
     }
 } // gl3
