@@ -52,35 +52,34 @@ void Game::start() {
     auto& guiScene_E = engine::Game::entityManager.createEntity();
     combatSelection_C = &guiScene_E.addComponent<CombatSelection<GuiCombat>>();
 
-    // auto& terrain_E = engine::Game::entityManager.createEntity();
-    // tempTexID = GetTextureFromRegistry("Terrain");
-    // terrain_E.addComponent<Model2D>(engine::util::VertPreset::background, engine::util::VertPreset::quadIndices,
-    //                                 tempTexID);
-    // terrain_E.addComponent<Shader>();
-    // terrain_E.addComponent<engine::sceneGraph::Transform>(origin, glm::vec3(0, 0, -0.91), 0, glm::vec3(2.75, 2.75, 1));
+    auto& terrain_E = engine::Game::entityManager.createEntity();
+    tempTexID = GetTextureFromRegistry("Terrain");
+    terrain_E.addComponent<Model2D>(VertPreset::background, VertPreset::quadIndices, tempTexID);
+    terrain_E.addComponent<Shader>();
+    terrain_E.addComponent<Transform>(origin, glm::vec3(0, 0, -0.91), 0, glm::vec3(2.75, 2.75, 1));
 
     //----- Boilerplate Entities -----
     auto pArrowPlayer_E = &entityManager.createEntity();
     int iArrowID = pArrowPlayer_E->guid();
-    auto pProjectilePlayer_C = &pArrowPlayer_E->addComponent<Projectile>(iArrowID);
+    pArrowPlayer_E->addComponent<Projectile>(iArrowID);
     tempTexID = GetTextureFromRegistry("Arrow");
     pArrowPlayer_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
     pArrowPlayer_E->addComponent<Shader>();
     pArrowPlayer_E->addComponent<Transform>(origin);
     pArrowPlayer_E->addComponent<InstanceBuffer>();
     pArrowPlayer_E->addComponent<InstanceAmount>();
-    pArrowPlayer_E->addComponent<TagComponent>(Tag{Tag::PLAYER});
+    // pArrowPlayer_E->addComponent<TagComponent>(Tag{Tag::PLAYER});
 
-    auto pArrowEnemy_E = &entityManager.createEntity();
-    iArrowID = pArrowEnemy_E->guid();
-    auto pProjectileEnemy_C = &pArrowEnemy_E->addComponent<Projectile>(iArrowID);
-    tempTexID = GetTextureFromRegistry("Arrow");
-    pArrowEnemy_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
-    pArrowEnemy_E->addComponent<Shader>();
-    pArrowEnemy_E->addComponent<Transform>(origin);
-    pArrowEnemy_E->addComponent<InstanceBuffer>();
-    pArrowEnemy_E->addComponent<InstanceAmount>();
-    pArrowEnemy_E->addComponent<TagComponent>(Tag{Tag::ENEMY});
+    // auto pArrowEnemy_E = &entityManager.createEntity();
+    // iArrowID = pArrowEnemy_E->guid();
+    // pArrowEnemy_E->addComponent<Projectile>(iArrowID);
+    // tempTexID = GetTextureFromRegistry("Arrow");
+    // pArrowEnemy_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
+    // pArrowEnemy_E->addComponent<Shader>();
+    // pArrowEnemy_E->addComponent<Transform>(origin);
+    // pArrowEnemy_E->addComponent<InstanceBuffer>();
+    // pArrowEnemy_E->addComponent<InstanceAmount>();
+    // pArrowEnemy_E->addComponent<TagComponent>(Tag{Tag::ENEMY});
 
     //----- Entities of player's army -----
     auto& InfPlayer_E = engine::Game::entityManager.createEntity();

@@ -4,9 +4,6 @@
 
 #include "MovementSystem.h"
 
-#include <algorithm>
-#include <__msvc_ranges_to.hpp>
-
 #include "engine/Game.h"
 
 #include "CombatController.h"
@@ -18,13 +15,9 @@
 #include "../components/UnitState.h"
 #include "engine/sceneGraph/Transform.h"
 #include "../components/unitTypes/Unit.h"
-#include "engine/Game.h"
-#include "engine/Game.h"
-#include "engine/Texture.h"
 #include "engine/rendering/InstanceBuffer.h"
 #include "engine/rendering/Model2D.h"
-#include "engine/rendering/Shader.h"
-#include "engine/util/VertPresets.h"
+#include "glm/gtx/norm.inl"
 
 using gl3::engine::sceneGraph::Transform;
 
@@ -272,8 +265,6 @@ namespace gl3 {
     // Maybe just add a central arrow entity to game and add instances to it through this function
     // Might not render, because mvp matrix is empty
     bool MovementSystem::CreateProjectiles(Transform& transform, State endState) {
-        auto iShooterID = transform.entity();
-        if (engine.componentManager.hasComponent<Projectile>(iShooterID)) return true;
 
         auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(transform.entity());
 
@@ -290,7 +281,6 @@ namespace gl3 {
         auto pRootArrowTransform_C = &engine.componentManager.getComponent<Transform>(iRootProjectile);
 
         auto pProjectile_E = &engine.entityManager.createEntity();
-        auto pProjectile_C = &engine.componentManager.addComponent<Projectile>(pProjectile_E->guid());
 
         auto pProjectileTransform_C = &pProjectile_E->addComponent<Transform>(
             pRootArrowTransform_C, transform.localPosition, transform.localZRotation, transform.localScale);
@@ -298,6 +288,15 @@ namespace gl3 {
         pProjectileState_C->startPos = pProjectileTransform_C->localPosition;
         pProjectileState_C->lastPos = pProjectileTransform_C->localPosition;
         pProjectileState_C->endPos = pTargetTransform->localPosition;
+        float direction = pTargetTransform->localPosition.x - pProjectileTransform_C->localPosition.x;
+        if (direction < 0.0f)
+        {
+            pProjectileTransform_C->localZRotation = 135;
+        }
+        else
+        {
+            pProjectileTransform_C->localZRotation = 45;
+        }
 
         pUnitState_C->state = endState;
         pUnitState_C->m_iTarget = engine::ecs::invalidID;
@@ -336,9 +335,7 @@ namespace gl3 {
 
         const auto startPos = projectileState_C.startPos;
         const auto endPos = projectileState_C.endPos;
-        auto currentPos = projectileTransform.localPosition;
 
-        float compression = 0.4;
         glm::vec3 baseForward = glm::normalize(endPos - startPos);
         glm::vec3 worldUp = glm::vec3(0, 1, 0);
         glm::vec3 right = glm::normalize(glm::cross(worldUp, baseForward));
@@ -346,16 +343,21 @@ namespace gl3 {
 
         glm::vec3 horizontalDirection = endPos - startPos;
         float xEnd = glm::dot(horizontalDirection, baseForward);
-        float yEnd = glm::dot(horizontalDirection, baseUp);
         float maxHeight = 1.0f;
 
 
+        glm::vec3 lastPos = projectileState_C.lastPos;
         float xDist = glm::mix(0.0f, xEnd, timeNorm);
-        float yDist = glm::mix(0.0f, yEnd, timeNorm) + maxHeight * 4.0f * timeNorm * (1.0f - timeNorm);
+        float yDist = maxHeight * 4.0f * timeNorm * (1.0f - timeNorm);
         projectileTransform.localPosition = startPos + baseForward * xDist + baseUp * yDist;
 
-        float dx = xEnd / flightTime;
-        float dy = (yEnd / flightTime) + (maxHeight * 4.0f * (1.0f - 2.0f * timeNorm) / flightTime);
+        glm::vec2 rotation = glm::vec2(projectileTransform.localPosition.x - lastPos.x,
+                                        projectileTransform.localPosition.y - lastPos.y);
+        if (glm::length(rotation) > 0.0001f)
+        {
+            projectileTransform.localZRotation = glm::degrees(std::atan2(rotation.y, rotation.x));
+        }
+        projectileState_C.lastPos = projectileTransform.localPosition;
 
         if (timeNorm >= 1.0f)
         {
