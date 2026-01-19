@@ -11,12 +11,18 @@
 #include "../../components/UnitState.h"
 #include "../../gui/GuiCombat.h"
 #include "../../systems/CombatController.h"
+#include "engine/sceneGraph/SceneGraphPruner.h"
 
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
     InstanceManager::InstanceManager(engine::Game& game):
     System(game)
     {
+        game.onUpdate.addListener([&](Game& game)
+        {
+            update(game);
+        });
+
         GuiCombat::startRound.addListener([&]()
         {
         });
@@ -78,40 +84,48 @@ namespace gl3 {
         });
     }
 
-    void InstanceManager::update(engine::Game& game, Transform* root)
+    void InstanceManager::update(engine::Game& game)
     {
         int amount = 0;
         int amountLastFrame = 0;
-        if (game.componentManager.hasComponent<Unit>(root->entity()))
-        {
-            amount = game.componentManager.getComponent<Unit>(root->entity()).totalAmount;
-            amountLastFrame = game.componentManager.getComponent<Unit>(root->entity()).totalAmountLastFrame;
-            game.componentManager.getComponent<Unit>(root->entity()).totalAmountLastFrame = amount;;
-        }
-        auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(root->entity());
-        instanceBuffer_C.instances.clear();
-        game.componentManager.forEachComponentRevers<Transform>([&](Transform &transform)
-        {
-            if (transform.getParent() != root) return;
-            if (amount < amountLastFrame)
+        engine.componentManager.forEachComponent<InstanceBuffer>([&](InstanceBuffer& instanceBuffer) {
+            auto iRootEntity = instanceBuffer.entity();
+            if (!engine.componentManager.hasComponent<Transform>(iRootEntity)) return;
+
+            auto pUnitRootTransform_C = &engine.componentManager.getComponent<Transform>(iRootEntity);
+
+            if (engine.componentManager.hasComponent<Unit>(iRootEntity))
             {
-                game.entityManager.deleteEntity(game.entityManager.getEntity(transform.entity()));
-                amountLastFrame--;
-            }else if (amountLastFrame < amount)
-            {
-            }else
-            {
-                instanceBuffer_C.instances.push_back(game.calculateMvpMatrix(transform.modelMatrix));
+                amount = engine.componentManager.getComponent<Unit>(iRootEntity).totalAmount;
+                amountLastFrame = engine.componentManager.getComponent<Unit>(iRootEntity).totalAmountLastFrame;
+                engine.componentManager.getComponent<Unit>(iRootEntity).totalAmountLastFrame = amount;;
             }
+
+            instanceBuffer.instances.clear();
+            for (auto pInstanceTransform: pUnitRootTransform_C->getChildTransforms())
+            {
+                if (amount < amountLastFrame)
+                {
+                    engine.entityManager.deleteEntity(engine.entityManager.getEntity(pInstanceTransform->entity()));
+                    amountLastFrame--;
+                }
+                else if (amountLastFrame < amount)
+                {
+
+                }
+                else
+                {
+                    instanceBuffer.instances.push_back(engine.calculateMvpMatrix(pInstanceTransform->modelMatrix));
+                }
+            }
+            if (!engine.componentManager.hasComponent<UvOffset>(iRootEntity)) return;
+
+            int totalFrames = 4;
+            float frameDuration = 0.1f;
+            int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
+
+            auto& uvOffset_C = engine.componentManager.getComponent<UvOffset>(iRootEntity);
+            uvOffset_C.value = currentFrame * (1.0f / totalFrames);
         });
-
-        if (!game.componentManager.hasComponent<UvOffset>(root->entity())) return;
-
-        int totalFrames = 4;
-        float frameDuration = 0.1f;
-        int currentFrame = static_cast<int>(game.elapsedTime / frameDuration) % totalFrames;
-
-        auto& uvOffset_C = game.componentManager.getComponent<UvOffset>(root->entity());
-        uvOffset_C.value = currentFrame * (1.0f / totalFrames);
     }
 } // gl3

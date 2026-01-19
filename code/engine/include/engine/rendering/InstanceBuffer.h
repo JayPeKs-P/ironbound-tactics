@@ -16,20 +16,20 @@ struct InstanceBuffer: Component
 {
     friend ComponentManager;
     friend Entity;
-    /// Delete copy constructor.
-    InstanceBuffer(const InstanceBuffer &other) = delete;
-    /// Custom move semantics.
-    InstanceBuffer(InstanceBuffer &&other) noexcept
-    {
-        std::swap(this->VBO, other.VBO);
-        this->instances = std::move(other.instances);
-    }
+    // /// Delete copy constructor.
+    // InstanceBuffer(const InstanceBuffer &other) = delete;
+    // /// Custom move semantics.
+    // InstanceBuffer(InstanceBuffer &&other) noexcept
+    // {
+    //     std::swap(this->VBO, other.VBO);
+    //     this->instances = std::move(other.instances);
+    // }
+    /// @brief Stores the MVP matrices of each instance.
+    std::vector <glm::mat4> instances;
 
     /// @brief ID of the VBO used for instance rendering.
     unsigned int VBO = 0;
 
-    /// @brief Stores the MVP matrices of each instance.
-    std::vector <glm::mat4> instances;
 
     ///@brief Used for animation if texture has animation frames.
     // float uvOffset = 0.0f;

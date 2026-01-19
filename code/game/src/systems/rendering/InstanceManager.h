@@ -13,7 +13,7 @@ public:
     explicit InstanceManager(engine::Game &game);
     void init(engine::Game &game);
     void terminate(engine::Game &game);
-    void update(engine::Game &game, engine::sceneGraph::Transform* root);
+    void update(engine::Game& game);
 
 };
 

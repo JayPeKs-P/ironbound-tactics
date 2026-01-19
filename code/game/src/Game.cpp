@@ -243,10 +243,10 @@ void Game::update(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
-    for (auto& transform_C : unitTransforms)
-    {
-        instanceManager->update(*this, transform_C);
-    }
+    // for (auto& transform_C : unitTransforms)
+    // {
+    //     instanceManager->update();
+    // }
     elapsedTime += deltaTime;
 }
 
