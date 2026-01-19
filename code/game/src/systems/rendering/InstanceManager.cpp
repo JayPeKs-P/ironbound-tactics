@@ -38,14 +38,13 @@ namespace gl3 {
     {
         game.componentManager.forEachComponent<Transform>([&](Transform &transform)
         {
+            if (!game.componentManager.hasComponent<InstanceBuffer>(transform.entity())) [[likely]] return;
+
             int createdInstances = 0;
             int maxInstances = 0;
             if (game.componentManager.hasComponent<Unit>(transform.entity()))
             {
                 maxInstances = game.componentManager.getComponent<Unit>(transform.entity()).lifetimeMaxAmount;
-            }
-            if (game.componentManager.hasComponent<InstanceBuffer>(transform.entity()))
-            {
                 auto rootLocation = transform.localPosition;
                 auto rootScale = transform.localScale;
                 for (int j = 0 ; j < 10 && createdInstances < maxInstances; j++)
@@ -70,7 +69,7 @@ namespace gl3 {
     {
         game.componentManager.forEachComponent<Transform>([&](Transform &transform)
         {
-            if (!game.componentManager.hasComponent<Unit>(transform.entity())) return;
+            if (!game.componentManager.hasComponent<Unit>(transform.entity())) [[likely]] return;
             for (auto child : transform.getChildTransforms())
             {
                 auto& child_E = game.entityManager.getEntity(child->entity());
@@ -89,9 +88,6 @@ namespace gl3 {
             amountLastFrame = game.componentManager.getComponent<Unit>(root->entity()).totalAmountLastFrame;
             game.componentManager.getComponent<Unit>(root->entity()).totalAmountLastFrame = amount;;
         }
-        int totalFrames = 4;
-        float frameDuration = 0.1f;
-        int currentFrame = static_cast<int>(game.elapsedTime / frameDuration) % totalFrames;
         auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(root->entity());
         instanceBuffer_C.instances.clear();
         game.componentManager.forEachComponentRevers<Transform>([&](Transform &transform)
@@ -108,10 +104,14 @@ namespace gl3 {
                 instanceBuffer_C.instances.push_back(game.calculateMvpMatrix(transform.modelMatrix));
             }
         });
+
         if (!game.componentManager.hasComponent<UvOffset>(root->entity())) return;
+
+        int totalFrames = 4;
+        float frameDuration = 0.1f;
+        int currentFrame = static_cast<int>(game.elapsedTime / frameDuration) % totalFrames;
 
         auto& uvOffset_C = game.componentManager.getComponent<UvOffset>(root->entity());
         uvOffset_C.value = currentFrame * (1.0f / totalFrames);
-//TODO add push function to trigger when unit dies or is added
     }
 } // gl3

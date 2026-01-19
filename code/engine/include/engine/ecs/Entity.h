@@ -33,7 +33,7 @@ namespace gl3::engine::ecs {
         /// @tparam Args Arguments, that are used in the specific component's constructor (except guid_t).
         /// @return Reference to the newly created component.
         template<typename C, typename ... Args>
-        [[nodiscard]] C &addComponent(Args ...args) {
+        C &addComponent(Args ...args) {
             return componentManager.addComponent<C>(id, args...);
         }
 

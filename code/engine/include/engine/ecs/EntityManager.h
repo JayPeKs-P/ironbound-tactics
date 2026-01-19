@@ -43,6 +43,8 @@ namespace gl3::engine::ecs {
         /// @return Reference to the entity object associated to the passed ID.
         [[nodiscard]] Entity &getEntity(guid_t guid);
 
+        bool IsAlive(guid_t guid);
+
         /// @brief Function to check, if one or more entities have the specified component.
         ///
         /// This utility function returns true, if all entities, whose IDs are provided, have a Component of type T.

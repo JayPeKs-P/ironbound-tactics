@@ -29,7 +29,7 @@ public:
 private:
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
     void setMoved(Transform& root, Transform& goalPosition, int amount, State initialState);
-    void SetResetting(Transform& root, State initialState) const;
+    void SetResetting(Transform& unitTransform, State initialState) const;
     void SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState);
 
 
@@ -38,6 +38,8 @@ private:
     glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);
     bool m_bAllAnimationsFinished = false;
     bool m_bMoveAnimsFinished = false;
+    bool m_bPlayFightAnimation = false;
+    bool m_bResetUnits = false;
     bool m_bAttackAnimsFinished = false;
 
     float countdown = 0.5f;

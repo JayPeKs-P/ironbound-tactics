@@ -47,3 +47,14 @@ private:
     explicit UvOffset(guid_t owner):
     Component(owner) {}
 };
+struct InstanceAmount: Component {
+    friend ComponentManager;
+    friend Entity;
+
+    uint32_t value;
+
+private:
+    explicit InstanceAmount(guid_t owner, uint32_t initialAmount = 0):
+    Component(owner),
+    value(initialAmount){}
+};

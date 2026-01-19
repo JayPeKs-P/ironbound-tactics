@@ -30,6 +30,10 @@ namespace gl3::engine::ecs {
         return *entities.at(guid).get();
     }
 
+    bool EntityManager::IsAlive(guid_t guid) {
+        return entities.contains(guid);
+    }
+
     void EntityManager::deleteEntity(Entity &entity) {
         entity.deleted = true;
         entity.deleteAllComponents();

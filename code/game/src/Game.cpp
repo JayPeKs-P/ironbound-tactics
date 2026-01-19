@@ -46,6 +46,8 @@ void Game::start() {
     AddTextureToRegistry("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png", "Terrain");
     AddTextureToRegistry("assets/textures/entities/Arrow_No_BG.png", "Arrow");
     unsigned int tempTexID = -1;
+
+    using namespace engine::util;
     //---- Entities ----
     auto& guiScene_E = engine::Game::entityManager.createEntity();
     combatSelection_C = &guiScene_E.addComponent<CombatSelection<GuiCombat>>();
@@ -57,13 +59,23 @@ void Game::start() {
     // terrain_E.addComponent<Shader>();
     // terrain_E.addComponent<engine::sceneGraph::Transform>(origin, glm::vec3(0, 0, -0.91), 0, glm::vec3(2.75, 2.75, 1));
 
+    //----- Boilerplate Entities -----
+    auto pProjectile_E = &entityManager.createEntity();
+    tempTexID = GetTextureFromRegistry("Arrow");
+    pProjectile_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
+    pProjectile_E->addComponent<Shader>();
+    pProjectile_E->addComponent<Transform>(origin);
+    pProjectile_E->addComponent<InstanceBuffer>();
+    pProjectile_E->addComponent<InstanceAmount>();
+
+
     //----- Entities of player's army -----
     auto& InfPlayer_E = engine::Game::entityManager.createEntity();
     pInfID_E = InfPlayer_E.guid();
     auto& pInfU_C = InfPlayer_E.addComponent<Unit>("pInfantry");
     InfPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     tempTexID = AddTextureToRegistry(pInfU_C.texturePath.c_str(), "pInfantry");
-    InfPlayer_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    InfPlayer_E.addComponent<Model2D>(VertPreset::pQuad, VertPreset::quadIndices, tempTexID);
     InfPlayer_E.addComponent<InstanceBuffer>();
     InfPlayer_E.addComponent<UvOffset>();
     InfPlayer_E.addComponent<Shader>();
@@ -74,8 +86,8 @@ void Game::start() {
     pArcID_E = ArcPlayer_E.guid();
     auto& pArcU_C = ArcPlayer_E.addComponent<Unit>("pArcher");
     ArcPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = engine::util::Texture::load(pArcU_C.texturePath.c_str());
-    ArcPlayer_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    tempTexID = Texture::load(pArcU_C.texturePath.c_str());
+    ArcPlayer_E.addComponent<Model2D>(VertPreset::pQuad, VertPreset::quadIndices, tempTexID);
     ArcPlayer_E.addComponent<InstanceBuffer>();
     ArcPlayer_E.addComponent<UvOffset>();
     ArcPlayer_E.addComponent<Shader>();

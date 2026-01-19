@@ -70,8 +70,10 @@ namespace gl3::engine::render {
             if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
                 auto& instanceBuffer_C = game.componentManager.getComponent<InstanceBuffer>(owner);
-                auto& uvOffset_C = game.componentManager.getComponent<UvOffset>(owner);
-                setFloat("uvOffset", uvOffset_C.value, shader_C.get_shader_program());
+                if (game.componentManager.hasComponent<UvOffset>(owner)) {
+                    auto& uvOffset_C = game.componentManager.getComponent<UvOffset>(owner);
+                    setFloat("uvOffset", uvOffset_C.value, shader_C.get_shader_program());
+                }
                 glDrawElementsInstanced(GL_TRIANGLES, model2D_C.numberOfIndices, GL_UNSIGNED_INT, nullptr,
                                         instanceBuffer_C.instances.size());
             }

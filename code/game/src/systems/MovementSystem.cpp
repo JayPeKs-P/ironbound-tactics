@@ -21,18 +21,19 @@
 #include "engine/Game.h"
 #include "engine/Game.h"
 #include "engine/Texture.h"
+#include "engine/rendering/InstanceBuffer.h"
 #include "engine/rendering/Model2D.h"
 #include "engine/rendering/Shader.h"
 #include "engine/util/VertPresets.h"
 
 using gl3::engine::sceneGraph::Transform;
+
 namespace gl3 {
     MovementSystem::event_t MovementSystem::finishAnimation;
     MovementSystem::event_t MovementSystem::finishedAllAnimations;
 
-    MovementSystem::MovementSystem(engine::Game& game):
-    System(game)
-    {
+    MovementSystem::MovementSystem(engine::Game& game) :
+        System(game) {
         CombatController::onBeforeDamageStep.addListener([&]()
         {
             moveTo(engine, engine.getDeltaTime());
@@ -43,43 +44,46 @@ namespace gl3 {
             countdown = delay;
             DEBUG_LOG(
                 << "TRIGGERED EVENT: 'finishedAnimation'"
-                );
+            );
         });
 #endif
 
         CombatController::onBeforeAttack.addListener([&](guid_t unit, guid_t target, int amount)
         {
-            if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target)) throw("MovementSystem::MovementSystem() onBeforeAttack.addListener missing unit_C");
+            if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target)) throw(
+                "MovementSystem::MovementSystem() onBeforeAttack.addListener missing unit_C");
             auto unit_C = &engine.componentManager.getComponent<Unit>(unit);
             auto& actorRoot = engine.componentManager.getComponent<Transform>(unit);
-            auto& targetRoot = engine. componentManager.getComponent<Transform>(target);
+            auto& targetRoot = engine.componentManager.getComponent<Transform>(target);
             auto& tag = engine.componentManager.getComponent<TagComponent>(unit).value;
 
             switch (unit_C->category)
             {
-                case UnitCategory::INFANTRY:
+            case UnitCategory::INFANTRY:
+                {
+                    if (tag == Tag::PLAYER)
                     {
-                        if (tag == Tag::PLAYER)
-                        {
-                            setMoving(actorRoot, playerPendingPosition, amount, State::IDLE);
-                        }else if (tag == Tag::ENEMY)
-                        {
-                            setMoving(actorRoot, enemyPendingPosition, amount, State::IDLE);
-                        }
-                        break;
+                        setMoving(actorRoot, playerPendingPosition, amount, State::IDLE);
                     }
-                case UnitCategory::ARCHER:
+                    else if (tag == Tag::ENEMY)
                     {
-                        // maybe pass UnitCategory here? or add another State::SHOOTING and make CreateProjectiles() set units to fighting
-                        SetAiming(actorRoot, targetRoot, amount, State::IDLE);
-                        break;
+                        setMoving(actorRoot, enemyPendingPosition, amount, State::IDLE);
                     }
+                    break;
+                }
+            case UnitCategory::ARCHER:
+                {
+                    // maybe pass UnitCategory here? or add another State::SHOOTING and make CreateProjectiles() set units to fighting
+                    SetAiming(actorRoot, targetRoot, amount, State::IDLE);
+                    break;
+                }
             }
         });
         // Sets units to Moved if they were flagged with Preparing
         CombatController::onAttack.addListener([&](guid_t unit, guid_t target, int amount)
         {
-            if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target)) throw("MovementSystem::MovementSystem() onAttack.addListener missing unit_C");
+            if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target)) throw(
+                "MovementSystem::MovementSystem() onAttack.addListener missing unit_C");
             auto unit_C = &engine.componentManager.getComponent<Unit>(unit);
             auto& actorRoot = engine.componentManager.getComponent<Transform>(unit);
             auto& targetRoot = engine.componentManager.getComponent<Transform>(target);
@@ -98,105 +102,144 @@ namespace gl3 {
         });
         CombatController::onAfterAttack.addListener([&](guid_t unused1, guid_t unused2, int unused3)
         {
-            engine.componentManager.forEachComponent<Unit>([&](const Unit& unit_C)
-            {
-                if (unit_C.category == UnitCategory::INFANTRY){
-                    auto& root = engine.componentManager.getComponent<Transform>(unit_C.entity());
-                    SetResetting(root, State::FIGHTING);
-                }
-            });
+            // engine.componentManager.forEachComponent<Unit>([&](const Unit& unit_C)
+            // {
+            //     if (unit_C.category == UnitCategory::INFANTRY)
+            //     {
+            //         auto& root = engine.componentManager.getComponent<Transform>(unit_C.entity());
+            //         SetResetting(root, State::FIGHTING);
+            //     }
+            // });
         });
     }
 
-    void MovementSystem::moveTo(engine::Game& game, float deltaTime)
-    {
-        m_bAllAnimationsFinished = true;
-        m_bMoveAnimsFinished = true;
-        m_bAttackAnimsFinished = true;
-        game.componentManager.forEachComponent<Transform>([&](Transform &transform)
+    void MovementSystem::moveTo(engine::Game& game, float deltaTime) {
+        try
         {
-            if (game.componentManager.hasComponent<ProjectileState>(transform.entity()))
+            m_bAllAnimationsFinished = true;
+            m_bMoveAnimsFinished = true;
+            m_bAttackAnimsFinished = true;
+            game.componentManager.forEachComponent<Transform>([&](Transform& transform)
             {
-                m_bAttackAnimsFinished = MoveCurved(transform, deltaTime);
-            }
-            if (game.componentManager.hasComponent<UnitState>(transform.entity()))
-            {
-                auto root = transform.getParent();
-                auto unitState_C = game.componentManager.getComponent<UnitState>(transform.entity());
-
-                switch (unitState_C.state)
+                if (m_bPlayFightAnimation)
                 {
-                case State::MOVING:
+                    if (game.componentManager.hasComponent<ProjectileState>(transform.entity()))
                     {
-                        glm::vec3 directionPrep = unitState_C.goal - transform.localPosition;
-                        m_bMoveAnimsFinished = moveStraight(transform, directionPrep, deltaTime, State::PREPARING, 3);
-                        break;
-                    }
-                case State::PREPARING:
-                    {
-                        break;
-                    }
-                case State::MOVED:
-                    {
-                        glm::vec3 directionMov;
-                        if (unitState_C.m_iTarget > engine::ecs::invalidID)
-                        {
-                            auto pTargetTransform = &engine.componentManager.getComponent<Transform>(unitState_C.m_iTarget);
-                            directionMov = pTargetTransform->localPosition - transform.localPosition;
-                            unitState_C.goal = pTargetTransform->localPosition;
-                        }
-                        else
-                        {
-                            unitState_C.goal = transform.localPosition;
-                            directionMov = {0,0,0};
-                        }
-                        m_bMoveAnimsFinished = moveStraight(transform, directionMov, deltaTime, State::FIGHTING, 15);
-                        break;
-                    }
-                case::State::AIMING:
-                    {
-                        m_bAttackAnimsFinished = CreateProjectiles(transform, State::FIGHTING);
-                        break;
-                    }
-                case State::FIGHTING:
-                    {
-                        if (m_bMoveAnimsFinished)
-                        {
-                            unitState_C.state = State::RESETTING;
-                        }
-                        break;
-                    }
-                case State::RESETTING:
-                    {
-                        glm::vec3 directionRes = unitState_C.goal - transform.localPosition;
-                        m_bMoveAnimsFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE, 3);
-                        break;
-                    }
-                case State::IDLE:
-                    {
-                        break;
+                        m_bAttackAnimsFinished = MoveCurved(transform, deltaTime);
                     }
                 }
+                else
+                {
+                    if (game.componentManager.hasComponent<UnitState>(transform.entity()))
+                    {
+                        auto root = transform.getParent();
+                        auto unitState_C = &game.componentManager.getComponent<UnitState>(transform.entity());
+
+                        switch (unitState_C->state)
+                        {
+                        case State::MOVING:
+                            {
+                                glm::vec3 directionPrep = unitState_C->goal - transform.localPosition;
+                                m_bMoveAnimsFinished = moveStraight(transform, directionPrep, deltaTime,
+                                                                    State::PREPARING, 3);
+                                break;
+                            }
+                        case State::PREPARING:
+                            {
+                                break;
+                            }
+                        case State::MOVED:
+                            {
+                                glm::vec3 directionMov;
+                                if (unitState_C->m_iTarget != engine::ecs::invalidID)
+                                {
+                                    if (!engine.entityManager.IsAlive(unitState_C->m_iTarget))
+                                    {
+                                        unitState_C->m_iTarget = engine::ecs::invalidID;
+                                        unitState_C->goal = transform.localPosition;
+                                        directionMov = {0, 0, 0};
+
+                                        m_bMoveAnimsFinished = moveStraight(transform, directionMov, deltaTime, State::FIGHTING,
+                                                                            15);
+                                        break;
+                                    }
+                                    auto pTargetTransform = &engine.componentManager.getComponent<Transform>(
+                                        unitState_C->m_iTarget);
+                                    directionMov = pTargetTransform->localPosition - transform.localPosition;
+                                    unitState_C->goal = pTargetTransform->localPosition;
+                                }
+                                else
+                                {
+                                    unitState_C->goal = transform.localPosition;
+                                    directionMov = {0, 0, 0};
+                                }
+                                m_bMoveAnimsFinished = moveStraight(transform, directionMov, deltaTime, State::FIGHTING,
+                                                                    15);
+                                break;
+                            }
+                        case::State::AIMING:
+                            {
+                                m_bAttackAnimsFinished = CreateProjectiles(transform, State::IDLE);
+                                break;
+                            }
+                        case State::FIGHTING:
+                            {
+                                if (m_bResetUnits)
+                                {
+                                    SetResetting(transform, State::FIGHTING);
+                                    m_bMoveAnimsFinished = false;
+                                }
+                                break;
+                            }
+                        case State::RESETTING:
+                            {
+                                glm::vec3 directionRes = unitState_C->goal - transform.localPosition;
+                                m_bMoveAnimsFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE, 3);
+                                break;
+                            }
+                        case State::IDLE:
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+            if (m_bMoveAnimsFinished && !m_bPlayFightAnimation && !m_bResetUnits)
+            {
+                m_bPlayFightAnimation = true;
+                m_bMoveAnimsFinished = false;
+                m_bAttackAnimsFinished = false;
             }
-        });
-        if (m_bMoveAnimsFinished && m_bAttackAnimsFinished) m_bAllAnimationsFinished = true;
-        else m_bAllAnimationsFinished = false;
+            if (m_bAttackAnimsFinished && m_bPlayFightAnimation && !m_bResetUnits)
+            {
+                m_bPlayFightAnimation = false;
+                m_bMoveAnimsFinished = false;
+                m_bResetUnits = true;
+            }
+            if (m_bMoveAnimsFinished && m_bAttackAnimsFinished) m_bAllAnimationsFinished = true;
+            else m_bAllAnimationsFinished = false;
 
-        if (m_bAllAnimationsFinished)
-        {
-            countdown -= deltaTime;
+            if (m_bAllAnimationsFinished)
+            {
+                countdown -= deltaTime;
+            }
+
+            if (countdown <= 0 && m_bAllAnimationsFinished)
+            {
+                m_bResetUnits = false;
+                finishedAllAnimations.invoke(true);
+                countdown = 0.5f;
+            }
         }
-
-        if (countdown <= 0 && m_bAllAnimationsFinished)
+        catch (const std::exception& e)
         {
-            finishedAllAnimations.invoke(true);
-            countdown = 0.5f;
+            std::cerr << "Unhandled exception in MoveTo function" << e.what() << std::endl;
         }
     }
 
     bool MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState,
-                                      float delay)
-    {
+                                      float delay) {
         bool bFinished = true;
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
@@ -209,11 +252,13 @@ namespace gl3 {
             transform.localPosition += speed * deltatime * directionNormalized;
             unitState_C.traveledDistance += deltatime * speed;
             bFinished = false;
-        }else
+        }
+        else
         {
             unitState_C.oldPos = transform.localPosition;
             unitState_C.state = endState;
             unitState_C.traveledDistance = 0;
+            unitState_C.m_iTarget = engine::ecs::invalidID;
             finishAnimation.invoke(delay);
             if (unitState_C.state == State::IDLE)
             {
@@ -223,6 +268,9 @@ namespace gl3 {
         return bFinished;
     }
 
+    // This whole function would probably fit better into instance manager
+    // Maybe just add a central arrow entity to game and add instances to it through this function
+    // Might not render, because mvp matrix is empty
     bool MovementSystem::CreateProjectiles(Transform& transform, State endState) {
         if (transform.getChildTransforms().empty())
         {
@@ -230,14 +278,18 @@ namespace gl3 {
             auto& targetTransform = engine.componentManager.getComponent<Transform>(unitState_C.m_iTarget);
             auto projectile = &engine.entityManager.createEntity();
             auto tempTexID = engine.GetTextureFromRegistry("Arrow");
-            auto model2D = &projectile->addComponent<Model2D>(engine::util::VertPreset::QuadInanimate, engine::util::VertPreset::quadIndices, tempTexID);
+            auto model2D = &projectile->addComponent<Model2D>(engine::util::VertPreset::QuadInanimate,
+                                                              engine::util::VertPreset::quadIndices, tempTexID);
             auto shader = &projectile->addComponent<Shader>();
-            auto projectileTransform = &projectile->addComponent<Transform>(&transform, transform.localPosition, transform.localZRotation, transform.localScale);
+            // auto instanceBuffer = &projectile->addComponent<InstanceBuffer>();  Will not work out of the box. Instance buffer needs to be filled which happens hardcoded in Instancemanager
+            auto projectileTransform = &projectile->addComponent<Transform>(
+                &transform, transform.localPosition, transform.localZRotation, transform.localScale);
             auto projectileState_C = &projectile->addComponent<ProjectileState>();
             projectileState_C->startPos = projectileTransform->localPosition;
             projectileState_C->lastPos = projectileTransform->localPosition;
             projectileState_C->endPos = targetTransform.localPosition;
             unitState_C.state = endState;
+            unitState_C.m_iTarget = engine::ecs::invalidID;
         }
         return false;
     }
@@ -249,7 +301,6 @@ namespace gl3 {
     }
 
     bool MovementSystem::ShootProjectiles(Transform& transform, float deltatime, State endState) {
-
         return true;
 
         if (transform.getChildTransforms().empty())
@@ -257,6 +308,7 @@ namespace gl3 {
             engine.entityManager.createEntity();
         }
     }
+
     bool MovementSystem::MoveCurved(Transform& projectileTransform, float deltatime) {
         auto& projectileState_C = engine.componentManager.getComponent<ProjectileState>(projectileTransform.entity());
 
@@ -295,8 +347,7 @@ namespace gl3 {
         return false;
     }
 
-    void MovementSystem::moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime)
-    {
+    void MovementSystem::moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime) {
         glm::vec3 start = root.localPosition;
         glm::vec3 forward = glm::normalize(goal - start);
         glm::vec3 worldUp = glm::vec3(0, 1, 0);
@@ -326,22 +377,22 @@ namespace gl3 {
                 if (t > 1.0f) t = 1.0f;
 
                 glm::vec3 direction =
-                        2.0f * (1.0f - t) * (mid - start) +
-                        2.0f * t * (goal - mid);
-                    direction = glm::normalize(direction);
+                    2.0f * (1.0f - t) * (mid - start) +
+                    2.0f * t * (goal - mid);
+                direction = glm::normalize(direction);
 
-                    childTransform->localPosition += speed * deltatime * direction;
-                    unitState_C.traveledDistance += speed * deltatime;
-                }else
-                {
-                    unitState_C.state = State::IDLE;
-                    finishAnimation.invoke(true);
-                }
+                childTransform->localPosition += speed * deltatime * direction;
+                unitState_C.traveledDistance += speed * deltatime;
             }
+            else
+            {
+                unitState_C.state = State::IDLE;
+                finishAnimation.invoke(true);
+            }
+        }
     }
 
-    void MovementSystem::setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState)
-    {
+    void MovementSystem::setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState) {
         int counter = 0;
         for (auto& childTransform : root.getChildTransforms())
         {
@@ -363,8 +414,7 @@ namespace gl3 {
         }
     }
 
-    void MovementSystem::setMoved(Transform& root, Transform& goalPosition, int amount, State initialState)
-    {
+    void MovementSystem::setMoved(Transform& root, Transform& goalPosition, int amount, State initialState) {
         int counter = 0;
         for (auto& childTransform : root.getChildTransforms())
         {
@@ -375,7 +425,8 @@ namespace gl3 {
                 guid_t iTargetEntity = engine::ecs::invalidID;
                 for (auto childTransformTarget : goalPosition.getChildTransforms())
                 {
-                    auto unitStateTarget_C = &engine.componentManager.getComponent<UnitState>(childTransformTarget->entity());
+                    auto unitStateTarget_C = &engine.componentManager.getComponent<UnitState>(
+                        childTransformTarget->entity());
                     if (unitStateTarget_C->m_TargetedBy.empty())
                     {
                         iTargetEntity = childTransformTarget->entity();
@@ -403,18 +454,19 @@ namespace gl3 {
         }
     }
 
-    void MovementSystem::SetResetting(Transform& root, State initialState) const {
-        for (auto& childTransform : root.getChildTransforms())
+    void MovementSystem::SetResetting(Transform& unitTransform, State initialState) const {
+        // for (auto& childTransform : root.getChildTransforms())
+        // {
+        if (!engine.entityManager.checkIfEntityHasComponent<UnitState>(unitTransform.entity())) return;
+        auto unitState_C = &engine.componentManager.getComponent<UnitState>(unitTransform.entity());
+        auto parrentTransform = unitTransform.getParent();
+        if (unitState_C->state == initialState)
         {
-            if (!engine.entityManager.checkIfEntityHasComponent<UnitState>(childTransform->entity())) continue;
-            auto unitState_C = &engine.componentManager.getComponent<UnitState>(childTransform->entity());
-            if (unitState_C->state == initialState)
-            {
-                unitState_C->state = State::RESETTING;
-                unitState_C->goal = root.localPosition + unitState_C->relativeVec;
-                unitState_C->m_TargetedBy.clear();
-            }
+            unitState_C->state = State::RESETTING;
+            unitState_C->goal = parrentTransform->localPosition + unitState_C->relativeVec;
+            unitState_C->m_TargetedBy.clear();
         }
+        // }
     }
 
     void MovementSystem::SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState) {
@@ -429,7 +481,8 @@ namespace gl3 {
                 guid_t iTargetEntity = engine::ecs::invalidID;
                 for (auto childTransformTarget : targetPosition.getChildTransforms())
                 {
-                    auto unitStateTarget_C = &engine.componentManager.getComponent<UnitState>(childTransformTarget->entity());
+                    auto unitStateTarget_C = &engine.componentManager.getComponent<UnitState>(
+                        childTransformTarget->entity());
                     if (unitStateTarget_C->m_TargetedBy.empty())
                     {
                         iTargetEntity = childTransformTarget->entity();
