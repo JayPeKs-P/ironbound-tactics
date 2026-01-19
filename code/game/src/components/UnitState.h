@@ -45,7 +45,7 @@ struct ProjectileState: Component {
     glm::vec3 lastPos;
     glm::vec3 startPos;
     glm::vec3 endPos;
-    float movementSpeed = 0.4;
+    guid_t m_iTarget = gl3::engine::ecs::invalidID;
     float elapsedTime = 0.0f;
 private:
     explicit ProjectileState(guid_t owner):

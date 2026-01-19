@@ -118,6 +118,11 @@ namespace gl3 {
                 {
                     if (game.componentManager.hasComponent<ProjectileState>(transform.entity()))
                     {
+                        if (m_bUpdateProjectileTarget == true)
+                        {
+                            auto pProjectileState = &game.componentManager.getComponent<ProjectileState>(transform.entity());
+                            CheckIfTargetMoved(*pProjectileState);
+                        }
                         m_bAttackAnimsFinished = MoveCurved(transform, deltaTime);
                     }
                 }
@@ -209,6 +214,7 @@ namespace gl3 {
                 m_bPlayFightAnimation = false;
                 m_bMoveAnimsFinished = false;
                 m_bResetUnits = true;
+                m_bUpdateProjectileTarget = m_bAttackAnimsFinished;
             }
             if (m_bMoveAnimsFinished && m_bAttackAnimsFinished) m_bAllAnimationsFinished = true;
             else m_bAllAnimationsFinished = false;
@@ -261,9 +267,16 @@ namespace gl3 {
         return bFinished;
     }
 
-    // This whole function would probably fit better into instance manager
-    // Maybe just add a central arrow entity to game and add instances to it through this function
-    // Might not render, because mvp matrix is empty
+    bool MovementSystem::CheckIfTargetMoved(ProjectileState& projectile) {
+        auto pTargetTransform = &engine.componentManager.getComponent<Transform>(projectile.m_iTarget);
+        auto distance = glm::distance2(projectile.endPos, pTargetTransform->localPosition);
+        if (distance > 0.05)
+        {
+            projectile.endPos = pTargetTransform->localPosition;
+        }
+        return true;
+    }
+
     bool MovementSystem::CreateProjectiles(Transform& transform, State endState) {
 
         auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(transform.entity());
@@ -288,6 +301,8 @@ namespace gl3 {
         pProjectileState_C->startPos = pProjectileTransform_C->localPosition;
         pProjectileState_C->lastPos = pProjectileTransform_C->localPosition;
         pProjectileState_C->endPos = pTargetTransform->localPosition;
+        pProjectileState_C->m_iTarget = pUnitState_C->m_iTarget;
+
         float direction = pTargetTransform->localPosition.x - pProjectileTransform_C->localPosition.x;
         if (direction < 0.0f)
         {
@@ -343,7 +358,7 @@ namespace gl3 {
 
         glm::vec3 horizontalDirection = endPos - startPos;
         float xEnd = glm::dot(horizontalDirection, baseForward);
-        float maxHeight = 1.0f;
+        float maxHeight = 0.5f;
 
 
         glm::vec3 lastPos = projectileState_C.lastPos;

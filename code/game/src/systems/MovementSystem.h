@@ -7,6 +7,7 @@
 #include "engine/Events.h"
 
 
+struct ProjectileState;
 enum class State;
 using gl3::engine::sceneGraph::Transform;
 namespace gl3 {
@@ -21,6 +22,7 @@ public:
     void moveTo(engine::Game &game, float deltatime);
     void update(engine::Game &game, Transform* root);
     bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState, float delay);
+    bool CheckIfTargetMoved(ProjectileState& projectile);
     bool CreateProjectiles(Transform& transform, State endState);
     bool DeleteProjectile(guid_t ID);
     bool ShootProjectiles(Transform& transform, float deltatime, State endState);
@@ -38,6 +40,7 @@ private:
     glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);
     bool m_bAllAnimationsFinished = false;
     bool m_bMoveAnimsFinished = false;
+    bool m_bUpdateProjectileTarget = true;
     bool m_bPlayFightAnimation = false;
     bool m_bResetUnits = false;
     bool m_bAttackAnimsFinished = false;
