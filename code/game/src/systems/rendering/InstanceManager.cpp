@@ -59,7 +59,7 @@ namespace gl3 {
                     {
                         auto instance_E = game.entityManager.createEntity();
                         instance_E.addComponent<Transform>(&transform,
-                            glm::vec3(rootLocation.x + j * 0.1f, rootLocation.y - i * 0.05, rootLocation.z),
+                            glm::vec3(rootLocation.x + j * 0.1f, rootLocation.y - i * 0.05, rootLocation.z + i * 0.01f),
                             0,
                             glm::vec3(rootScale.x, rootScale.y, rootScale.z));
                         instance_E.addComponent<UnitState>();
