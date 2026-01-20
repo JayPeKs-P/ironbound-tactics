@@ -345,6 +345,7 @@ namespace gl3 {
     bool MovementSystem::DeleteProjectile(guid_t ID) {
         engine.componentManager.forEachComponent<Projectile>([&](Projectile& projectile)
         {
+            engine.PlaySound("retro_impact_colorful_01.wav");
             if (projectile.m_iRefComponent == projectile.entity()) return;
             engine.componentManager.removeComponent<Projectile>(projectile.entity());
         });

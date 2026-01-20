@@ -24,6 +24,8 @@ entityManager(componentManager,*this)
     RegisterSound("retro_ui_menu_simple_click_12.wav");
     RegisterSound("retro_ui_menu_simple_click_03.wav");
     RegisterSound("retro_ui_menu_blip_click_20.wav");
+    RegisterSound("retro_footstep_movement_05.wav");
+    RegisterSound("retro_impact_colorful_01.wav");
     RegisterMusic("Retro Action Game Theme #6 (looped).wav");
     RegisterMusic("Retro Action Game Theme #8 (looped).wav");
 }
