@@ -5,6 +5,8 @@
 #include "engine/sceneGraph/Transform.h"
 #include "engine/ecs/System.h"
 #include "engine/Events.h"
+#include "engine/Game.h"
+#include "engine/Game.h"
 
 
 struct ProjectileState;
@@ -15,19 +17,16 @@ namespace gl3 {
 class MovementSystem: public engine::ecs::System{
 public:
     using event_t = gl3::engine::events::Event<MovementSystem, float>;
-    static event_t finishAnimation;
     static event_t finishedAllAnimations;
 
     explicit MovementSystem(engine::Game &game);
-    void moveTo(engine::Game &game, float deltatime);
+    void Animate(engine::Game &game, float deltatime);
     void update(engine::Game &game, Transform* root);
-    bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState, float delay);
-    bool CheckIfTargetMoved(ProjectileState& projectile);
-    bool CreateProjectiles(Transform& transform, State endState);
+    bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState);
+    bool CheckIfTargetMoved(ProjectileState& projectileState_C);
+    bool CreateProjectiles(const Transform& transform, State endState);
     bool DeleteProjectile(guid_t ID);
-    bool ShootProjectiles(Transform& transform, float deltatime, State endState);
     bool MoveCurved(Transform& projectileTransform, float deltatime);
-    void moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime);
 private:
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
     void setMoved(Transform& root, Transform& goalPosition, int amount, State initialState);

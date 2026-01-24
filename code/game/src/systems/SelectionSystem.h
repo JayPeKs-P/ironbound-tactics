@@ -13,6 +13,9 @@ class SelectionSystem: public engine::ecs::System {
     using transform_t = typename engine::sceneGraph::Transform;
     public:
     explicit SelectionSystem(engine::Game &game): System(game) {};
+
+    /// @tparam Component that identifies desired entity
+    template<typename C>
     transform_t* select(engine::Game &game, float pickRadius = 0.5f)
     {
         transform_t *selected = nullptr;
@@ -22,6 +25,7 @@ class SelectionSystem: public engine::ecs::System {
             float dist = glm::distance(glm::vec2(mouseWorldPos), glm::vec2(transform.localPosition));
             if (dist < pickRadius)
             {
+                if (!engine.componentManager.hasComponent<C>(transform.entity())) return;
                 selected = &transform;
             }
         });

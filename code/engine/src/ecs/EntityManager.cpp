@@ -15,10 +15,10 @@ namespace gl3::engine::ecs {
 
     Entity &EntityManager::createEntity() {
         guid_t guid;
-        if (m_FreeGUIDs.empty()) guid = entityCounter++;
+        if (m_FreeGUIDs.size() < 40) guid = entityCounter++;
         else [[likely]]
         {
-            guid = m_FreeGUIDs.top();
+            guid = m_FreeGUIDs.front();
             m_FreeGUIDs.pop();
         }
         Entity entity(guid, componentManager);

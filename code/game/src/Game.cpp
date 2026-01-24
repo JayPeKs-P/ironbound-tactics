@@ -218,7 +218,7 @@ void Game::update(GLFWwindow* window) {
     if (left.clicked)
     {
         Transform* selection = nullptr;
-        selection = selectionSystem->select(*this, 0.1f);
+        selection = selectionSystem->select<UnitState>(*this, 0.1f);
         if (selection != nullptr)
         {
             auto root = selection->getParent();

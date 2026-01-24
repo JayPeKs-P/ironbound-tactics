@@ -32,6 +32,7 @@ struct Projectile: Component {
     friend ComponentManager;
     friend Entity;
     guid_t m_iRefComponent;
+    int m_iCountActive = 0;
 private:
     explicit Projectile(guid_t owner, guid_t iRefEntity = gl3::engine::ecs::invalidID):
     Component(owner),
@@ -45,8 +46,11 @@ struct ProjectileState: Component {
     glm::vec3 lastPos;
     glm::vec3 startPos;
     glm::vec3 endPos;
+    float m_fFlightTime = 0.0f;
+    float m_fProjectileSpeed = 3.0f;
     guid_t m_iTarget = gl3::engine::ecs::invalidID;
     float elapsedTime = 0.0f;
+    bool m_bUpdated = false;
 private:
     explicit ProjectileState(guid_t owner):
     Component(owner) {}

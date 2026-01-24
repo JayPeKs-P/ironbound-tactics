@@ -22,23 +22,15 @@
 using gl3::engine::sceneGraph::Transform;
 
 namespace gl3 {
-    MovementSystem::event_t MovementSystem::finishAnimation;
     MovementSystem::event_t MovementSystem::finishedAllAnimations;
 
     MovementSystem::MovementSystem(engine::Game& game) :
         System(game) {
         CombatController::onBeforeDamageStep.addListener([&]()
         {
-            moveTo(engine, engine.getDeltaTime());
+            Animate(engine, engine.getDeltaTime());
         });
 #ifdef DEBUG_MODE
-        finishAnimation.addListener([&](float delay)
-        {
-            countdown = delay;
-            DEBUG_LOG(
-                << "TRIGGERED EVENT: 'finishedAnimation'"
-            );
-        });
 #endif
 
         CombatController::onBeforeAttack.addListener([&](guid_t unit, guid_t target, int amount)
@@ -106,7 +98,7 @@ namespace gl3 {
         });
     }
 
-    void MovementSystem::moveTo(engine::Game& game, float deltaTime) {
+    void MovementSystem::Animate(engine::Game& game, float deltaTime) {
         try
         {
             m_bAllAnimationsFinished = true;
@@ -116,93 +108,82 @@ namespace gl3 {
             {
                 if (m_bPlayFightAnimation)
                 {
-                    if (game.componentManager.hasComponent<ProjectileState>(transform.entity()))
+                    if (!game.componentManager.hasComponent<ProjectileState>(transform.entity())) return;
+                    auto pProjectileState = &game.componentManager.getComponent<ProjectileState>(transform.entity());
+
+                    if (pProjectileState->m_bUpdated == false)
                     {
-                        if (m_bUpdateProjectileTarget == true)
-                        {
-                            auto pProjectileState = &game.componentManager.getComponent<ProjectileState>(transform.entity());
-                            CheckIfTargetMoved(*pProjectileState);
-                        }
-                        m_bAttackAnimsFinished = MoveCurved(transform, deltaTime);
+                        pProjectileState->m_bUpdated = CheckIfTargetMoved(*pProjectileState);
                     }
+                    MoveCurved(transform, deltaTime);
                 }
                 else
                 {
-                    if (game.componentManager.hasComponent<UnitState>(transform.entity()))
+                    if (!game.componentManager.hasComponent<UnitState>(transform.entity())) return;
+                    auto pUnitState_C = &game.componentManager.getComponent<UnitState>(transform.entity());
+
+                    switch (pUnitState_C->state)
                     {
-                        auto root = transform.getParent();
-                        auto unitState_C = &game.componentManager.getComponent<UnitState>(transform.entity());
-
-                        switch (unitState_C->state)
+                    case State::MOVING:
                         {
-                        case State::MOVING:
-                            {
-                                glm::vec3 directionPrep = unitState_C->goal - transform.localPosition;
-                                m_bMoveAnimsFinished = moveStraight(transform, directionPrep, deltaTime,
-                                                                    State::PREPARING, 3);
-                                break;
-                            }
-                        case State::PREPARING:
-                            {
-                                break;
-                            }
-                        case State::MOVED:
-                            {
-                                glm::vec3 directionMov;
-                                if (unitState_C->m_iTarget != engine::ecs::invalidID)
-                                {
-                                    if (!engine.entityManager.IsAlive(unitState_C->m_iTarget))
-                                    {
-                                        unitState_C->m_iTarget = engine::ecs::invalidID;
-                                        unitState_C->goal = transform.localPosition;
-                                        directionMov = {0, 0, 0};
+                            glm::vec3 directionPrep = pUnitState_C->goal - transform.localPosition;
+                            bool bFinished = moveStraight(transform, directionPrep, deltaTime, State::PREPARING);
+                            if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
+                            break;
+                        }
+                    case State::PREPARING:{ break; }
+                    case State::MOVED:
+                        {
+                            glm::vec3 directionMov;
 
-                                        m_bMoveAnimsFinished = moveStraight(transform, directionMov, deltaTime, State::FIGHTING,
-                                                                            15);
-                                        break;
-                                    }
-                                    auto pTargetTransform = &engine.componentManager.getComponent<Transform>(
-                                        unitState_C->m_iTarget);
-                                    directionMov = pTargetTransform->localPosition - transform.localPosition;
-                                    unitState_C->goal = pTargetTransform->localPosition;
-                                }
-                                else
-                                {
-                                    unitState_C->goal = transform.localPosition;
-                                    directionMov = {0, 0, 0};
-                                }
-                                m_bMoveAnimsFinished = moveStraight(transform, directionMov, deltaTime, State::FIGHTING,
-                                                                    15);
-                                break;
-                            }
-                        case::State::AIMING:
+                            const bool bValidTargetID = pUnitState_C->m_iTarget != engine::ecs::invalidID;
+                            const bool bEntityAlive = engine.entityManager.IsAlive(pUnitState_C->m_iTarget);
+                            if (bValidTargetID && bEntityAlive)
                             {
-                                m_bMoveAnimsFinished = CreateProjectiles(transform, State::IDLE);
-                                break;
+                                auto pTargetTransform = &engine.componentManager.getComponent<Transform>(pUnitState_C->m_iTarget);
+                                directionMov = pTargetTransform->localPosition - transform.localPosition;
+                                pUnitState_C->goal = pTargetTransform->localPosition;
                             }
-                        case State::FIGHTING:
+                            else
                             {
-                                if (m_bResetUnits)
-                                {
-                                    SetResetting(transform, State::FIGHTING);
-                                    m_bMoveAnimsFinished = false;
-                                }
-                                break;
+                                pUnitState_C->m_iTarget = engine::ecs::invalidID;
+                                pUnitState_C->goal = transform.localPosition;
+                                directionMov = {0, 0, 0};
                             }
-                        case State::RESETTING:
+                            bool bFinished = moveStraight(transform, directionMov, deltaTime, State::FIGHTING);
+                            if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
+                            break;
+                        }
+                    case State::FIGHTING:
+                        {
+                            if (m_bResetUnits)
                             {
-                                glm::vec3 directionRes = unitState_C->goal - transform.localPosition;
-                                m_bMoveAnimsFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE, 3);
-                                break;
+                                SetResetting(transform, State::FIGHTING);
+                                m_bMoveAnimsFinished = false;
                             }
-                        case State::IDLE:
-                            {
-                                break;
-                            }
+                            break;
+                        }
+                    case State::RESETTING:
+                        {
+                            glm::vec3 directionRes = pUnitState_C->goal - transform.localPosition;
+                            bool bFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE);
+                            if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
+                            break;
+                        }
+                    case State::IDLE:
+                        {
+                            break;
                         }
                     }
                 }
             });
+
+            engine.componentManager.forEachComponent<Projectile>([&](const Projectile& projectile_C)
+            {
+                if (!m_bAttackAnimsFinished) return;
+                if (projectile_C.m_iCountActive > 0) m_bAttackAnimsFinished = false;
+            });
+
             if (m_bMoveAnimsFinished && !m_bPlayFightAnimation && !m_bResetUnits)
             {
                 m_bPlayFightAnimation = true;
@@ -237,8 +218,7 @@ namespace gl3 {
         }
     }
 
-    bool MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState,
-                                      float delay) {
+    bool MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState) {
         bool bFinished = true;
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
@@ -278,7 +258,6 @@ namespace gl3 {
             unitState_C.state = endState;
             unitState_C.traveledDistance = 0;
             unitState_C.m_iTarget = engine::ecs::invalidID;
-            finishAnimation.invoke(delay);
             if (unitState_C.state == State::IDLE)
             {
                 transform.localPosition = transform.getParent()->localPosition + unitState_C.relativeVec;
@@ -288,18 +267,22 @@ namespace gl3 {
         return bFinished;
     }
 
-    bool MovementSystem::CheckIfTargetMoved(ProjectileState& projectile) {
-        auto pTargetTransform = &engine.componentManager.getComponent<Transform>(projectile.m_iTarget);
-        auto distance = glm::distance2(projectile.endPos, pTargetTransform->localPosition);
-        if (distance > 0.05)
+    bool MovementSystem::CheckIfTargetMoved(ProjectileState& projectileState_C) {
+        auto pTargetTransform = &engine.componentManager.getComponent<Transform>(projectileState_C.m_iTarget);
+        auto distanceDifference = glm::distance(projectileState_C.endPos, pTargetTransform->localPosition);
+        if (distanceDifference > 0.05)
         {
-            projectile.endPos = pTargetTransform->localPosition;
+            projectileState_C.endPos = pTargetTransform->localPosition;
+
+            auto travelDistance = glm::distance(projectileState_C.endPos, projectileState_C.startPos);
+            float speed = projectileState_C.m_fProjectileSpeed;
+            projectileState_C.m_fFlightTime = glm::max(travelDistance / speed, 0.05f);
+            projectileState_C.elapsedTime = 0.0f;
         }
         return true;
     }
 
-    bool MovementSystem::CreateProjectiles(Transform& transform, State endState) {
-
+    bool MovementSystem::CreateProjectiles(const Transform& transform, State endState) {
         auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(transform.entity());
 
         auto pTargetTransform = &engine.componentManager.getComponent<Transform>(pUnitState_C->m_iTarget);
@@ -310,6 +293,7 @@ namespace gl3 {
             if (projectile.entity() == projectile.m_iRefComponent)
             {
                 iRootProjectile = projectile.m_iRefComponent;
+                projectile.m_iCountActive++;
             }
         });
         auto pRootArrowTransform_C = &engine.componentManager.getComponent<Transform>(iRootProjectile);
@@ -323,6 +307,9 @@ namespace gl3 {
         pProjectileState_C->lastPos = pProjectileTransform_C->localPosition;
         pProjectileState_C->endPos = pTargetTransform->localPosition;
         pProjectileState_C->m_iTarget = pUnitState_C->m_iTarget;
+        float speed = pProjectileState_C->m_fProjectileSpeed;
+        auto distance = glm::distance(pProjectileState_C->startPos, pProjectileState_C->endPos);
+        pProjectileState_C->m_fFlightTime = glm::max(distance / speed, 0.05f);
 
         float direction = pTargetTransform->localPosition.x - pProjectileTransform_C->localPosition.x;
         if (direction < 0.0f)
@@ -343,30 +330,19 @@ namespace gl3 {
     }
 
     bool MovementSystem::DeleteProjectile(guid_t ID) {
-        engine.componentManager.forEachComponent<Projectile>([&](Projectile& projectile)
-        {
-            engine.PlaySound("retro_impact_colorful_01.wav");
-            if (projectile.m_iRefComponent == projectile.entity()) return;
-            engine.componentManager.removeComponent<Projectile>(projectile.entity());
-        });
+        engine.PlaySound("retro_impact_colorful_01.wav");
         auto projectile = engine.entityManager.getEntity(ID);
         engine.entityManager.deleteEntity(projectile);
+        int iRootProjectile_E = engine.componentManager.getComponent<Transform>(ID).getParent()->entity();
+        auto pRootProjectile_C = &engine.componentManager.getComponent<Projectile>(iRootProjectile_E);
+        pRootProjectile_C->m_iCountActive--;
         return true;
-    }
-
-    bool MovementSystem::ShootProjectiles(Transform& transform, float deltatime, State endState) {
-        return true;
-
-        if (transform.getChildTransforms().empty())
-        {
-            engine.entityManager.createEntity();
-        }
     }
 
     bool MovementSystem::MoveCurved(Transform& projectileTransform, float deltatime) {
         auto& projectileState_C = engine.componentManager.getComponent<ProjectileState>(projectileTransform.entity());
 
-        float flightTime = 0.9f;
+        float flightTime = projectileState_C.m_fFlightTime;
         projectileState_C.elapsedTime += deltatime;
         float timeNorm = glm::clamp(projectileState_C.elapsedTime / flightTime, 0.0f, 1.0f);
 
@@ -379,13 +355,21 @@ namespace gl3 {
         glm::vec3 baseUp = glm::normalize(glm::cross(baseForward, right));
 
         glm::vec3 horizontalDirection = endPos - startPos;
+
+        if (glm::length(horizontalDirection) < 0.0001f)
+        {
+            DeleteProjectile(projectileTransform.entity());
+            return true;
+        }
+
         float xEnd = glm::dot(horizontalDirection, baseForward);
-        float maxHeight = 0.5f;
+        float maxHeight = 1.0f;
+        if (flightTime < 0.25) maxHeight = 0.001;
 
 
         glm::vec3 lastPos = projectileState_C.lastPos;
         float xDist = glm::mix(0.0f, xEnd, timeNorm);
-        float yDist = maxHeight * 4.0f * timeNorm * (1.0f - timeNorm);
+        float yDist = maxHeight * 2.0 * timeNorm * (1.0f - timeNorm);
         projectileTransform.localPosition = startPos + baseForward * xDist + baseUp * yDist;
 
         glm::vec2 rotation = glm::vec2(projectileTransform.localPosition.x - lastPos.x,
@@ -404,50 +388,6 @@ namespace gl3 {
         return false;
     }
 
-    void MovementSystem::moveCurved(Transform& root, glm::vec3 goal, float compression, float deltatime) {
-        glm::vec3 start = root.localPosition;
-        glm::vec3 forward = glm::normalize(goal - start);
-        glm::vec3 worldUp = glm::vec3(0, 1, 0);
-
-        glm::vec3 side = glm::normalize(glm::cross(forward, worldUp));
-        glm::vec3 up = glm::normalize(glm::cross(side, forward));
-
-        glm::vec3 mid = (start + goal) * 0.5f + compression * up;
-        float totalDistance = glm::length(goal - start);
-
-        glm::vec3 direction = goal - root.localPosition;
-        float distanceToGoal = glm::length(direction);
-        auto children = root.getChildTransforms();
-        for (auto& childTransform : children)
-        {
-            auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
-            if (unitState_C.state != State::MOVING) continue;
-            auto speed = 3.0f;
-
-            float t = unitState_C.traveledDistance / totalDistance;
-            if (t > 1.0f) t = 1.0f;
-
-
-            if (distanceToGoal - unitState_C.traveledDistance >= 0)
-            {
-                float t = unitState_C.traveledDistance / totalDistance;
-                if (t > 1.0f) t = 1.0f;
-
-                glm::vec3 direction =
-                    2.0f * (1.0f - t) * (mid - start) +
-                    2.0f * t * (goal - mid);
-                direction = glm::normalize(direction);
-
-                childTransform->localPosition += speed * deltatime * direction;
-                unitState_C.traveledDistance += speed * deltatime;
-            }
-            else
-            {
-                unitState_C.state = State::IDLE;
-                finishAnimation.invoke(true);
-            }
-        }
-    }
 
     void MovementSystem::setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState) {
         int counter = 0;
@@ -551,20 +491,7 @@ namespace gl3 {
                     break;
                 }
             }
+            CreateProjectiles(*childTransform, State::IDLE);
         }
     }
-
-    // void MovementSystem::setAttacking(Transform& root, glm::vec3 targetPosition, int amount)
-    // {
-    //     int counter = 0;
-    //     for (auto& childTransform : root.getChildTransforms())
-    //     {
-    //         auto& unitState_C = engine.componentManager.getComponent<UnitState>(childTransform->entity());
-    //         if (unitState_C.state == State::IDLE && counter < amount)
-    //         {
-    //             unitState_C.state = State::ATTACKING;
-    //             counter++;
-    //         }
-    //     }
-    // }
 }
