@@ -7,6 +7,8 @@
 #include "engine/ecs/Component.h"
 #include "UnitCategory.h"
 
+#define MIN_SPEED_VALUE 1
+
 using gl3::engine::ecs::Component;
 using gl3::engine::ecs::ComponentManager;
 using gl3::engine::ecs::guid_t;

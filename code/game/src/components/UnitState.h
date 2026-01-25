@@ -15,9 +15,10 @@ struct UnitState: Component
     friend Entity;
     public:
     State state = State::IDLE;
+    glm::vec3 startPos;
     glm::vec3 oldPos;
     glm::vec3 relativeVec;
-    glm::vec3 goal;
+    glm::vec3 endPos;
     guid_t m_iTarget = gl3::engine::ecs::invalidID;
     std::vector<guid_t> m_TargetedBy;
 
@@ -32,7 +33,7 @@ struct Projectile: Component {
     friend ComponentManager;
     friend Entity;
     guid_t m_iRefComponent;
-    int m_iCountActive = 0;
+    std::vector<int> m_ActiveProjectileList = {0, 0, 0, 0, 0};
 private:
     explicit Projectile(guid_t owner, guid_t iRefEntity = gl3::engine::ecs::invalidID):
     Component(owner),
@@ -51,7 +52,9 @@ struct ProjectileState: Component {
     guid_t m_iTarget = gl3::engine::ecs::invalidID;
     float elapsedTime = 0.0f;
     bool m_bUpdated = false;
+    int m_iDelayTurns;
 private:
-    explicit ProjectileState(guid_t owner):
-    Component(owner) {}
+    explicit ProjectileState(guid_t owner, int iAnimationDelay):
+    Component(owner),
+    m_iDelayTurns(iAnimationDelay){}
 };

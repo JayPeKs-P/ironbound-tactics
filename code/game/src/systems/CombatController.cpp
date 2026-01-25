@@ -109,6 +109,7 @@ void CombatController::handleTurn()
             currentState = CombatState::DEFEAT;
             playerDead.invoke();
         } else if (enemyDeadNow) {
+            turnEnd.invoke();
             currentState = CombatState::VICTORY;
             enemyDead.invoke();
         } else {

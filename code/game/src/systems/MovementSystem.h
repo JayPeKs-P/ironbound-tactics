@@ -22,16 +22,18 @@ public:
     explicit MovementSystem(engine::Game &game);
     void Animate(engine::Game &game, float deltatime);
     void update(engine::Game &game, Transform* root);
-    bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState);
-    bool CheckIfTargetMoved(ProjectileState& projectileState_C);
-    bool CreateProjectiles(const Transform& transform, State endState);
+    bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState) const;
+    bool CheckIfTargetMoved(ProjectileState& projectileState_C) const;
+    bool CreateProjectiles(const Transform& transform, State endState, int iDelay) const;
     bool DeleteProjectile(guid_t ID);
     bool MoveCurved(Transform& projectileTransform, float deltatime);
 private:
+    template<typename C>
+    void HelperTargetValidity(C* pComponent);
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
     void setMoved(Transform& root, Transform& goalPosition, int amount, State initialState);
     void SetResetting(Transform& unitTransform, State initialState) const;
-    void SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState);
+    void SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState, int iDelay = 0);
 
 
     glm::vec3 movementVector;

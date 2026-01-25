@@ -11,6 +11,8 @@
 #include "engine/ecs/Entity.h"
 #include "engine/ecs/ComponentManager.h"
 
+#define FREE_GUID_BUFFER_SIZE 1024
+
 namespace gl3::engine {
     class Game;
 }

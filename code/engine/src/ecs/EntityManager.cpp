@@ -15,7 +15,7 @@ namespace gl3::engine::ecs {
 
     Entity &EntityManager::createEntity() {
         guid_t guid;
-        if (m_FreeGUIDs.size() < 40) guid = entityCounter++;
+        if (m_FreeGUIDs.size() < FREE_GUID_BUFFER_SIZE) guid = entityCounter++;
         else [[likely]]
         {
             guid = m_FreeGUIDs.front();
