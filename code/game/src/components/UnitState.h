@@ -19,7 +19,11 @@ struct UnitState: Component
     glm::vec3 oldPos;
     glm::vec3 relativeVec;
     glm::vec3 endPos;
+
+    guid_t m_iParentEntity = gl3::engine::ecs::invalidID;
     guid_t m_iTarget = gl3::engine::ecs::invalidID;
+    guid_t m_iTargetParentEntity = gl3::engine::ecs::invalidID;
+
     std::vector<guid_t> m_TargetedBy;
 
     float movementSpeed = 0.4;
@@ -49,7 +53,10 @@ struct ProjectileState: Component {
     glm::vec3 endPos;
     float m_fFlightTime = 0.0f;
     float m_fProjectileSpeed = 3.0f;
+
     guid_t m_iTarget = gl3::engine::ecs::invalidID;
+    guid_t m_iTargetParentEntity = gl3::engine::ecs::invalidID;
+
     float elapsedTime = 0.0f;
     bool m_bUpdated = false;
     int m_iDelayTurns;

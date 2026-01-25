@@ -225,6 +225,17 @@ namespace gl3 {
         {
             pComponent->m_iTarget = engine::ecs::invalidID;
             pComponent->endPos = pComponent->startPos;
+
+            engine.componentManager.forEachComponent<UnitState>([&](UnitState& unitState)
+            {
+                if (!pComponent->m_iTarget == engine::ecs::invalidID) return;
+                if (!(unitState.m_iParentEntity == pComponent->m_iTargetParentEntity)) return;
+
+                guid_t iNewTarget = unitState.entity();
+                pComponent->m_iTarget = iNewTarget;
+                auto pTargetTransform = &engine.componentManager.getComponent<Transform>(pComponent->m_iTarget);
+                pComponent->endPos = pTargetTransform->localPosition;
+            });
         }
     }
     template void MovementSystem::HelperTargetValidity<UnitState>(UnitState* );
@@ -281,6 +292,7 @@ namespace gl3 {
 
     bool MovementSystem::CheckIfTargetMoved(ProjectileState& projectileState_C) const {
         if (projectileState_C.m_iTarget == engine::ecs::invalidID) return true;
+
         auto pTargetTransform = &engine.componentManager.getComponent<Transform>(projectileState_C.m_iTarget);
         auto distanceDifference = glm::distance(projectileState_C.endPos, pTargetTransform->localPosition);
         if (distanceDifference > 0.05)
@@ -446,7 +458,10 @@ namespace gl3 {
                         iTargetEntity = childTransformTarget->entity();
                     }
                 }
+                pUnitState_C->m_iParentEntity = root.entity();
                 pUnitState_C->m_iTarget = iTargetEntity;
+                pUnitState_C->m_iTargetParentEntity = goalPosition.entity();
+
                 pUnitState_C->traveledDistance = 0;
                 pUnitState_C->endPos = goalPosition.localPosition;
                 pUnitState_C->state = State::MOVED;
@@ -500,8 +515,11 @@ namespace gl3 {
                 }
                 auto pTarget = &engine.componentManager.getComponent<UnitState>(iTargetEntity);
                 pTarget->m_TargetedBy.push_back(pUnitState_C->entity());
-                pUnitState_C->m_iTarget = iTargetEntity;
                 pUnitState_C->state = State::AIMING;
+
+                pUnitState_C->m_iParentEntity = root.entity();
+                pUnitState_C->m_iTarget = iTargetEntity;
+                pUnitState_C->m_iTargetParentEntity = targetPosition.entity();
 
                 CreateProjectiles(*childTransform, State::IDLE, iDelay);
                 counter++;
