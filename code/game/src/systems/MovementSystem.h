@@ -30,10 +30,11 @@ public:
 private:
     template<typename C>
     void HelperTargetValidity(C* pComponent);
+    guid_t HelperGetTargetInstance(Transform& rootTargetTransform_C) const;
     void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
-    void setMoved(Transform& root, Transform& goalPosition, int amount, State initialState);
+    void setMoved(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState);
     void SetResetting(Transform& unitTransform, State initialState) const;
-    void SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState, int iDelay = 0);
+    void SetAiming(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State intitialActorState, int iDelay = 0);
 
 
     glm::vec3 movementVector;

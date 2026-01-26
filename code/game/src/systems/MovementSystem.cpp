@@ -38,33 +38,38 @@ namespace gl3 {
             if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target)) throw(
                 "MovementSystem::MovementSystem() onBeforeAttack.addListener missing unit_C");
             auto pUnit_C = &engine.componentManager.getComponent<Unit>(unit);
-            auto& actorRoot = engine.componentManager.getComponent<Transform>(unit);
-            auto& targetRoot = engine.componentManager.getComponent<Transform>(target);
-            auto& tag = engine.componentManager.getComponent<TagComponent>(unit).value;
+            auto& rootTransformActor_C = engine.componentManager.getComponent<Transform>(unit);
+            auto& rootTransformTarget_C = engine.componentManager.getComponent<Transform>(target);
+            auto& tagActor_C = engine.componentManager.getComponent<TagComponent>(unit).value;
+            auto& tagTarget_C = engine.componentManager.getComponent<TagComponent>(target).value;
 
             switch (pUnit_C->category)
             {
             case UnitCategory::INFANTRY:
                 {
-                    if (tag == Tag::PLAYER)
+                    if (tagActor_C == tagTarget_C)
                     {
-                        setMoving(actorRoot, playerPendingPosition, amount, State::IDLE);
+                        // setMoving(rootTransformActor_C, transformTarget_C, amount, State::IDLE);
                     }
-                    else if (tag == Tag::ENEMY)
+                    if (tagActor_C == Tag::PLAYER)
                     {
-                        setMoving(actorRoot, enemyPendingPosition, amount, State::IDLE);
+                        setMoving(rootTransformActor_C, playerPendingPosition, amount, State::IDLE);
+                    }
+                    else if (tagActor_C == Tag::ENEMY)
+                    {
+                        setMoving(rootTransformActor_C, enemyPendingPosition, amount, State::IDLE);
                     }
                     break;
                 }
             case UnitCategory::ARCHER:
                 {
                     // maybe pass UnitCategory here? or add another State::SHOOTING and make CreateProjectiles() set units to fighting
-                    SetAiming(actorRoot, targetRoot, amount, State::IDLE, pUnit_C->speed);
+                    SetAiming(rootTransformActor_C, rootTransformTarget_C, amount, State::IDLE, pUnit_C->speed);
                     break;
                 }
             case UnitCategory::CATAPULT:
                 {
-                    SetAiming(actorRoot, targetRoot, amount, State::IDLE, pUnit_C->speed);
+                    SetAiming(rootTransformActor_C, rootTransformTarget_C, amount, State::IDLE, pUnit_C->speed);
                     break;
                 }
             }
@@ -228,8 +233,8 @@ namespace gl3 {
 
             engine.componentManager.forEachComponent<UnitState>([&](UnitState& unitState)
             {
-                if (!pComponent->m_iTarget == engine::ecs::invalidID) return;
-                if (!(unitState.m_iParentEntity == pComponent->m_iTargetParentEntity)) return;
+                if (pComponent->m_iTarget != engine::ecs::invalidID) return;
+                if (unitState.m_iParentEntity != pComponent->m_iTargetParentEntity) return;
 
                 guid_t iNewTarget = unitState.entity();
                 pComponent->m_iTarget = iNewTarget;
@@ -382,7 +387,7 @@ namespace gl3 {
 
         glm::vec3 horizontalDirection = endPos - startPos;
 
-        if (glm::length(horizontalDirection) < 0.0001f)
+        if (glm::length(horizontalDirection) < 0.01f)
         {
             DeleteProjectile(projectileTransform.entity());
             return true;
@@ -434,36 +439,20 @@ namespace gl3 {
         }
     }
 
-    void MovementSystem::setMoved(Transform& root, Transform& goalPosition, int amount, State initialState) {
+    void MovementSystem::setMoved(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState) {
         int counter = 0;
-        for (auto& childTransform : root.getChildTransforms())
+        for (auto& childTransform : rootActorTransform_C.getChildTransforms())
         {
             auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(childTransform->entity());
-            if (pUnitState_C->state == initialState)
+            if (pUnitState_C->state == initialActorState)
             {
-                size_t currentSmalestSize = 5000;
-                guid_t iTargetEntity = engine::ecs::invalidID;
-                for (auto childTransformTarget : goalPosition.getChildTransforms())
-                {
-                    auto unitStateTarget_C = &engine.componentManager.getComponent<UnitState>(
-                        childTransformTarget->entity());
-                    if (unitStateTarget_C->m_TargetedBy.empty())
-                    {
-                        iTargetEntity = childTransformTarget->entity();
-                        break;
-                    }
-                    if (currentSmalestSize > unitStateTarget_C->m_TargetedBy.size())
-                    {
-                        currentSmalestSize = unitStateTarget_C->m_TargetedBy.size();
-                        iTargetEntity = childTransformTarget->entity();
-                    }
-                }
-                pUnitState_C->m_iParentEntity = root.entity();
+                const guid_t iTargetEntity = HelperGetTargetInstance(rootTargetTransform_C);
+                pUnitState_C->m_iParentEntity = rootActorTransform_C.entity();
                 pUnitState_C->m_iTarget = iTargetEntity;
-                pUnitState_C->m_iTargetParentEntity = goalPosition.entity();
+                pUnitState_C->m_iTargetParentEntity = rootTargetTransform_C.entity();
 
                 pUnitState_C->traveledDistance = 0;
-                pUnitState_C->endPos = goalPosition.localPosition;
+                pUnitState_C->endPos = rootTargetTransform_C.localPosition;
                 pUnitState_C->state = State::MOVED;
 
                 counter++;
@@ -472,7 +461,7 @@ namespace gl3 {
                     auto pTarget = &engine.componentManager.getComponent<UnitState>(iTargetEntity);
                     pTarget->m_TargetedBy.push_back(pUnitState_C->entity());
                 }
-                if (counter >= amount) break;
+                if (counter >= iAmount) break;
             }
         }
     }
@@ -488,42 +477,46 @@ namespace gl3 {
             unitState_C->m_TargetedBy.clear();
         }
     }
+    guid_t MovementSystem::HelperGetTargetInstance(Transform& rootTargetTransform_C) const {
+        size_t currentSmallestSize = 5000;
+        guid_t iTargetEntity = engine::ecs::invalidID;
+        for (auto childTransformTarget : rootTargetTransform_C.getChildTransforms())
+        {
+            auto pUnitStateTarget_C = &engine.componentManager.getComponent<UnitState>(
+                childTransformTarget->entity());
+            if (pUnitStateTarget_C->m_TargetedBy.empty())
+            {
+                iTargetEntity = childTransformTarget->entity();
+                break;
+            }
+            if (currentSmallestSize > pUnitStateTarget_C->m_TargetedBy.size())
+            {
+                currentSmallestSize = pUnitStateTarget_C->m_TargetedBy.size();
+                iTargetEntity = childTransformTarget->entity();
+            }
+        }
+        return iTargetEntity;
+    }
 
-    void MovementSystem::SetAiming(Transform& root, Transform& targetPosition, int amount, State initialState, int iDelay) {
+    void MovementSystem::SetAiming(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State intitialActorState, int iDelay) {
         int counter = 0;
-        for (auto& childTransform : root.getChildTransforms())
+        for (auto& childTransform : rootActorTransform_C.getChildTransforms())
         {
             auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(childTransform->entity());
-            if (pUnitState_C->state == initialState)
+            if (pUnitState_C->state == intitialActorState)
             {
-                size_t currentSmallestSize = 5000;
-                guid_t iTargetEntity = engine::ecs::invalidID;
-                for (auto childTransformTarget : targetPosition.getChildTransforms())
-                {
-                    auto pUnitStateTarget_C = &engine.componentManager.getComponent<UnitState>(
-                        childTransformTarget->entity());
-                    if (pUnitStateTarget_C->m_TargetedBy.empty())
-                    {
-                        iTargetEntity = childTransformTarget->entity();
-                        break;
-                    }
-                    if (currentSmallestSize > pUnitStateTarget_C->m_TargetedBy.size())
-                    {
-                        currentSmallestSize = pUnitStateTarget_C->m_TargetedBy.size();
-                        iTargetEntity = childTransformTarget->entity();
-                    }
-                }
+                const guid_t iTargetEntity = HelperGetTargetInstance(rootTargetTransform_C);
                 auto pTarget = &engine.componentManager.getComponent<UnitState>(iTargetEntity);
                 pTarget->m_TargetedBy.push_back(pUnitState_C->entity());
                 pUnitState_C->state = State::AIMING;
 
-                pUnitState_C->m_iParentEntity = root.entity();
+                pUnitState_C->m_iParentEntity = rootActorTransform_C.entity();
                 pUnitState_C->m_iTarget = iTargetEntity;
-                pUnitState_C->m_iTargetParentEntity = targetPosition.entity();
+                pUnitState_C->m_iTargetParentEntity = rootTargetTransform_C.entity();
 
                 CreateProjectiles(*childTransform, State::IDLE, iDelay);
                 counter++;
-                if (counter >= amount)
+                if (counter >= iAmount)
                 {
                     break;
                 }
