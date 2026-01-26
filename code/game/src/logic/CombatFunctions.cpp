@@ -60,14 +60,13 @@ void CombatFunctions::takeDamage(Unit* unit, float damage)
     // return lifePoints;
 }
 
-void CombatFunctions::use(int amount, Unit* unit, SiegeEngine* siege)
+void CombatFunctions::UseSiegeEngine(int iAmountTarget, Unit* pUnitActor, SiegeEngine* pSiegeEngineTarget)
 {
-    siege->useableAmount += amount;     //TODO refactor to  unused amount
-    unit->totalAmount -= amount * siege->cost;
-    unit->availableAmount -= amount * siege->cost;
+    pSiegeEngineTarget->useableAmount += iAmountTarget;     //TODO refactor to  unused amount
+    pUnitActor->totalAmount -= iAmountTarget * pSiegeEngineTarget->cost;
 }
 
-void CombatFunctions::reset(Unit* unit, int amount)
+void CombatFunctions::ResetUnit(Unit* unit, int amount)
 {
     int iAmountAddBack = unit->availableAmount + amount;
     if (iAmountAddBack > unit->totalAmount)

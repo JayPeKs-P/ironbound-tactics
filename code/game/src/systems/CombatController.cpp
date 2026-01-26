@@ -92,11 +92,11 @@ void CombatController::handleTurn()
 
     case CombatState::EVALUATE_END:
     {
-        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E)) return;
+        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(iInfantryPlayer, iArcherPlayer, iCatapultPlayer, eInf_E, eArc_E, eCat_E)) return;
 
-        auto pInfU_C = engine.componentManager.getComponent<Unit>(pInf_E);
-        auto pArcU_C = engine.componentManager.getComponent<Unit>(pArc_E);
-        auto pCatU_C = engine.componentManager.getComponent<Unit>(pCat_E);
+        auto pInfU_C = engine.componentManager.getComponent<Unit>(iInfantryPlayer);
+        auto pArcU_C = engine.componentManager.getComponent<Unit>(iArcherPlayer);
+        auto pCatU_C = engine.componentManager.getComponent<Unit>(iCatapultPlayer);
 
         auto eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
         auto eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
@@ -215,52 +215,28 @@ DEBUG_LOG(
             {
                 if (selP == UnitCategory::INFANTRY)
                 {
-                    chooseAttackTarget(pInf_E, selE, amount);
+                    chooseAttackTarget(iInfantryPlayer, selE, amount);
                 }else if (selP == UnitCategory::ARCHER)
                 {
-                    chooseAttackTarget(pArc_E, selE, amount);
+                    chooseAttackTarget(iArcherPlayer, selE, amount);
                 }else if (selP == UnitCategory::CATAPULT)
                 {
-                    chooseAttackTarget(pCat_E, selE, amount);
+                    chooseAttackTarget(iCatapultPlayer, selE, amount);
                 }
             });
-            selectionEvent.use.addListener([&](UnitCategory selP, int amount, UnitCategory selPTarget)
+            selectionEvent.use.addListener([&](UnitCategory selP, int iTargetInstanceAmount, UnitCategory selPTarget)
             {
                 if (selP == UnitCategory::INFANTRY)
                 {
                     if (selPTarget == UnitCategory::CATAPULT)
                     {
-                        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(pInf_E, pCat_E)) throw("CombatController::use() Missing unit_C");
-                        if (!engine.entityManager.checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
-                        auto pInfU_C = &engine.componentManager.getComponent<Unit>(pInf_E);
-                        auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
-                        auto pCatSE_C = &engine.componentManager.getComponent<SiegeEngine>(pCat_E);
-                        CombatFunctions::use(amount, pInfU_C, pCatSE_C);
-                        onUse.invoke(pInf_E, pCat_E, amount);
-
-                        std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
-                        *handle = turnEnd.addListener([=](){
-                            CombatFunctions::reset(pCatU_C, amount);
-                            turnEnd.removeListener(*handle);
-                        });
+                        HelperScheduleUse(iInfantryPlayer, iCatapultPlayer, iTargetInstanceAmount);
                     }
                 }else if (selP == UnitCategory::ARCHER)
                 {
                     if (selPTarget == UnitCategory::CATAPULT)
                     {
-                        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(pArc_E, pCat_E)) throw("CombatController::use() Missing unit_C");
-                        if (!engine.entityManager.checkIfEntityHasComponent<SiegeEngine>(pCat_E)) throw("CombatController::unit() Missing siege_C");
-                        auto pArcU_C = &engine.componentManager.getComponent<Unit>(pArc_E);
-                        auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
-                        auto pCatSE_C = &engine.componentManager.getComponent<SiegeEngine>(pCat_E);
-                        CombatFunctions::use(amount, pArcU_C, pCatSE_C);
-                        onUse.invoke(pArc_E, pCat_E, amount);
-
-                        std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
-                        *handle = turnEnd.addListener([=](){
-                            CombatFunctions::reset(pCatU_C, amount);
-                            turnEnd.removeListener(*handle);
-                        });
+                        HelperScheduleUse(iArcherPlayer, iCatapultPlayer, iTargetInstanceAmount);
                     }
 
                 }
@@ -279,20 +255,20 @@ void CombatController::init(engine::Game &game, int amountInf, int amountArc, in
         {
             if (unit.category == UnitCategory::INFANTRY)
             {
-                pInf_E = unit.entity();
-                auto pInfU_C = &engine.componentManager.getComponent<Unit>(pInf_E);
+                iInfantryPlayer = unit.entity();
+                auto pInfU_C = &engine.componentManager.getComponent<Unit>(iInfantryPlayer);
                 CombatFunctions::setAmount(pInfU_C, amountInf);
             }else if (unit.category == UnitCategory::ARCHER)
             {
-                pArc_E = unit.entity();
-                auto pArcU_C = &engine.componentManager.getComponent<Unit>(pArc_E);
+                iArcherPlayer = unit.entity();
+                auto pArcU_C = &engine.componentManager.getComponent<Unit>(iArcherPlayer);
                 CombatFunctions::setAmount(pArcU_C, amountArc);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
-                pCat_E = unit.entity();
-                auto pCatU_C = &engine.componentManager.getComponent<Unit>(pCat_E);
-                auto pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(pCat_E);
+                iCatapultPlayer = unit.entity();
+                auto pCatU_C = &engine.componentManager.getComponent<Unit>(iCatapultPlayer);
+                auto pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(iCatapultPlayer);
                 CombatFunctions::setAmount(pCatU_C, amountCat / pCatSE_C->cost);
             }
         }else if (tag == Tag::ENEMY)
@@ -399,8 +375,8 @@ void CombatController::runEnemyTurn()
         {
             if (engine.componentManager.hasComponent<SiegeEngine>(option.target))
             {
-                auto targetSE_C = &engine.componentManager.getComponent<SiegeEngine>(option.target);
-
+                if (targetU_C->availableAmount < option.amount) continue;
+                HelperScheduleUse(option.actor, option.target, option.amount);
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "AI uses: "
@@ -413,16 +389,8 @@ void CombatController::runEnemyTurn()
         << unitCategory_to_string(targetU_C->category)
         );
 #endif
-
-                onUse.invoke(option.actor, option.target, option.amount);
-                CombatFunctions::use(option.amount/targetSE_C->cost, actorU_C, targetSE_C);
-
-                std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
-                *handle = turnEnd.addListener([=](){
-                    CombatFunctions::reset(targetU_C, option.amount / targetSE_C->cost);
-                    turnEnd.removeListener(*handle);
-                });
-            }else
+            }
+            else
             {
 #ifdef DEBUG_MODE
     DEBUG_LOG(
@@ -461,7 +429,7 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
 
         std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
         *handle = turnEnd.addListener([=](){
-            CombatFunctions::reset(attackerU_C, amount);
+            CombatFunctions::ResetUnit(attackerU_C, amount);
 
             turnEnd.removeListener(*handle);
         });
@@ -476,5 +444,30 @@ void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount
         );
 #endif
     });
+}
+
+void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, guid_t iTargetInstanceAmount) const {
+    if (!engine.entityManager.checkIfEntityHasComponent<Unit>(iActor, iTarget)) throw("CombatController::use() Missing unit_C");
+    if (!engine.entityManager.checkIfEntityHasComponent<SiegeEngine>(iTarget)) throw("CombatController::unit() Missing siege_C");
+
+    auto pActorUnit_C = &engine.componentManager.getComponent<Unit>(iActor);
+    auto pTargetUnit_C = &engine.componentManager.getComponent<Unit>(iTarget);
+    auto pTargetSiegeEngine_C = &engine.componentManager.getComponent<SiegeEngine>(iTarget);
+    const int iActorCost = iTargetInstanceAmount * pTargetSiegeEngine_C->cost;
+
+    onBeforeAttack.invoke(iActor, iTarget, iActorCost);
+    engine.actionRegister.scheduleAction(MIN_SPEED_VALUE,[=] ()
+    {
+        CombatFunctions::UseSiegeEngine(iTargetInstanceAmount, pActorUnit_C, pTargetSiegeEngine_C);
+        onUse.invoke(iActor, iTarget, iTargetInstanceAmount);
+
+        std::shared_ptr<event_t::handle_t> pHandle = std::make_shared<event_t::handle_t>();
+        *pHandle = turnEnd.addListener([=](){
+            CombatFunctions::ResetUnit(pTargetUnit_C, iTargetInstanceAmount);
+            turnEnd.removeListener(*pHandle);
+        });
+    });
+
+    pActorUnit_C->availableAmount -= iActorCost;
 }
 

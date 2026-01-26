@@ -9,6 +9,7 @@
 #include "engine/Game.h"
 
 
+struct UnitState;
 struct ProjectileState;
 enum class State;
 using gl3::engine::sceneGraph::Transform;
@@ -31,10 +32,14 @@ private:
     template<typename C>
     void HelperTargetValidity(C* pComponent);
     guid_t HelperGetTargetInstance(Transform& rootTargetTransform_C) const;
-    void setMoving(Transform& root, glm::vec3 goalPosition, int amount, State initialState);
-    void setMoved(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState);
+    void PrepareMoving(UnitState* pUnitState_C, Transform& rootUnitTransform_C, Transform& rootTargetTransform_C);
+    void PrepareAttack(UnitState* pUnitState_C,guid_t iRootActor, Transform& rootTargetTransform_C) const;
+    void SetUnitState(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState, State endActorState, int
+                                      iDelay = 0);
+    // void setMoving(Transform& rootUnitTransform_C, glm::vec3 goalPosition, int amount, State initialActorState);
+    // void setMoved(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState);
     void SetResetting(Transform& unitTransform, State initialState) const;
-    void SetAiming(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State intitialActorState, int iDelay = 0);
+    // void SetAiming(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State intitialActorState, int iDelay = 0);
 
 
     glm::vec3 movementVector;

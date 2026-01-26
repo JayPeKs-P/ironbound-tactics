@@ -15,8 +15,8 @@ public:
     static void setAmount(Unit* unit,  int value);
     static float attack(Unit* unit, int amount);
     static void takeDamage(Unit* unit, float damage);
-    static void use(int amount, Unit* unit, SiegeEngine* siege);
-    static void reset(Unit* unit, int amount);
+    static void UseSiegeEngine(int iAmountTarget, Unit* pUnitActor, SiegeEngine* pSiegeEngineTarget);
+    static void ResetUnit(Unit* unit, int amount);
 };
 
 } // gl3

@@ -65,11 +65,12 @@ private:
     void chooseAttackTarget(guid_t attacker, const UnitCategory &target, const int &amount);
     void runEnemyTurn();
     void scheduleAttack(guid_t attacker, guid_t target, int amount);
+    void HelperScheduleUse(guid_t iActor, guid_t iTarget, guid_t iTargetInstanceAmount) const;
 
 
-    guid_t pInf_E;
-    guid_t pArc_E;
-    guid_t pCat_E;
+    guid_t iInfantryPlayer;
+    guid_t iArcherPlayer;
+    guid_t iCatapultPlayer;
 
     guid_t eInf_E;
     guid_t eArc_E;

@@ -8,7 +8,7 @@ using gl3::engine::ecs::ComponentManager;
 using gl3::engine::ecs::guid_t;
 using gl3::engine::ecs::Entity;
 
-enum class State {IDLE, MOVING, MOVED, AIMING, FIGHTING, RESETTING, PREPARING};
+enum class State {IDLE, MOVING, MOVED,MOVE_TO_SIEGE, USING, AIMING, FIGHTING, RESETTING, PREPARING};
 struct UnitState: Component
 {
     friend ComponentManager;
@@ -27,7 +27,7 @@ struct UnitState: Component
     std::vector<guid_t> m_TargetedBy;
 
     float movementSpeed = 0.4;
-    float traveledDistance = 0;
+    // float traveledDistance = 0;
 
 private:
     explicit UnitState(guid_t owner):
