@@ -24,7 +24,7 @@ enum class GuiScene
     COMBAT_MENU,
     LOADING
 };
-enum Fonts{FANTASY_REGULAR, FANTASY_VERY_LARGE, FONTS_LAST};
+enum Fonts{FANTASY_REGULAR, FANTASY_VERY_LARGE, FANTASY_SMALL, FONTS_LAST};
 namespace gl3 {
 
 class GuiHandler: public engine::ecs::System {

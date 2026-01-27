@@ -5,13 +5,17 @@
 #include "GuiCombat.h"
 #include "engine/util/Debug.h"
 #include <iostream>
+#include <ranges>
 
 #include "../components/unitTypes/UnitCategory.h"
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 #include "../components/TagComponent.h"
+#include "../logic/LibCombatFunctions.h"
 #include "../systems/CombatController.h"
 #include "../systems/GuiHandler.h"
+#include "engine/Texture.h"
+#include "engine/rendering/Model2D.h"
 
 using namespace gl3;
 GuiCombat::event_t GuiCombat::startRound;
@@ -92,6 +96,12 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, GuiHandler& guiHandler,  nk_contex
     engine.PlayMusic("Retro Action Game Theme #8 (looped).wav");
 }
 
+GuiCombat::~GuiCombat() {
+    for (auto val : m_Textures | std::views::values) {
+        glDeleteTextures(1, &val);
+    }
+}
+
 void GuiCombat::render()
 {
     if (CombatController::getCombatState() == CombatState::STARTING_NEW_ROUND)
@@ -112,8 +122,8 @@ void GuiCombat::render()
     else if (CombatController::getCombatState() == CombatState::DEFEAT) {
         DrawDefeatWindow();
     }
-    else if (CombatController::getCombatState() == CombatState::VICTORY) {
-
+    else if (CombatController::getCombatState() == CombatState::REWARD_PHASE) {
+        if (DrawRewardWindow()) CombatController::setState(CombatState::PREPARE);
     }
 
 
@@ -208,6 +218,84 @@ void GuiCombat::DrawDefeatWindow() {
     nk_end(ctx);
 }
 
+bool GuiCombat::DrawRewardWindow() {
+    bool bAdvance = false;
+    auto pLibCombat = LibCombatFunctions::GetInstance(engine);
+    if (m_bFirstEnterRewardWindow) {
+        m_Rewards.push_back(pLibCombat->GetRandomReward());
+        m_Rewards.push_back(pLibCombat->GetRandomReward());
+        m_Rewards.push_back(pLibCombat->GetRandomReward());
+        m_bFirstEnterRewardWindow = false;
+    }
+    if (nk_begin(ctx, "Background",
+        nk_rect(0, 0,
+            windowWidth, windowHeight),
+        NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
+    if (nk_begin(ctx, "Rewards",
+        nk_rect(windowWidth / 4,  windowHeight / 4,
+            windowWidth / 2, windowHeight/ 2),
+            NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
+    {
+        auto& fonts = m_GuiHandler.GetFonts();
+        nk_layout_row_dynamic(ctx, windowHeight / 8, 1);
+        nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
+        nk_label_colored(ctx, "Choose a Reward: ", NK_TEXT_CENTERED, highlightColor);
+        nk_style_pop_font(ctx);
+
+        float ratio[] = {0.01, 0.1, 0.05, 0.45, 0.15, 0.2};
+
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 6, ratio);
+
+        float frameDuration = 0.1f;
+        int totalFrames = 4;
+        int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
+        auto unitImage = nk_subimage_id(m_Textures.at(m_Rewards[0].m_iUnit_ID), 192, 192,
+            nk_rect(currentFrame * 48, 0, 48, 48));
+
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_image(ctx, unitImage);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label(ctx, m_Rewards[0].m_FunctionKey.c_str(), NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(m_Rewards[0].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
+        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
+        {
+            pLibCombat->InvokeRewardCallback(m_Rewards[0]);
+            m_bFirstEnterRewardWindow = true;
+            bAdvance = true;
+        }
+
+        unitImage = nk_subimage_id(m_Textures.at(m_Rewards[1].m_iUnit_ID), 192, 192,
+            nk_rect(currentFrame * 48, 0, 48, 48));
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_image(ctx, unitImage);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label(ctx, m_Rewards[1].m_FunctionKey.c_str(), NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(m_Rewards[1].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
+        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
+        {
+            pLibCombat->InvokeRewardCallback(m_Rewards[1]);
+            m_bFirstEnterRewardWindow = true;
+            bAdvance = true;
+        }
+
+        unitImage = nk_subimage_id(m_Textures.at(m_Rewards[2].m_iUnit_ID), 192, 192,
+            nk_rect(currentFrame * 48, 0, 48, 48));
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_image(ctx, unitImage);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label(ctx, m_Rewards[2].m_FunctionKey.c_str(), NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(m_Rewards[2].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
+        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
+        {
+            pLibCombat->InvokeRewardCallback(m_Rewards[2]);
+            m_bFirstEnterRewardWindow = true;
+            bAdvance = true;
+        }
+    }
+    nk_end(ctx);
+    return bAdvance;
+}
+
 void GuiCombat::drawTopRow()
 {
     if (!checkIfEntityHasComponent<Unit>(pInf_E, pArc_E, pCat_E, eInf_E, eArc_E, eCat_E))
@@ -250,7 +338,8 @@ void GuiCombat::drawTopRow()
 
     if (NK_WRAP::button_label(ctx, "esc", m_Hovered, &engine))
     {
-        endScene = true;
+        // endScene = true;
+        CombatController::setState(CombatState::VICTORY); //TODO: remove this again
     }
 
 
@@ -456,4 +545,7 @@ void GuiCombat::getComponents(engine::Game &game)
     {
         combatSelection_C = &sel;
     });
+    m_Textures[pInf_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
+    m_Textures[pArc_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
+    m_Textures[pCat_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
 }

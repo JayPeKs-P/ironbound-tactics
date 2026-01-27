@@ -45,8 +45,15 @@ namespace gl3 {
         nkCTX = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
         {
             nk_glfw3_font_stash_begin(&glfw, &atlas);
-            m_Fonts[FANTASY_REGULAR] = nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", windowHeight/36, 0);
-            m_Fonts[FANTASY_VERY_LARGE] =  nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", windowHeight/20, 0);
+            m_Fonts[FANTASY_REGULAR] = nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        windowHeight/36, 0);
+            m_Fonts[FANTASY_VERY_LARGE] =  nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        windowHeight/20, 0);
+            m_Fonts[FANTASY_SMALL] =  nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        windowHeight/45, 0);
             nk_glfw3_font_stash_end(&glfw);
             /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
             nk_style_set_font(nkCTX, &m_Fonts[FANTASY_REGULAR]->handle);

@@ -114,7 +114,7 @@ void CombatController::handleTurn()
         } else if (enemyDeadNow) {
             turnEnd.InvokeAndClear();
             currentState = CombatState::VICTORY;
-            enemyDead.invoke();
+            // enemyDead.invoke();   //TODO: change this back
         } else {
             turnEnd.InvokeAndClear();
             currentState = CombatState::BEGIN_TURN;
@@ -123,11 +123,12 @@ void CombatController::handleTurn()
     }
 
     case CombatState::VICTORY:
-        setState(CombatState::PREPARE);
+        enemyDead.invoke();   //TODO: remove this again and uncomment above
+        setState(CombatState::REWARD_PHASE);
         break;
-
+    case CombatState::REWARD_PHASE:
+        break;
     case CombatState::DEFEAT:
-        // setState(CombatState::IDLE);
         break;
     case CombatState::PREPARE:
         setEnemy(engine);

@@ -13,6 +13,9 @@
 #include "../../systems/CombatController.h"
 #include "engine/sceneGraph/SceneGraphPruner.h"
 
+#define MAX_UNITS_HORIZONTAL 15
+#define MAX_UNITS_VERTICAL 5
+
 using gl3::engine::sceneGraph::Transform;
 
 namespace gl3 {
@@ -47,28 +50,27 @@ namespace gl3 {
 
             int createdInstances = 0;
             int maxInstances = 0;
-            if (game.componentManager.hasComponent<Unit>(transform.entity())) {
-                maxInstances = game.componentManager.getComponent<Unit>(transform.entity()).totalAmount;
-                auto vOffset = game.componentManager.getComponent<UvOffset>(transform.entity()).originalV;
-                auto rootLocation = transform.localPosition;
-                auto rootScale = transform.localScale;
-                for (int j = 0; j < 10 && createdInstances < maxInstances; j++) {
-                    for (int i = 0; i < 5 && createdInstances < maxInstances; i++) {
-                        auto instance_E = game.entityManager.createEntity();
-                        auto pInstanceTransform = &instance_E.addComponent<Transform>(&transform,
-                                                           glm::vec3(rootLocation.x + j * 0.1f,
-                                                                     rootLocation.y - i * 0.05,
-                                                                     rootLocation.z + i * 0.5f),
-                                                           0,
-                                                           glm::vec3(rootScale.x, rootScale.y, rootScale.z));
-                        auto pUnitState_C = &instance_E.addComponent<UnitState>();
-                        pUnitState_C->startPos = pInstanceTransform->localPosition;
-                        pUnitState_C->relativeVec = pInstanceTransform->localPosition - transform.localPosition;
+            if (!game.componentManager.hasComponent<Unit>(transform.entity())) return;
+            maxInstances = game.componentManager.getComponent<Unit>(transform.entity()).totalAmount;
+            auto vOffset = game.componentManager.getComponent<UvOffset>(transform.entity()).originalV;
+            auto rootLocation = transform.localPosition;
+            auto rootScale = transform.localScale;
+            for (int j = 0; j < MAX_UNITS_HORIZONTAL && createdInstances < maxInstances; j++) {
+                for (int i = 0; i < MAX_UNITS_VERTICAL && createdInstances < maxInstances; i++) {
+                    auto instance_E = game.entityManager.createEntity();
+                    auto pInstanceTransform = &instance_E.addComponent<Transform>(&transform,
+                                                       glm::vec3(rootLocation.x + j * 0.1f,
+                                                                 rootLocation.y - i * 0.05,
+                                                                 rootLocation.z + i * 0.5f),
+                                                       0,
+                                                       glm::vec3(rootScale.x, rootScale.y, rootScale.z));
+                    auto pUnitState_C = &instance_E.addComponent<UnitState>();
+                    pUnitState_C->startPos = pInstanceTransform->localPosition;
+                    pUnitState_C->relativeVec = pInstanceTransform->localPosition - transform.localPosition;
 
-                        instance_E.addComponent<UvOffset>(vOffset);
+                    instance_E.addComponent<UvOffset>(vOffset);
 
-                        createdInstances++;
-                    }
+                    createdInstances++;
                 }
             }
         });

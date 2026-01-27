@@ -7,6 +7,7 @@
 #include "../components/CombatSelection.h"
 
 namespace gl3 {
+    struct RandomReward;
     class GuiHandler;
 }
 
@@ -18,6 +19,7 @@ public:
     static event_t startRound;
     // static event_t startEndOfTurn;
     GuiCombat(gl3::engine::Game& game, gl3::GuiHandler& guiHandler,  nk_context* ctx, nk_uint& textureID);
+    ~GuiCombat();
 
     static float countdownStartRound;
 private:
@@ -25,6 +27,7 @@ private:
     void invokeSceneChange() override;
     void drawStartRoundWindow();
     void DrawDefeatWindow();
+    bool DrawRewardWindow();
     void drawTopRow();
     void drawEndTurnWindow();
     void drawActions();
@@ -50,7 +53,7 @@ private:
 
     bool justStarted = true;
     gl3::GuiHandler& m_GuiHandler;
-
-
-
+    bool m_bFirstEnterRewardWindow = true;
+    std::vector<gl3::RandomReward> m_Rewards;
+    std::unordered_map<guid_t, unsigned int> m_Textures;
 };

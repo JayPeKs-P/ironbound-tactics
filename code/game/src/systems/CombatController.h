@@ -23,6 +23,7 @@ enum class CombatState {
     DAMAGE_STEP,
     EVALUATE_END,
     VICTORY,
+    REWARD_PHASE,
     DEFEAT,
     PREPARE,
     WAIT_NEXT_ROUND
