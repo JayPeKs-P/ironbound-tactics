@@ -58,7 +58,7 @@ namespace gl3 {
                         auto pInstanceTransform = &instance_E.addComponent<Transform>(&transform,
                                                            glm::vec3(rootLocation.x + j * 0.1f,
                                                                      rootLocation.y - i * 0.05,
-                                                                     rootLocation.z + i * 0.01f),
+                                                                     rootLocation.z + i * 0.5f),
                                                            0,
                                                            glm::vec3(rootScale.x, rootScale.y, rootScale.z));
                         auto pUnitState_C = &instance_E.addComponent<UnitState>();
