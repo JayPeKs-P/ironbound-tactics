@@ -5,6 +5,11 @@
 #pragma once
 #include "engine/ecs/Gui.h"
 #include "../components/CombatSelection.h"
+
+namespace gl3 {
+    class GuiHandler;
+}
+
 using gl3::engine::ecs::Gui;
 
 class GuiCombat: public Gui {
@@ -12,13 +17,14 @@ class GuiCombat: public Gui {
 public:
     static event_t startRound;
     // static event_t startEndOfTurn;
-    GuiCombat(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
+    GuiCombat(gl3::engine::Game& game, gl3::GuiHandler& guiHandler,  nk_context* ctx, nk_uint& textureID);
 
     static float countdownStartRound;
 private:
     void render() override;
     void invokeSceneChange() override;
     void drawStartRoundWindow();
+    void DrawDefeatWindow();
     void drawTopRow();
     void drawEndTurnWindow();
     void drawActions();
@@ -43,6 +49,7 @@ private:
     int value = 0;
 
     bool justStarted = true;
+    gl3::GuiHandler& m_GuiHandler;
 
 
 

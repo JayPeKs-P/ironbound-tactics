@@ -127,7 +127,7 @@ void CombatController::handleTurn()
         break;
 
     case CombatState::DEFEAT:
-        setState(CombatState::IDLE);
+        // setState(CombatState::IDLE);
         break;
     case CombatState::PREPARE:
         setEnemy(engine);

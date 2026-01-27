@@ -40,14 +40,16 @@ namespace gl3 {
 
     void GuiHandler::initialize(engine::Game &game)
     {
+        m_Fonts.resize(FONTS_LAST);
         glfwGetWindowSize(game.getWindow(), &windowWidth, &windowHeight);
         nkCTX = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
         {
             nk_glfw3_font_stash_begin(&glfw, &atlas);
-            nk_font *FantasyRPG1 = nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", windowHeight/36, 0);
+            m_Fonts[FANTASY_REGULAR] = nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", windowHeight/36, 0);
+            m_Fonts[FANTASY_VERY_LARGE] =  nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", windowHeight/20, 0);
             nk_glfw3_font_stash_end(&glfw);
             /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
-            nk_style_set_font(nkCTX, &FantasyRPG1->handle);
+            nk_style_set_font(nkCTX, &m_Fonts[FANTASY_REGULAR]->handle);
         }
         textureAtlasID = engine::util::Texture::load("assets/textures/gui/ui_atlas_48x48.png", false);
         nk_style* style = &nkCTX->style;
@@ -64,7 +66,7 @@ namespace gl3 {
         {
             onChangeToCombatScene.invoke();
             activeScene = GuiScene::COMBAT_MENU;
-            activeGui = std::make_unique<GuiCombat>(game, nkCTX, textureAtlasID);
+            activeGui = std::make_unique<GuiCombat>(game,*this,  nkCTX, textureAtlasID);
         });
     }
 

@@ -24,7 +24,7 @@ enum class GuiScene
     COMBAT_MENU,
     LOADING
 };
-
+enum Fonts{FANTASY_REGULAR, FANTASY_VERY_LARGE, FONTS_LAST};
 namespace gl3 {
 
 class GuiHandler: public engine::ecs::System {
@@ -39,6 +39,9 @@ public:
         int tileY, int tileWidth,
         int tileHeight, int atlasWidth, int atlasHeight
     );
+    [[nodiscard]] std::vector<nk_font*>& GetFonts() {
+        return m_Fonts;
+    }
 private:
     void restoreGameState();
     void selectCurrentScene(engine::Game &game);
@@ -62,6 +65,7 @@ private:
     GLFWwindow* window;
     nk_context *nkCTX;
     nk_glfw glfw = {nullptr};
+    std::vector<nk_font*> m_Fonts = {};
 
 };
 

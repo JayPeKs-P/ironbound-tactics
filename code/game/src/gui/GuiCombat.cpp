@@ -48,8 +48,9 @@ std::string getOwner(Tag tag)
 }
 
 
-GuiCombat::GuiCombat(gl3::engine::Game &game, nk_context* ctx, nk_uint& textureID)
-    : Gui(game, ctx,textureID)
+GuiCombat::GuiCombat(gl3::engine::Game &game, GuiHandler& guiHandler,  nk_context* ctx, nk_uint& textureID)
+    : Gui(game, ctx,textureID),
+      m_GuiHandler(guiHandler)
 {
     getComponents(game);
 
@@ -108,6 +109,12 @@ void GuiCombat::render()
         }
         nk_end(ctx);
     }
+    else if (CombatController::getCombatState() == CombatState::DEFEAT) {
+        DrawDefeatWindow();
+    }
+    else if (CombatController::getCombatState() == CombatState::VICTORY) {
+
+    }
 
 
     if (nk_begin(ctx, "Top Row Window",
@@ -149,11 +156,6 @@ void GuiCombat::invokeSceneChange()
 
 void GuiCombat::drawStartRoundWindow()
 {
-    // if (justStarted)    // CombatController getState == ??
-    // {
-    //     startRound.invoke();
-    //     justStarted = false;
-    // }
     if (nk_begin(ctx, "Background",
         nk_rect(0, 0,
             windowWidth, windowHeight),
@@ -163,11 +165,14 @@ void GuiCombat::drawStartRoundWindow()
             windowWidth / 2, windowHeight/ 2),
             NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER | NK_WINDOW_TITLE))
     {
-        nk_layout_row_dynamic(ctx, windowHeight/5, 2);
+        nk_layout_row_dynamic(ctx, windowHeight/5, 3);
+        auto& fonts = m_GuiHandler.GetFonts();
+        nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
         nk_label(ctx, "Round", NK_TEXT_CENTERED);
         nk_label(ctx, std::to_string(CombatController::roundCount).c_str(), NK_TEXT_CENTERED);
         nk_layout_row_dynamic(ctx, windowHeight/5, 1);
         nk_label(ctx, std::to_string(static_cast<int>(countdownStartRound)).c_str(), NK_TEXT_CENTERED);
+        nk_style_pop_font(ctx);
     }
     nk_end(ctx);
     if (countdownStartRound <= 0)
@@ -176,6 +181,31 @@ void GuiCombat::drawStartRoundWindow()
         countdownStartRound = 3.0f;
     }
     countdownStartRound -=  engine.getDeltaTime();
+}
+
+void GuiCombat::DrawDefeatWindow() {
+    if (nk_begin(ctx, "Background",
+        nk_rect(0, 0,
+            windowWidth, windowHeight),
+        NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
+    if (nk_begin(ctx, "Defeat",
+        nk_rect(windowWidth / 5,  windowHeight / 5,
+            windowWidth / 2, windowHeight/ 2),
+            NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
+    {
+        nk_layout_row_dynamic(ctx, windowHeight/3, 1);
+        auto& fonts = m_GuiHandler.GetFonts();
+        nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
+        nk_label(ctx, "YOU DIED", NK_TEXT_CENTERED);
+        nk_style_pop_font(ctx);
+        nk_layout_row_dynamic(ctx, windowHeight/20, 3);
+        nk_label(ctx, "", NK_TEXT_CENTERED);
+        if (NK_WRAP::button_label(ctx, "Quit", m_Hovered, &engine))
+        {
+            glfwSetWindowShouldClose(engine.getWindow(), true);
+        }
+    }
+    nk_end(ctx);
 }
 
 void GuiCombat::drawTopRow()
