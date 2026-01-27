@@ -48,7 +48,7 @@ namespace gl3 {
             int createdInstances = 0;
             int maxInstances = 0;
             if (game.componentManager.hasComponent<Unit>(transform.entity())) {
-                maxInstances = game.componentManager.getComponent<Unit>(transform.entity()).lifetimeMaxAmount;
+                maxInstances = game.componentManager.getComponent<Unit>(transform.entity()).totalAmount;
                 auto vOffset = game.componentManager.getComponent<UvOffset>(transform.entity()).originalV;
                 auto rootLocation = transform.localPosition;
                 auto rootScale = transform.localScale;
