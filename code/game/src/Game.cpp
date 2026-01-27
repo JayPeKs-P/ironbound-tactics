@@ -92,7 +92,7 @@ void Game::start() {
     InfPlayer_E.addComponent<UvOffset>(PLAYER);
     InfPlayer_E.addComponent<Shader>();
     &InfPlayer_E.addComponent<Transform>(origin,
-        glm::vec3(-2.25f, -1.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
+        glm::vec3(-2.25f, -1.0f, 0.2f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& ArcPlayer_E = engine::Game::entityManager.createEntity();
     pArcID_E = ArcPlayer_E.guid();
@@ -104,7 +104,7 @@ void Game::start() {
     ArcPlayer_E.addComponent<UvOffset>(PLAYER);
     ArcPlayer_E.addComponent<Shader>();
     &ArcPlayer_E.addComponent<Transform>(origin,
-        glm::vec3(-2.25f, -0.25f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
+        glm::vec3(-2.25f, -0.25f, 0.1f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& CatPlayer_E = engine::Game::entityManager.createEntity();
     pCatID_E = CatPlayer_E.guid();
@@ -132,7 +132,7 @@ void Game::start() {
     InfEnemy_E.addComponent<UvOffset>(ENEMY);
     InfEnemy_E.addComponent<Shader>();
     &InfEnemy_E.addComponent<Transform>(origin,
-        glm::vec3(1.75f, -0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
+        glm::vec3(1.75f, -0.75f, 0.2f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& ArcEnemy_E = engine::Game::entityManager.createEntity();
     eArcID_E = ArcEnemy_E.guid();
@@ -145,7 +145,7 @@ void Game::start() {
     ArcEnemy_E.addComponent<UvOffset>(ENEMY);
     ArcEnemy_E.addComponent<Shader>();
     &ArcEnemy_E.addComponent<Transform>(origin,
-        glm::vec3(1.75f, 0.0f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
+        glm::vec3(1.75f, 0.0f, 0.1f), 0, glm::vec3(0.25, 0.25, 1));
 
     auto& CatEnemy_E = engine::Game::entityManager.createEntity();
     eCatID_E = CatEnemy_E.guid();
