@@ -39,6 +39,14 @@ namespace gl3::engine::events {
             }
         }
 
+        void InvokeAndClear(Args ...args) {
+            container_t callbacks;
+            callbacks.swap(listeners);
+            for(auto &callback: callbacks) {
+                callback(std::forward<Args>(args) ...);
+            }
+        }
+
         container_t listeners;
     };
 }

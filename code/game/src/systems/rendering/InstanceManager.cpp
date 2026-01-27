@@ -88,6 +88,7 @@ namespace gl3 {
     void InstanceManager::update(Game& game) {
         int amount = 0;
         int amountLastFrame = 0;
+        int amountScheduledForUse = 0;
         engine.componentManager.forEachComponent<InstanceBuffer>([&](InstanceBuffer& instanceBuffer)
         {
             auto iRootEntity = instanceBuffer.entity();
@@ -95,21 +96,26 @@ namespace gl3 {
 
             auto pRootTransform_C = &engine.componentManager.getComponent<Transform>(iRootEntity);
 
+            // bool bSkipRedrawing = false;
             if (engine.componentManager.hasComponent<Unit>(iRootEntity)) {
-                amount = engine.componentManager.getComponent<Unit>(iRootEntity).totalAmount;
-                amountLastFrame = engine.componentManager.getComponent<Unit>(iRootEntity).totalAmountLastFrame;
+                auto pUnit_C = &engine.componentManager.getComponent<Unit>(iRootEntity);
+                amount = pUnit_C->totalAmount;
+                amountLastFrame = pUnit_C->totalAmountLastFrame;
+                amountScheduledForUse = pUnit_C->m_iScheduledForUse;
+                pUnit_C->m_iScheduledForUse = 0;
                 engine.componentManager.getComponent<Unit>(iRootEntity).totalAmountLastFrame = amount;;
 
-                // for (auto pInstanceTransform : pRootTransform_C->getChildTransforms()) {
-                //     if (amount >= amountLastFrame) return;
-                //     auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(pInstanceTransform->entity());
-                //     if (pUnitState_C->state != State::USING) return;
-                //     engine.entityManager.deleteEntity(engine.entityManager.getEntity(pInstanceTransform->entity()));
-                //     amountLastFrame--;
-                // }
+                for (auto pInstanceTransform : pRootTransform_C->getChildTransforms()) {
+                    if (amountScheduledForUse <= 0) break;
+                    // bSkipRedrawing = true;
+                    auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(pInstanceTransform->entity());
+                    if (pUnitState_C->state != State::USING) continue;
+                    engine.entityManager.deleteEntity(engine.entityManager.getEntity(pInstanceTransform->entity()));
+                    if (amountLastFrame > amount) amountLastFrame--;
+                    amountScheduledForUse--;
+                }
             }
-            else if (engine.componentManager.hasComponent<InstanceAmount>(iRootEntity)) {
-            }
+            // if (bSkipRedrawing) return;
 
             instanceBuffer.instances.clear();
             instanceBuffer.instanceUVs.clear();

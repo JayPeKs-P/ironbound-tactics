@@ -8,7 +8,7 @@
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 #include "../components/TagComponent.h"
-#include "../logic/CombatFunctions.h"
+#include "../logic/LibCombatFunctions.h"
 #include "../systems/CombatController.h"
 #include "engine/Texture.h"
 #include "engine/util/Debug.h"

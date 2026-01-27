@@ -21,7 +21,7 @@ public:
     static event_t finishedAllAnimations;
 
     explicit MovementSystem(engine::Game &game);
-    void Animate(engine::Game &game, float deltatime);
+    void Animate(float deltatime);
     void update(engine::Game &game, Transform* root);
     bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState) const;
     bool CheckIfTargetMoved(ProjectileState& projectileState_C) const;
@@ -32,14 +32,17 @@ private:
     template<typename C>
     void HelperTargetValidity(C* pComponent);
     guid_t HelperGetTargetInstance(Transform& rootTargetTransform_C) const;
+    void UpdateEndPosition(UnitState* pUnitState_C);
+    void HandleMovementAnimation(Transform& transform, float deltaTime);
+    void HandleAttackAnimation(Transform& transform, float deltaTime);
     void PrepareMoving(UnitState* pUnitState_C, Transform& rootUnitTransform_C, Transform& rootTargetTransform_C);
     void PrepareAttack(UnitState* pUnitState_C,guid_t iRootActor, Transform& rootTargetTransform_C) const;
     void SetUnitState(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState, State endActorState, int
                                       iDelay = 0);
-    // void setMoving(Transform& rootUnitTransform_C, glm::vec3 goalPosition, int amount, State initialActorState);
-    // void setMoved(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState);
     void SetResetting(Transform& unitTransform, State initialState) const;
-    // void SetAiming(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State intitialActorState, int iDelay = 0);
+    void AtomicCheckAnimationFinished();
+    void UpdateAnimationStage();
+    void FinishAnimationPhase(float deltaTime);
 
 
     glm::vec3 movementVector;

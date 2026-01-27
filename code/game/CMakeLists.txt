@@ -19,10 +19,10 @@ set(SOURCE_FILES src/main.cpp
         src/components/UnitState.h
         src/systems/rendering/InstanceManager.cpp
         src/systems/rendering/InstanceManager.h
-        src/logic/CombatFunctions.cpp
-        src/logic/CombatFunctions.h
-        src/logic/ActionEvaluation.cpp
-        src/logic/ActionEvaluation.h
+        src/logic/LibCombatFunctions.cpp
+        src/logic/LibCombatFunctions.h
+        src/logic/EnemyAI.cpp
+        src/logic/EnemyAI.h
         src/components/unitTypes/UnitCategory.h
         src/systems/SelectionSystem.h
         src/systems/MovementSystem.cpp

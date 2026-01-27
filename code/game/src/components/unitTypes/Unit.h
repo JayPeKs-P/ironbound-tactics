@@ -27,6 +27,7 @@ struct Unit: Component {
     int lifetimeMaxAmount;
     int totalAmount;
     int totalAmountLastFrame;
+    int m_iScheduledForUse = 0;
     int availableAmount;
     int speed;
     UnitCategory category;

@@ -8,8 +8,8 @@
 #include "engine/Game.h"
 #include "CombatController.h"
 
-#include "../logic/CombatFunctions.h"
-#include "../logic/ActionEvaluation.h"
+#include "../logic/LibCombatFunctions.h"
+#include "../logic/EnemyAI.h"
 
 
 
@@ -51,10 +51,10 @@ void CombatController::handleTurn()
     case CombatState::IDLE:     // Base state when inactive
         break;
     case CombatState::RESET_ENEMY:
-        engine.componentManager.removeComponent<Unit>(eInf_E);
-        engine.componentManager.removeComponent<Unit>(eArc_E);
-        engine.componentManager.removeComponent<Unit>(eCat_E);
-        engine.componentManager.getComponent<SiegeEngine>(eCat_E).useableAmount = 0;
+        engine.componentManager.removeComponent<Unit>(iInfantryEnemy);
+        engine.componentManager.removeComponent<Unit>(iArcherEnemy);
+        engine.componentManager.removeComponent<Unit>(iCatapultEnemy);
+        engine.componentManager.getComponent<SiegeEngine>(iCatapultEnemy).useableAmount = 0;
         setState(CombatState::STARTING_NEW_ROUND);
         break;
     case CombatState::STARTING_NEW_ROUND:
@@ -62,16 +62,19 @@ void CombatController::handleTurn()
         done = true;
         break;
     case CombatState::INITIALIZING:     // Called once after starting a new round of combat
+        {
         done = false;
         initialize.invoke();
-        ActionEvaluation::setGuids(engine);
+        auto pEnemyAI = EnemyAI::GetInstance();
+        pEnemyAI->setGuids(engine);
         setState(CombatState::BEGIN_TURN);
-        break;
+        break;}
     case CombatState::BEGIN_TURN:
+        {
         turnCount++;
         turnStart.invoke();
         setState(CombatState::ENEMY_TURN);
-        break;
+        break;}
     case CombatState::ENEMY_TURN:
         runEnemyTurn();
         currentState = CombatState::MAIN_PHASE;
@@ -92,15 +95,15 @@ void CombatController::handleTurn()
 
     case CombatState::EVALUATE_END:
     {
-        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(iInfantryPlayer, iArcherPlayer, iCatapultPlayer, eInf_E, eArc_E, eCat_E)) return;
+        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(iInfantryPlayer, iArcherPlayer, iCatapultPlayer, iInfantryEnemy, iArcherEnemy, iCatapultEnemy)) return;
 
         auto pInfU_C = engine.componentManager.getComponent<Unit>(iInfantryPlayer);
         auto pArcU_C = engine.componentManager.getComponent<Unit>(iArcherPlayer);
         auto pCatU_C = engine.componentManager.getComponent<Unit>(iCatapultPlayer);
 
-        auto eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
-        auto eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);
-        auto eCatU_C = engine.componentManager.getComponent<Unit>(eCat_E);
+        auto eInfU_C = engine.componentManager.getComponent<Unit>(iInfantryEnemy);
+        auto eArcU_C = engine.componentManager.getComponent<Unit>(iArcherEnemy);
+        auto eCatU_C = engine.componentManager.getComponent<Unit>(iCatapultEnemy);
 
         bool playerDeadNow = (pInfU_C.totalAmount <= 0 && pArcU_C.totalAmount <= 0 && pCatU_C.totalAmount <= 0);
         bool enemyDeadNow  = (eInfU_C.totalAmount <= 0 && eArcU_C.totalAmount <= 0 && eCatU_C.totalAmount <= 0);
@@ -109,11 +112,11 @@ void CombatController::handleTurn()
             currentState = CombatState::DEFEAT;
             playerDead.invoke();
         } else if (enemyDeadNow) {
-            turnEnd.invoke();
+            turnEnd.InvokeAndClear();
             currentState = CombatState::VICTORY;
             enemyDead.invoke();
         } else {
-            turnEnd.invoke();
+            turnEnd.InvokeAndClear();
             currentState = CombatState::BEGIN_TURN;
         }
         break;
@@ -169,8 +172,17 @@ DEBUG_LOG(
     );
     });
 
-    turnEnd.addListener([=]()
+    turnEnd.addListener([&]()
     {
+        // engine.componentManager.forEachComponent<Unit>([&](Unit& unit_C)
+        // {
+        //     if (engine.componentManager.hasComponent<SiegeEngine>(unit_C.entity())) {
+        //
+        //     }
+        //     else {
+        //         unit_C.availableAmount = (unit_C.totalAmount < 0) ? 0 : unit_C.totalAmount;
+        //     }
+        // });
     DEBUG_LOG(
         << "=======| End of turn: "
         << turnCount
@@ -211,34 +223,37 @@ DEBUG_LOG(
         if (game.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
         {
             auto& selectionEvent = engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner);
-            selectionEvent.attack.addListener([&](UnitCategory selP, int amount, UnitCategory selE)
+            selectionEvent.attack.addListener([&](UnitCategory selectionPlayer, int iAmount, UnitCategory selectionEnemy)
             {
-                if (selP == UnitCategory::INFANTRY)
+                if (selectionPlayer == UnitCategory::INFANTRY)
                 {
-                    chooseAttackTarget(iInfantryPlayer, selE, amount);
-                }else if (selP == UnitCategory::ARCHER)
+                    chooseAttackTarget(iInfantryPlayer, selectionEnemy, iAmount);
+                }
+                else if (selectionPlayer == UnitCategory::ARCHER)
                 {
-                    chooseAttackTarget(iArcherPlayer, selE, amount);
-                }else if (selP == UnitCategory::CATAPULT)
+                    chooseAttackTarget(iArcherPlayer, selectionEnemy, iAmount);
+                }
+                else if (selectionPlayer == UnitCategory::CATAPULT)
                 {
-                    chooseAttackTarget(iCatapultPlayer, selE, amount);
+                    chooseAttackTarget(iCatapultPlayer, selectionEnemy, iAmount);
                 }
             });
-            selectionEvent.use.addListener([&](UnitCategory selP, int iTargetInstanceAmount, UnitCategory selPTarget)
+
+            selectionEvent.use.addListener([&](UnitCategory selectionUnit, int iTargetInstanceAmount, UnitCategory selectionSiegeEngine)
             {
-                if (selP == UnitCategory::INFANTRY)
+                if (selectionUnit == UnitCategory::INFANTRY)
                 {
-                    if (selPTarget == UnitCategory::CATAPULT)
+                    if (selectionSiegeEngine == UnitCategory::CATAPULT)
                     {
                         HelperScheduleUse(iInfantryPlayer, iCatapultPlayer, iTargetInstanceAmount);
                     }
-                }else if (selP == UnitCategory::ARCHER)
+                }
+                else if (selectionUnit == UnitCategory::ARCHER)
                 {
-                    if (selPTarget == UnitCategory::CATAPULT)
+                    if (selectionSiegeEngine == UnitCategory::CATAPULT)
                     {
                         HelperScheduleUse(iArcherPlayer, iCatapultPlayer, iTargetInstanceAmount);
                     }
-
                 }
             });
         }
@@ -253,38 +268,36 @@ void CombatController::init(engine::Game &game, int amountInf, int amountArc, in
         auto &tag = game.componentManager.getComponent<TagComponent>(unit.entity()).value;
         if (tag == Tag::PLAYER)
         {
+            auto pLibCombat = LibCombatFunctions::GetInstance(engine);
             if (unit.category == UnitCategory::INFANTRY)
             {
                 iInfantryPlayer = unit.entity();
-                auto pInfU_C = &engine.componentManager.getComponent<Unit>(iInfantryPlayer);
-                CombatFunctions::setAmount(pInfU_C, amountInf);
+                pLibCombat->setAmount(iInfantryPlayer, amountInf);
             }else if (unit.category == UnitCategory::ARCHER)
             {
                 iArcherPlayer = unit.entity();
-                auto pArcU_C = &engine.componentManager.getComponent<Unit>(iArcherPlayer);
-                CombatFunctions::setAmount(pArcU_C, amountArc);
+                pLibCombat->setAmount(iArcherPlayer, amountArc);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
                 iCatapultPlayer = unit.entity();
-                auto pCatU_C = &engine.componentManager.getComponent<Unit>(iCatapultPlayer);
                 auto pCatSE_C = &game.componentManager.getComponent<SiegeEngine>(iCatapultPlayer);
-                CombatFunctions::setAmount(pCatU_C, amountCat / pCatSE_C->cost);
+                pLibCombat->setAmount(iCatapultPlayer, amountCat / pCatSE_C->cost);
             }
         }else if (tag == Tag::ENEMY)
         {
             if (unit.category == UnitCategory::INFANTRY)
             {
-                eInf_E = unit.entity();
+                iInfantryEnemy = unit.entity();
                 // engine.componentManager.removeComponent<Unit>(eInf_E);
             }else if (unit.category == UnitCategory::ARCHER)
             {
-                eArc_E = unit.entity();
+                iArcherEnemy = unit.entity();
                 // engine.componentManager.removeComponent<Unit>(eArc_E);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
-                eCat_E = unit.entity();
+                iCatapultEnemy = unit.entity();
                 // engine.componentManager.removeComponent<Unit>(eCat_E);
             }
         }
@@ -317,76 +330,75 @@ void CombatController::setEnemy(engine::Game& game)
     }
     json enemySetup = ArmySetup[difficulty][key];
 
+    auto pLibCombat = LibCombatFunctions::GetInstance(engine);
+    auto eInfU_C = &engine.componentManager.addComponent<Unit>(iInfantryEnemy, enemySetup.at("Infantry"));
+    auto eArcU_C = &engine.componentManager.addComponent<Unit>(iArcherEnemy, enemySetup.at("Archer"));
+    auto eCatU_C = &engine.componentManager.addComponent<Unit>(iCatapultEnemy, enemySetup.at("Catapult"));
 
-    engine.componentManager.addComponent<Unit>(eInf_E, enemySetup.at("Infantry"));
-    engine.componentManager.addComponent<Unit>(eArc_E, enemySetup.at("Archer"));
-    engine.componentManager.addComponent<Unit>(eCat_E, enemySetup.at("Catapult"));
-
-                auto eInfU_C = &engine.componentManager.getComponent<Unit>(eInf_E);
-                CombatFunctions::setAmount(eInfU_C, enemySetup.at("amountInf"));
-
-                auto eArcU_C = &engine.componentManager.getComponent<Unit>(eArc_E);
-                CombatFunctions::setAmount(eArcU_C, enemySetup.at("amountArc"));
-
-                auto eCatU_C = &engine.componentManager.getComponent<Unit>(eCat_E);
-                CombatFunctions::setAmount(eCatU_C, enemySetup.at("amountCat"));
+    pLibCombat->setAmount(iInfantryEnemy, enemySetup.at("amountInf"));
+    pLibCombat->setAmount(iArcherEnemy, enemySetup.at("amountArc"));
+    pLibCombat->setAmount(iCatapultEnemy, enemySetup.at("amountCat"));
 }
 
-void CombatController::chooseAttackTarget(guid_t attacker, const UnitCategory &target, const int &amount)
+void CombatController::chooseAttackTarget(guid_t iAttacker, const UnitCategory &selectionTarget, const int &iAmount)
 {
-    auto attackerUnit_C = &engine.componentManager.getComponent<Unit>(attacker);
-    switch (target)
+    auto attackerUnit_C = &engine.componentManager.getComponent<Unit>(iAttacker);
+    switch (selectionTarget)
     {
         case UnitCategory::INFANTRY:
-            scheduleAttack(attacker, eInf_E, amount);
+            scheduleAttack(iAttacker, iInfantryEnemy, iAmount);
             break;
         case UnitCategory::ARCHER:
-            scheduleAttack(attacker, eArc_E, amount);
+            scheduleAttack(iAttacker, iArcherEnemy, iAmount);
             break;
         case UnitCategory::CATAPULT:
-            scheduleAttack(attacker, eCat_E, amount);
+            scheduleAttack(iAttacker, iCatapultEnemy, iAmount);
             break;
     }
-    attackerUnit_C->availableAmount -= amount;
+    attackerUnit_C->availableAmount -= iAmount;
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "Player schedules attack: "
         << unitCategory_to_string(attackerUnit_C->category)
         <<" targets "
-        << unitCategory_to_string(target)
+        << unitCategory_to_string(selectionTarget)
         << " with "
-        << amount
+        << iAmount
         );
 #endif
 }
 
 void CombatController::runEnemyTurn()
 {
-    auto options = ActionEvaluation::generateOptions(engine);
+    auto pEnemyAI = EnemyAI::GetInstance();
+    auto options = pEnemyAI->generateOptions(engine);
     for (auto& option: options)
     {
-        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(option.actor, option.target))
+        if (!engine.entityManager.checkIfEntityHasComponent<Unit>(option.iActor_ID, option.iTarget_ID))
         {
             throw("CombatController::runEnemyTurn missing unit_C");
         }
-        auto actorU_C = &engine.componentManager.getComponent<Unit>(option.actor);
-        auto targetU_C = &engine.componentManager.getComponent<Unit>(option.target);
-        if (actorU_C->availableAmount >= option.amount)
+        auto pActorUnit_C = &engine.componentManager.getComponent<Unit>(option.iActor_ID);
+        auto pTargetUnit_C = &engine.componentManager.getComponent<Unit>(option.iTarget_ID);
+        auto pTargetTag_C = &engine.componentManager.getComponent<TagComponent>(option.iTarget_ID);
+
+        if (pActorUnit_C->availableAmount >= option.iTargetAmount)
         {
-            if (engine.componentManager.hasComponent<SiegeEngine>(option.target))
+            if (engine.componentManager.hasComponent<SiegeEngine>(option.iTarget_ID) && pTargetTag_C->value == Tag::ENEMY)
             {
-                if (targetU_C->availableAmount < option.amount) continue;
-                HelperScheduleUse(option.actor, option.target, option.amount);
+                auto pTargetSiegeEngine_C = &engine.componentManager.getComponent<SiegeEngine>(option.iTarget_ID);
+                if (pTargetSiegeEngine_C->useableAmount < option.iTargetAmount) continue;
+                HelperScheduleUse(option.iActor_ID, option.iTarget_ID, option.iTargetAmount);
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "AI uses: "
-        << option.amount
+        << option.iTargetAmount
         << " of "
-        << unitCategory_to_string(actorU_C->category)
+        << unitCategory_to_string(pActorUnit_C->category)
         << " for "
-        << option.amount / targetSE_C->cost
+        << option.iTargetAmount / targetSE_C->cost
         << " of "
-        << unitCategory_to_string(targetU_C->category)
+        << unitCategory_to_string(pTargetUnit_C->category)
         );
 #endif
             }
@@ -395,52 +407,51 @@ void CombatController::runEnemyTurn()
 #ifdef DEBUG_MODE
     DEBUG_LOG(
         << "AI schedules attack: "
-        << unitCategory_to_string(actorU_C->category)
+        << unitCategory_to_string(pActorUnit_C->category)
         << " targets "
-        << unitCategory_to_string(targetU_C->category)
+        << unitCategory_to_string(pTargetUnit_C->category)
         << " with "
-        << option.amount
+        << option.iTargetAmount
         );
 #endif
 
-                scheduleAttack(option.actor, option.target, option.amount);
-                actorU_C->availableAmount -= option.amount;
+                scheduleAttack(option.iActor_ID, option.iTarget_ID, option.iTargetAmount);
+                pActorUnit_C->availableAmount -= option.iTargetAmount;
             }
         }
     }
 }
 
-void CombatController::scheduleAttack(guid_t attacker, guid_t target, int amount)
+void CombatController::scheduleAttack(guid_t iActor, guid_t iTarget, int iAmountActors)
 {
-    if (!engine.entityManager.checkIfEntityHasComponent<Unit>(attacker, target)) throw("CombatController::scheduleAttack Missing unit_C");
-    auto attackerU_C = &engine.componentManager.getComponent<Unit>(attacker);
-    auto targetU_C = &engine.componentManager.getComponent<Unit>(target);
+    if (!engine.entityManager.checkIfEntityHasComponent<Unit>(iActor, iTarget)) throw("CombatController::scheduleAttack Missing unit_C");
+    auto pActorUnit_C = &engine.componentManager.getComponent<Unit>(iActor);
+    auto pTargetUnit_C = &engine.componentManager.getComponent<Unit>(iTarget);
 
-    onBeforeAttack.invoke(attacker, target, amount);
+    onBeforeAttack.invoke(iActor, iTarget, iAmountActors);
     // Hardcoded for end of turn movement of infantry. need to change that
-    engine.actionRegister.scheduleAction(attackerU_C->speed-1, [=]()
+    engine.actionRegister.scheduleAction(pActorUnit_C->speed-1, [=]()
     {
-        onAttack.invoke(attacker, target, amount);
+        onAttack.invoke(iActor, iTarget, iAmountActors);
     });
-    engine.actionRegister.scheduleAction(attackerU_C->speed,[=] ()
+    engine.actionRegister.scheduleAction(pActorUnit_C->speed,[=] ()
     {
-        onAttack.invoke(attacker, target, amount);
-        CombatFunctions::takeDamage(targetU_C, CombatFunctions::attack(attackerU_C, amount));
+        auto pLibCombat = LibCombatFunctions::GetInstance(engine);
+        onAttack.invoke(iActor, iTarget, iAmountActors);
+        pLibCombat->takeDamage(iTarget, pLibCombat->attack(iActor, iAmountActors));
 
-        std::shared_ptr<event_t::handle_t> handle = std::make_shared<event_t::handle_t>();
-        *handle = turnEnd.addListener([=](){
-            CombatFunctions::ResetUnit(attackerU_C, amount);
-
-            turnEnd.removeListener(*handle);
+        turnEnd.addListener([=](){
+            auto pLibCombatCallback = LibCombatFunctions::GetInstance(engine);
+            pLibCombatCallback->ResetUnit(iActor, iAmountActors);
         });
 
 #ifdef DEBUG_MODE
     DEBUG_LOG(
-        << unitCategory_to_string(attackerU_C->category)
+        << unitCategory_to_string(pActorUnit_C->category)
         <<" attacked "
-        << unitCategory_to_string(targetU_C->category)
+        << unitCategory_to_string(pTargetUnit_C->category)
         << " with "
-        << amount
+        << iAmountActors
         );
 #endif
     });
@@ -451,20 +462,21 @@ void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, guid_t i
     if (!engine.entityManager.checkIfEntityHasComponent<SiegeEngine>(iTarget)) throw("CombatController::unit() Missing siege_C");
 
     auto pActorUnit_C = &engine.componentManager.getComponent<Unit>(iActor);
-    auto pTargetUnit_C = &engine.componentManager.getComponent<Unit>(iTarget);
+    // auto pTargetUnit_C = &engine.componentManager.getComponent<Unit>(iTarget);
     auto pTargetSiegeEngine_C = &engine.componentManager.getComponent<SiegeEngine>(iTarget);
     const int iActorCost = iTargetInstanceAmount * pTargetSiegeEngine_C->cost;
 
     onBeforeAttack.invoke(iActor, iTarget, iActorCost);
     engine.actionRegister.scheduleAction(MIN_SPEED_VALUE,[=] ()
     {
-        CombatFunctions::UseSiegeEngine(iTargetInstanceAmount, pActorUnit_C, pTargetSiegeEngine_C);
+        auto pLibCombat = LibCombatFunctions::GetInstance(engine);
+        pLibCombat->UseSiegeEngine(iTargetInstanceAmount, iActor, iTarget);
         onUse.invoke(iActor, iTarget, iTargetInstanceAmount);
 
-        std::shared_ptr<event_t::handle_t> pHandle = std::make_shared<event_t::handle_t>();
-        *pHandle = turnEnd.addListener([=](){
-            CombatFunctions::ResetUnit(pTargetUnit_C, iTargetInstanceAmount);
-            turnEnd.removeListener(*pHandle);
+        turnEnd.addListener([=](){
+            auto pLibCombatCallback = LibCombatFunctions::GetInstance(engine);
+            pLibCombatCallback->ResetUnit(iTarget, iTargetInstanceAmount);
+            pLibCombatCallback->ResetUnit(iActor, iActorCost);
         });
     });
 

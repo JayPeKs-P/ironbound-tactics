@@ -314,6 +314,7 @@ void GuiCombat::drawActions()
         nk_label_colored(ctx, std::to_string(unitOne->availableAmount).c_str(), NK_TEXT_LEFT, playerColor);
     }
 
+    bool bFirstSelctedIsCatapult = engine.componentManager.hasComponent<SiegeEngine>(unitOne->entity());
 
     if (unitTwo != nullptr)
     {
@@ -342,7 +343,8 @@ void GuiCombat::drawActions()
             nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
             nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
             nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
-        }else if (tagSelectionTwo == Tag::PLAYER && unitOne->availableAmount != 0)
+        }
+        else if (tagSelectionTwo == Tag::PLAYER && unitOne->availableAmount != 0 && !bFirstSelctedIsCatapult)
         {
             if (!engine.componentManager.hasComponent<SiegeEngine>(unitTwo->entity()))
             {
@@ -366,7 +368,8 @@ void GuiCombat::drawActions()
             {
                 auto unusedAmount = unitTwo->totalAmount - siege_C.useableAmount;
                 NK_WRAP::slider_int(ctx, 0, &value, unusedAmount, 1, "UnusedAmount", m_Hovered, &engine);
-            }else
+            }
+            else
             {
                 int canUseAmount = unitOne->availableAmount / cost;
                 NK_WRAP::slider_int(ctx, 0, &value, canUseAmount, 1, "CanUseAmount", m_Hovered, &engine);
