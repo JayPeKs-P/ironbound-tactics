@@ -123,7 +123,10 @@ void GuiCombat::render()
         DrawDefeatWindow();
     }
     else if (CombatController::getCombatState() == CombatState::REWARD_PHASE) {
-        if (DrawRewardWindow()) CombatController::setState(CombatState::PREPARE);
+        if (DrawRewardWindow()) {
+            CombatController::setState(CombatState::PREPARE);
+            m_Rewards.clear();
+        }
     }
 
 
@@ -390,6 +393,8 @@ void GuiCombat::drawEndTurnWindow()
     if (NK_WRAP::button_label(ctx, "Next", m_Hovered, &engine) && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
     {
         CombatController::setState(CombatState::ANIMATION);
+        combatSelection_C->selectionOne = nullptr;
+        combatSelection_C->selectionTwo = nullptr;
     }
 }
 

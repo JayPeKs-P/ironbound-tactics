@@ -19,7 +19,7 @@ namespace gl3 {
         guid_t m_iUnit_ID;
         int m_iAmount;
     };
-    enum RandomRewardType {ADD, ATTACK, DEFENSE, SPEED, CRIT_CHANCE, CRIT_MULT, REWARD_LAST};
+    enum RandomRewardType {ADD, ATTACK, DEFENSE, /*SPEED,*/ CRIT_CHANCE, CRIT_MULT, REWARD_LAST};
 
     class LibCombatFunctions {
     public:

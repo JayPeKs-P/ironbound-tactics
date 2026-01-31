@@ -178,12 +178,14 @@ namespace gl3 {
             iUnit_ID = iCatapult_ID;
         }
 
+
         if (iFunctionIndex == ADD) {
             auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
             if (pUnit_C->totalAmount > MAX_UNIT_AMOUNT) {
                 iFunctionIndex += iUnit_ID + 1;
             }
         }
+
         return {
             m_FunctionKeys[iFunctionIndex],
             iUnit_ID,

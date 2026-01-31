@@ -290,16 +290,13 @@ void CombatController::init(engine::Game &game, int amountInf, int amountArc, in
             if (unit.category == UnitCategory::INFANTRY)
             {
                 iInfantryEnemy = unit.entity();
-                // engine.componentManager.removeComponent<Unit>(eInf_E);
             }else if (unit.category == UnitCategory::ARCHER)
             {
                 iArcherEnemy = unit.entity();
-                // engine.componentManager.removeComponent<Unit>(eArc_E);
             }
             else if (unit.category == UnitCategory::CATAPULT)
             {
                 iCatapultEnemy = unit.entity();
-                // engine.componentManager.removeComponent<Unit>(eCat_E);
             }
         }
     });

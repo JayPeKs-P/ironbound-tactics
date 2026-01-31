@@ -34,11 +34,11 @@
     },
     "5": {
       "Infantry": "eInfEASY",
-      "amountInf": 46,
+      "amountInf": 36,
       "Archer": "eArcMEDIUM",
       "amountArc": 0,
-      "Catapult": "eCatEASY",
-      "amountCat": 1
+      "Catapult": "eCatMEDIUM",
+      "amountCat": 2
     }
   },
   "MEDIUM": {
