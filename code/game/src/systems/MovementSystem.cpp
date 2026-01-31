@@ -22,7 +22,6 @@
 using gl3::engine::sceneGraph::Transform;
 
 namespace gl3 {
-    MovementSystem::event_t MovementSystem::finishedAllAnimations;
     AnimationState MovementSystem::m_AnimationState = AnimationState::NOTHING;
 
     MovementSystem::MovementSystem(engine::Game& game) :
@@ -37,8 +36,6 @@ namespace gl3 {
             engine.origin, playerPendingPosition);
         auto& enemyPendingTransform_C = pEnemyPendingRoot_E->addComponent<Transform>(
             engine.origin, enemyPendingPosition);
-#ifdef DEBUG_MODE
-#endif
 
         CombatController::onBeforeAttack.addListener([&](guid_t unit, guid_t target, int amount)
         {
@@ -107,7 +104,6 @@ namespace gl3 {
 
     void MovementSystem::Animate(float deltaTime) {
         try {
-            m_bAllAnimationsFinished = true;
             m_bMoveAnimsFinished = true;
             m_bAttackAnimsFinished = true;
             engine.componentManager.forEachComponent<Transform>([&](Transform& transform)
@@ -128,22 +124,10 @@ namespace gl3 {
                 }
                 default: {}
                 }
-                // if (m_bPlayFightAnimation) {
-                //     HandleAttackAnimation(transform, deltaTime);
-                // }
-                // else {
-                //     HandleMovementAnimation(transform, deltaTime);
-                // }
             });
 
             AtomicCheckAnimationFinished();
             UpdateAnimationStage(deltaTime);
-
-            // if (m_bMoveAnimsFinished && m_bAttackAnimsFinished) {
-            //     m_bAllAnimationsFinished = true;
-            //     FinishAnimationPhase(deltaTime);
-            // }
-            // else m_bAllAnimationsFinished = false;
         }
         catch (const std::exception& e) {
             std::cerr << "Unhandled exception in MoveTo function" << e.what() << std::endl;
@@ -244,17 +228,26 @@ namespace gl3 {
                 projectile.m_ActiveProjectileList[iDelay]++;
             }
         });
+        auto pRootProjectile = &engine.componentManager.getComponent<Projectile>(iRootProjectile);
         auto pRootArrowTransform_C = &engine.componentManager.getComponent<Transform>(iRootProjectile);
-
         auto pProjectile_E = &engine.entityManager.createEntity();
+        engine.entityManager.SetParent(pProjectile_E->guid(), pUnitState_C->entity());
 
         auto pProjectileTransform_C = &pProjectile_E->addComponent<Transform>(
             pRootArrowTransform_C, transform.localPosition, transform.localZRotation, transform.localScale);
+
         auto pProjectileState_C = &pProjectile_E->addComponent<ProjectileState>(iDelay);
+        pProjectileState_C->m_ComponentDestroyed.addListener([=](int iDelay)
+        {
+            pRootProjectile->m_ActiveProjectileList[iDelay]--;
+        });
+
         pProjectileState_C->startPos = pProjectileTransform_C->localPosition;
         pProjectileState_C->lastPos = pProjectileTransform_C->localPosition;
         pProjectileState_C->endPos = pTargetTransform->localPosition;
+
         pProjectileState_C->m_iTarget = pUnitState_C->m_iTarget;
+
         pProjectileState_C->m_iDelayTurns = iDelay;
         float speed = pProjectileState_C->m_fProjectileSpeed;
         auto distance = glm::distance(pProjectileState_C->startPos, pProjectileState_C->endPos);
@@ -280,9 +273,6 @@ namespace gl3 {
         engine.PlaySound("retro_impact_colorful_01.wav");
         auto projectile = engine.entityManager.getEntity(ID);
         engine.entityManager.deleteEntity(projectile);
-        int iRootProjectile_E = engine.componentManager.getComponent<Transform>(ID).getParent()->entity();
-        auto pRootProjectile_C = &engine.componentManager.getComponent<Projectile>(iRootProjectile_E);
-        pRootProjectile_C->m_ActiveProjectileList[MIN_SPEED_VALUE]--;
         return true;
     }
 
@@ -412,19 +402,6 @@ namespace gl3 {
             if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
             break;
         }
-        // case State::FIGHTING: {
-        //     if (m_bResetUnits) {
-        //         SetResetting(transform, State::FIGHTING);
-        //         m_bMoveAnimsFinished = false;
-        //     }
-        //     break;
-        // }
-        // case State::RESETTING: {
-        //     glm::vec3 directionRes = pUnitState_C->endPos - transform.localPosition;
-        //     bool bFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE);
-        //     if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
-        //     break;
-        // }
         }
     }
 
@@ -454,7 +431,6 @@ namespace gl3 {
                                        Transform& rootTargetTransform_C) {
         auto directionGlobal = rootTargetTransform_C.localPosition - rootUnitTransform_C.localPosition;
 
-        // pUnitState_C->traveledDistance = 0;
         pUnitState_C->endPos = pUnitState_C->startPos + directionGlobal;
     }
 
@@ -523,11 +499,6 @@ namespace gl3 {
     }
 
     void MovementSystem::UpdateAnimationStage(float deltaTime) {
-        // if (m_bMoveAnimsFinished && !m_bPlayFightAnimation && !m_bResetUnits) {
-        //     m_bPlayFightAnimation = true;
-        //     m_bMoveAnimsFinished = false;
-        //     m_bAttackAnimsFinished = false;
-        // }
         if (m_bMoveAnimsFinished && m_AnimationState == AnimationState::ANIMATE_MOVEMENT) {
             SetState(AnimationState::ANIMATE_ATTACK);
         }
@@ -543,25 +514,6 @@ namespace gl3 {
             SetState(AnimationState::NOTHING);
             HelperProjectileDelay();
             CombatController::setState(CombatState::EVALUATE_END);
-        }
-
-        // if (m_bAttackAnimsFinished && m_bPlayFightAnimation && !m_bResetUnits) {
-        //     m_bPlayFightAnimation = false;
-        //     m_bMoveAnimsFinished = false;
-        //     m_bResetUnits = true;
-        //     m_bUpdateProjectileTarget = m_bAttackAnimsFinished;
-        // }
-    }
-
-    void MovementSystem::FinishAnimationPhase(float deltaTime) {
-        if (m_bAllAnimationsFinished) {
-            countdown -= deltaTime;
-        }
-
-        if (countdown <= 0 && m_bAllAnimationsFinished) {
-            m_bResetUnits = false;
-            finishedAllAnimations.invoke(true);
-            countdown = 0.5f;
         }
     }
 }

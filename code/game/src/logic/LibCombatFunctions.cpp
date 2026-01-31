@@ -70,7 +70,7 @@ namespace gl3 {
         if (pUnit_C->availableAmount > pUnit_C->totalAmount) pUnit_C->availableAmount = pUnit_C->totalAmount;
         if (m_Game.componentManager.hasComponent<SiegeEngine>(iUnit_ID)) {
             auto pSiege_C = &m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID);
-            pSiege_C->useableAmount -+ iAmountDead;
+            pSiege_C->useableAmount -= iAmountDead;
             if (pSiege_C->useableAmount <= 0) pSiege_C->useableAmount = 0;
         }
     }
@@ -88,10 +88,6 @@ namespace gl3 {
         auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
         int iAmountAddBack = pUnit_C->availableAmount + iAmount;
         int iCapReset = pUnit_C->totalAmount;
-        // if (m_Game.componentManager.hasComponent<SiegeEngine>(iUnit_ID)) {
-        //     int iCapSiege = m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID).useableAmount;
-        //     if (iCapSiege < iCapReset) iCapReset = iCapSiege;
-        // }
 
         if (iAmountAddBack > iCapReset) {
             pUnit_C->availableAmount = iCapReset;

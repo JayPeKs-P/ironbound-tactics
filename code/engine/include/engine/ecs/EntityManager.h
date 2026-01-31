@@ -59,7 +59,16 @@ namespace gl3::engine::ecs {
             return (... && componentManager.hasComponent<T>((guids)));
         }
 
+        /// @brief Add guid_t of child to parent Entity container and set childs reference guid_t.
+        /// Function assures, that each entity can be only child of one Entity. If child already has
+        /// parent entries are adjusted.
+        ///
+        /// @param iChild ID of Entity to become adopted
+        /// @param iParent New parent.
+        void SetParent(guid_t iChild, guid_t iParent);
+
         /// @brief Add a specific entity to the @ref gl3::engine::ecs::EntityManager::deleteList
+        /// Also deletes all child Entity objects, if target was parent.
         void deleteEntity(Entity &entity);
 
     private:

@@ -18,9 +18,6 @@ namespace gl3 {
 
 class MovementSystem: public engine::ecs::System{
 public:
-    using event_t = gl3::engine::events::Event<MovementSystem, float>;
-    static event_t finishedAllAnimations;
-
     explicit MovementSystem(engine::Game &game);
     void Animate(float deltatime);
     void update(engine::Game &game, Transform* root);
@@ -47,17 +44,11 @@ private:
     void SetResetting(Transform& unitTransform, State initialState) const;
     void AtomicCheckAnimationFinished();
     void UpdateAnimationStage(float deltaTime);
-    void FinishAnimationPhase(float deltaTime);
 
 
-    glm::vec3 movementVector;
     glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 1.0);
     glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.5);
-    bool m_bAllAnimationsFinished = false;
     bool m_bMoveAnimsFinished = false;
-    bool m_bUpdateProjectileTarget = true;
-    bool m_bPlayFightAnimation = false;
-    bool m_bResetUnits = false;
     bool m_bAttackAnimsFinished = false;
     static AnimationState m_AnimationState;
 

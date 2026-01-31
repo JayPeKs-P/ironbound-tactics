@@ -3,6 +3,7 @@
 //
 #pragma once
 #include <engine/ecs/Component.h>
+#include "engine/Events.h"
 using gl3::engine::ecs::Component;
 using gl3::engine::ecs::ComponentManager;
 using gl3::engine::ecs::guid_t;
@@ -27,7 +28,6 @@ struct UnitState: Component
     std::vector<guid_t> m_TargetedBy;
 
     float movementSpeed = 0.7;
-    // float traveledDistance = 0;
 
 private:
     explicit UnitState(guid_t owner):
@@ -46,6 +46,32 @@ private:
 struct ProjectileState: Component {
     friend ComponentManager;
     friend Entity;
+    using event_t = gl3::engine::events::Event<ProjectileState, int>;
+    event_t m_ComponentDestroyed;
+
+    ~ProjectileState() override {
+        m_ComponentDestroyed.InvokeAndClear(this->m_iDelayTurns);
+    }
+    ProjectileState(ProjectileState&& other) noexcept:
+    m_ComponentDestroyed(std::move(other.m_ComponentDestroyed)),
+    state(other.state),
+    lastPos(other.lastPos),
+    startPos(other.startPos),
+    endPos(other.endPos),
+    m_fFlightTime(other.m_fFlightTime),
+    m_fProjectileSpeed(other.m_fProjectileSpeed),
+    m_iTarget(other.m_iTarget),
+    m_iTargetParentEntity(other.m_iTargetParentEntity),
+    elapsedTime(other.elapsedTime),
+    m_bUpdated(other.m_bUpdated),
+    m_iDelayTurns(other.m_iDelayTurns)
+    {
+         owner = other.owner;
+    }
+    ProjectileState(const ProjectileState&) = delete;
+    ProjectileState& operator=(const ProjectileState&) = delete;
+    ProjectileState& operator=(ProjectileState&&) = delete;
+
     public:
     State state = State::IDLE;
     glm::vec3 lastPos;

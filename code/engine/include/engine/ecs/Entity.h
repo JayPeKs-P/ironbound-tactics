@@ -4,6 +4,7 @@
 
 // Entity.h
 #pragma once
+#include <set>
 #include <vector>
 #include "ecs.h"
 #include "engine/ecs/ComponentManager.h"
@@ -70,7 +71,7 @@ namespace gl3::engine::ecs {
             removeComponent<C>(component);
         }
 
-    private:
+    protected:
         /// @param id The ID this instance of entity will be associated to.
         /// @param componentManager A reference to the @ref gl3::engine::ecs::ComponentManager instance.
         explicit Entity(guid_t id, ComponentManager &componentManager) : id(id), componentManager(componentManager) {}
@@ -78,13 +79,26 @@ namespace gl3::engine::ecs {
         /// @brief Removes all @ref gl3::engine::ecs::Components associated to this instance of entity.
         ///
         /// This function calls @ref gl3::engine::ecs::ComponentManager::removeComponents().
-        void deleteAllComponents() {
+        void deleteAllComponents() const {
             componentManager.removeComponents(id);
+        }
+
+        void AddChild(guid_t iChild) {
+            m_Children.push_back(iChild);
+        }
+
+        std::vector<guid_t> &GetChildren() {
+            return m_Children;
+        }
+        void RemoveChild(guid_t iChild) {
+            std::erase(m_Children, iChild);
         }
 
         /// @brief The entity's ID. By default, it is set to @ref gl3::engine::ecs::invalidID.
         guid_t id = invalidID;
         bool deleted = false;
         ComponentManager &componentManager;
+        std::vector<guid_t> m_Children;
+        guid_t m_iParentEntity = invalidID;
     };
 }

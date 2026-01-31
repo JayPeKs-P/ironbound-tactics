@@ -34,10 +34,34 @@ namespace gl3::engine::ecs {
         return entities.contains(guid);
     }
 
+    void EntityManager::SetParent(guid_t iChild, guid_t iParent) {
+        auto& child_E = getEntity(iChild);
+
+        if (child_E.m_iParentEntity != invalidID) {
+            auto& oldParent_E = getEntity(child_E.m_iParentEntity);
+            oldParent_E.RemoveChild(iChild);
+        }
+
+        child_E.m_iParentEntity = iParent;
+        getEntity(iParent).AddChild(iChild);
+    }
+
     void EntityManager::deleteEntity(Entity &entity) {
+        if (entity.deleted) return;
+
         entity.deleted = true;
         entity.deleteAllComponents();
         deleteList.push_back(entity.guid());
+
+        auto children = entity.m_Children;
+        for (guid_t iChild: children) {
+            deleteEntity(getEntity(iChild));
+        }
+        if (entity.m_iParentEntity != invalidID) {
+            getEntity(entity.m_iParentEntity).RemoveChild(entity.guid());
+        }
+        entity.m_Children.clear();
+        entity.m_iParentEntity = invalidID;
     }
 
     void EntityManager::purgeEntities() {
