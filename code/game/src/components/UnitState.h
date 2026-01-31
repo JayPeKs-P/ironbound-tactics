@@ -26,7 +26,7 @@ struct UnitState: Component
 
     std::vector<guid_t> m_TargetedBy;
 
-    float movementSpeed = 0.4;
+    float movementSpeed = 0.7;
     // float traveledDistance = 0;
 
 private:
