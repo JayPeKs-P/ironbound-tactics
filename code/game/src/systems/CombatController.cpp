@@ -79,18 +79,21 @@ void CombatController::handleTurn()
         runEnemyTurn();
         currentState = CombatState::MAIN_PHASE;
         break;
+    case CombatState::MAIN_PHASE:
+        // Warten auf startRound
+        MovementSystem::SetState(AnimationState::ANIMATE_MOVEMENT);
+        break;
     case CombatState::ANIMATION:
         onBeforeDamageStep.invoke();
         break;
-    case CombatState::MAIN_PHASE:
-        // Warten auf startRound
-        break;
     case CombatState::DAMAGE_STEP:
+        MovementSystem::SetState(AnimationState::ANIMATE_RESET);
         if (engine.actionRegister.advance()) {
             int unused = engine::ecs::invalidID;
             onAfterAttack.invoke(unused, unused, unused);
-            currentState = CombatState::EVALUATE_END;
+            // currentState = CombatState::EVALUATE_END;
         }
+        setState(CombatState::ANIMATION);
         break;
 
     case CombatState::EVALUATE_END:
@@ -156,10 +159,15 @@ CombatController::CombatController(engine::Game &game):
         init(game, amountInf, amountArc, amountCat);
         setState(CombatState::RESET_ENEMY);
     });
-    MovementSystem::finishedAllAnimations.addListener([&](bool finished)
-    {
-        setState(CombatState::DAMAGE_STEP);
-    });
+    // MovementSystem::finishedAllAnimations.addListener([&](bool bBeforeDamageCalculation)
+    // {
+    //     if (bBeforeDamageCalculation) {
+    //         setState(CombatState::DAMAGE_STEP);
+    //     }
+    //     else {
+    //         setState(CombatState::EVALUATE_END);
+    //     }
+    // });
     turnStart.addListener([=]()
     {
     });

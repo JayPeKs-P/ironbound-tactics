@@ -23,6 +23,7 @@ using gl3::engine::sceneGraph::Transform;
 
 namespace gl3 {
     MovementSystem::event_t MovementSystem::finishedAllAnimations;
+    AnimationState MovementSystem::m_AnimationState = AnimationState::NOTHING;
 
     MovementSystem::MovementSystem(engine::Game& game) :
         System(game) {
@@ -101,20 +102,6 @@ namespace gl3 {
         });
         CombatController::turnEnd.addListener([&]()
         {
-            engine.componentManager.forEachComponent<ProjectileState>([&](ProjectileState& projectileState_C)
-            {
-                projectileState_C.m_iDelayTurns--;
-            });
-            engine.componentManager.forEachComponent<Projectile>([&](Projectile& projectile)
-            {
-                for (int i = 1; i < projectile.m_ActiveProjectileList.size(); i++) {
-                    projectile.m_ActiveProjectileList[i - 1] += projectile.m_ActiveProjectileList[i];
-                    projectile.m_ActiveProjectileList[i] = 0;
-                }
-#ifdef _DEBUG
-                assert(projectile.m_ActiveProjectileList[MIN_SPEED_VALUE - 1] == 0);
-#endif
-            });
         });
     }
 
@@ -125,22 +112,38 @@ namespace gl3 {
             m_bAttackAnimsFinished = true;
             engine.componentManager.forEachComponent<Transform>([&](Transform& transform)
             {
-                if (m_bPlayFightAnimation) {
+                switch (m_AnimationState) {
+                case AnimationState::ANIMATE_ATTACK: {
                     HandleAttackAnimation(transform, deltaTime);
+                    break;
                 }
-                else {
+                case AnimationState::ANIMATE_MOVEMENT: {
                     HandleMovementAnimation(transform, deltaTime);
+                    break;
                 }
+                case AnimationState::ANIMATE_RESET: {
+                    SetResetting(transform, State::FIGHTING);
+                    HandleResetAnimation(transform, deltaTime);
+                    break;
+                }
+                default: {}
+                }
+                // if (m_bPlayFightAnimation) {
+                //     HandleAttackAnimation(transform, deltaTime);
+                // }
+                // else {
+                //     HandleMovementAnimation(transform, deltaTime);
+                // }
             });
 
             AtomicCheckAnimationFinished();
-            UpdateAnimationStage();
+            UpdateAnimationStage(deltaTime);
 
-            if (m_bMoveAnimsFinished && m_bAttackAnimsFinished) {
-                m_bAllAnimationsFinished = true;
-                FinishAnimationPhase(deltaTime);
-            }
-            else m_bAllAnimationsFinished = false;
+            // if (m_bMoveAnimsFinished && m_bAttackAnimsFinished) {
+            //     m_bAllAnimationsFinished = true;
+            //     FinishAnimationPhase(deltaTime);
+            // }
+            // else m_bAllAnimationsFinished = false;
         }
         catch (const std::exception& e) {
             std::cerr << "Unhandled exception in MoveTo function" << e.what() << std::endl;
@@ -329,6 +332,14 @@ namespace gl3 {
         return false;
     }
 
+    void MovementSystem::SetState(AnimationState newState) {
+        m_AnimationState = newState;
+    }
+
+    AnimationState MovementSystem::GetState() {
+        return m_AnimationState;
+    }
+
     guid_t MovementSystem::HelperGetTargetInstance(Transform& rootTargetTransform_C) const {
         size_t currentSmallestSize = 5000;
         guid_t iTargetEntity = engine::ecs::invalidID;
@@ -345,6 +356,23 @@ namespace gl3 {
             }
         }
         return iTargetEntity;
+    }
+
+    void MovementSystem::HelperProjectileDelay() const {
+        engine.componentManager.forEachComponent<ProjectileState>([&](ProjectileState& projectileState_C)
+        {
+            projectileState_C.m_iDelayTurns--;
+        });
+        engine.componentManager.forEachComponent<Projectile>([&](Projectile& projectile)
+        {
+            for (int i = 1; i < projectile.m_ActiveProjectileList.size(); i++) {
+                projectile.m_ActiveProjectileList[i - 1] += projectile.m_ActiveProjectileList[i];
+                projectile.m_ActiveProjectileList[i] = 0;
+            }
+#ifdef _DEBUG
+            assert(projectile.m_ActiveProjectileList[MIN_SPEED_VALUE - 1] == 0);
+#endif
+        });
     }
 
     void MovementSystem::UpdateEndPosition(UnitState* pUnitState_C) {
@@ -384,19 +412,19 @@ namespace gl3 {
             if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
             break;
         }
-        case State::FIGHTING: {
-            if (m_bResetUnits) {
-                SetResetting(transform, State::FIGHTING);
-                m_bMoveAnimsFinished = false;
-            }
-            break;
-        }
-        case State::RESETTING: {
-            glm::vec3 directionRes = pUnitState_C->endPos - transform.localPosition;
-            bool bFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE);
-            if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
-            break;
-        }
+        // case State::FIGHTING: {
+        //     if (m_bResetUnits) {
+        //         SetResetting(transform, State::FIGHTING);
+        //         m_bMoveAnimsFinished = false;
+        //     }
+        //     break;
+        // }
+        // case State::RESETTING: {
+        //     glm::vec3 directionRes = pUnitState_C->endPos - transform.localPosition;
+        //     bool bFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE);
+        //     if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
+        //     break;
+        // }
         }
     }
 
@@ -410,6 +438,16 @@ namespace gl3 {
             pProjectileState->m_bUpdated = CheckIfTargetMoved(*pProjectileState);
         }
         MoveCurved(transform, deltaTime);
+    }
+
+    void MovementSystem::HandleResetAnimation(Transform& transform, float deltaTime) {
+        if (!engine.componentManager.hasComponent<UnitState>(transform.entity())) return;
+        auto pUnitState_C = &engine.componentManager.getComponent<UnitState>(transform.entity());
+        if (pUnitState_C->state != State::RESETTING) return;
+
+        glm::vec3 directionRes = pUnitState_C->endPos - transform.localPosition;
+        bool bFinished = moveStraight(transform, directionRes, deltaTime, State::IDLE);
+        if (m_bMoveAnimsFinished) m_bMoveAnimsFinished = bFinished;
     }
 
     void MovementSystem::PrepareMoving(UnitState* pUnitState_C, Transform& rootUnitTransform_C,
@@ -484,19 +522,35 @@ namespace gl3 {
         });
     }
 
-    void MovementSystem::UpdateAnimationStage() {
-        if (m_bMoveAnimsFinished && !m_bPlayFightAnimation && !m_bResetUnits) {
-            m_bPlayFightAnimation = true;
-            m_bMoveAnimsFinished = false;
-            m_bAttackAnimsFinished = false;
+    void MovementSystem::UpdateAnimationStage(float deltaTime) {
+        // if (m_bMoveAnimsFinished && !m_bPlayFightAnimation && !m_bResetUnits) {
+        //     m_bPlayFightAnimation = true;
+        //     m_bMoveAnimsFinished = false;
+        //     m_bAttackAnimsFinished = false;
+        // }
+        if (m_bMoveAnimsFinished && m_AnimationState == AnimationState::ANIMATE_MOVEMENT) {
+            SetState(AnimationState::ANIMATE_ATTACK);
+        }
+        if (m_bAttackAnimsFinished && m_AnimationState == AnimationState::ANIMATE_ATTACK) {
+            countdown -= deltaTime;
+            if (countdown > 0.0f) return;
+
+            countdown = 0.5f;
+            SetState(AnimationState::NOTHING);
+            CombatController::setState(CombatState::DAMAGE_STEP);
+        }
+        if (m_bMoveAnimsFinished && m_AnimationState == AnimationState::ANIMATE_RESET) {
+            SetState(AnimationState::NOTHING);
+            HelperProjectileDelay();
+            CombatController::setState(CombatState::EVALUATE_END);
         }
 
-        if (m_bAttackAnimsFinished && m_bPlayFightAnimation && !m_bResetUnits) {
-            m_bPlayFightAnimation = false;
-            m_bMoveAnimsFinished = false;
-            m_bResetUnits = true;
-            m_bUpdateProjectileTarget = m_bAttackAnimsFinished;
-        }
+        // if (m_bAttackAnimsFinished && m_bPlayFightAnimation && !m_bResetUnits) {
+        //     m_bPlayFightAnimation = false;
+        //     m_bMoveAnimsFinished = false;
+        //     m_bResetUnits = true;
+        //     m_bUpdateProjectileTarget = m_bAttackAnimsFinished;
+        // }
     }
 
     void MovementSystem::FinishAnimationPhase(float deltaTime) {
