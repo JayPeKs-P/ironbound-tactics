@@ -17,6 +17,7 @@ struct SiegeEngine: Component {
     friend Entity;
 
     int useableAmount = 0;
+    int useableAmountNew = 0;
     int cost;
 protected:
     SiegeEngine(guid_t owner, int cost):

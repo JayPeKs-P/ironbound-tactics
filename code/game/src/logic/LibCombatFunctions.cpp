@@ -79,7 +79,12 @@ namespace gl3 {
         auto pUnitActor = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
         auto pSiegeEngineTarget = &m_Game.componentManager.getComponent<SiegeEngine>(iSiegeEngine_ID);
 
-        pSiegeEngineTarget->useableAmount += iAmountTarget; //TODO refactor to  unused amount
+        // I moved this line to CombatController. Reason is, that I call this function in ActionRegister. This value
+        // has to be decreased immediately though, since it is used in Gui
+        // ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+        // pSiegeEngineTarget->useableAmount += iAmountTarget;
+        pSiegeEngineTarget->useableAmount += iAmountTarget;
+        pSiegeEngineTarget->useableAmountNew -= iAmountTarget;
         pUnitActor->totalAmount -= iAmountTarget * pSiegeEngineTarget->cost;
         pUnitActor->m_iScheduledForUse = iAmountTarget * pSiegeEngineTarget->cost;
     }

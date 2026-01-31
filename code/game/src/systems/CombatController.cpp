@@ -35,7 +35,7 @@ CombatController::event_t CombatController::playerDead;
 CombatController::event_t CombatController::enemyDead;
 
 
-CombatController::eventAction_t CombatController::onBeforeAttack;
+CombatController::eventAction_t CombatController::onBeforeAction;
 CombatController::eventAction_t CombatController::onAttack;
 CombatController::eventAction_t CombatController::onAfterAttack;
 CombatController::eventAction_t CombatController::onUse;
@@ -91,7 +91,6 @@ void CombatController::handleTurn()
         if (engine.actionRegister.advance()) {
             int unused = engine::ecs::invalidID;
             onAfterAttack.invoke(unused, unused, unused);
-            // currentState = CombatState::EVALUATE_END;
         }
         setState(CombatState::ANIMATION);
         break;
@@ -102,12 +101,10 @@ void CombatController::handleTurn()
 
         auto iPlayerInfantryTotalAmount = engine.componentManager.getComponent<Unit>(iInfantryPlayer).totalAmount;
         auto iPlayerArcherTotalAmount = engine.componentManager.getComponent<Unit>(iArcherPlayer).totalAmount;
-        // auto iPlayerCatapultTotalAmount = engine.componentManager.getComponent<Unit>(iCatapultPlayer).totalAmount;
         auto iPlayerCatapultUseAmount = engine.componentManager.getComponent<SiegeEngine>(iCatapultPlayer).useableAmount;
 
         auto iEnemyInfantryTotalAmount= engine.componentManager.getComponent<Unit>(iInfantryEnemy).totalAmount;
         auto iEnemyArcherTotalAmount = engine.componentManager.getComponent<Unit>(iArcherEnemy).totalAmount;
-        // auto iEnemyCatapultTotalAmount  = engine.componentManager.getComponent<Unit>(iCatapultEnemy).totalAmount;
         auto iEnemyCatapultUseAmount = engine.componentManager. getComponent<SiegeEngine>(iCatapultEnemy).useableAmount;
 
         bool playerDeadNow = (iPlayerInfantryTotalAmount <= 0 &&
@@ -204,7 +201,7 @@ DEBUG_LOG(
         << " |======="
         );
     });
-    onBeforeAttack.addListener([&](guid_t attacker, guid_t target, int amount)
+    onBeforeAction.addListener([&](guid_t attacker, guid_t target, int amount)
     {
         DEBUG_LOG(
             << "TRIGGERED EVENT: 'onBeforeAttack'"
@@ -440,7 +437,7 @@ void CombatController::scheduleAttack(guid_t iActor, guid_t iTarget, int iAmount
     auto pActorUnit_C = &engine.componentManager.getComponent<Unit>(iActor);
     auto pTargetUnit_C = &engine.componentManager.getComponent<Unit>(iTarget);
 
-    onBeforeAttack.invoke(iActor, iTarget, iAmountActors);
+    onBeforeAction.invoke(iActor, iTarget, iAmountActors);
     // Hardcoded for end of turn movement of infantry. need to change that
     engine.actionRegister.scheduleAction(pActorUnit_C->speed-1, [=]()
     {
@@ -469,7 +466,7 @@ void CombatController::scheduleAttack(guid_t iActor, guid_t iTarget, int iAmount
     });
 }
 
-void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, guid_t iTargetInstanceAmount) const {
+void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, int iTargetInstanceAmount) const {
     if (!engine.entityManager.checkIfEntityHasComponent<Unit>(iActor, iTarget)) throw("CombatController::use() Missing unit_C");
     if (!engine.entityManager.checkIfEntityHasComponent<SiegeEngine>(iTarget)) throw("CombatController::unit() Missing siege_C");
 
@@ -478,7 +475,8 @@ void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, guid_t i
     auto pTargetSiegeEngine_C = &engine.componentManager.getComponent<SiegeEngine>(iTarget);
     const int iActorCost = iTargetInstanceAmount * pTargetSiegeEngine_C->cost;
 
-    onBeforeAttack.invoke(iActor, iTarget, iActorCost);
+    onBeforeAction.invoke(iActor, iTarget, iActorCost);
+    pTargetSiegeEngine_C->useableAmountNew += iTargetInstanceAmount;
     engine.actionRegister.scheduleAction(MIN_SPEED_VALUE,[=] ()
     {
         auto pLibCombat = LibCombatFunctions::GetInstance(engine);

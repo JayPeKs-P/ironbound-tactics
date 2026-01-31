@@ -41,7 +41,7 @@ public:
     static event_t enemyDead;
 
     using eventAction_t = engine::events::Event<CombatController, guid_t, guid_t, int >;
-    static eventAction_t onBeforeAttack;
+    static eventAction_t onBeforeAction;
     static eventAction_t onAttack;
     static eventAction_t onAfterAttack;
     static eventAction_t onUse;
@@ -66,7 +66,7 @@ private:
     void chooseAttackTarget(guid_t iAttacker, const UnitCategory &selectionTarget, const int &iAmount);
     void runEnemyTurn();
     void scheduleAttack(guid_t iActor, guid_t iTarget, int iAmountActors);
-    void HelperScheduleUse(guid_t iActor, guid_t iTarget, guid_t iTargetInstanceAmount) const;
+    void HelperScheduleUse(guid_t iActor, guid_t iTarget, int iTargetInstanceAmount) const;
 
 
     guid_t iInfantryPlayer;

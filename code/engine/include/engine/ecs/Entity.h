@@ -4,7 +4,6 @@
 
 // Entity.h
 #pragma once
-#include <set>
 #include <vector>
 #include "ecs.h"
 #include "engine/ecs/ComponentManager.h"

@@ -476,10 +476,17 @@ void GuiCombat::drawActions()
                 combatSelection_C->selectionTwo = nullptr;
                 return;
             }
-            auto siege_C = engine.componentManager.getComponent<SiegeEngine>(unitTwo->entity());
-            auto cost = siege_C.cost;
+            const auto& siege_C = engine.componentManager.getComponent<SiegeEngine>(unitTwo->entity());
+            const auto cost = siege_C.cost;
+            const int unusedAmount = unitTwo->totalAmount - siege_C.useableAmount - siege_C.useableAmountNew;
+            const int canUseAmount = unitOne->availableAmount / cost;
 
             nk_layout_row_dynamic(ctx, windowHeight/20, 3);
+            if (unusedAmount <= 0 || canUseAmount <= 0) {
+                combatSelection_C->selectionOne = unitTwo;
+                combatSelection_C->selectionTwo = nullptr;
+                return;
+            }
             if (NK_WRAP::button_label(ctx, "Use", m_Hovered, &engine))
             {
                 combatSelection_C->use.invoke(unitOne->category, value, unitTwo->category);
@@ -490,12 +497,10 @@ void GuiCombat::drawActions()
 
             if(unitTwo->totalAmount*cost <= unitOne->totalAmount)
             {
-                auto unusedAmount = unitTwo->totalAmount - siege_C.useableAmount;
                 NK_WRAP::slider_int(ctx, 0, &value, unusedAmount, 1, "UnusedAmount", m_Hovered, &engine);
             }
             else
             {
-                int canUseAmount = unitOne->availableAmount / cost;
                 NK_WRAP::slider_int(ctx, 0, &value, canUseAmount, 1, "CanUseAmount", m_Hovered, &engine);
             }
             nk_label_colored(ctx, getType(*unitTwo).c_str(), NK_TEXT_CENTERED, playerColor);

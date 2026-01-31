@@ -37,7 +37,7 @@ namespace gl3 {
         auto& enemyPendingTransform_C = pEnemyPendingRoot_E->addComponent<Transform>(
             engine.origin, enemyPendingPosition);
 
-        CombatController::onBeforeAttack.addListener([&](guid_t unit, guid_t target, int amount)
+        CombatController::onBeforeAction.addListener([&](guid_t unit, guid_t target, int amount)
         {
             if (!engine.entityManager.checkIfEntityHasComponent<Unit>(unit, target))
                 throw(
