@@ -274,7 +274,7 @@ bool GuiCombat::DrawRewardWindow() {
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_label(ctx, m_Rewards[1].m_FunctionKey.c_str(), NK_TEXT_LEFT);
         nk_label_colored(ctx, std::to_string(m_Rewards[1].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
-        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
+        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 1))
         {
             pLibCombat->InvokeRewardCallback(m_Rewards[1]);
             m_bFirstEnterRewardWindow = true;
@@ -288,7 +288,7 @@ bool GuiCombat::DrawRewardWindow() {
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_label(ctx, m_Rewards[2].m_FunctionKey.c_str(), NK_TEXT_LEFT);
         nk_label_colored(ctx, std::to_string(m_Rewards[2].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
-        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
+        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 2))
         {
             pLibCombat->InvokeRewardCallback(m_Rewards[2]);
             m_bFirstEnterRewardWindow = true;

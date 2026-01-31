@@ -46,8 +46,8 @@ private:
 
 
     glm::vec3 movementVector;
-    glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 0.0);
-    glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.0);
+    glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 1.0);
+    glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.5);
     bool m_bAllAnimationsFinished = false;
     bool m_bMoveAnimsFinished = false;
     bool m_bUpdateProjectileTarget = true;

@@ -97,16 +97,22 @@ void CombatController::handleTurn()
     {
         if (!engine.entityManager.checkIfEntityHasComponent<Unit>(iInfantryPlayer, iArcherPlayer, iCatapultPlayer, iInfantryEnemy, iArcherEnemy, iCatapultEnemy)) return;
 
-        auto pInfU_C = engine.componentManager.getComponent<Unit>(iInfantryPlayer);
-        auto pArcU_C = engine.componentManager.getComponent<Unit>(iArcherPlayer);
-        auto pCatU_C = engine.componentManager.getComponent<Unit>(iCatapultPlayer);
+        auto iPlayerInfantryTotalAmount = engine.componentManager.getComponent<Unit>(iInfantryPlayer).totalAmount;
+        auto iPlayerArcherTotalAmount = engine.componentManager.getComponent<Unit>(iArcherPlayer).totalAmount;
+        // auto iPlayerCatapultTotalAmount = engine.componentManager.getComponent<Unit>(iCatapultPlayer).totalAmount;
+        auto iPlayerCatapultUseAmount = engine.componentManager.getComponent<SiegeEngine>(iCatapultPlayer).useableAmount;
 
-        auto eInfU_C = engine.componentManager.getComponent<Unit>(iInfantryEnemy);
-        auto eArcU_C = engine.componentManager.getComponent<Unit>(iArcherEnemy);
-        auto eCatU_C = engine.componentManager.getComponent<Unit>(iCatapultEnemy);
+        auto iEnemyInfantryTotalAmount= engine.componentManager.getComponent<Unit>(iInfantryEnemy).totalAmount;
+        auto iEnemyArcherTotalAmount = engine.componentManager.getComponent<Unit>(iArcherEnemy).totalAmount;
+        // auto iEnemyCatapultTotalAmount  = engine.componentManager.getComponent<Unit>(iCatapultEnemy).totalAmount;
+        auto iEnemyCatapultUseAmount = engine.componentManager. getComponent<SiegeEngine>(iCatapultEnemy).useableAmount;
 
-        bool playerDeadNow = (pInfU_C.totalAmount <= 0 && pArcU_C.totalAmount <= 0 && pCatU_C.totalAmount <= 0);
-        bool enemyDeadNow  = (eInfU_C.totalAmount <= 0 && eArcU_C.totalAmount <= 0 && eCatU_C.totalAmount <= 0);
+        bool playerDeadNow = (iPlayerInfantryTotalAmount <= 0 &&
+                                iPlayerArcherTotalAmount <= 0 &&
+                                iPlayerCatapultUseAmount <= 0);
+        bool enemyDeadNow  = (iEnemyInfantryTotalAmount <= 0 &&
+                                iEnemyArcherTotalAmount <= 0 &&
+                                iEnemyCatapultUseAmount <= 0);
 
         if (playerDeadNow) {
             currentState = CombatState::DEFEAT;

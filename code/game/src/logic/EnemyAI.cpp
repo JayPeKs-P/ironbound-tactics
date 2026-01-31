@@ -93,7 +93,7 @@ std::vector<Option> EnemyAI::generateOptions(engine::Game &game)
         if (targetHP <= 0) return;
 
         auto pLibCombat = LibCombatFunctions::GetInstance(game);
-        float predictedDamage = pLibCombat->attack(iAttacker_ID, amount)/pAttackerUnit_C->speed;
+        float predictedDamage = (pLibCombat->attack(iAttacker_ID, amount) - pTargetUnit_C->armorValue * 0.5)/pAttackerUnit_C->speed;
         float priority = getCategoryPriority(pTargetUnit_C->category);
         if (targetHP*1.1 < predictedDamage) priority = 0.9;
         float score = (targetHP / predictedDamage ) * priority;

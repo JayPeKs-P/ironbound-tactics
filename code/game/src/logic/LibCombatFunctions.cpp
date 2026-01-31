@@ -55,17 +55,24 @@ namespace gl3 {
 
     void LibCombatFunctions::takeDamage(guid_t iUnit_ID, float fDamage) const {
         auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
-        float amountDead = fDamage / pUnit_C->hpValue;
-        pUnit_C->totalAmount -= static_cast<int>(amountDead);
+
+        float fAmountDead = (fDamage - pUnit_C->armorValue * 0.5f) / pUnit_C->hpValue;
+        int iAmountDead = static_cast<int>(fAmountDead);
+        float fDifference = fAmountDead - static_cast<float>(iAmountDead);
+        pUnit_C->fLeftoverDamage += fDifference;
+        if (pUnit_C->fLeftoverDamage > 1.0f) {
+            pUnit_C->fLeftoverDamage -= 1.0f;
+            iAmountDead += 1;
+        }
+
+        pUnit_C->totalAmount -= iAmountDead;
         if (pUnit_C->totalAmount <= 0) pUnit_C->totalAmount = 0;
         if (pUnit_C->availableAmount > pUnit_C->totalAmount) pUnit_C->availableAmount = pUnit_C->totalAmount;
-        // float differenceAD = damage - armorValue;
-        // armorValue -= damage/20;
-        // if (differenceAD > 0)
-        // {
-        //    lifePoints -= differenceAD;
-        // }
-        // return lifePoints;
+        if (m_Game.componentManager.hasComponent<SiegeEngine>(iUnit_ID)) {
+            auto pSiege_C = &m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID);
+            pSiege_C->useableAmount -+ iAmountDead;
+            if (pSiege_C->useableAmount <= 0) pSiege_C->useableAmount = 0;
+        }
     }
 
     void LibCombatFunctions::UseSiegeEngine(int iAmountTarget, guid_t iUnit_ID, guid_t iSiegeEngine_ID) const {
@@ -80,8 +87,14 @@ namespace gl3 {
     void LibCombatFunctions::ResetUnit(guid_t iUnit_ID, int iAmount) const {
         auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
         int iAmountAddBack = pUnit_C->availableAmount + iAmount;
-        if (iAmountAddBack > pUnit_C->totalAmount) {
-            pUnit_C->availableAmount = pUnit_C->totalAmount;
+        int iCapReset = pUnit_C->totalAmount;
+        // if (m_Game.componentManager.hasComponent<SiegeEngine>(iUnit_ID)) {
+        //     int iCapSiege = m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID).useableAmount;
+        //     if (iCapSiege < iCapReset) iCapReset = iCapSiege;
+        // }
+
+        if (iAmountAddBack > iCapReset) {
+            pUnit_C->availableAmount = iCapReset;
         }
         else {
             pUnit_C->availableAmount = iAmountAddBack;
@@ -111,6 +124,13 @@ namespace gl3 {
         pUnit_C->totalAmount += iAmount;
         if (pUnit_C->lifetimeMaxAmount < pUnit_C->totalAmount) {
             pUnit_C->lifetimeMaxAmount = pUnit_C->totalAmount;
+        }
+        if (!m_Game.componentManager.hasComponent<SiegeEngine>(iUnit_ID)) {
+            pUnit_C->availableAmount = pUnit_C->totalAmount;
+        }
+        else {
+            auto pSiege_C = &m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID);
+            pSiege_C->useableAmount += iAmount;
         }
     }
 

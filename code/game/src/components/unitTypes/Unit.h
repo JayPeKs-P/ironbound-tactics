@@ -19,6 +19,7 @@ struct Unit: Component {
     friend Entity;
 
     float hpValue;
+    float fLeftoverDamage = 0.0f;
     float armorValue;
     float attackValue;
     int accuracy;
