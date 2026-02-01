@@ -47,7 +47,7 @@ Game::Game(int width, int height, const std::string& title):
     pSoundSystem->RegisterSound("retro_move_walk_tick_20.wav");
     pSoundSystem->RegisterSound("retro_impact_hit_general_33.wav");
 
-    pSoundSystem->RegisterSound("retro_impact_colorful_01.wav");
+    pSoundSystem->RegisterSound("retro_impact_colorful_01.wav", false);
     pSoundSystem->RegisterSound("retro_damage_hurt_ouch_50.wav");
 
     pSoundSystem->RegisterSound("retro_beeps_collect_item_01.wav");

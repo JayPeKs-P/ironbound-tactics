@@ -163,7 +163,8 @@ namespace gl3 {
                                       State endState) const {
         // engine.PlaySound("retro_move_walk_tick_20.wav");
         auto pSoundSystem = engine::SoundSystem::GetInstance();
-        pSoundSystem->PlaySound("retro_impact_hit_general_33.wav");
+        // pSoundSystem->PlaySound("retro_impact_hit_general_33.wav");
+        pSoundSystem->PlaySound("retro_move_walk_tick_20.wav");
         bool bFinished = true;
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());

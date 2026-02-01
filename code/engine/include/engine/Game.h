@@ -37,18 +37,6 @@ namespace gl3::engine {
         using event_t = events::Event<Game, Game&>;
         using SystemContainer = std::unordered_map<std::type_index, std::unique_ptr<ecs::System>>;
 
-        // std::unique_ptr<SoLoud::Soloud> m_pAudioPlayer;
-        // std::shared_ptr<SoLoud::Wav> m_pCurrentMusic;
-        // int m_iCurrentMusic = -1;
-        // std::unordered_map<std::string, std::shared_ptr<SoLoud::Wav>> m_ListMusic;
-        // std::unordered_map<std::string, std::unique_ptr<SoLoud::Wav>> m_ListSound;
-        // std::unordered_map<std::string, unsigned int> m_ListHandles;
-        //
-        // void PlaySound(const std::string& pFileName);
-        // void PlayMusic(const std::string& pFileName);
-        // void RegisterSound(const std::string& pFileName);
-        // void RegisterMusic(const std::string& pFileName);
-
         template<typename S, typename ...Args>
         [[nodiscard]] S &addSystem(Args&& ...args) {
             auto system = std::make_unique<S>(*this, std::forward<Args>(args)...);

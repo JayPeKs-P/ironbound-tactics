@@ -17,19 +17,19 @@ namespace gl3::engine {
     }
 
     void SoundSystem::PlaySound(const std::string& sFileName) {
-        auto& sound = m_Sounds[sFileName];
-        if (m_pAudioPlayer->isValidVoiceHandle(sound.m_iHandle)) {
-            return;
-        }
-        sound.m_iHandle = m_pAudioPlayer->play(*m_Sounds[sFileName].m_pWav);
+        auto& sound = m_AudioObjects[sFileName];
+        if (m_pAudioPlayer->isValidVoiceHandle(sound.m_iHandle) && sound.m_bAwaitFinish) return;
+
+        sound.m_iHandle = m_pAudioPlayer->play(*sound.m_pWav);
     }
 
     void SoundSystem::PlayMusic(const std::string& sFileName) {
-        auto& music = m_ListMusic[sFileName];
-        if (music == m_pCurrentMusic) return;
-        if (m_iCurrentMusic > -1) m_pAudioPlayer->stop(m_iCurrentMusic);
-        m_iCurrentMusic = m_pAudioPlayer->play(*m_ListMusic[sFileName]);
-        m_pCurrentMusic = m_ListMusic[sFileName];
+        auto& music = m_AudioObjects[sFileName];
+        if (m_pAudioPlayer->isValidVoiceHandle(music.m_iHandle)) return;
+
+        if (m_iCurrentMusic != UINT_MAX) m_pAudioPlayer->stop(m_iCurrentMusic);
+        music.m_iHandle = m_pAudioPlayer->play(*music.m_pWav);
+        m_iCurrentMusic = music.m_iHandle;
     }
 
     SoundSystem::SoundSystem() {
@@ -38,19 +38,21 @@ namespace gl3::engine {
         m_pAudioPlayer->setGlobalVolume(0.4f);
     }
 
-    void SoundSystem::RegisterSound(const std::string& sFileName) {
-        SoundObject soundObject;
+    void SoundSystem::RegisterSound(const std::string& sFileName, bool bAwaitFinish) {
+        AudioObject soundObject;
         soundObject.m_pWav = std::make_unique<SoLoud::Wav>();
         soundObject.m_pWav->load(resolveAssetPath("audio/" + sFileName).string().c_str());
         soundObject.m_pWav->setSingleInstance(true);
-        m_Sounds[sFileName] = std::move(soundObject);
+        soundObject.m_bAwaitFinish = bAwaitFinish;
+        m_AudioObjects[sFileName] = std::move(soundObject);
     }
 
     void SoundSystem::RegisterMusic(const std::string& sFileName) {
-        auto music = std::make_unique<SoLoud::Wav>();
-        music->load(resolveAssetPath("audio/" + sFileName).string().c_str());
-        music->setSingleInstance(true);
-        music->setLooping(true);
-        m_ListMusic[sFileName] = std::move(music);
+        AudioObject musicObject;
+        musicObject.m_pWav = std::make_unique<SoLoud::Wav>();
+        musicObject.m_pWav->load(resolveAssetPath("audio/" + sFileName).string().c_str());
+        musicObject.m_pWav->setSingleInstance(true);
+        musicObject.m_pWav->setLooping(true);
+        m_AudioObjects[sFileName] = std::move(musicObject);
     }
 }

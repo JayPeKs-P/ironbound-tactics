@@ -13,10 +13,11 @@ namespace SoLoud {
 }
 
 namespace gl3::engine {
-    struct SoundObject {
+    struct AudioObject {
         std::unique_ptr<SoLoud::Wav> m_pWav;
-        unsigned int m_iHandle = -1;
-        float m_fTimeBuffer = 0.0f;
+        unsigned int m_iHandle = UINT_MAX;
+        // float m_fTimeBuffer = 0.0f;
+        bool m_bAwaitFinish = true;
     };
     class Game;
     class SoundSystem {
@@ -25,7 +26,7 @@ namespace gl3::engine {
         [[nodiscard]] static SoundSystem* GetInstance();
         void PlaySound(const std::string& sFileName);
         void PlayMusic(const std::string& sFileName);
-        void RegisterSound(const std::string& sFileName);
+        void RegisterSound(const std::string& sFileName, bool bAwaitFinish = true);
         void RegisterMusic(const std::string& sFileName);
 
         SoundSystem(const SoundSystem& obj) = delete;
@@ -37,13 +38,8 @@ namespace gl3::engine {
         SoundSystem();
         static SoundSystem* m_pSoundSystem;
 
-
         std::unique_ptr<SoLoud::Soloud> m_pAudioPlayer;
-        std::shared_ptr<SoLoud::Wav> m_pCurrentMusic;
-        int m_iCurrentMusic = -1;
-        std::unordered_map<std::string, std::shared_ptr<SoLoud::Wav>> m_ListMusic;
-        std::unordered_map<std::string, std::unique_ptr<SoLoud::Wav>> m_ListSound;
-        std::unordered_map<std::string, SoundObject> m_Sounds;
-        std::unordered_map<std::string, unsigned int> m_ListHandles;
+        unsigned int m_iCurrentMusic = UINT_MAX;
+        std::unordered_map<std::string, AudioObject> m_AudioObjects;
     };
 }

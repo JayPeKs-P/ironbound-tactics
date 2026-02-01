@@ -19,9 +19,6 @@ entityManager(componentManager,*this)
 {
     Log::init();
     origin = &entityManager.createEntity().addComponent<sceneGraph::Transform>();
-    // m_pAudioPlayer = std::make_unique<SoLoud::Soloud>();
-    // m_pAudioPlayer->init();
-    // m_pAudioPlayer->setGlobalVolume(0.3f);
 }
 
 Game::~Game()
@@ -58,40 +55,6 @@ unsigned int Game::GetTextureFromRegistry(const char* pKey) {
     }
     return -1;
 }
-
-// void Game::PlaySound(const std::string& sFileName) {
-//     if (m_ListHandles.contains(sFileName)) {
-//         auto& sound = m_ListHandles[sFileName];
-//         if (m_pAudioPlayer->isValidVoiceHandle(sound)) {
-//             return;
-//         }
-//     }
-//     auto handle = m_pAudioPlayer->play(*m_ListSound[sFileName]);
-//     m_ListHandles.insert({sFileName, handle});
-// }
-//
-// void Game::PlayMusic(const std::string& sFileName) {
-//     auto& music = m_ListMusic[sFileName];
-//     if (music == m_pCurrentMusic) return;
-//     if (m_iCurrentMusic > -1) m_pAudioPlayer->stop(m_iCurrentMusic);
-//     m_iCurrentMusic = m_pAudioPlayer->play(*m_ListMusic[sFileName]);
-//     m_pCurrentMusic = m_ListMusic[sFileName];
-// }
-//
-// void Game::RegisterSound(const std::string& sFileName) {
-//     auto sound = std::make_unique<SoLoud::Wav>();
-//     sound->load(resolveAssetPath("audio/" + sFileName).string().c_str());
-//     sound->setSingleInstance(true);
-//     m_ListSound[sFileName] = std::move(sound);
-// }
-//
-// void Game::RegisterMusic(const std::string& sFileName) {
-//     auto music = std::make_unique<SoLoud::Wav>();
-//     music->load(resolveAssetPath("audio/" + sFileName).string().c_str());
-//     music->setSingleInstance(true);
-//     music->setLooping(true);
-//     m_ListMusic[sFileName] = std::move(music);
-// }
 
 void Game::run()
 {
