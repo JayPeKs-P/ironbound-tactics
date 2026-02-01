@@ -118,6 +118,9 @@ namespace gl3 {
         m_FunctionKeys[DEFENSE] = "+ Defense";
         m_RewardCallbacks[m_FunctionKeys[DEFENSE]] = &LibCombatFunctions::IncreaseDefense;
 
+        m_FunctionKeys[HEALTH] = "+ Base Health";
+        m_RewardCallbacks[m_FunctionKeys[HEALTH]] = &LibCombatFunctions::IncreaseHealth;
+
         m_FunctionKeys[CRIT_CHANCE] = "+ Crit-Chance";
         m_RewardCallbacks[m_FunctionKeys[CRIT_CHANCE]] = &LibCombatFunctions::IncreaseCritChance;
 
@@ -148,6 +151,12 @@ namespace gl3 {
     void LibCombatFunctions::IncreaseDefense(guid_t iUnit_ID, int iAmount) const {
         auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
         pUnit_C->armorValue += static_cast<float>(iAmount);
+    }
+
+    void LibCombatFunctions::IncreaseHealth(guid_t iUnit_ID, int iAmount) const {
+        auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
+        pUnit_C->hpValue += static_cast<float>(iAmount);
+        pUnit_C->fLeftoverDamage = 0;
     }
 
     void LibCombatFunctions::IncreaseCritChance(guid_t iUnit_ID, int iAmount) const {

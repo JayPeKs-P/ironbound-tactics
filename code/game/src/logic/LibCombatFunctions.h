@@ -19,7 +19,7 @@ namespace gl3 {
         guid_t m_iUnit_ID;
         int m_iAmount;
     };
-    enum RandomRewardType {ADD, ATTACK, DEFENSE, /*SPEED,*/ CRIT_CHANCE, CRIT_MULT, REWARD_LAST};
+    enum RandomRewardType {ADD, ATTACK, DEFENSE, HEALTH, /*SPEED,*/ CRIT_CHANCE, CRIT_MULT, REWARD_LAST};
 
     class LibCombatFunctions {
     public:
@@ -42,6 +42,7 @@ namespace gl3 {
         void AddUnit(guid_t iUnit_ID, int iAmount) const;
         void IncreaseAttack(guid_t iUnit_ID, int iAmount) const;
         void IncreaseDefense(guid_t iUnit_ID, int iAmount) const;
+        void IncreaseHealth(guid_t iUnit_ID, int iAmount) const;
         void IncreaseSpeed(guid_t iUnit_ID, int iAmount) const;
         void IncreaseCritChance(guid_t iUnit_ID, int iAmount) const;
         void IncreaseCritMult(guid_t iUnit_ID, int iAmount) const;
