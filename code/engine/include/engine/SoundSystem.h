@@ -26,6 +26,8 @@ namespace gl3::engine {
         WALKING_1,
         IMPACT_1,
         DAMAGE_1,
+        USE_1,
+        ADVANCE_1,
         VICTORY_1,
         L0SS_1,
         MUSIC_SELECTION,

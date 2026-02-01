@@ -80,6 +80,8 @@ namespace gl3 {
     }
 
     void LibCombatFunctions::UseSiegeEngine(int iAmountTarget, guid_t iUnit_ID, guid_t iSiegeEngine_ID) const {
+        auto pSoundSystem = engine::SoundSystem::GetInstance();
+        pSoundSystem->PlaySound(engine::USE_1);
         auto pUnitActor = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
         auto pSiegeEngineTarget = &m_Game.componentManager.getComponent<SiegeEngine>(iSiegeEngine_ID);
 

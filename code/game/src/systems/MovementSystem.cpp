@@ -362,6 +362,10 @@ namespace gl3 {
         engine.componentManager.forEachComponent<Projectile>([&](Projectile& projectile)
         {
             for (int i = 1; i < projectile.m_ActiveProjectileList.size(); i++) {
+                if (projectile.m_ActiveProjectileList[i] > 0) {
+                    auto pSoundSystem = engine::SoundSystem::GetInstance();
+                    pSoundSystem->PlaySound(engine::ADVANCE_1);
+                }
                 projectile.m_ActiveProjectileList[i - 1] += projectile.m_ActiveProjectileList[i];
                 projectile.m_ActiveProjectileList[i] = 0;
             }
