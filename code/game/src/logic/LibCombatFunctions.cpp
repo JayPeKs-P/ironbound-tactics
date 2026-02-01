@@ -67,7 +67,7 @@ namespace gl3 {
         }
         if (iAmountDead <= 0) return;
         auto pSoundSystem = engine::SoundSystem::GetInstance();
-        pSoundSystem->PlaySound("retro_damage_hurt_ouch_50.wav");
+        pSoundSystem->PlaySound(engine::DAMAGE_1);
 
         pUnit_C->totalAmount -= iAmountDead;
         if (pUnit_C->totalAmount <= 0) pUnit_C->totalAmount = 0;

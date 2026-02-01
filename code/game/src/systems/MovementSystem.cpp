@@ -164,7 +164,7 @@ namespace gl3 {
         // engine.PlaySound("retro_move_walk_tick_20.wav");
         auto pSoundSystem = engine::SoundSystem::GetInstance();
         // pSoundSystem->PlaySound("retro_impact_hit_general_33.wav");
-        pSoundSystem->PlaySound("retro_move_walk_tick_20.wav");
+        pSoundSystem->PlaySound(engine::WALKING_1);
         bool bFinished = true;
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
@@ -276,7 +276,7 @@ namespace gl3 {
 
     bool MovementSystem::DeleteProjectile(guid_t ID) {
         auto pSoundSystem = engine::SoundSystem::GetInstance();
-        pSoundSystem->PlaySound("retro_impact_colorful_01.wav");
+        pSoundSystem->PlaySound(engine::IMPACT_1);
         auto projectile = engine.entityManager.getEntity(ID);
         engine.entityManager.deleteEntity(projectile);
         return true;

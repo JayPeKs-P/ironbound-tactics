@@ -23,11 +23,11 @@ namespace NK_WRAP {
 
         auto pSoundSystem = gl3::engine::SoundSystem::GetInstance();
         if (hovered && !bWasHovered) {
-            pSoundSystem->PlaySound("retro_ui_menu_simple_click_03.wav");
+            pSoundSystem->PlaySound(gl3::engine::UI_BUTTON_HOVER);
         }
         bWasHovered = hovered;
         if (pressed) {
-            pSoundSystem->PlaySound("retro_ui_menu_simple_click_12.wav");
+            pSoundSystem->PlaySound(gl3::engine::UI_BUTTON_PRESS);
         }
         return clicked;
     }
@@ -44,16 +44,16 @@ namespace NK_WRAP {
         auto pSoundSystem = gl3::engine::SoundSystem::GetInstance();
         if ( hovered && !bWasHovered)
         {
-            pSoundSystem->PlaySound("retro_ui_menu_simple_click_03.wav");
+            pSoundSystem->PlaySound(gl3::engine::UI_BUTTON_HOVER);
         }
         bWasHovered = hovered;
         if (clicked)
         {
-            pSoundSystem->PlaySound("retro_ui_menu_simple_click_12.wav");
+            pSoundSystem->PlaySound(gl3::engine::UI_BUTTON_PRESS);
         }
         if (changed)
         {
-            pSoundSystem->PlaySound("retro_ui_menu_blip_click_20.wav");
+            pSoundSystem->PlaySound(gl3::engine::UI_DRAG_SLIDER);
         }
         return changed;
     }

@@ -117,12 +117,12 @@ void CombatController::handleTurn()
 
         auto pSoundSystem = engine::SoundSystem::GetInstance();
         if (playerDeadNow) {
-            pSoundSystem->PlaySound("retro_fail_sound_04.wav");
+            pSoundSystem->PlaySound(engine::L0SS_1);
             currentState = CombatState::DEFEAT;
             playerDead.invoke();
         } else if (enemyDeadNow) {
             turnEnd.InvokeAndClear();
-            pSoundSystem->PlaySound("retro_beeps_collect_item_01.wav");
+            pSoundSystem->PlaySound(engine::VICTORY_1);
             currentState = CombatState::VICTORY;
             // enemyDead.invoke();   //TODO: change this back
         } else {

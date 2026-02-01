@@ -19,15 +19,29 @@ namespace gl3::engine {
         // float m_fTimeBuffer = 0.0f;
         bool m_bAwaitFinish = true;
     };
+    enum Audio_GUID {
+        UI_BUTTON_PRESS,
+        UI_BUTTON_HOVER,
+        UI_DRAG_SLIDER,
+        WALKING_1,
+        IMPACT_1,
+        DAMAGE_1,
+        VICTORY_1,
+        L0SS_1,
+        MUSIC_SELECTION,
+        MUSIC_COMBAT_1,
+        MUSIC_MAIN_MENU,
+        AUDIO_GUID_LAST
+    };
     class Game;
     class SoundSystem {
         friend class Game;
     public:
         [[nodiscard]] static SoundSystem* GetInstance();
-        void PlaySound(const std::string& sFileName);
-        void PlayMusic(const std::string& sFileName);
-        void RegisterSound(const std::string& sFileName, bool bAwaitFinish = true);
-        void RegisterMusic(const std::string& sFileName);
+        void PlaySound(Audio_GUID iAudio);
+        void PlayMusic(Audio_GUID iAudio);
+        void RegisterSound(Audio_GUID iAudio, const std::string& sFileName, bool bAwaitFinish = true);
+        void RegisterMusic(Audio_GUID iAudio, const std::string& sFileName);
 
         SoundSystem(const SoundSystem& obj) = delete;
         SoundSystem& operator=(const SoundSystem& obj) = delete;
@@ -40,6 +54,7 @@ namespace gl3::engine {
 
         std::unique_ptr<SoLoud::Soloud> m_pAudioPlayer;
         unsigned int m_iCurrentMusic = UINT_MAX;
-        std::unordered_map<std::string, AudioObject> m_AudioObjects;
+        // std::unordered_map<std::string, AudioObject> m_AudioObjects;
+        std::vector<AudioObject> m_AudioObjects;
     };
 }

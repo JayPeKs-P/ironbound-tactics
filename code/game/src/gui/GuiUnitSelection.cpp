@@ -30,7 +30,7 @@ amountToSpare(50)
     pArcTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
     pCatTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
     auto pSoundSystem = engine::SoundSystem::GetInstance();
-    pSoundSystem->PlayMusic("Retro Action Game Theme #6 (looped).wav");
+    pSoundSystem->PlayMusic(engine::MUSIC_SELECTION);
 }
 
 GuiUnitSelection::~GuiUnitSelection()

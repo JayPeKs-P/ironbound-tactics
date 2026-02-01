@@ -39,21 +39,21 @@ using namespace gl3;
 Game::Game(int width, int height, const std::string& title):
     engine::Game(width, height, title) {
     auto pSoundSystem = engine::SoundSystem::GetInstance();
-    pSoundSystem->RegisterSound("retro_ui_menu_simple_click_12.wav");
-    pSoundSystem->RegisterSound("retro_ui_menu_simple_click_03.wav");
-    pSoundSystem->RegisterSound("retro_ui_menu_blip_click_20.wav");
+    pSoundSystem->RegisterSound(engine::UI_BUTTON_HOVER, "retro_ui_menu_simple_click_12.wav");
+    pSoundSystem->RegisterSound(engine::UI_BUTTON_PRESS, "retro_ui_menu_simple_click_03.wav");
+    pSoundSystem->RegisterSound(engine::UI_DRAG_SLIDER, "retro_ui_menu_blip_click_20.wav");
 
-    pSoundSystem->RegisterSound("retro_footstep_movement_05.wav");
-    pSoundSystem->RegisterSound("retro_move_walk_tick_20.wav");
-    pSoundSystem->RegisterSound("retro_impact_hit_general_33.wav");
+    // pSoundSystem->RegisterSound(, "retro_footstep_movement_05.wav");
+    pSoundSystem->RegisterSound(engine::WALKING_1, "retro_move_walk_tick_20.wav");
+    // pSoundSystem->RegisterSound(, "retro_impact_hit_general_33.wav");
 
-    pSoundSystem->RegisterSound("retro_impact_colorful_01.wav", false);
-    pSoundSystem->RegisterSound("retro_damage_hurt_ouch_50.wav");
+    pSoundSystem->RegisterSound(engine::IMPACT_1, "retro_impact_colorful_01.wav", false);
+    pSoundSystem->RegisterSound(engine::DAMAGE_1, "retro_damage_hurt_ouch_50.wav");
 
-    pSoundSystem->RegisterSound("retro_beeps_collect_item_01.wav");
-    pSoundSystem->RegisterSound("retro_fail_sound_04.wav");
-    pSoundSystem->RegisterMusic("Retro Action Game Theme #6 (looped).wav");
-    pSoundSystem->RegisterMusic("Retro Action Game Theme #8 (looped).wav");
+    pSoundSystem->RegisterSound(engine::VICTORY_1, "retro_beeps_collect_item_01.wav");
+    pSoundSystem->RegisterSound(engine::L0SS_1, "retro_fail_sound_04.wav");
+    pSoundSystem->RegisterMusic(engine::MUSIC_SELECTION, "Retro Action Game Theme #6 (looped).wav");
+    pSoundSystem->RegisterMusic(engine::MUSIC_COMBAT_1, "Retro Action Game Theme #8 (looped).wav");
 
 }
 

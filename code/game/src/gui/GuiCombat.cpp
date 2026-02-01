@@ -76,7 +76,7 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, GuiHandler& guiHandler,  nk_contex
 ////////////////////////////////////////////////////////////////////////
     });
     auto pSoundSystem = engine::SoundSystem::GetInstance();
-    pSoundSystem->PlayMusic("Retro Action Game Theme #8 (looped).wav");
+    pSoundSystem->PlayMusic(engine::MUSIC_COMBAT_1);
 }
 
 GuiCombat::~GuiCombat() {
