@@ -70,6 +70,10 @@ namespace gl3::engine::ecs {
             removeComponent<C>(component);
         }
 
+        std::vector<guid_t> &GetChildren() {
+            return m_Children;
+        }
+
     protected:
         /// @param id The ID this instance of entity will be associated to.
         /// @param componentManager A reference to the @ref gl3::engine::ecs::ComponentManager instance.
@@ -86,9 +90,6 @@ namespace gl3::engine::ecs {
             m_Children.push_back(iChild);
         }
 
-        std::vector<guid_t> &GetChildren() {
-            return m_Children;
-        }
         void RemoveChild(guid_t iChild) {
             std::erase(m_Children, iChild);
         }

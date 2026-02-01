@@ -120,6 +120,15 @@ namespace gl3::engine::render {
         glDetachShader(inanimateBatchProgram, inanimateBatchVert);
         glDetachShader(inanimateBatchProgram, inanimateBatchFrag);
 
+        guiAtlasVert = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/batch/guiAtlas.vert");
+        guiAtlasFrag = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/batch/guiAtlas.frag");
+        guiAtlasProgram = glCreateProgram();
+        glAttachShader(guiAtlasProgram, guiAtlasVert);
+        glAttachShader(guiAtlasProgram, guiAtlasFrag);
+        glLinkProgram(guiAtlasProgram);
+        glDetachShader(guiAtlasProgram, guiAtlasVert);
+        glDetachShader(guiAtlasProgram, guiAtlasFrag);
+
         singleVertexShader = loadAndCompileShader(GL_VERTEX_SHADER, "shaders/single/vertexShader.vert");
         singleFragmentShader = loadAndCompileShader(GL_FRAGMENT_SHADER, "shaders/single/fragmentShader.frag");
         singleProgram = glCreateProgram();
@@ -133,9 +142,12 @@ namespace gl3::engine::render {
         for (auto& [owner, _] : shaderContainer)
         {
             auto& shader_C = game.componentManager.getComponent<Shader>(owner);
-            if (game.componentManager.hasComponent<InstanceBuffer>(owner) && game.componentManager.hasComponent<UvOffset>(owner))
+            if (game.componentManager.hasComponent<InstanceBuffer>(owner) && game.componentManager.hasComponent<AnimationSpeed>(owner))
             {
                 shader_C.set_shader_program(instanceProgram);
+            }
+            else if (game.componentManager.hasComponent<InstanceBuffer>(owner) && game.componentManager.hasComponent<UvOffset>(owner)) {
+                shader_C.set_shader_program(guiAtlasProgram);
             }
             else if (game.componentManager.hasComponent<InstanceBuffer>(owner))
             {
@@ -223,8 +235,13 @@ namespace gl3::engine::render {
     void RenderSystem::deleteShader(engine::Game& game) {
         glDeleteShader(instanceVertexShader);
         glDeleteShader(instanceFragmentShader);
+
         glDeleteShader(inanimateBatchVert);
         glDeleteShader(inanimateBatchFrag);
+
+        glDeleteShader(guiAtlasVert);
+        glDeleteShader(guiAtlasFrag);
+
         glDeleteShader(singleVertexShader);
         glDeleteShader(singleFragmentShader);
     }

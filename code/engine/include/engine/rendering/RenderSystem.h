@@ -100,6 +100,10 @@ namespace gl3::engine::render {
         unsigned int inanimateBatchFrag;
         unsigned int inanimateBatchProgram;
 
+        unsigned int guiAtlasVert;
+        unsigned int guiAtlasFrag;
+        unsigned int guiAtlasProgram;
+
         /// ID of the vertex shader used for non-instance rendering.
         unsigned int singleVertexShader;
 

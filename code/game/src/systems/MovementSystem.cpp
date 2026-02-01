@@ -236,6 +236,8 @@ namespace gl3 {
         auto pRootProjectile = &engine.componentManager.getComponent<Projectile>(iRootProjectile);
         auto pRootArrowTransform_C = &engine.componentManager.getComponent<Transform>(iRootProjectile);
         auto pProjectile_E = &engine.entityManager.createEntity();
+        pProjectile_E->addComponent<Visibility>(true);
+
         engine.entityManager.SetParent(pProjectile_E->guid(), pUnitState_C->entity());
 
         auto pProjectileTransform_C = &pProjectile_E->addComponent<Transform>(

@@ -16,6 +16,7 @@
 #include "components/TagComponent.h"
 #include "systems/GuiHandler.h"
 #include "components/CombatSelection.h"
+#include "components/Icon.h"
 #include "gui/GuiCombat.h"
 #include "engine/rendering/InstanceBuffer.h"
 #include "engine/rendering/Shader.h"
@@ -32,6 +33,7 @@
 #include "systems/SelectionSystem.h"
 #include "systems/rendering/InstanceManager.h"
 #include "engine/SoundSystem.h"
+#include "systems/HoverIconSystem.h"
 
 using gl3::engine::sceneGraph::Transform;
 using namespace gl3;
@@ -63,6 +65,7 @@ Game::Game(int width, int height, const std::string& title):
 void Game::start() {
     AddTextureToRegistry("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png", "Terrain");
     AddTextureToRegistry("assets/textures/entities/Arrow_No_BG.png", "Arrow");
+    AddTextureToRegistry("assets/textures/gui/ui_atlas_48x48.png", "GUI");
     unsigned int tempTexID = -1;
 
     using namespace engine::util;
@@ -88,6 +91,16 @@ void Game::start() {
     pArrowPlayer_E->addComponent<InstanceAmount>();
     // pArrowPlayer_E->addComponent<TagComponent>(Tag{Tag::PLAYER});
 
+    auto pRootIcon_E = &entityManager.createEntity();
+    pRootIcon_E->addComponent<Icon>();
+    tempTexID = GetTextureFromRegistry("GUI");
+    pRootIcon_E->addComponent<Model2D>(VertPreset::QuadInanimate, VertPreset::quadIndices, tempTexID);
+    pRootIcon_E->addComponent<UvOffset>(9, 3, 64, 64);
+    pRootIcon_E->addComponent<Shader>();
+    pRootIcon_E->addComponent<Transform>(origin);
+    pRootIcon_E->addComponent<InstanceBuffer>();
+
+
     // auto pArrowEnemy_E = &entityManager.createEntity();
     // iArrowID = pArrowEnemy_E->guid();
     // pArrowEnemy_E->addComponent<Projectile>(iArrowID);
@@ -106,8 +119,9 @@ void Game::start() {
     InfPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     tempTexID = AddTextureToRegistry(pInfU_C.texturePath.c_str(), "pInfantry");
     InfPlayer_E.addComponent<Model2D>(VertPreset::pQuad, VertPreset::quadIndices, tempTexID);
+    InfPlayer_E.addComponent<AnimationSpeed>(0.1f);
     InfPlayer_E.addComponent<InstanceBuffer>();
-    InfPlayer_E.addComponent<UvOffset>(PLAYER);
+    InfPlayer_E.addComponent<UvOffset>(PLAYER, 1, 4, 4);
     InfPlayer_E.addComponent<Shader>();
     &InfPlayer_E.addComponent<Transform>(origin,
         glm::vec3(-2.25f, -1.0f, 0.2f), 0, glm::vec3(0.25, 0.25, 1));
@@ -118,8 +132,9 @@ void Game::start() {
     ArcPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     tempTexID = Texture::load(pArcU_C.texturePath.c_str());
     ArcPlayer_E.addComponent<Model2D>(VertPreset::pQuad, VertPreset::quadIndices, tempTexID);
+    ArcPlayer_E.addComponent<AnimationSpeed>(0.1f);
     ArcPlayer_E.addComponent<InstanceBuffer>();
-    ArcPlayer_E.addComponent<UvOffset>(PLAYER);
+    ArcPlayer_E.addComponent<UvOffset>(PLAYER, 1, 4, 4);
     ArcPlayer_E.addComponent<Shader>();
     &ArcPlayer_E.addComponent<Transform>(origin,
         glm::vec3(-2.25f, -0.25f, 0.1f), 0, glm::vec3(0.25, 0.25, 1));
@@ -131,8 +146,9 @@ void Game::start() {
     CatPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     tempTexID = engine::util::Texture::load(pCatU_C.texturePath.c_str());
     CatPlayer_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    CatPlayer_E.addComponent<AnimationSpeed>(0.1f);
     CatPlayer_E.addComponent<InstanceBuffer>();
-    CatPlayer_E.addComponent<UvOffset>(PLAYER);
+    CatPlayer_E.addComponent<UvOffset>(PLAYER, 1, 4, 4);
     CatPlayer_E.addComponent<Shader>();
     &CatPlayer_E.addComponent<Transform>(origin,
         glm::vec3(-2.25f, 0.5f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
@@ -146,8 +162,9 @@ void Game::start() {
     );
     InfEnemy_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
     InfEnemy_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    InfEnemy_E.addComponent<AnimationSpeed>(0.1f);
     InfEnemy_E.addComponent<InstanceBuffer>();
-    InfEnemy_E.addComponent<UvOffset>(ENEMY);
+    InfEnemy_E.addComponent<UvOffset>(ENEMY, 1, 4, 4);
     InfEnemy_E.addComponent<Shader>();
     &InfEnemy_E.addComponent<Transform>(origin,
         glm::vec3(1.75f, -0.75f, 0.2f), 0, glm::vec3(0.25, 0.25, 1));
@@ -159,8 +176,9 @@ void Game::start() {
     );
     ArcEnemy_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
     ArcEnemy_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    ArcEnemy_E.addComponent<AnimationSpeed>(0.1f);
     ArcEnemy_E.addComponent<InstanceBuffer>();
-    ArcEnemy_E.addComponent<UvOffset>(ENEMY);
+    ArcEnemy_E.addComponent<UvOffset>(ENEMY, 1, 4, 4);
     ArcEnemy_E.addComponent<Shader>();
     &ArcEnemy_E.addComponent<Transform>(origin,
         glm::vec3(1.75f, 0.0f, 0.1f), 0, glm::vec3(0.25, 0.25, 1));
@@ -173,8 +191,9 @@ void Game::start() {
     auto& eCatSE_C = CatEnemy_E.addComponent<SiegeEngine>(5);
     CatEnemy_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
     CatEnemy_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
+    CatEnemy_E.addComponent<AnimationSpeed>(0.1f);
     CatEnemy_E.addComponent<InstanceBuffer>();
-    CatEnemy_E.addComponent<UvOffset>(ENEMY);
+    CatEnemy_E.addComponent<UvOffset>(ENEMY, 1, 4, 4);
     CatEnemy_E.addComponent<Shader>();
     &CatEnemy_E.addComponent<Transform>(origin,
         glm::vec3(1.75f, 0.75f, 0.0f), 0, glm::vec3(0.25, 0.25, 1));
@@ -184,6 +203,7 @@ void Game::start() {
     auto movementSystem = &addSystem<MovementSystem>();
     auto combatController = &addSystem<CombatController>();
     auto selectionSystem = &addSystem<SelectionSystem>();
+    auto pHoverIconSystem = &addSystem<HoverIconSystem>();
     // backgroundMusic = std::make_unique<SoLoud::Wav>();
     // backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
     // backgroundMusic->setLooping(true);

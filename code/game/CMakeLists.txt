@@ -30,6 +30,9 @@ set(SOURCE_FILES src/main.cpp
         src/gui/GuiUnitSelection.cpp
         src/gui/GuiUnitSelection.h
         src/components/unitTypes/Unit.cpp
+        src/components/Icon.h
+        src/systems/HoverIconSystem.cpp
+        src/systems/HoverIconSystem.h
 )
 
 # set executable name

@@ -65,10 +65,11 @@ namespace gl3 {
                                                        0,
                                                        glm::vec3(rootScale.x, rootScale.y, rootScale.z));
                     auto pUnitState_C = &instance_E.addComponent<UnitState>();
+                    instance_E.addComponent<Visibility>(true);
                     pUnitState_C->startPos = pInstanceTransform->localPosition;
                     pUnitState_C->relativeVec = pInstanceTransform->localPosition - transform.localPosition;
 
-                    instance_E.addComponent<UvOffset>(vOffset);
+                    instance_E.addComponent<UvOffset>(vOffset, 1, 4, 4);
 
                     createdInstances++;
                 }
@@ -124,22 +125,33 @@ namespace gl3 {
 
 
             for (auto pInstanceTransform : pRootTransform_C->getChildTransforms()) {
+                const guid_t iInstanceID = pInstanceTransform->entity();
                 if (amount < amountLastFrame) {
-                    engine.entityManager.deleteEntity(engine.entityManager.getEntity(pInstanceTransform->entity()));
+                    engine.entityManager.deleteEntity(engine.entityManager.getEntity(iInstanceID));
                     amountLastFrame--;
                 }
                 else {
+                    if (engine.componentManager.hasComponent<Visibility>(iInstanceID)) {
+                        auto bVisible = engine.componentManager.getComponent<Visibility>(iInstanceID).m_bVisible;
+                        if (!bVisible) continue;
+                    }
                     instanceBuffer.instances.push_back(engine.calculateMvpMatrix(pInstanceTransform->modelMatrix));
 
-                    if (!engine.componentManager.hasComponent<UvOffset>(pInstanceTransform->entity())) continue;
+                    if (!engine.componentManager.hasComponent<UvOffset>(iInstanceID)) continue;
+                    auto uvOffset_C = &engine.componentManager.getComponent<UvOffset>(iInstanceID);
 
-                    int totalFrames = 4;
-                    float frameDuration = 0.1f / engine.GetSpeedUpValue();
-                    int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
+                    if (engine.componentManager.hasComponent<AnimationSpeed>(iRootEntity)) {
+                        const float fFrameTime = engine.componentManager.getComponent<AnimationSpeed>(iRootEntity).m_fFrameTime;
+                        int totalFrames = uvOffset_C->m_iHorizontalSize;
+                        float frameDuration = fFrameTime / engine.GetSpeedUpValue();
+                        int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
 
-                    auto uvOffset_C = &engine.componentManager.getComponent<UvOffset>(pInstanceTransform->entity());
-                    uvOffset_C->u = currentFrame;
-                    instanceBuffer.instanceUVs.push_back(glm::vec2(uvOffset_C->u, uvOffset_C->v));
+                        uvOffset_C->u = currentFrame;
+                        instanceBuffer.instanceUVs.push_back(glm::vec2(uvOffset_C->u, uvOffset_C->v));
+                    }
+                    else {
+                        instanceBuffer.instanceUVs.push_back(glm::vec2(uvOffset_C->u, uvOffset_C->v));
+                    }
                 }
             }
         });

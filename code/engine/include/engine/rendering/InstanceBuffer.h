@@ -47,14 +47,41 @@ struct UvOffset: Component {
 
     float u = 0.0f;
     float v = 0.0f;
+    int m_iHorizontalSize = 0;
+    int m_iVerticalSize = 0;
 
     const float originalV;
+    const float originalU;
 
 private:
-    explicit UvOffset(guid_t owner, float v):
+    explicit UvOffset(guid_t owner, float v, float u, int hSize, int vSize):
     Component(owner),
     originalV(v),
-    v(v){}
+    originalU(u),
+    v(v),
+    u(u),
+    m_iHorizontalSize(hSize),
+    m_iVerticalSize(vSize){}
+};
+struct AnimationSpeed: Component {
+    friend ComponentManager;
+    friend Entity;
+
+    float m_fFrameTime;
+private:
+    explicit AnimationSpeed(guid_t owner, float fFrameTime):
+    Component(owner),
+    m_fFrameTime(fFrameTime){}
+};
+
+struct Visibility: Component {
+    friend ComponentManager;
+    friend Entity;
+    bool m_bVisible;
+private:
+    explicit Visibility(guid_t owner, bool bVisible):
+    Component(owner),
+    m_bVisible(bVisible){}
 };
 struct InstanceAmount: Component {
     friend ComponentManager;
