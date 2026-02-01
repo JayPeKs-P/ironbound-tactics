@@ -134,7 +134,7 @@ namespace gl3 {
                     if (!engine.componentManager.hasComponent<UvOffset>(pInstanceTransform->entity())) continue;
 
                     int totalFrames = 4;
-                    float frameDuration = 0.1f;
+                    float frameDuration = 0.1f / engine.GetSpeedUpValue();
                     int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
 
                     auto uvOffset_C = &engine.componentManager.getComponent<UvOffset>(pInstanceTransform->entity());

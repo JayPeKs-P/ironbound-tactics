@@ -12,6 +12,7 @@ namespace gl3 {
 }
 
 using gl3::engine::ecs::Gui;
+enum class PlaybackState{DEFAULT, TWICE, MAX};
 
 class GuiCombat: public Gui {
     using event_t = gl3::engine::events::Event<GuiCombat>;
@@ -56,4 +57,6 @@ private:
     bool m_bFirstEnterRewardWindow = true;
     std::vector<gl3::RandomReward> m_Rewards;
     std::unordered_map<guid_t, unsigned int> m_Textures;
+
+    PlaybackState m_PlaybackState = PlaybackState::DEFAULT;
 };

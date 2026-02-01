@@ -83,6 +83,7 @@ GuiCombat::~GuiCombat() {
     for (auto val : m_Textures | std::views::values) {
         glDeleteTextures(1, &val);
     }
+    engine.SetSpeedUpValue(1.0f);
 }
 
 void GuiCombat::render()
@@ -323,8 +324,8 @@ void GuiCombat::drawTopRow()
 ////////////////////////////////////////////////////////////////////////
         return;
     }
-    float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.3, 0.2, 0.1 };
-    nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 7, ratio);
+    float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.01, 0.04, 0.2, 0.04, 0.01,  0.2, 0.1 };
+    nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 11, ratio);
 
     if (NK_WRAP::button_label(ctx, "esc", m_Hovered, &engine))
     {
@@ -350,9 +351,38 @@ void GuiCombat::drawTopRow()
     nk_label(ctx, "Player", NK_TEXT_LEFT);
     nk_progress(ctx, &hp, 100, NK_FIXED);
 
+    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+    switch (m_PlaybackState) {
+    case PlaybackState::DEFAULT: {
+        if (NK_WRAP::button_label(ctx, ">>", m_Hovered, &engine)) {
+            m_PlaybackState = PlaybackState::TWICE;
+            engine.SetSpeedUpValue(2.0f);
+        }
+        break;
+    }
+    case PlaybackState::TWICE: {
+        if (NK_WRAP::button_label(ctx, ">>>>", m_Hovered, &engine)) {
+            m_PlaybackState = PlaybackState::MAX;
+            engine.SetSpeedUpValue(4.0f);
+        }
+        break;
+    }
+    case PlaybackState::MAX: {
+        if (NK_WRAP::button_label(ctx, ">", m_Hovered, &engine)) {
+            m_PlaybackState = PlaybackState::DEFAULT;
+            engine.SetSpeedUpValue(1.0f);
+        }
+        break;
+    }
+    default: {
+        break;
+    }
+    }
+
     std::string roundLabel = "Round  " + std::to_string(CombatController::roundCount);
     nk_label_colored(ctx, roundLabel.c_str(), NK_TEXT_CENTERED, highlightColor);
-
+    nk_label(ctx, "", NK_TEXT_CENTERED);
+    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
     auto& eInfU_C = engine.componentManager.getComponent<Unit>(eInf_E);
     auto& eArcU_C = engine.componentManager.getComponent<Unit>(eArc_E);

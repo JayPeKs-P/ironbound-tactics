@@ -168,7 +168,7 @@ namespace gl3 {
         bool bFinished = true;
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
-        auto speed = unitState_C.movementSpeed;
+        auto speed = unitState_C.movementSpeed * engine.GetSpeedUpValue();
         if (unitState_C.state == State::RESETTING) speed *= 2.5;
         auto directionNormalized = glm::normalize(direction);
         auto directionAngle = glm::degrees(std::atan2(directionNormalized.x, directionNormalized.y));
@@ -286,7 +286,7 @@ namespace gl3 {
         auto& projectileState_C = engine.componentManager.getComponent<ProjectileState>(projectileTransform.entity());
 
         float flightTime = projectileState_C.m_fFlightTime;
-        projectileState_C.elapsedTime += deltatime;
+        projectileState_C.elapsedTime += deltatime * engine.GetSpeedUpValue();
         float timeNorm = glm::clamp(projectileState_C.elapsedTime / flightTime, 0.0f, 1.0f);
 
         const auto startPos = projectileState_C.startPos;

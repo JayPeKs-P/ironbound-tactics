@@ -119,6 +119,8 @@ namespace gl3::engine {
 
         engine::combat::ActionRegistry actionRegister;
         float elapsedTime = 0.0f;
+        [[nodiscard]] float GetSpeedUpValue() const {return m_fSpeedupValue;}
+        void SetSpeedUpValue(float value) {m_fSpeedupValue = value;}
     protected:
         /// @brief Constructs the game with window dimensions and title.
         ///
@@ -146,6 +148,7 @@ namespace gl3::engine {
         /// @brief Time in seconds since the last frame.
         float deltaTime = 1.0f / 60;
     private:
+        float m_fSpeedupValue = 1.0f;
         SystemContainer systems;
         context::Context context;
         std::unordered_map<std::string, unsigned int> m_TextureRegistry = {};
