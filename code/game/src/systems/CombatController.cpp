@@ -125,7 +125,7 @@ void CombatController::handleTurn()
             turnEnd.InvokeAndClear();
             pSoundSystem->PlaySound(engine::VICTORY_1);
             currentState = CombatState::VICTORY;
-            // enemyDead.invoke();   //TODO: change this back
+            enemyDead.invoke();
         } else {
             turnEnd.InvokeAndClear();
             currentState = CombatState::BEGIN_TURN;
@@ -134,7 +134,6 @@ void CombatController::handleTurn()
     }
 
     case CombatState::VICTORY:
-        enemyDead.invoke();   //TODO: remove this again and uncomment above
         setState(CombatState::REWARD_PHASE);
         break;
     case CombatState::REWARD_PHASE:

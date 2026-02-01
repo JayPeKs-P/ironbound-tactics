@@ -128,13 +128,13 @@ void GuiCombat::render()
         if (combatSelection_C->selectionTwo == nullptr)
         {
             actionBounds = nk_rect(
-            windowWidth / 4, windowHeight - windowHeight / 4,
-            windowWidth / 2, windowHeight / 4);
+            windowWidth / 4, windowHeight - windowHeight / 3.9f,
+            windowWidth / 2, windowHeight / 3.9f);
         }else
         {
             actionBounds = nk_rect(
-            windowWidth / 4, windowHeight - windowHeight / 3,
-            windowWidth / 2, windowHeight / 3);
+            windowWidth / 4, windowHeight - windowHeight / 2.8f,
+            windowWidth / 2, windowHeight / 2.8f);
         }
         if (nk_begin(ctx, "Actions",
             actionBounds,
@@ -159,13 +159,17 @@ void GuiCombat::drawStartRoundWindow()
     if (nk_begin(ctx, "Round ",
         nk_rect(windowWidth / 4,  windowHeight / 4,
             windowWidth / 2, windowHeight/ 2),
-            NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+            NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
     {
-        nk_layout_row_dynamic(ctx, windowHeight/5, 3);
+        nk_layout_row_dynamic(ctx, windowHeight/5, 2);
         auto& fonts = m_GuiHandler.GetFonts();
+
+        nk_style_push_font(ctx, &fonts[FANTASY_MAX_SIZE]->handle);
+        nk_label_colored(ctx, "Round", NK_TEXT_CENTERED, highlightColor);
+        nk_label_colored(ctx, std::to_string(CombatController::roundCount).c_str(), NK_TEXT_CENTERED, highlightColor);
+        nk_style_pop_font(ctx);
+
         nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
-        nk_label(ctx, "Round", NK_TEXT_CENTERED);
-        nk_label(ctx, std::to_string(CombatController::roundCount).c_str(), NK_TEXT_CENTERED);
         nk_layout_row_dynamic(ctx, windowHeight/5, 1);
         nk_label(ctx, std::to_string(static_cast<int>(countdownStartRound)).c_str(), NK_TEXT_CENTERED);
         nk_style_pop_font(ctx);
@@ -325,7 +329,6 @@ void GuiCombat::drawTopRow()
     if (NK_WRAP::button_label(ctx, "esc", m_Hovered, &engine))
     {
         // endScene = true;
-        CombatController::setState(CombatState::VICTORY); //TODO: remove this again
     }
 
 
