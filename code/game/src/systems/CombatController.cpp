@@ -117,6 +117,7 @@ void CombatController::handleTurn()
 
         auto pSoundSystem = engine::SoundSystem::GetInstance();
         if (playerDeadNow) {
+            pSoundSystem->StopMusic();
             pSoundSystem->PlaySound(engine::L0SS_1);
             currentState = CombatState::DEFEAT;
             playerDead.invoke();

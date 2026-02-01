@@ -32,6 +32,12 @@ namespace gl3::engine {
         m_iCurrentMusic = music.m_iHandle;
     }
 
+    void SoundSystem::StopMusic() {
+        if (m_iCurrentMusic == UINT_MAX) return;
+            m_pAudioPlayer->stop(m_iCurrentMusic);
+            m_iCurrentMusic = UINT_MAX;
+    }
+
     SoundSystem::SoundSystem() {
         m_pAudioPlayer = std::make_unique<SoLoud::Soloud>();
         m_pAudioPlayer->init();
