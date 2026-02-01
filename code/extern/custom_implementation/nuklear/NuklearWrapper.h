@@ -4,6 +4,7 @@
 #pragma once
 #include <nuklear_glfw_gl3.h>
 #include "engine/Game.h"
+#include "engine/SoundSystem.h"
 
 namespace NK_WRAP {
     static bool button_label(nk_context* pCtx, std::string pLabel, std::unordered_map<std::string, bool>& HoverStates, gl3::engine::Game* pCore, uint8_t identifier = 0) {
@@ -20,12 +21,13 @@ namespace NK_WRAP {
 
         if (!pCore) return clicked;
 
+        auto pSoundSystem = gl3::engine::SoundSystem::GetInstance();
         if (hovered && !bWasHovered) {
-            pCore->PlaySound("retro_ui_menu_simple_click_03.wav");
+            pSoundSystem->PlaySound("retro_ui_menu_simple_click_03.wav");
         }
         bWasHovered = hovered;
         if (pressed) {
-            pCore->PlaySound("retro_ui_menu_simple_click_12.wav");
+            pSoundSystem->PlaySound("retro_ui_menu_simple_click_12.wav");
         }
         return clicked;
     }
@@ -39,18 +41,19 @@ namespace NK_WRAP {
 
         if (!pCore) return clicked;
 
+        auto pSoundSystem = gl3::engine::SoundSystem::GetInstance();
         if ( hovered && !bWasHovered)
         {
-            pCore->PlaySound("retro_ui_menu_simple_click_03.wav");
+            pSoundSystem->PlaySound("retro_ui_menu_simple_click_03.wav");
         }
         bWasHovered = hovered;
         if (clicked)
         {
-            pCore->PlaySound("retro_ui_menu_simple_click_12.wav");
+            pSoundSystem->PlaySound("retro_ui_menu_simple_click_12.wav");
         }
         if (changed)
         {
-            pCore->PlaySound("retro_ui_menu_blip_click_20.wav");
+            pSoundSystem->PlaySound("retro_ui_menu_blip_click_20.wav");
         }
         return changed;
     }

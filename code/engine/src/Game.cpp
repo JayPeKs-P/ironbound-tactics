@@ -7,6 +7,7 @@
 #include "engine/util/Assets.h"
 #include <soloud.h>
 #include <soloud_wav.h>
+#include "engine/SoundSystem.h"
 
 #include "engine/Texture.h"
 
@@ -18,16 +19,9 @@ entityManager(componentManager,*this)
 {
     Log::init();
     origin = &entityManager.createEntity().addComponent<sceneGraph::Transform>();
-    m_pAudioPlayer = std::make_unique<SoLoud::Soloud>();
-    m_pAudioPlayer->init();
-    m_pAudioPlayer->setGlobalVolume(0.1f);
-    RegisterSound("retro_ui_menu_simple_click_12.wav");
-    RegisterSound("retro_ui_menu_simple_click_03.wav");
-    RegisterSound("retro_ui_menu_blip_click_20.wav");
-    RegisterSound("retro_footstep_movement_05.wav");
-    RegisterSound("retro_impact_colorful_01.wav");
-    RegisterMusic("Retro Action Game Theme #6 (looped).wav");
-    RegisterMusic("Retro Action Game Theme #8 (looped).wav");
+    // m_pAudioPlayer = std::make_unique<SoLoud::Soloud>();
+    // m_pAudioPlayer->init();
+    // m_pAudioPlayer->setGlobalVolume(0.3f);
 }
 
 Game::~Game()
@@ -65,34 +59,39 @@ unsigned int Game::GetTextureFromRegistry(const char* pKey) {
     return -1;
 }
 
-void Game::PlaySound(const char* pFileName) {
-    m_pAudioPlayer->play(*m_ListSound[pFileName]);
-}
-
-void Game::PlayMusic(const char* pFileName) {
-    auto& music = m_ListMusic[pFileName];
-    if (music == m_pCurrentMusic) return;
-    if (m_iCurrentMusic > -1) m_pAudioPlayer->stop(m_iCurrentMusic);
-    m_iCurrentMusic = m_pAudioPlayer->play(*m_ListMusic[pFileName]);
-    m_pCurrentMusic = m_ListMusic[pFileName];
-}
-
-void Game::RegisterSound(const char* pFileName) {
-    auto sound = std::make_unique<SoLoud::Wav>();
-    std::string fileName = pFileName;
-    sound->load(resolveAssetPath("audio/" + fileName).string().c_str());
-    sound->setSingleInstance(true);
-    m_ListSound[fileName] = std::move(sound);
-}
-
-void Game::RegisterMusic(const char* pFileName) {
-    auto music = std::make_unique<SoLoud::Wav>();
-    std::string fileName = pFileName;
-    music->load(resolveAssetPath("audio/" + fileName).string().c_str());
-    music->setSingleInstance(true);
-    music->setLooping(true);
-    m_ListMusic[fileName] = std::move(music);
-}
+// void Game::PlaySound(const std::string& sFileName) {
+//     if (m_ListHandles.contains(sFileName)) {
+//         auto& sound = m_ListHandles[sFileName];
+//         if (m_pAudioPlayer->isValidVoiceHandle(sound)) {
+//             return;
+//         }
+//     }
+//     auto handle = m_pAudioPlayer->play(*m_ListSound[sFileName]);
+//     m_ListHandles.insert({sFileName, handle});
+// }
+//
+// void Game::PlayMusic(const std::string& sFileName) {
+//     auto& music = m_ListMusic[sFileName];
+//     if (music == m_pCurrentMusic) return;
+//     if (m_iCurrentMusic > -1) m_pAudioPlayer->stop(m_iCurrentMusic);
+//     m_iCurrentMusic = m_pAudioPlayer->play(*m_ListMusic[sFileName]);
+//     m_pCurrentMusic = m_ListMusic[sFileName];
+// }
+//
+// void Game::RegisterSound(const std::string& sFileName) {
+//     auto sound = std::make_unique<SoLoud::Wav>();
+//     sound->load(resolveAssetPath("audio/" + sFileName).string().c_str());
+//     sound->setSingleInstance(true);
+//     m_ListSound[sFileName] = std::move(sound);
+// }
+//
+// void Game::RegisterMusic(const std::string& sFileName) {
+//     auto music = std::make_unique<SoLoud::Wav>();
+//     music->load(resolveAssetPath("audio/" + sFileName).string().c_str());
+//     music->setSingleInstance(true);
+//     music->setLooping(true);
+//     m_ListMusic[sFileName] = std::move(music);
+// }
 
 void Game::run()
 {

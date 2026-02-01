@@ -16,6 +16,7 @@
 #include "../systems/GuiHandler.h"
 #include "engine/Texture.h"
 #include "engine/rendering/Model2D.h"
+#include "engine/SoundSystem.h"
 
 using namespace gl3;
 GuiCombat::event_t GuiCombat::startRound;
@@ -74,26 +75,8 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, GuiHandler& guiHandler,  nk_contex
 }
 ////////////////////////////////////////////////////////////////////////
     });
-//     startEndOfTurn.addListener([&]()
-//     {
-// ////////////////////////////////////////////////////////////////////////
-// {
-// #ifdef DEBUG_MODE
-//     DEBUG_LOG(
-//         << "TRIGGERED EVENT: 'startEndOfTurn'"
-//         );
-// #endif
-// }
-// ////////////////////////////////////////////////////////////////////////
-//     });
-
-    // CombatController::enemyDead.addListener([&]()
-    // {
-    //     countdownStartRound = 3.0f;
-    //     startRound.invoke();
-    //     CombatController::setState(CombatState::WAITNEXTROUND);
-    // });
-    engine.PlayMusic("Retro Action Game Theme #8 (looped).wav");
+    auto pSoundSystem = engine::SoundSystem::GetInstance();
+    pSoundSystem->PlayMusic("Retro Action Game Theme #8 (looped).wav");
 }
 
 GuiCombat::~GuiCombat() {

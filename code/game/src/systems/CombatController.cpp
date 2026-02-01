@@ -14,6 +14,7 @@
 
 
 #include "MovementSystem.h"
+#include "engine/SoundSystem.h"
 using json = nlohmann::json;
 
 #include "../gui/GuiCombat.h"
@@ -114,11 +115,14 @@ void CombatController::handleTurn()
                                 iEnemyArcherTotalAmount <= 0 &&
                                 iEnemyCatapultUseAmount <= 0);
 
+        auto pSoundSystem = engine::SoundSystem::GetInstance();
         if (playerDeadNow) {
+            pSoundSystem->PlaySound("retro_fail_sound_04.wav");
             currentState = CombatState::DEFEAT;
             playerDead.invoke();
         } else if (enemyDeadNow) {
             turnEnd.InvokeAndClear();
+            pSoundSystem->PlaySound("retro_beeps_collect_item_01.wav");
             currentState = CombatState::VICTORY;
             // enemyDead.invoke();   //TODO: change this back
         } else {

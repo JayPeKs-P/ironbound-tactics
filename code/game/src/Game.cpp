@@ -31,14 +31,29 @@
 #include "systems/MovementSystem.h"
 #include "systems/SelectionSystem.h"
 #include "systems/rendering/InstanceManager.h"
+#include "engine/SoundSystem.h"
 
 using gl3::engine::sceneGraph::Transform;
 using namespace gl3;
 
 Game::Game(int width, int height, const std::string& title):
     engine::Game(width, height, title) {
-    // audio.init();
-    // audio.setGlobalVolume(0.1f);
+    auto pSoundSystem = engine::SoundSystem::GetInstance();
+    pSoundSystem->RegisterSound("retro_ui_menu_simple_click_12.wav");
+    pSoundSystem->RegisterSound("retro_ui_menu_simple_click_03.wav");
+    pSoundSystem->RegisterSound("retro_ui_menu_blip_click_20.wav");
+
+    pSoundSystem->RegisterSound("retro_footstep_movement_05.wav");
+    pSoundSystem->RegisterSound("retro_move_walk_tick_20.wav");
+    pSoundSystem->RegisterSound("retro_impact_hit_general_33.wav");
+
+    pSoundSystem->RegisterSound("retro_impact_colorful_01.wav");
+    pSoundSystem->RegisterSound("retro_damage_hurt_ouch_50.wav");
+
+    pSoundSystem->RegisterSound("retro_beeps_collect_item_01.wav");
+    pSoundSystem->RegisterSound("retro_fail_sound_04.wav");
+    pSoundSystem->RegisterMusic("Retro Action Game Theme #6 (looped).wav");
+    pSoundSystem->RegisterMusic("Retro Action Game Theme #8 (looped).wav");
 
 }
 

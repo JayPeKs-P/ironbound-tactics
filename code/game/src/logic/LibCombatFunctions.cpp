@@ -9,6 +9,7 @@
 
 #include "../components/TagComponent.h"
 #include "engine/Game.h"
+#include "engine/SoundSystem.h"
 #define MAX_UNIT_AMOUNT 75
 
 namespace gl3 {
@@ -64,6 +65,9 @@ namespace gl3 {
             pUnit_C->fLeftoverDamage -= 1.0f;
             iAmountDead += 1;
         }
+        if (iAmountDead <= 0) return;
+        auto pSoundSystem = engine::SoundSystem::GetInstance();
+        pSoundSystem->PlaySound("retro_damage_hurt_ouch_50.wav");
 
         pUnit_C->totalAmount -= iAmountDead;
         if (pUnit_C->totalAmount <= 0) pUnit_C->totalAmount = 0;

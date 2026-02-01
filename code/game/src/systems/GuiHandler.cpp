@@ -5,6 +5,7 @@
 #include "GuiHandler.h"
 #include "engine/Texture.h"
 #include <iostream>
+#include <algorithm>
 
 
 #include "../gui/GuiUnitSelection.h"

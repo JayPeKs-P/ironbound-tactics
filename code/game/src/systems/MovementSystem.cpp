@@ -15,6 +15,7 @@
 #include "../components/UnitState.h"
 #include "engine/sceneGraph/Transform.h"
 #include "../components/unitTypes/Unit.h"
+#include "engine/SoundSystem.h"
 #include "engine/rendering/InstanceBuffer.h"
 #include "engine/rendering/Model2D.h"
 #include "glm/gtx/norm.inl"
@@ -160,6 +161,9 @@ namespace gl3 {
 
     bool MovementSystem::moveStraight(Transform& transform, glm::vec3 direction, float deltatime,
                                       State endState) const {
+        // engine.PlaySound("retro_move_walk_tick_20.wav");
+        auto pSoundSystem = engine::SoundSystem::GetInstance();
+        pSoundSystem->PlaySound("retro_impact_hit_general_33.wav");
         bool bFinished = true;
         float distanceToGoal = glm::length(direction);
         auto& unitState_C = engine.componentManager.getComponent<UnitState>(transform.entity());
@@ -270,7 +274,8 @@ namespace gl3 {
     }
 
     bool MovementSystem::DeleteProjectile(guid_t ID) {
-        engine.PlaySound("retro_impact_colorful_01.wav");
+        auto pSoundSystem = engine::SoundSystem::GetInstance();
+        pSoundSystem->PlaySound("retro_impact_colorful_01.wav");
         auto projectile = engine.entityManager.getEntity(ID);
         engine.entityManager.deleteEntity(projectile);
         return true;
