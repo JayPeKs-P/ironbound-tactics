@@ -1,4 +1,46 @@
 {
+  "VERY EASY": {
+    "1": {
+      "Infantry": "eInfEASY",
+      "amountInf": 15,
+      "Archer": "eArcEASY",
+      "amountArc": 15,
+      "Catapult": "eCatEASY",
+      "amountCat": 0
+    },
+    "2": {
+      "Infantry": "eInfEASY",
+      "amountInf": 5,
+      "Archer": "eArcEASY",
+      "amountArc": 25,
+      "Catapult": "eCatEASY",
+      "amountCat": 0
+    },
+    "3": {
+      "Infantry": "eInfEASY",
+      "amountInf": 15,
+      "Archer": "eArcEASY",
+      "amountArc": 5,
+      "Catapult": "eCatEASY",
+      "amountCat": 1
+    },
+    "4": {
+      "Infantry": "eInfEASY",
+      "amountInf": 20,
+      "Archer": "eArcEASY",
+      "amountArc": 0,
+      "Catapult": "eCatEASY",
+      "amountCat": 0
+    },
+    "5": {
+      "Infantry": "eInfEASY",
+      "amountInf": 0,
+      "Archer": "eArcEASY",
+      "amountArc": 20,
+      "Catapult": "eCatEASY",
+      "amountCat": 2
+    }
+  },
   "EASY":{
     "1": {
       "Infantry": "eInfEASY",
@@ -6,19 +48,19 @@
       "Archer": "eArcEASY",
       "amountArc": 10,
       "Catapult": "eCatEASY",
-      "amountCat": 2
+      "amountCat": 0
     },
     "2": {
       "Infantry": "eInfEASY",
-      "amountInf": 23,
+      "amountInf": 20,
       "Archer": "eArcEASY",
-      "amountArc": 25,
+      "amountArc": 20,
       "Catapult": "eCatEASY",
       "amountCat": 0
     },
     "3": {
       "Infantry": "eInfMEDIUM",
-      "amountInf": 12,
+      "amountInf": 15,
       "Archer": "eArcEASY",
       "amountArc": 20,
       "Catapult": "eCatEASY",
@@ -26,43 +68,103 @@
     },
     "4": {
       "Infantry": "eInfEASY",
-      "amountInf": 25,
+      "amountInf": 15,
       "Archer": "eArcMEDIUM",
-      "amountArc": 14,
+      "amountArc": 18,
       "Catapult": "eCatEASY",
       "amountCat": 1
     },
     "5": {
-      "Infantry": "eInfEASY",
-      "amountInf": 36,
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 25,
       "Archer": "eArcMEDIUM",
-      "amountArc": 0,
+      "amountArc": 3,
       "Catapult": "eCatMEDIUM",
-      "amountCat": 2
+      "amountCat": 0
     }
   },
   "MEDIUM": {
     "1": {
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 30,
+      "Archer": "eArcMEDIUM",
+      "amountArc": 20,
+      "Catapult": "eCatMEDIUM",
+      "amountCat": 4
     },
     "2": {
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 15,
+      "Archer": "eArcMEDIUM",
+      "amountArc": 35,
+      "Catapult": "eCatMEDIUM",
+      "amountCat": 4
     },
     "3": {
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 15,
+      "Archer": "eArcHARD",
+      "amountArc": 15,
+      "Catapult": "eCatMEDIUM",
+      "amountCat": 4
     },
     "4": {
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 15,
+      "Archer": "eArcEASY",
+      "amountArc": 35,
+      "Catapult": "eCatHARD",
+      "amountCat": 4
     },
     "5": {
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 20,
+      "Archer": "eArcMEDIUM",
+      "amountArc": 20,
+      "Catapult": "eCatMEDIUM",
+      "amountCat": 5
     }
   },
   "HARD": {
     "1": {
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 20,
+      "Archer": "eArcHARD",
+      "amountArc": 20,
+      "Catapult": "eCatHARD",
+      "amountCat": 3
     },
     "2": {
+      "Infantry": "eInfHARD",
+      "amountInf": 30,
+      "Archer": "eArcHARD",
+      "amountArc": 30,
+      "Catapult": "eCatHARD",
+      "amountCat": 0
     },
     "3": {
+      "Infantry": "eInfHARD",
+      "amountInf": 20,
+      "Archer": "eArcHARD",
+      "amountArc": 40,
+      "Catapult": "eCatHARD",
+      "amountCat": 4
     },
     "4": {
+      "Infantry": "eInfEASY",
+      "amountInf": 50,
+      "Archer": "eArcMEDIUM",
+      "amountArc": 75,
+      "Catapult": "eCatHARD",
+      "amountCat": 10
     },
     "5": {
+      "Infantry": "eInfMEDIUM",
+      "amountInf": 50,
+      "Archer": "eArcMEDIUM",
+      "amountArc": 50,
+      "Catapult": "eCatHARD",
+      "amountCat": 0
     }
   }
 }

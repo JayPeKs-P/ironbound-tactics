@@ -5,7 +5,6 @@
 #include "LibCombatFunctions.h"
 
 #include <complex.h>
-#include <complex.h>
 
 #include "../components/TagComponent.h"
 #include "engine/Game.h"
@@ -205,11 +204,34 @@ namespace gl3 {
             iUnit_ID = iCatapult_ID;
         }
 
+        if (iUnit_ID == iCatapult_ID) {
+            int iUnitBias = 12;
+            int iBias = random % iUnitBias;
+            if (iBias == 0 || iBias == 1) {
+                iUnit_ID = iInfantry_ID;
+            }
+            else if (iBias == 2 || iBias == 3 || iBias == 4) {
+                iUnit_ID = iArcher_ID;
+            }
+        }
+
+        int iAddBias = 3;
+        bool bAddBias = (random % iAddBias == 0);
+        if (iFunctionIndex != ADD && bAddBias) {
+            iFunctionIndex = ADD;
+            iAmount =static_cast<int>(static_cast<float>(iAmount) * 1.5f) ;
+        }
+
 
         if (iFunctionIndex == ADD) {
             auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
-            if (pUnit_C->totalAmount > MAX_UNIT_AMOUNT) {
-                iFunctionIndex += iUnit_ID + 1;
+            if (pUnit_C->totalAmount + iAmount > MAX_UNIT_AMOUNT) {
+                if ( MAX_UNIT_AMOUNT - pUnit_C->totalAmount > 0) {
+                    iAmount = MAX_UNIT_AMOUNT - pUnit_C->totalAmount;
+                }
+                else {
+                    iFunctionIndex += iUnit_ID + 1;
+                }
             }
         }
 

@@ -160,15 +160,6 @@ CombatController::CombatController(engine::Game &game):
         init(game, amountInf, amountArc, amountCat);
         setState(CombatState::RESET_ENEMY);
     });
-    // MovementSystem::finishedAllAnimations.addListener([&](bool bBeforeDamageCalculation)
-    // {
-    //     if (bBeforeDamageCalculation) {
-    //         setState(CombatState::DAMAGE_STEP);
-    //     }
-    //     else {
-    //         setState(CombatState::EVALUATE_END);
-    //     }
-    // });
     turnStart.addListener([=]()
     {
     });
@@ -190,15 +181,6 @@ DEBUG_LOG(
 
     turnEnd.addListener([&]()
     {
-        // engine.componentManager.forEachComponent<Unit>([&](Unit& unit_C)
-        // {
-        //     if (engine.componentManager.hasComponent<SiegeEngine>(unit_C.entity())) {
-        //
-        //     }
-        //     else {
-        //         unit_C.availableAmount = (unit_C.totalAmount < 0) ? 0 : unit_C.totalAmount;
-        //     }
-        // });
     DEBUG_LOG(
         << "=======| End of turn: "
         << turnCount
@@ -328,9 +310,10 @@ void CombatController::setEnemy(engine::Game& game)
     }
 
     std::string difficulty;
-    if (roundCount >= 10) difficulty = "HARD";
-    else if (roundCount >= 5) difficulty = "MEDIUM";
-    else difficulty = "EASY";
+    if (roundCount >= 20) difficulty = "HARD";
+    else if (roundCount >= 10) difficulty = "MEDIUM";
+    else if (roundCount >= 5) difficulty = "EASY";
+    else difficulty = "VERY EASY";
 
     static std::random_device random;
     static std::mt19937 generate(random());
