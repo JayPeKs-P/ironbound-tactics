@@ -36,7 +36,10 @@ set(SOURCE_FILES src/main.cpp
 set(EXE_FILE Game)
 
 # add the executable target
-add_executable(${EXE_FILE} ${SOURCE_FILES})
+add_executable(${EXE_FILE} WIN32 ${SOURCE_FILES})
+
+# Removes console window in combination with ↑ WIN32 flag
+target_link_options(${EXE_FILE} PRIVATE /ENTRY:mainCRTStartup)
 
 #target_compile_definitions(${EXE_FILE} PRIVATE DEBUG_MODE)
 
