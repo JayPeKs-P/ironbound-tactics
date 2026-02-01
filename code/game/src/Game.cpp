@@ -39,8 +39,8 @@ using namespace gl3;
 Game::Game(int width, int height, const std::string& title):
     engine::Game(width, height, title) {
     auto pSoundSystem = engine::SoundSystem::GetInstance();
-    pSoundSystem->RegisterSound(engine::UI_BUTTON_HOVER, "retro_ui_menu_simple_click_12.wav");
-    pSoundSystem->RegisterSound(engine::UI_BUTTON_PRESS, "retro_ui_menu_simple_click_03.wav");
+    pSoundSystem->RegisterSound(engine::UI_BUTTON_PRESS, "retro_ui_menu_simple_click_12.wav");
+    pSoundSystem->RegisterSound(engine::UI_BUTTON_HOVER, "retro_ui_menu_simple_click_03.wav");
     pSoundSystem->RegisterSound(engine::UI_DRAG_SLIDER, "retro_ui_menu_blip_click_20.wav");
 
     // pSoundSystem->RegisterSound(, "retro_footstep_movement_05.wav");
@@ -228,34 +228,28 @@ MouseInput right;
 void Game::update(GLFWwindow* window) {
     auto selectionSystem = &getSystem<SelectionSystem>();
     auto combatController = &getSystem<CombatController>();
-    auto instanceManager = &getSystem<InstanceManager>();
     left.update(window, GLFW_MOUSE_BUTTON_LEFT);
     if (left.clicked)
     {
-        Transform* selection = nullptr;
-        selection = selectionSystem->select<UnitState>(*this, 0.1f);
+        Unit* selection = nullptr;
+        selection = selectionSystem->select<Unit, UnitState>(*this, 0.1f);
         if (selection != nullptr)
         {
-            auto root = selection->getParent();
-            auto entity = root->entity();
-            if (componentManager.hasComponent<Unit>(entity))
+            auto pSoundSystem = engine::SoundSystem::GetInstance();
+            pSoundSystem->PlaySound(engine::UI_BUTTON_PRESS);
+            ////////////////////////////////////////////////////////////////////////
+            DEBUG_LOG(
+                << unitCategory_to_string(unit.category)
+            );
+            ////////////////////////////////////////////////////////////////////////
+
+            if (combatSelection_C->selectionOne == nullptr)
             {
-                auto& unit = componentManager.getComponent<Unit>(entity);
-
-                ////////////////////////////////////////////////////////////////////////
-                DEBUG_LOG(
-                    << unitCategory_to_string(unit.category)
-                );
-                ////////////////////////////////////////////////////////////////////////
-
-                if (combatSelection_C->selectionOne == nullptr)
-                {
-                    combatSelection_C->selectionOne = std::make_shared<Unit>(unit);
-                }
-                else
-                {
-                    combatSelection_C->selectionTwo = std::make_shared<Unit>(unit);
-                }
+                combatSelection_C->selectionOne = std::make_shared<Unit>(*selection);
+            }
+            else
+            {
+                combatSelection_C->selectionTwo = std::make_shared<Unit>(*selection);
             }
         }
     }
@@ -270,10 +264,6 @@ void Game::update(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
     }
     combatController->handleTurn();
-    // for (auto& transform_C : unitTransforms)
-    // {
-    //     instanceManager->update();
-    // }
     elapsedTime += deltaTime;
 }
 

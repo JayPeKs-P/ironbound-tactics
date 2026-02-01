@@ -15,19 +15,19 @@ class SelectionSystem: public engine::ecs::System {
     explicit SelectionSystem(engine::Game &game): System(game) {};
 
     /// @tparam Component that identifies desired entity
-    template<typename C>
-    transform_t* select(engine::Game &game, float pickRadius = 0.5f)
+    template<typename T, typename C>
+    T* select(engine::Game& game, float pickRadius = 0.5f)
     {
-        transform_t *selected = nullptr;
+        T* selected = nullptr;
         glm::vec3 mouseWorldPos = getMousePos();
         game.componentManager.forEachComponent<transform_t>([&](transform_t &transform)
         {
             float dist = glm::distance(glm::vec2(mouseWorldPos), glm::vec2(transform.localPosition));
-            if (dist < pickRadius)
-            {
-                if (!engine.componentManager.hasComponent<C>(transform.entity())) return;
-                selected = &transform;
-            }
+            if (dist >= pickRadius) return;
+            if (!engine.componentManager.hasComponent<C>(transform.entity())) return;
+            auto iRoot = transform.getParent()->entity();
+            if (!engine.componentManager.hasComponent<T>(iRoot)) return;
+            selected = &engine.componentManager.getComponent<T>(iRoot);
         });
         return selected;
     }
