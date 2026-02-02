@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "engine/ecs/ecs.h"
 #include "engine/ecs/System.h"
 
 namespace gl3 {
@@ -10,5 +11,7 @@ namespace gl3 {
     public:
         explicit HoverIconSystem(engine::Game& game);
         void update(engine::Game& game);
+    private:
+        void HelperNoSelection(engine::ecs::guid_t iUnit);
     };
 }

@@ -4,7 +4,9 @@
 
 #include "HoverIconSystem.h"
 
+#include "CombatController.h"
 #include "MovementSystem.h"
+#include "../components/CombatSelection.h"
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 #include "../components/TagComponent.h"
@@ -43,13 +45,20 @@ namespace gl3 {
     }
 
     void HoverIconSystem::update(engine::Game& game) {
+        auto pCombatSelection = CombatSelection::GetInstance();
         game.componentManager.forEachComponent<Unit>([&](Unit& unit)
         {
             auto pUnit_E = &game.entityManager.getEntity(unit.entity());
             auto pUnitInstanceBuffer_C = &game.componentManager.getComponent<InstanceBuffer>(pUnit_E->guid());
-            for (auto child : pUnit_E->GetChildren()) {
-                if (!game.componentManager.hasComponent<UvOffset>(child)) continue;
-                auto pVisibility_C = &game.componentManager.getComponent<Visibility>(child);
+            for (auto iIcon : pUnit_E->GetChildren()) {
+                if (!game.componentManager.hasComponent<UvOffset>(iIcon)) continue;
+                auto pUvOffset_C = &game.componentManager.getComponent<UvOffset>(iIcon);
+
+                auto pVisibility_C = &game.componentManager.getComponent<Visibility>(iIcon);
+                if (CombatController::getCombatState() != CombatState::MAIN_PHASE) {
+                    pVisibility_C->m_bVisible = false;
+                    continue;
+                }
                 if (unit.totalAmount <= 0) {
                     pVisibility_C->m_bVisible = false;
                     continue;
@@ -59,8 +68,72 @@ namespace gl3 {
                     continue;
                 }
 
+                if (pCombatSelection->selectionTwo) {
+                    guid_t iSelection = pCombatSelection->selectionOne->entity();
+                    guid_t iSelection2 = pCombatSelection->selectionTwo->entity();
+                    int iSelectionAvailable = pCombatSelection->selectionOne->availableAmount;
+                    auto pTag_C = &game.componentManager.getComponent<TagComponent>(iSelection);
+                    auto pTag2_C = &game.componentManager.getComponent<TagComponent>(iSelection2);
+
+                    bool bPlayerSelected = pTag_C->value == Tag::PLAYER;
+                    bool bEnemySelected2 = pTag2_C->value == Tag::ENEMY;
+                    bool bIsSelection1 = unit.entity() == iSelection;
+                    bool bIsSelection2 = unit.entity() == iSelection2;
+                    if (bPlayerSelected && !bIsSelection1 && !bIsSelection2) {
+                        pVisibility_C->m_bVisible = false;
+                        continue;
+                    }
+                    if (bIsSelection2 && bEnemySelected2 && iSelectionAvailable > 0) {
+                        pUvOffset_C->u = 8;
+                        pUvOffset_C->v = 48;
+                    }
+                }
+                else if (pCombatSelection->selectionOne) {
+                    guid_t iSelection = pCombatSelection->selectionOne->entity();
+                    int iSelectionAvailable = pCombatSelection->selectionOne->availableAmount;
+                    auto pTag_C = &game.componentManager.getComponent<TagComponent>(iSelection);
+
+                    bool bPlayerSelected = pTag_C->value == Tag::PLAYER;
+                    bool bUnitIsSiege = game.componentManager.hasComponent<SiegeEngine>(pUnit_E->guid());
+                    bool bUnitIsEnemy = game.componentManager.getComponent<TagComponent>(pUnit_E->guid()).value == Tag::ENEMY;
+                    bool bUnitIsSelection = iSelection == unit.entity();
+                    if (bPlayerSelected && !bUnitIsSiege && !bUnitIsEnemy && !bUnitIsSelection) {
+                        pVisibility_C->m_bVisible = false;
+                        continue;
+                    }
+                    if (!bUnitIsSelection && iSelectionAvailable <= 0) {
+                        pVisibility_C->m_bVisible = false;
+                        continue;
+                    }
+                    bool bSiegeIsUseable = false;
+                    if (bUnitIsSiege && !bUnitIsEnemy) {
+                        auto& siege = game.componentManager.getComponent<SiegeEngine>(pUnit_E->guid());
+                        auto iTotalSiege = unit.totalAmount;
+                        auto iUseableAmount = siege.useableAmount;
+                        auto iUseAmountNew = siege.useableAmountNew;
+                        auto iCost = siege.cost;
+                        bool bHasUnused = iTotalSiege - iUseableAmount - iUseAmountNew > 0;
+                        bool bSelectionEnough = iSelectionAvailable > iCost;
+                        bSiegeIsUseable = bHasUnused && bSelectionEnough;
+                    }
+                    if (bUnitIsSelection || bSiegeIsUseable) {
+                        pUvOffset_C->u = 20;
+                    }
+                    else {
+                        pUvOffset_C->u = 11;
+                    }
+                }
+                else {
+                    pUvOffset_C->u = pUvOffset_C->originalU;
+                    pUvOffset_C->v = pUvOffset_C->originalV;
+                }
+
                 pVisibility_C->m_bVisible = true;
             }
         });
+    }
+
+    void HoverIconSystem::HelperNoSelection(guid_t iUnit) {
+
     }
 }
