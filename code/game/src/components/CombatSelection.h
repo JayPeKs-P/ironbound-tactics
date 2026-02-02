@@ -11,6 +11,10 @@
 
 struct Unit;
 namespace gl3 {
+    namespace engine {
+        class Game;
+    }
+
     struct CombatSelection {
         [[nodiscard]] static CombatSelection* GetInstance() {
             if (!m_pInstance) {
@@ -33,9 +37,16 @@ namespace gl3 {
         void InvokeUse(UnitCategory first, int iAmount, UnitCategory second) {
             use.invoke(first, iAmount, second);
         }
+        void ResetSelections() {
+            m_pFirstUnit_C = nullptr;
+            m_pSecondUnit_C = nullptr;
+        }
+
+        bool SetSelection(Unit* pSelection);
         event_t attack;
         event_t defend;
         event_t use;
+        void HandleEdgeCases(engine::Game& game);
 
     private:
         explicit CombatSelection() {}

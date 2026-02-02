@@ -11,6 +11,7 @@ using engine::ecs::ComponentManager;
 using engine::ecs::guid_t;
 using engine::ecs::Entity;
 
+    // Do not extend this class. Logic in multiple cases depend on existence of exactly two valid values.
 enum class Tag {PLAYER, ENEMY};
 
 class TagComponent: public Component {

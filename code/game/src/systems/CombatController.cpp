@@ -55,7 +55,7 @@ void CombatController::handleTurn()
         engine.componentManager.removeComponent<Unit>(iInfantryEnemy);
         engine.componentManager.removeComponent<Unit>(iArcherEnemy);
         engine.componentManager.removeComponent<Unit>(iCatapultEnemy);
-        engine.componentManager.getComponent<SiegeEngine>(iCatapultEnemy).useableAmount = 0;
+        engine.componentManager.getComponent<SiegeEngine>(iCatapultEnemy).m_iUsedAmount = 0;
         setState(CombatState::STARTING_NEW_ROUND);
         break;
     case CombatState::STARTING_NEW_ROUND:
@@ -102,11 +102,11 @@ void CombatController::handleTurn()
 
         auto iPlayerInfantryTotalAmount = engine.componentManager.getComponent<Unit>(iInfantryPlayer).totalAmount;
         auto iPlayerArcherTotalAmount = engine.componentManager.getComponent<Unit>(iArcherPlayer).totalAmount;
-        auto iPlayerCatapultUseAmount = engine.componentManager.getComponent<SiegeEngine>(iCatapultPlayer).useableAmount;
+        auto iPlayerCatapultUseAmount = engine.componentManager.getComponent<SiegeEngine>(iCatapultPlayer).m_iUsedAmount;
 
         auto iEnemyInfantryTotalAmount= engine.componentManager.getComponent<Unit>(iInfantryEnemy).totalAmount;
         auto iEnemyArcherTotalAmount = engine.componentManager.getComponent<Unit>(iArcherEnemy).totalAmount;
-        auto iEnemyCatapultUseAmount = engine.componentManager. getComponent<SiegeEngine>(iCatapultEnemy).useableAmount;
+        auto iEnemyCatapultUseAmount = engine.componentManager. getComponent<SiegeEngine>(iCatapultEnemy).m_iUsedAmount;
 
         bool playerDeadNow = (iPlayerInfantryTotalAmount <= 0 &&
                                 iPlayerArcherTotalAmount <= 0 &&
@@ -375,7 +375,7 @@ void CombatController::runEnemyTurn()
             if (engine.componentManager.hasComponent<SiegeEngine>(option.iTarget_ID) && pTargetTag_C->value == Tag::ENEMY)
             {
                 auto pTargetSiegeEngine_C = &engine.componentManager.getComponent<SiegeEngine>(option.iTarget_ID);
-                if (pTargetSiegeEngine_C->useableAmount < option.iTargetAmount) continue;
+                if (pTargetSiegeEngine_C->m_iUsedAmount < option.iTargetAmount) continue;
                 HelperScheduleUse(option.iActor_ID, option.iTarget_ID, option.iTargetAmount);
 #ifdef DEBUG_MODE
     DEBUG_LOG(
@@ -455,7 +455,7 @@ void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, int iTar
     const int iActorCost = iTargetInstanceAmount * pTargetSiegeEngine_C->cost;
 
     onBeforeAction.invoke(iActor, iTarget, iActorCost);
-    pTargetSiegeEngine_C->useableAmountNew += iTargetInstanceAmount;
+    pTargetSiegeEngine_C->m_iUsedAmountNew += iTargetInstanceAmount;
     engine.actionRegister.scheduleAction(MIN_SPEED_VALUE,[=] ()
     {
         auto pLibCombat = LibCombatFunctions::GetInstance(engine);

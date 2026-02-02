@@ -251,37 +251,24 @@ void Game::update(GLFWwindow* window) {
     auto selectionSystem = &getSystem<SelectionSystem>();
     auto combatController = &getSystem<CombatController>();
     auto pCombatSelection = CombatSelection::GetInstance();
+
     left.update(window, GLFW_MOUSE_BUTTON_LEFT);
     if (left.clicked)
     {
-        Unit* selection = nullptr;
-        selection = selectionSystem->select<Unit, UnitState>(*this, 0.1f);
-        if (selection != nullptr)
-        {
+        Unit* pSelection = selectionSystem->select<Unit, UnitState>(*this, 0.1f);
+        if (pCombatSelection->SetSelection(pSelection)) {
             auto pSoundSystem = engine::SoundSystem::GetInstance();
             pSoundSystem->PlaySound(engine::UI_BUTTON_PRESS);
-            ////////////////////////////////////////////////////////////////////////
-            DEBUG_LOG(
-                << unitCategory_to_string(unit.category)
-            );
-            ////////////////////////////////////////////////////////////////////////
-
-            if (pCombatSelection->m_pFirstUnit_C == nullptr)
-            {
-                pCombatSelection->m_pFirstUnit_C = std::make_shared<Unit>(*selection);
-            }
-            else
-            {
-                pCombatSelection->m_pSecondUnit_C = std::make_shared<Unit>(*selection);
-            }
+            pCombatSelection->HandleEdgeCases(*this);
         }
     }
+
     right.update(window, GLFW_MOUSE_BUTTON_RIGHT);
     if (right.clicked)
     {
-        pCombatSelection->m_pFirstUnit_C = nullptr;
-        pCombatSelection->m_pSecondUnit_C = nullptr;
+        pCombatSelection->ResetSelections();
     }
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);

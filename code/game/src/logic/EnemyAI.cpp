@@ -107,7 +107,7 @@ std::vector<Option> EnemyAI::generateOptions(engine::Game &game)
         if (amount < targetSE->cost) return;
         if(targetU->totalAmount*targetSE->cost <= amount)
         {
-            unusedTargets = pCatapultUnitPlayer_C->totalAmount-pCatapultSiegeEnginePlayer_C->useableAmount;
+            unusedTargets = pCatapultUnitPlayer_C->totalAmount-pCatapultSiegeEnginePlayer_C->m_iUsedAmount;
         }else
         {
             unusedTargets = actor->availableAmount / pCatapultSiegeEnginePlayer_C->cost;

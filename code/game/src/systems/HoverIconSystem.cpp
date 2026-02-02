@@ -110,6 +110,10 @@ namespace gl3 {
                         pVisibility_C->m_bVisible = false;
                         continue;
                     }
+                    if (!bPlayerSelected && !bUnitIsSelection) {
+                        pVisibility_C->m_bVisible = false;
+                        continue;
+                    }
                     if (!bUnitIsSelection && iSelectionAvailable <= 0) {
                         pVisibility_C->m_bVisible = false;
                         continue;
@@ -118,11 +122,9 @@ namespace gl3 {
                     if (bUnitIsSiege && !bUnitIsEnemy) {
                         auto& siege = game.componentManager.getComponent<SiegeEngine>(pUnit_E->guid());
                         auto iTotalSiege = unit.totalAmount;
-                        auto iUseableAmount = siege.useableAmount;
-                        auto iUseAmountNew = siege.useableAmountNew;
-                        auto iCost = siege.cost;
-                        bool bHasUnused = iTotalSiege - iUseableAmount - iUseAmountNew > 0;
-                        bool bSelectionEnough = iSelectionAvailable > iCost;
+                        auto iTotalUsedAmount = siege.m_iUsedAmount + siege.m_iUsedAmountNew;;
+                        bool bHasUnused = iTotalSiege - iTotalUsedAmount > 0;
+                        bool bSelectionEnough = iSelectionAvailable > siege.cost;
                         bSiegeIsUseable = bHasUnused && bSelectionEnough;
                     }
                     if (bUnitIsSelection || bSiegeIsUseable) {

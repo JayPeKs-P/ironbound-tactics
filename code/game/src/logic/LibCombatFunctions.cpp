@@ -73,8 +73,8 @@ namespace gl3 {
         if (pUnit_C->availableAmount > pUnit_C->totalAmount) pUnit_C->availableAmount = pUnit_C->totalAmount;
         if (m_Game.componentManager.hasComponent<SiegeEngine>(iUnit_ID)) {
             auto pSiege_C = &m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID);
-            pSiege_C->useableAmount -= iAmountDead;
-            if (pSiege_C->useableAmount <= 0) pSiege_C->useableAmount = 0;
+            pSiege_C->m_iUsedAmount -= iAmountDead;
+            if (pSiege_C->m_iUsedAmount <= 0) pSiege_C->m_iUsedAmount = 0;
         }
     }
 
@@ -88,8 +88,8 @@ namespace gl3 {
         // has to be decreased immediately though, since it is used in Gui
         // ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
         // pSiegeEngineTarget->useableAmount += iAmountTarget;
-        pSiegeEngineTarget->useableAmount += iAmountTarget;
-        pSiegeEngineTarget->useableAmountNew -= iAmountTarget;
+        pSiegeEngineTarget->m_iUsedAmount += iAmountTarget;
+        pSiegeEngineTarget->m_iUsedAmountNew -= iAmountTarget;
         pUnitActor->totalAmount -= iAmountTarget * pSiegeEngineTarget->cost;
         pUnitActor->m_iScheduledForUse = iAmountTarget * pSiegeEngineTarget->cost;
     }
@@ -139,7 +139,7 @@ namespace gl3 {
         }
         else {
             auto pSiege_C = &m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID);
-            pSiege_C->useableAmount += iAmount;
+            pSiege_C->m_iUsedAmount += iAmount;
         }
     }
 
