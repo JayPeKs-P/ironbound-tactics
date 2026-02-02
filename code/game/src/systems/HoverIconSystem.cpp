@@ -63,7 +63,7 @@ namespace gl3 {
         });
     }
 
-    void HoverIconSystem::AnimateIcon(guid_t iIcon) {
+    void HoverIconSystem::AnimateIcon(guid_t iIcon) const {
         auto pTransform_C = &engine.componentManager.getComponent<Transform>(iIcon);
         auto pBounce_C = &engine.componentManager.getComponent<Bounce>(iIcon);
         float fDeltaTime = engine.getDeltaTime();
