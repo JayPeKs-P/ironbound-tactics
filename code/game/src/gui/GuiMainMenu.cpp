@@ -4,6 +4,9 @@
 
 #include "GuiMainMenu.h"
 
+#include <fstream>
+
+#include "json.hpp"
 #include "../systems/GuiHandler.h"
 
 GuiMainMenu::event_t GuiMainMenu::onPressPlay;
@@ -14,6 +17,7 @@ m_GuiHandler(guiHandler)
 {
     auto pSoundSystem = engine::SoundSystem::GetInstance();
     pSoundSystem->PlayMusic(engine::MUSIC_MAIN_MENU);
+    HelperLoadConfig();
 }
 
 void GuiMainMenu::render() {
@@ -63,7 +67,7 @@ void GuiMainMenu::MainDisplay() {
     nk_label_colored(ctx, "Current Highscore: ", NK_TEXT_CENTERED, ColorYellow);
     nk_style_pop_font(ctx);
     nk_layout_row_dynamic(ctx, windowHeight / 36, 1);
-    nk_label_colored(ctx, "Round 9", NK_TEXT_CENTERED, ColorBlue);
+    nk_label_colored(ctx, m_HighscoreText.c_str(), NK_TEXT_CENTERED, ColorBlue);
     nk_layout_row_dynamic(ctx, windowHeight / 50, 1);
     nk_label(ctx, "", NK_TEXT_LEFT);
 
@@ -137,4 +141,15 @@ void GuiMainMenu::SettingsDisplay() {
     if (NK_WRAP::button_label(ctx, "Back", m_Hovered, &engine)) {
         SetMenuState(MainMenuState::MAIN_MENU);
     }
+}
+
+void GuiMainMenu::HelperLoadConfig() {
+    auto pConfigPath = engine.GetConfigPath();
+    using json = nlohmann::json;
+    json config;
+
+    std::ifstream in(pConfigPath);
+    in >> config;
+    m_CurrentHighscore = config["highscore"];
+    m_HighscoreText = "Round " + std::to_string(m_CurrentHighscore);
 }

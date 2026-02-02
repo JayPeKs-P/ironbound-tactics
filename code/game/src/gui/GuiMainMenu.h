@@ -28,7 +28,10 @@ private:
     void MainDisplay();
     void SettingsDisplay();
     void TutorialDisplay();
+    void HelperLoadConfig();
     gl3::GuiHandler& m_GuiHandler;
+    uint8_t m_CurrentHighscore;
+    std::string m_HighscoreText;
 
     nk_color ColorYellow = nk_rgba(255, 250, 200, 255);
     nk_color ColorGreen = nk_rgba(100, 255, 100, 255);

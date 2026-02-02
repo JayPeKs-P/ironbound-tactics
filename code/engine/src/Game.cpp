@@ -1,12 +1,16 @@
 #include "engine/Log.h"
 #include "engine/Game.h"
 
+#include <fstream>
+
 #include "engine/sceneGraph/SceneGraphPruner.h"
 #include "engine/sceneGraph/SceneGraphUpdater.h"
 #include "engine/rendering/RenderSystem.h"
 #include "engine/util/Assets.h"
 #include <soloud.h>
 #include <soloud_wav.h>
+
+#include "json.hpp"
 #include "engine/SoundSystem.h"
 
 #include "engine/Texture.h"
@@ -88,13 +92,10 @@ unsigned int Game::GetTextureFromRegistry(const char* pKey) {
 
 void Game::run()
 {
+    LoadConfig();
     auto sceneGraphUpdater = &addSystem<sceneGraph::SceneGraphUpdater>();
-    // sceneGraph::SceneGraphUpdater sceneGraphUpdater(*this);
     auto sceneGraphPruner = &addSystem<sceneGraph::SceneGraphPruner>();
-    // sceneGraph::SceneGraphPruner sceneGraphPruner(*this);
-
     auto renderer = &addSystem<render::RenderSystem>();
-    // render::RenderSystem renderer(*this);
 
 
     onStartup.invoke(*this);
@@ -120,4 +121,33 @@ void Game::updateDeltaTime()
     float frameTime = glfwGetTime();
     deltaTime = frameTime - lastFrameTime;
     lastFrameTime = frameTime;
+}
+
+void Game::LoadConfig() {
+    using json = nlohmann::json;
+    json config;
+
+    std::ifstream in(m_pConfigPath);
+    if (in.good()) {
+        try {
+            in >> config;
+        }
+        catch (...) {
+            config = {
+                {"highscore", 0},
+                {"volume", 0.3f}
+            };
+        }
+    }
+    else {
+        config = {
+            {"highscore", 0},
+            {"volume", 0.3f}
+        };
+    }
+    config.emplace("highscore", 0);
+    config.emplace("volume", 0.3f);
+
+    std::ofstream out(m_pConfigPath);
+    out << config.dump(4);
 }
