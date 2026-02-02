@@ -34,7 +34,7 @@ void GuiMainMenu::render() {
         break;
     }
     case MainMenuState::SETTINGS: {
-        if (nk_begin(ctx, "Main Menu Buttons",
+        if (nk_begin(ctx, "Settings Menu",
             nk_rect(windowWidth * 2/6,  windowHeight * 3/ 6,
                 windowWidth *  2/6 , windowHeight * 11/24 ),
                 NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))

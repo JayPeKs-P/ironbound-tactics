@@ -18,6 +18,7 @@ class GuiCombat: public Gui {
     using event_t = gl3::engine::events::Event<GuiCombat>;
 public:
     static event_t startRound;
+    static event_t quitToMenu;
     GuiCombat(gl3::engine::Game& game, gl3::GuiHandler& guiHandler,  nk_context* ctx, nk_uint& textureID);
     ~GuiCombat();
 
@@ -32,6 +33,7 @@ private:
     void drawEndTurnWindow();
     void DrawFirstSelection() const;
     void DrawSecondSelection();
+    void DrawPauseWindow();
     void getComponents(gl3::engine::Game& game);
 
     guid_t pInf_E;
@@ -43,13 +45,14 @@ private:
     guid_t eCat_E;
 
     // struct nk_rect infoBounds;
-    nk_color highlightColor = nk_rgba(255, 250, 200, 255);
-    nk_color playerColor = nk_rgba(100, 255, 100, 255);
-    nk_color enemyColor = nk_rgba(255, 100, 100, 255);
-    nk_color numberColor = nk_rgba(100, 200, 255, 255);
+    nk_color ColorYellow = nk_rgba(255, 250, 200, 255);
+    nk_color ColorGreen = nk_rgba(100, 255, 100, 255);
+    nk_color ColorRed = nk_rgba(255, 100, 100, 255);
+    nk_color ColorBlue = nk_rgba(100, 200, 255, 255);
     nk_color ColorOrange = nk_rgba(255, 165, 0, 255);
 
     int value = 0;
+    bool m_bPaused = false;
 
     bool justStarted = true;
     gl3::GuiHandler& m_GuiHandler;

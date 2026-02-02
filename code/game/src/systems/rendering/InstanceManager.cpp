@@ -26,9 +26,6 @@ namespace gl3 {
             update(game);
         });
 
-        GuiCombat::startRound.addListener([&]()
-        {
-        });
         CombatController::initialize.addListener([&]()
         {
             init(engine);
@@ -38,6 +35,10 @@ namespace gl3 {
             terminate(engine);
         });
         CombatController::playerDead.addListener([&]()
+        {
+            terminate(engine);
+        });
+        GuiCombat::quitToMenu.addListener([&]()
         {
             terminate(engine);
         });
@@ -80,7 +81,7 @@ namespace gl3 {
     void InstanceManager::terminate(engine::Game& game) {
         game.componentManager.forEachComponent<Transform>([&](Transform& transform)
         {
-            if (!game.componentManager.hasComponent<Unit>(transform.entity())) [[likely]] return;
+            if (!game.componentManager.hasComponent<InstanceBuffer>(transform.entity())) [[likely]] return;
             for (auto child : transform.getChildTransforms()) {
                 auto& child_E = game.entityManager.getEntity(child->entity());
                 game.entityManager.deleteEntity(child_E);

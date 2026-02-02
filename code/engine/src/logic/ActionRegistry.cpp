@@ -33,4 +33,8 @@ namespace gl3::engine::combat {
         }
         return true;
     }
+
+    void ActionRegistry::ClearAllActions() {
+        actions.clear();
+    }
 } // gl3

@@ -69,6 +69,11 @@ namespace gl3 {
             activeScene = GuiScene::COMBAT_MENU;
             activeGui = std::make_unique<GuiCombat>(game,*this,  nkCTX, textureAtlasID);
         });
+        GuiCombat::quitToMenu.addListener([&]()
+        {
+            activeScene = GuiScene::MAIN_MENU;
+            activeGui = std::make_unique<GuiMainMenu> (game, *this, nkCTX, textureAtlasID);
+        });
     }
 
     void GuiHandler::restoreGameState()
@@ -79,7 +84,6 @@ namespace gl3 {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        //
     }
 
     void GuiHandler::selectCurrentScene(engine::Game& game)
@@ -91,22 +95,6 @@ namespace gl3 {
     void GuiHandler::renderGUI(engine::Game& game)
     {
         glfwGetWindowSize(game.getWindow(), &windowWidth, &windowHeight);
-        if (currentH != windowHeight)
-        {
-            currentH = windowHeight;
-            // nk_glfw3_font_stash_begin(&glfw, &atlas);
-            // int fontSize = std::max(windowHeight / 36, 10);
-            // nk_font *rpg1= nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", fontSize, 0);
-            // nk_glfw3_font_stash_end(&glfw);
-            // if (rpg1)
-            // {
-            // nk_style_set_font(nkCTX, &rpg1->handle);
-            // }
-            // else
-            // {
-            //     std::cerr << "Font konnte nicht geladen werden! (Größe: " << fontSize;
-            // }
-        }
         glfwGetFramebufferSize(engine.getWindow(), &fbWidth, &fbHeight);
         if (fbHeightCurrent != fbHeight) {
             fbHeightCurrent = fbHeight;

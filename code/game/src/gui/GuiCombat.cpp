@@ -20,6 +20,7 @@
 
 using namespace gl3;
 GuiCombat::event_t GuiCombat::startRound;
+GuiCombat::event_t GuiCombat::quitToMenu;
 // GuiCombat::event_t GuiCombat::startEndOfTurn;
 float GuiCombat::countdownStartRound = 3.0f;
 
@@ -88,6 +89,21 @@ GuiCombat::~GuiCombat() {
 
 void GuiCombat::render()
 {
+    if (m_bPaused) {
+        if (nk_begin(ctx, "Background",
+            nk_rect(0, 0,
+                windowWidth, windowHeight),
+            NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
+        if (nk_begin(ctx, "Pause Window",
+            nk_rect(windowWidth * 2/6,  windowHeight * 2/ 6,
+                windowWidth *  2/6 , windowHeight * 11/24 ),
+                NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
+        {
+            DrawPauseWindow();
+            nk_end(ctx);
+        }
+        return;
+    }
     if (CombatController::getCombatState() == CombatState::STARTING_NEW_ROUND)
     {
         drawStartRoundWindow();
@@ -162,6 +178,7 @@ void GuiCombat::render()
 
 void GuiCombat::invokeSceneChange()
 {
+    quitToMenu.invoke();
 }
 
 void GuiCombat::drawStartRoundWindow()
@@ -179,8 +196,8 @@ void GuiCombat::drawStartRoundWindow()
         auto& fonts = m_GuiHandler.GetFonts();
 
         nk_style_push_font(ctx, &fonts[FANTASY_MAX_SIZE]->handle);
-        nk_label_colored(ctx, "Round", NK_TEXT_CENTERED, highlightColor);
-        nk_label_colored(ctx, std::to_string(CombatController::roundCount).c_str(), NK_TEXT_CENTERED, highlightColor);
+        nk_label_colored(ctx, "Round", NK_TEXT_CENTERED, ColorYellow);
+        nk_label_colored(ctx, std::to_string(CombatController::roundCount).c_str(), NK_TEXT_CENTERED, ColorYellow);
         nk_style_pop_font(ctx);
 
         nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
@@ -243,7 +260,7 @@ bool GuiCombat::DrawRewardWindow() {
         auto& fonts = m_GuiHandler.GetFonts();
         nk_layout_row_dynamic(ctx, windowHeight / 8, 1);
         nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
-        nk_label_colored(ctx, "Choose a Reward: ", NK_TEXT_CENTERED, highlightColor);
+        nk_label_colored(ctx, "Choose a Reward: ", NK_TEXT_CENTERED, ColorYellow);
         nk_style_pop_font(ctx);
 
         float ratio[] = {0.01, 0.1, 0.05, 0.45, 0.15, 0.2};
@@ -260,7 +277,7 @@ bool GuiCombat::DrawRewardWindow() {
         nk_image(ctx, unitImage);
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_label(ctx, m_Rewards[0].m_FunctionKey.c_str(), NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(m_Rewards[0].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
+        nk_label_colored(ctx, std::to_string(m_Rewards[0].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
         if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
         {
             pLibCombat->InvokeRewardCallback(m_Rewards[0]);
@@ -274,7 +291,7 @@ bool GuiCombat::DrawRewardWindow() {
         nk_image(ctx, unitImage);
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_label(ctx, m_Rewards[1].m_FunctionKey.c_str(), NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(m_Rewards[1].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
+        nk_label_colored(ctx, std::to_string(m_Rewards[1].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
         if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 1))
         {
             pLibCombat->InvokeRewardCallback(m_Rewards[1]);
@@ -288,7 +305,7 @@ bool GuiCombat::DrawRewardWindow() {
         nk_image(ctx, unitImage);
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_label(ctx, m_Rewards[2].m_FunctionKey.c_str(), NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(m_Rewards[2].m_iAmount).c_str(), NK_TEXT_CENTERED, numberColor);
+        nk_label_colored(ctx, std::to_string(m_Rewards[2].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
         if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 2))
         {
             pLibCombat->InvokeRewardCallback(m_Rewards[2]);
@@ -342,7 +359,7 @@ void GuiCombat::drawTopRow()
 
     if (NK_WRAP::button_label(ctx, "esc", m_Hovered, &engine))
     {
-        // endScene = true;
+        m_bPaused = true;
     }
 
 
@@ -393,7 +410,7 @@ void GuiCombat::drawTopRow()
     }
 
     std::string roundLabel = "Round  " + std::to_string(CombatController::roundCount);
-    nk_label_colored(ctx, roundLabel.c_str(), NK_TEXT_CENTERED, highlightColor);
+    nk_label_colored(ctx, roundLabel.c_str(), NK_TEXT_CENTERED, ColorYellow);
     nk_label(ctx, "", NK_TEXT_CENTERED);
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
@@ -435,24 +452,24 @@ void GuiCombat::DrawFirstSelection() const {
     auto tagOwnerFirstSelection = engine.componentManager.getComponent<TagComponent>(pFirstSelection->entity()).value;
 
     nk_layout_row_dynamic(ctx, windowHeight/20, 2);
-    nk_label_colored(ctx, getType(*pFirstSelection).c_str(), NK_TEXT_LEFT, highlightColor);
+    nk_label_colored(ctx, getType(*pFirstSelection).c_str(), NK_TEXT_LEFT, ColorYellow);
     if (tagOwnerFirstSelection == Tag::PLAYER)
     {
-        nk_label_colored(ctx, getOwner(tagOwnerFirstSelection).c_str(), NK_TEXT_LEFT, playerColor);
+        nk_label_colored(ctx, getOwner(tagOwnerFirstSelection).c_str(), NK_TEXT_LEFT, ColorGreen);
     }else
     {
-        nk_label_colored(ctx, getOwner(tagOwnerFirstSelection).c_str(), NK_TEXT_LEFT, enemyColor);
+        nk_label_colored(ctx, getOwner(tagOwnerFirstSelection).c_str(), NK_TEXT_LEFT, ColorRed);
     }
 
     nk_layout_row_dynamic(ctx, windowHeight/40, 2);
     nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
     {
         nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
+        nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, ColorBlue);
         if (tagOwnerFirstSelection == Tag::PLAYER)
         {
             nk_label(ctx, "Left  this  turn: ", NK_TEXT_LEFT);
-            nk_label_colored(ctx, std::to_string(pFirstSelection->availableAmount).c_str(), NK_TEXT_LEFT, playerColor);
+            nk_label_colored(ctx, std::to_string(pFirstSelection->availableAmount).c_str(), NK_TEXT_LEFT, ColorGreen);
             if (engine.componentManager.hasComponent<SiegeEngine>(pFirstSelection->entity())) {
                 auto& siege_C = engine.componentManager.getComponent<SiegeEngine>(pFirstSelection->entity());
                 int iUsedAmount = siege_C.m_iUsedAmountNew + siege_C.m_iUsedAmount;
@@ -462,31 +479,31 @@ void GuiCombat::DrawFirstSelection() const {
 
                 std::string pTextCost = std::to_string(siege_C.cost) + "  other  units  necessary  per  individual  Catapult.";
                 nk_layout_row_dynamic(ctx, windowHeight/20, 1);
-                nk_label_colored_wrap(ctx, pTextCost.c_str(), numberColor);
+                nk_label_colored_wrap(ctx, pTextCost.c_str(), ColorBlue);
                 nk_layout_row_dynamic(ctx, windowHeight/40, 2);
             }
         }
 
-        nk_label_colored(ctx, "Stats Single Unit", NK_TEXT_LEFT, highlightColor);
+        nk_label_colored(ctx, "Stats Single Unit", NK_TEXT_LEFT, ColorYellow);
         nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
         nk_label(ctx, "Atk Delay: ", NK_TEXT_LEFT);
         nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->speed)).c_str(), NK_TEXT_LEFT, ColorOrange);
 
         nk_label(ctx, "HP: ",NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->hpValue)).c_str(), NK_TEXT_LEFT, numberColor);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->hpValue)).c_str(), NK_TEXT_LEFT, ColorBlue);
 
         nk_label(ctx, "Def: ",NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->armorValue)).c_str(), NK_TEXT_LEFT, numberColor);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->armorValue)).c_str(), NK_TEXT_LEFT, ColorBlue);
 
         nk_label(ctx, "Atk: ", NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->attackValue)).c_str(), NK_TEXT_LEFT, numberColor);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->attackValue)).c_str(), NK_TEXT_LEFT, ColorBlue);
 
         nk_label(ctx, "Accuracy: ", NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(pFirstSelection->accuracy).c_str(), NK_TEXT_LEFT, numberColor);
+        nk_label_colored(ctx, std::to_string(pFirstSelection->accuracy).c_str(), NK_TEXT_LEFT, ColorBlue);
 
         nk_label(ctx, "Crit Chance: ", NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->critChance)).c_str(), NK_TEXT_LEFT, numberColor);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->critChance)).c_str(), NK_TEXT_LEFT, ColorBlue);
     }
     nk_style_pop_font(ctx);
 }
@@ -502,7 +519,7 @@ void GuiCombat::DrawSecondSelection() {
 
     float ratio[] = {0.1, 0.7, 0.2};
     nk_layout_row_dynamic(ctx, windowHeight/25, 2);
-    nk_label_colored(ctx, getType(*pSecondSelection).c_str(), NK_TEXT_LEFT, highlightColor);
+    nk_label_colored(ctx, getType(*pSecondSelection).c_str(), NK_TEXT_LEFT, ColorYellow);
 
     if (tagOwnerSecondSelection == Tag::PLAYER && !bFirstSelctedIsCatapult)
     {
@@ -511,7 +528,7 @@ void GuiCombat::DrawSecondSelection() {
         const int iUnusedAmount = pSecondSelection->totalAmount - siege_C.m_iUsedAmount - siege_C.m_iUsedAmountNew;
         const int iCanUseAmount = pFirstSelection->availableAmount / cost;
 
-        nk_label_colored(ctx, "Player", NK_TEXT_CENTERED, playerColor);
+        nk_label_colored(ctx, "Player", NK_TEXT_CENTERED, ColorGreen);
         nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
         {
             nk_label(ctx, "Unused Left: ", NK_TEXT_LEFT);
@@ -549,11 +566,11 @@ void GuiCombat::DrawSecondSelection() {
     {
         int availableTroups = pFirstSelection->availableAmount;
 
-        nk_label_colored(ctx, "Enemy", NK_TEXT_CENTERED, enemyColor);
+        nk_label_colored(ctx, "Enemy", NK_TEXT_CENTERED, ColorRed);
         nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
         {
             nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
-            nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
+            nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, ColorBlue);
 
             nk_layout_row(ctx,NK_DYNAMIC,  windowHeight/30, 3, ratio);
             nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
@@ -573,6 +590,55 @@ void GuiCombat::DrawSecondSelection() {
             nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
         }
         nk_style_pop_font(ctx);
+    }
+}
+
+void GuiCombat::DrawPauseWindow() {
+    auto& fonts = m_GuiHandler.GetFonts();
+    nk_layout_row_dynamic(ctx, windowHeight / 18, 1);
+    nk_style_push_font(ctx, &fonts[FANTASY_LARGE]->handle);
+    nk_label_colored(ctx, "Settings", NK_TEXT_CENTERED, ColorYellow);
+    nk_style_pop_font(ctx);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 50, 1);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    float ratio[] = {0.05f, 0.325f, 0.53f, 0.05f};
+    nk_layout_row(ctx, NK_DYNAMIC, windowHeight / 18, 4, ratio);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "Volume", NK_TEXT_LEFT);
+    auto pSoundSystem = engine::SoundSystem::GetInstance();
+    float fCurrentVolume = pSoundSystem->GetVolume();
+    float newValue = NK_WRAP::slider_float(ctx, 0.0f, fCurrentVolume, 1.0f, 0.05f, "Volume", m_Hovered, &engine);
+    pSoundSystem->SetVolume(newValue);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 50, 1);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    float toggleRatio[] = {0.05f, 0.325f, 0.13f, 0.27f, 0.13f, 0.05f};
+    nk_layout_row(ctx, NK_DYNAMIC, windowHeight / 18, 6, toggleRatio);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "Fullscreen", NK_TEXT_LEFT);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    if (NK_WRAP::button_label(ctx, "Toggle", m_Hovered, &engine)) {
+        engine.ToggleFullScreen();
+    }
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 10, 1);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    float buttonRatio[] = {0.05f, 0.4f, 0.1f, 0.4f, 0.05f};
+    nk_layout_row(ctx, NK_DYNAMIC, windowHeight / 18, 5, buttonRatio);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    if (NK_WRAP::button_label(ctx, "Resume", m_Hovered, &engine)) {
+        m_bPaused = false;
+    }
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    if (NK_WRAP::button_label(ctx, "Quit Game", m_Hovered, &engine)) {
+        endScene = true;
     }
 }
 

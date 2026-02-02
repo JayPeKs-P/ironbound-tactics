@@ -62,6 +62,7 @@ public:
     void handleTurn();
 private:
     void init(engine::Game &game, int amountInf, int amountArc, int amountCat);
+    void Terminate() const;
     void setEnemy(engine::Game &game);
     void chooseAttackTarget(guid_t iAttacker, const UnitCategory &selectionTarget, const int &iAmount);
     void runEnemyTurn();

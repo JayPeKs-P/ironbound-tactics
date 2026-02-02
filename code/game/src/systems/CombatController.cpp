@@ -160,11 +160,9 @@ CombatController::CombatController(engine::Game &game):
         init(game, amountInf, amountArc, amountCat);
         setState(CombatState::RESET_ENEMY);
     });
-    turnStart.addListener([=]()
+    GuiCombat::quitToMenu.addListener([&]()
     {
-    });
-    playerDead.addListener([&]()
-    {
+        Terminate();
     });
 
 ////////////////////////////////////////////////////////////////////////
@@ -289,6 +287,23 @@ void CombatController::init(engine::Game &game, int amountInf, int amountArc, in
             }
         }
     });
+}
+
+void CombatController::Terminate() const {
+    engine.componentManager.forEachComponent<Unit>([&](Unit& unit)
+    {
+        auto pLibCombat = LibCombatFunctions::GetInstance(engine);
+        pLibCombat->setAmount(unit.entity(), 0);
+        if (engine.componentManager.hasComponent<SiegeEngine>(unit.entity())) {
+            auto pSiege_C = &engine.componentManager.getComponent<SiegeEngine>(unit.entity());
+            pSiege_C->m_iUsedAmountNew = 0;
+            pSiege_C->m_iUsedAmount = 0;
+        }
+    });
+    turnCount = 0;
+    roundCount = 1;
+    currentState = CombatState::IDLE;
+    engine.actionRegister.ClearAllActions();
 }
 
 void CombatController::setEnemy(engine::Game& game)
