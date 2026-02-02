@@ -71,7 +71,6 @@ void Game::start() {
     using namespace engine::util;
     //---- Entities ----
     auto& guiScene_E = engine::Game::entityManager.createEntity();
-    combatSelection_C = &guiScene_E.addComponent<CombatSelection<GuiCombat>>();
 
     auto& terrain_E = engine::Game::entityManager.createEntity();
     tempTexID = GetTextureFromRegistry("Terrain");
@@ -251,6 +250,7 @@ MouseInput right;
 void Game::update(GLFWwindow* window) {
     auto selectionSystem = &getSystem<SelectionSystem>();
     auto combatController = &getSystem<CombatController>();
+    auto pCombatSelection = CombatSelection::GetInstance();
     left.update(window, GLFW_MOUSE_BUTTON_LEFT);
     if (left.clicked)
     {
@@ -266,21 +266,21 @@ void Game::update(GLFWwindow* window) {
             );
             ////////////////////////////////////////////////////////////////////////
 
-            if (combatSelection_C->selectionOne == nullptr)
+            if (pCombatSelection->selectionOne == nullptr)
             {
-                combatSelection_C->selectionOne = std::make_shared<Unit>(*selection);
+                pCombatSelection->selectionOne = std::make_shared<Unit>(*selection);
             }
             else
             {
-                combatSelection_C->selectionTwo = std::make_shared<Unit>(*selection);
+                pCombatSelection->selectionTwo = std::make_shared<Unit>(*selection);
             }
         }
     }
     right.update(window, GLFW_MOUSE_BUTTON_RIGHT);
     if (right.clicked)
     {
-        combatSelection_C->selectionOne = nullptr;
-        combatSelection_C->selectionTwo = nullptr;
+        pCombatSelection->selectionOne = nullptr;
+        pCombatSelection->selectionTwo = nullptr;
     }
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {

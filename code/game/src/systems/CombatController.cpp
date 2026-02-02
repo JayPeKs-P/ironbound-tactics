@@ -214,48 +214,40 @@ DEBUG_LOG(
 #endif
 }
 ////////////////////////////////////////////////////////////////////////
-
-
-    for (auto& [owner, _] : engine.componentManager.getContainer<CombatSelection<GuiCombat>>())
+    auto pCombatSelection = CombatSelection::GetInstance();
+    pCombatSelection->attack.addListener([&](UnitCategory selectionPlayer, int iAmount, UnitCategory selectionEnemy)
     {
-        if (game.componentManager.hasComponent<CombatSelection<GuiCombat>>(owner))
+        if (selectionPlayer == UnitCategory::INFANTRY)
         {
-            auto& selectionEvent = engine.componentManager.getComponent<CombatSelection<GuiCombat>>(owner);
-            selectionEvent.attack.addListener([&](UnitCategory selectionPlayer, int iAmount, UnitCategory selectionEnemy)
-            {
-                if (selectionPlayer == UnitCategory::INFANTRY)
-                {
-                    chooseAttackTarget(iInfantryPlayer, selectionEnemy, iAmount);
-                }
-                else if (selectionPlayer == UnitCategory::ARCHER)
-                {
-                    chooseAttackTarget(iArcherPlayer, selectionEnemy, iAmount);
-                }
-                else if (selectionPlayer == UnitCategory::CATAPULT)
-                {
-                    chooseAttackTarget(iCatapultPlayer, selectionEnemy, iAmount);
-                }
-            });
-
-            selectionEvent.use.addListener([&](UnitCategory selectionUnit, int iTargetInstanceAmount, UnitCategory selectionSiegeEngine)
-            {
-                if (selectionUnit == UnitCategory::INFANTRY)
-                {
-                    if (selectionSiegeEngine == UnitCategory::CATAPULT)
-                    {
-                        HelperScheduleUse(iInfantryPlayer, iCatapultPlayer, iTargetInstanceAmount);
-                    }
-                }
-                else if (selectionUnit == UnitCategory::ARCHER)
-                {
-                    if (selectionSiegeEngine == UnitCategory::CATAPULT)
-                    {
-                        HelperScheduleUse(iArcherPlayer, iCatapultPlayer, iTargetInstanceAmount);
-                    }
-                }
-            });
+            chooseAttackTarget(iInfantryPlayer, selectionEnemy, iAmount);
         }
-    }
+        else if (selectionPlayer == UnitCategory::ARCHER)
+        {
+            chooseAttackTarget(iArcherPlayer, selectionEnemy, iAmount);
+        }
+        else if (selectionPlayer == UnitCategory::CATAPULT)
+        {
+            chooseAttackTarget(iCatapultPlayer, selectionEnemy, iAmount);
+        }
+    });
+
+    pCombatSelection->use.addListener([&](UnitCategory selectionUnit, int iTargetInstanceAmount, UnitCategory selectionSiegeEngine)
+    {
+        if (selectionUnit == UnitCategory::INFANTRY)
+        {
+            if (selectionSiegeEngine == UnitCategory::CATAPULT)
+            {
+                HelperScheduleUse(iInfantryPlayer, iCatapultPlayer, iTargetInstanceAmount);
+            }
+        }
+        else if (selectionUnit == UnitCategory::ARCHER)
+        {
+            if (selectionSiegeEngine == UnitCategory::CATAPULT)
+            {
+                HelperScheduleUse(iArcherPlayer, iCatapultPlayer, iTargetInstanceAmount);
+            }
+        }
+    });
 }
 
 void CombatController::init(engine::Game &game, int amountInf, int amountArc, int amountCat)

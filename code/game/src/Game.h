@@ -19,29 +19,10 @@ namespace gl3
     public:
         Game(int width, int height, const std::string& title);
 
-        // [[nodiscard]] std::shared_ptr<GuiHandler> gui_handler() const
-        // {
-        //     return guiHandler;
-        // }
-
     private:
-        // std::shared_ptr<GuiHandler> guiHandler;
-        // CombatController* combatController = nullptr;
-        // InstanceManager* instanceManager = nullptr;
-        // SelectionSystem* selectionSystem = nullptr;
-        // MovementSystem* movementSystem = nullptr;
-
-        CombatSelection<GuiCombat>* combatSelection_C = nullptr;
-
         void start() override;
         void update(GLFWwindow *window) override;
         void draw() override;
-
-
-        // BattleMenu* battleMenu = nullptr;
-
-        // SoLoud::Soloud audio;
-        // std::unique_ptr<SoLoud::Wav>(backgroundMusic);
 
         guid_t pInfID_E = -1;
         guid_t pArcID_E = -1;
@@ -51,14 +32,10 @@ namespace gl3
         guid_t eArcID_E = -1;
         guid_t eCatID_E = -1;
 
-
         float zRotation = 0.0f;
         float rotationSpeed = 120.0f;
         float xTranslate = 0.0f;
         float yTranslate = 0.0f;
         float translationSpeed = 1.0f;
-
-
-
     };
 }

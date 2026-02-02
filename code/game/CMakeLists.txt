@@ -33,6 +33,7 @@ set(SOURCE_FILES src/main.cpp
         src/components/Icon.h
         src/systems/HoverIconSystem.cpp
         src/systems/HoverIconSystem.h
+        src/components/CombatSelection.cpp
 )
 
 # set executable name

@@ -18,7 +18,6 @@ class GuiCombat: public Gui {
     using event_t = gl3::engine::events::Event<GuiCombat>;
 public:
     static event_t startRound;
-    // static event_t startEndOfTurn;
     GuiCombat(gl3::engine::Game& game, gl3::GuiHandler& guiHandler,  nk_context* ctx, nk_uint& textureID);
     ~GuiCombat();
 
@@ -33,8 +32,6 @@ private:
     void drawEndTurnWindow();
     void drawActions();
     void getComponents(gl3::engine::Game& game);
-
-    CombatSelection<GuiCombat>* combatSelection_C = nullptr;
 
     guid_t pInf_E;
     guid_t pArc_E;

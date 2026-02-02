@@ -124,9 +124,10 @@ void GuiCombat::render()
     nk_end(ctx);
 
 
-    if (combatSelection_C->selectionOne != nullptr)
+    auto pCombatSelection = CombatSelection::GetInstance();
+    if (pCombatSelection->selectionOne != nullptr)
     {
-        if (combatSelection_C->selectionTwo == nullptr)
+        if (pCombatSelection->selectionTwo == nullptr)
         {
             actionBounds = nk_rect(
             windowWidth / 4, windowHeight - windowHeight / 3.9f,
@@ -400,6 +401,7 @@ void GuiCombat::drawTopRow()
 
 void GuiCombat::drawEndTurnWindow()
 {
+    auto pCombatSelection = CombatSelection::GetInstance();
     float ratio[] = {0.5, 0.4};
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 2, ratio);
     std::string turnLabel =  "Turn  " + std::to_string(CombatController::turnCount);
@@ -409,17 +411,18 @@ void GuiCombat::drawEndTurnWindow()
     if (NK_WRAP::button_label(ctx, "Next", m_Hovered, &engine) && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
     {
         CombatController::setState(CombatState::ANIMATION);
-        combatSelection_C->selectionOne = nullptr;
-        combatSelection_C->selectionTwo = nullptr;
+        pCombatSelection->selectionOne = nullptr;
+        pCombatSelection->selectionTwo = nullptr;
     }
 }
 
 void GuiCombat::drawActions()
 {
-    auto unitOne = combatSelection_C->selectionOne;
+    auto pCombatSelection = CombatSelection::GetInstance();
+    auto unitOne = pCombatSelection->selectionOne;
     auto tagSelectionOne = engine.componentManager.getComponent<TagComponent>(unitOne->entity()).value;
 
-    auto unitTwo = combatSelection_C->selectionTwo;
+    auto unitTwo = pCombatSelection->selectionTwo;
 
     nk_layout_row_dynamic(ctx, windowHeight/20, 4);
     nk_label(ctx, "Type: ", NK_TEXT_LEFT);
@@ -461,8 +464,8 @@ void GuiCombat::drawActions()
         auto tagSelectionTwo = engine.componentManager.getComponent<TagComponent>(unitTwo->entity()).value;
         if (tagSelectionOne == Tag::ENEMY)
         {
-            combatSelection_C->selectionOne = unitTwo;
-            combatSelection_C->selectionTwo = nullptr;
+            pCombatSelection->selectionOne = unitTwo;
+            pCombatSelection->selectionTwo = nullptr;
             return;
         }
         if (tagSelectionTwo == Tag::ENEMY && unitOne->availableAmount != 0)
@@ -470,9 +473,9 @@ void GuiCombat::drawActions()
             nk_layout_row_dynamic(ctx, windowHeight/20, 3);
             if (NK_WRAP::button_label(ctx, "Attack", m_Hovered, &engine))
             {
-                combatSelection_C->attack.invoke(unitOne->category, value, unitTwo->category);
-                combatSelection_C->selectionOne = nullptr;
-                combatSelection_C->selectionTwo = nullptr;
+                pCombatSelection->InvokeAttack(unitOne->category, value, unitTwo->category);
+                pCombatSelection->selectionOne = nullptr;
+                pCombatSelection->selectionTwo = nullptr;
                 value = 0;
             }
             int availableTroups = unitOne->availableAmount;
@@ -488,8 +491,8 @@ void GuiCombat::drawActions()
         {
             if (!engine.componentManager.hasComponent<SiegeEngine>(unitTwo->entity()))
             {
-                combatSelection_C->selectionOne = unitTwo;
-                combatSelection_C->selectionTwo = nullptr;
+                pCombatSelection->selectionOne = unitTwo;
+                pCombatSelection->selectionTwo = nullptr;
                 return;
             }
             const auto& siege_C = engine.componentManager.getComponent<SiegeEngine>(unitTwo->entity());
@@ -499,15 +502,15 @@ void GuiCombat::drawActions()
 
             nk_layout_row_dynamic(ctx, windowHeight/20, 3);
             if (unusedAmount <= 0 || canUseAmount <= 0) {
-                combatSelection_C->selectionOne = unitTwo;
-                combatSelection_C->selectionTwo = nullptr;
+                pCombatSelection->selectionOne = unitTwo;
+                pCombatSelection->selectionTwo = nullptr;
                 return;
             }
             if (NK_WRAP::button_label(ctx, "Use", m_Hovered, &engine))
             {
-                combatSelection_C->use.invoke(unitOne->category, value, unitTwo->category);
-                combatSelection_C->selectionOne = nullptr;
-                combatSelection_C->selectionTwo = nullptr;
+                pCombatSelection->InvokeUse(unitOne->category, value, unitTwo->category);
+                pCombatSelection->selectionOne = nullptr;
+                pCombatSelection->selectionTwo = nullptr;
                 value = 0;
             }
 
@@ -528,8 +531,8 @@ void GuiCombat::drawActions()
 
         }else
         {
-            combatSelection_C->selectionOne = unitTwo;
-            combatSelection_C->selectionTwo = nullptr;
+            pCombatSelection->selectionOne = unitTwo;
+            pCombatSelection->selectionTwo = nullptr;
         }
     }
 }
@@ -566,10 +569,6 @@ void GuiCombat::getComponents(engine::Game &game)
                 eCat_E = unit.entity();
             }
         }
-    });
-    game.componentManager.forEachComponent<CombatSelection<GuiCombat>>([&] (CombatSelection<GuiCombat> &sel)
-    {
-        combatSelection_C = &sel;
     });
     m_Textures[pInf_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
     m_Textures[pArc_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);

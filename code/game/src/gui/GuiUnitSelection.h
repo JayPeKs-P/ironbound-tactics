@@ -27,8 +27,6 @@ private:
     void drawSelectionFrame();
     void getComponents(gl3::engine::Game& game);
 
-    CombatSelection<GuiCombat>* combatSelection_C = nullptr;
-
     Unit* pInfU_C = nullptr;
     Unit* pArcU_C = nullptr;
     Unit* pCatU_C = nullptr;

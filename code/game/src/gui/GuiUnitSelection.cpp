@@ -146,9 +146,5 @@ void GuiUnitSelection::getComponents(engine::Game& game)
             }
         }
     });
-    game.componentManager.forEachComponent<CombatSelection<GuiCombat>>([&] (CombatSelection<GuiCombat> &sel)
-    {
-        combatSelection_C = &sel;
-    });
 }
 

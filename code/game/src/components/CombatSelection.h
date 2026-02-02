@@ -4,29 +4,41 @@
 
 #pragma once
 
-#include "engine/ecs/Component.h"
+#include <memory>
+
 #include "engine/Events.h"
 #include"unitTypes/UnitCategory.h"
 
 struct Unit;
-using gl3::engine::ecs::Component;
-using gl3::engine::ecs::ComponentManager;
-using gl3::engine::ecs::guid_t;
-using gl3::engine::ecs::Entity;
-//TODO create GuiSelection Parent Interface, that stores events of any kind
-template <typename G>
-struct CombatSelection : Component {
-    friend ComponentManager;
-    friend Entity;
+namespace gl3 {
+    struct CombatSelection {
+        [[nodiscard]] static CombatSelection* GetInstance() {
+            if (!m_pInstance) {
+                m_pInstance = new CombatSelection();
+            }
+            return m_pInstance;
+        }
+        CombatSelection(CombatSelection const&) = delete;
 
-    std::shared_ptr<Unit> selectionOne;
-    std::shared_ptr<Unit> selectionTwo;
+        std::shared_ptr<Unit> selectionOne;
+        std::shared_ptr<Unit> selectionTwo;
 
-    using event_t = gl3::engine::events::Event<G, UnitCategory, int, UnitCategory>;
-    event_t attack;
-    event_t defend;
-    event_t use;
+        using event_t = engine::events::Event<CombatSelection, UnitCategory, int, UnitCategory>;
+        void InvokeAttack(UnitCategory first, int iAmount, UnitCategory second) {
+            attack.invoke(first, iAmount, second);
+        }
+        void InvokeDefend(UnitCategory first, int iAmount, UnitCategory second) {
+            defend.invoke(first, iAmount, second);
+        }
+        void InvokeUse(UnitCategory first, int iAmount, UnitCategory second) {
+            use.invoke(first, iAmount, second);
+        }
+        event_t attack;
+        event_t defend;
+        event_t use;
 
-private:
-    explicit CombatSelection(guid_t owner) : Component(owner) {}
-};
+    private:
+        explicit CombatSelection() {}
+        static CombatSelection* m_pInstance;
+    };
+}
