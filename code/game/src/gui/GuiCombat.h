@@ -35,6 +35,8 @@ private:
     void DrawSecondSelection();
     void DrawPauseWindow();
     void getComponents(gl3::engine::Game& game);
+    void HelperLoadConfig();
+    void HelperNewHighscore(int iValue) const;
 
     guid_t pInf_E;
     guid_t pArc_E;
@@ -53,6 +55,9 @@ private:
 
     int value = 0;
     bool m_bPaused = false;
+    bool m_bNewHighscore = false;
+    uint8_t m_CurrentHighscore = -1;
+    std::string m_HighscoreText;
 
     bool justStarted = true;
     gl3::GuiHandler& m_GuiHandler;

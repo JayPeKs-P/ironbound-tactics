@@ -7,6 +7,7 @@
 #include <iostream>
 #include <ranges>
 
+#include "json.hpp"
 #include "../components/unitTypes/UnitCategory.h"
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
@@ -78,6 +79,7 @@ GuiCombat::GuiCombat(gl3::engine::Game &game, GuiHandler& guiHandler,  nk_contex
     });
     auto pSoundSystem = engine::SoundSystem::GetInstance();
     pSoundSystem->PlayMusic(engine::MUSIC_COMBAT_1);
+    HelperLoadConfig();
 }
 
 GuiCombat::~GuiCombat() {
@@ -224,16 +226,29 @@ void GuiCombat::DrawDefeatWindow() {
             windowWidth / 2, windowHeight/ 2),
             NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
     {
+        int iCurrentRound = CombatController::roundCount;
+        if (iCurrentRound > m_CurrentHighscore) {
+            m_CurrentHighscore = iCurrentRound;
+            HelperNewHighscore(iCurrentRound);
+            m_bNewHighscore = true;
+        }
+
         nk_layout_row_dynamic(ctx, windowHeight/3, 1);
         auto& fonts = m_GuiHandler.GetFonts();
         nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
         nk_label(ctx, "YOU DIED", NK_TEXT_CENTERED);
         nk_style_pop_font(ctx);
+        if (m_bNewHighscore) {
+            nk_layout_row_dynamic(ctx, windowHeight/20, 1);
+            nk_label_colored(ctx, "NEW  HIGHSCORE!", NK_TEXT_CENTERED, ColorYellow);
+        }
+
         nk_layout_row_dynamic(ctx, windowHeight/20, 3);
         nk_label(ctx, "", NK_TEXT_CENTERED);
         if (NK_WRAP::button_label(ctx, "Quit", m_Hovered, &engine))
         {
-            glfwSetWindowShouldClose(engine.getWindow(), true);
+            endScene = true;
+            m_bNewHighscore = false;
         }
     }
     nk_end(ctx);
@@ -678,4 +693,26 @@ void GuiCombat::getComponents(engine::Game &game)
     m_Textures[pInf_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
     m_Textures[pArc_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
     m_Textures[pCat_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
+}
+
+void GuiCombat::HelperLoadConfig() {
+    auto pConfigPath = engine.GetConfigPath();
+    using json = nlohmann::json;
+    json config;
+
+    std::ifstream in(pConfigPath);
+    in >> config;
+    m_CurrentHighscore = config["highscore"];
+}
+
+void GuiCombat::HelperNewHighscore(int iValue) const {
+    auto pConfigPath = engine.GetConfigPath();
+    using json = nlohmann::json;
+    json config;
+
+    std::ifstream in(pConfigPath);
+    in >> config;
+    config["highscore"] = iValue;
+    std::ofstream out(pConfigPath);
+    out << config.dump(4);
 }
