@@ -21,13 +21,32 @@ void GuiMainMenu::render() {
         nk_rect(0, 0,
             windowWidth, windowHeight),
         NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
-    if (nk_begin(ctx, "Main Menu Buttons",
-        nk_rect(windowWidth * 2/6,  windowHeight * 3/ 6,
-            windowWidth *  2/6 , windowHeight * 11/24 ),
-            NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
-    {
-        MainDisplay();
-        nk_end(ctx);
+    switch (m_ActiveState) {
+    case MainMenuState::MAIN_MENU: {
+        if (nk_begin(ctx, "Main Menu Buttons",
+            nk_rect(windowWidth * 2/6,  windowHeight * 3/ 6,
+                windowWidth *  2/6 , windowHeight * 11/24 ),
+                NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
+        {
+            MainDisplay();
+            nk_end(ctx);
+        }
+        break;
+    }
+    case MainMenuState::SETTINGS: {
+        if (nk_begin(ctx, "Main Menu Buttons",
+            nk_rect(windowWidth * 2/6,  windowHeight * 3/ 6,
+                windowWidth *  2/6 , windowHeight * 11/24 ),
+                NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
+        {
+            SettingsDisplay();
+            nk_end(ctx);
+        }
+        break;
+    }
+    case MainMenuState::TUTORIAL: {
+        break;
+    }
     }
 }
 
@@ -58,13 +77,13 @@ void GuiMainMenu::MainDisplay() {
 
     nk_label(ctx, "", NK_TEXT_LEFT);
     if (NK_WRAP::button_label(ctx, "Settings", m_Hovered, &engine)) {
-
+        SetMenuState(MainMenuState::SETTINGS);
     }
     nk_label(ctx, "", NK_TEXT_LEFT);
 
     nk_label(ctx, "", NK_TEXT_LEFT);
     if (NK_WRAP::button_label(ctx, "How to Play", m_Hovered, &engine)) {
-
+        SetMenuState(MainMenuState::TUTORIAL);
     }
     nk_label(ctx, "", NK_TEXT_LEFT);
 
@@ -73,4 +92,49 @@ void GuiMainMenu::MainDisplay() {
         glfwSetWindowShouldClose(engine.getWindow(), true);
     }
     nk_label(ctx, "", NK_TEXT_LEFT);
+}
+
+void GuiMainMenu::SettingsDisplay() {
+    auto& fonts = m_GuiHandler.GetFonts();
+    nk_layout_row_dynamic(ctx, windowHeight / 18, 1);
+    nk_style_push_font(ctx, &fonts[FANTASY_LARGE]->handle);
+    nk_label_colored(ctx, "Settings", NK_TEXT_CENTERED, ColorYellow);
+    nk_style_pop_font(ctx);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 50, 1);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    float ratio[] = {0.05f, 0.325f, 0.53f, 0.05f};
+    nk_layout_row(ctx, NK_DYNAMIC, windowHeight / 18, 4, ratio);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "Volume", NK_TEXT_LEFT);
+    auto pSoundSystem = engine::SoundSystem::GetInstance();
+    float fCurrentVolume = pSoundSystem->GetVolume();
+    float newValue = NK_WRAP::slider_float(ctx, 0.0f, fCurrentVolume, 1.0f, 0.05f, "Volume", m_Hovered, &engine);
+    pSoundSystem->SetVolume(newValue);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 50, 1);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    float toggleRatio[] = {0.05f, 0.325f, 0.13f, 0.27f, 0.13f, 0.05f};
+    nk_layout_row(ctx, NK_DYNAMIC, windowHeight / 18, 6, toggleRatio);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "Fullscreen", NK_TEXT_LEFT);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    if (NK_WRAP::button_label(ctx, "Toggle", m_Hovered, &engine)) {
+        engine.ToggleFullScreen();
+    }
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 10, 1);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 18, 5);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    if (NK_WRAP::button_label(ctx, "Back", m_Hovered, &engine)) {
+        SetMenuState(MainMenuState::MAIN_MENU);
+    }
 }

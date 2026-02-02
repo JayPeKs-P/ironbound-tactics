@@ -42,6 +42,8 @@ namespace gl3::engine {
         [[nodiscard]] static SoundSystem* GetInstance();
         void PlaySound(Audio_GUID iAudio);
         void PlayMusic(Audio_GUID iAudio);
+        float GetVolume() const;
+        void SetVolume(float newValue) const;
         void StopMusic();
         void RegisterSound(Audio_GUID iAudio, const std::string& sFileName, bool bAwaitFinish = true);
         void RegisterMusic(Audio_GUID iAudio, const std::string& sFileName);

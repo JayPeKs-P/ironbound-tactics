@@ -9,6 +9,7 @@
 namespace gl3 {
     class GuiHandler;
 }
+enum class MainMenuState {MAIN_MENU, SETTINGS, TUTORIAL};
 
 using gl3::engine::ecs::Gui;
 
@@ -17,15 +18,21 @@ class GuiMainMenu: public Gui {
 public:
     static event_t onPressPlay;
     GuiMainMenu(gl3::engine::Game& game, gl3::GuiHandler& guiHandler, nk_context* ctx, nk_uint& textureID);
+    void SetMenuState(MainMenuState newState) {
+        m_ActiveState = newState;
+    }
 
 private:
     void render();
     void invokeSceneChange();
     void MainDisplay();
+    void SettingsDisplay();
+    void TutorialDisplay();
     gl3::GuiHandler& m_GuiHandler;
 
     nk_color ColorYellow = nk_rgba(255, 250, 200, 255);
     nk_color ColorGreen = nk_rgba(100, 255, 100, 255);
     nk_color ColorRed = nk_rgba(255, 100, 100, 255);
     nk_color ColorBlue = nk_rgba(100, 200, 255, 255);
+    MainMenuState m_ActiveState = MainMenuState::MAIN_MENU;
 };

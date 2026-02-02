@@ -38,6 +38,36 @@ glm::mat4 Game::calculateMvpMatrix(glm::mat4 model)
     return mvpMatrix;
 }
 
+void Game::ToggleFullScreen() {
+    GLFWmonitor* pCurrentMonitor = glfwGetWindowMonitor(context.getWindow());
+    if (!pCurrentMonitor) {
+        glfwGetWindowPos(context.getWindow(),
+                        &m_WindowedData.iWindowedX, &m_WindowedData.iWindowedY);
+        glfwGetWindowSize(context.getWindow(),
+                        &m_WindowedData.iWindowedWidth, &m_WindowedData.iWindowedHeight);
+        GLFWmonitor* pMonitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode* pVidMode = glfwGetVideoMode(pMonitor);
+
+        glfwSetWindowMonitor(
+            context.getWindow(),
+            pMonitor,
+            0, 0,
+            pVidMode->width,
+            pVidMode->height,
+            pVidMode->refreshRate);
+    }
+    else {
+        glfwSetWindowMonitor(
+            context.getWindow(),
+            nullptr,
+            m_WindowedData.iWindowedX,
+            m_WindowedData.iWindowedY,
+            m_WindowedData.iWindowedWidth,
+            m_WindowedData.iWindowedHeight,
+            0);
+    }
+}
+
 unsigned int Game::AddTextureToRegistry(const char* pPath, const char* pTextureName) {
     unsigned int texID = engine::util::Texture::load(pPath);
     if (pTextureName)

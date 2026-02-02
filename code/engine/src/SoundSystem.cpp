@@ -32,6 +32,14 @@ namespace gl3::engine {
         m_iCurrentMusic = music.m_iHandle;
     }
 
+    float SoundSystem::GetVolume() const {
+        return m_pAudioPlayer->getGlobalVolume();
+    }
+
+    void SoundSystem::SetVolume(float newValue) const {
+        m_pAudioPlayer->setGlobalVolume(newValue);
+    }
+
     void SoundSystem::StopMusic() {
         if (m_iCurrentMusic == UINT_MAX) return;
             m_pAudioPlayer->stop(m_iCurrentMusic);

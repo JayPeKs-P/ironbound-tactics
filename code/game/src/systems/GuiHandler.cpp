@@ -75,7 +75,7 @@ namespace gl3 {
         setStyleSlider(style);
         setStyleText(style);
 
-        activeGui = std::make_unique<GuiMainMenu>(game, *this, nkCTX, textureAtlasID);
+        activeGui = std::make_unique<GuiMainMenu> (game, *this, nkCTX, textureAtlasID);
         activeScene = GuiScene::MAIN_MENU;
         GuiMainMenu::onPressPlay.addListener([&]()
         {

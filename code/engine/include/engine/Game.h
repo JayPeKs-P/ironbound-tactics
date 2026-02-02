@@ -79,6 +79,7 @@ namespace gl3::engine {
         ///
         /// @return Pointer to GLFWwindow.
         GLFWwindow *getWindow() {return context.getWindow();}
+        void ToggleFullScreen();
 
         ///@brief Returns the current value of the delta-time variable.
         ///
@@ -151,6 +152,7 @@ namespace gl3::engine {
         float m_fSpeedupValue = 1.0f;
         SystemContainer systems;
         context::Context context;
+        context::WindowedData m_WindowedData;
         std::unordered_map<std::string, unsigned int> m_TextureRegistry = {};
 
 

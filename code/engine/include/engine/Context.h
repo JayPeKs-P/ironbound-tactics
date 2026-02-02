@@ -9,6 +9,12 @@
 #include <GLFW/glfw3.h>
 
 namespace gl3::engine::context {
+    struct WindowedData {
+        int iWindowedX = 0;
+        int iWindowedY = 0;
+        int iWindowedWidth = 0;
+        int iWindowedHeight = 0;
+    };
     /// @brief The core class, that initializes the GLFW library, manages window creation, termination and runs the update loop.
     ///
     /// This class initializes the GLFW library and GLAD, creates the window and runs the update loop.
