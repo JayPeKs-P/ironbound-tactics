@@ -20,8 +20,8 @@ namespace gl3 {
         }
         CombatSelection(CombatSelection const&) = delete;
 
-        std::shared_ptr<Unit> selectionOne;
-        std::shared_ptr<Unit> selectionTwo;
+        std::shared_ptr<Unit> m_pFirstUnit_C;
+        std::shared_ptr<Unit> m_pSecondUnit_C;
 
         using event_t = engine::events::Event<CombatSelection, UnitCategory, int, UnitCategory>;
         void InvokeAttack(UnitCategory first, int iAmount, UnitCategory second) {

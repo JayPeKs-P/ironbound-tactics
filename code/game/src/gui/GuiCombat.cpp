@@ -125,9 +125,9 @@ void GuiCombat::render()
 
 
     auto pCombatSelection = CombatSelection::GetInstance();
-    if (pCombatSelection->selectionOne != nullptr)
+    if (pCombatSelection->m_pFirstUnit_C != nullptr)
     {
-        if (pCombatSelection->selectionTwo == nullptr)
+        if (pCombatSelection->m_pSecondUnit_C == nullptr)
         {
             actionBounds = nk_rect(
             windowWidth / 4, windowHeight - windowHeight / 3.9f,
@@ -411,22 +411,22 @@ void GuiCombat::drawEndTurnWindow()
     if (NK_WRAP::button_label(ctx, "Next", m_Hovered, &engine) && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
     {
         CombatController::setState(CombatState::ANIMATION);
-        pCombatSelection->selectionOne = nullptr;
-        pCombatSelection->selectionTwo = nullptr;
+        pCombatSelection->m_pFirstUnit_C = nullptr;
+        pCombatSelection->m_pSecondUnit_C = nullptr;
     }
 }
 
 void GuiCombat::drawActions()
 {
     auto pCombatSelection = CombatSelection::GetInstance();
-    auto unitOne = pCombatSelection->selectionOne;
-    auto tagSelectionOne = engine.componentManager.getComponent<TagComponent>(unitOne->entity()).value;
+    auto pFirstSelection = pCombatSelection->m_pFirstUnit_C;
+    auto tagSelectionOne = engine.componentManager.getComponent<TagComponent>(pFirstSelection->entity()).value;
 
-    auto unitTwo = pCombatSelection->selectionTwo;
+    auto pSecondSelection = pCombatSelection->m_pSecondUnit_C;
 
     nk_layout_row_dynamic(ctx, windowHeight/20, 4);
     nk_label(ctx, "Type: ", NK_TEXT_LEFT);
-    nk_label_colored(ctx, getType(*unitOne).c_str(), NK_TEXT_LEFT, highlightColor);
+    nk_label_colored(ctx, getType(*pFirstSelection).c_str(), NK_TEXT_LEFT, highlightColor);
     nk_label(ctx, "Owner: ", NK_TEXT_LEFT);
     if (tagSelectionOne == Tag::PLAYER)
     {
@@ -437,16 +437,16 @@ void GuiCombat::drawActions()
     }
 
     nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(unitOne->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
+    nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
     nk_layout_row_dynamic(ctx, windowHeight/30, 6);
     nk_label(ctx, "HP: ",NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(static_cast<int>(unitOne->hpValue)).c_str(), NK_TEXT_LEFT, numberColor);
+    nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->hpValue)).c_str(), NK_TEXT_LEFT, numberColor);
     nk_label(ctx, "Atk: ", NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(static_cast<int>(unitOne->attackValue)).c_str(), NK_TEXT_LEFT, numberColor);
+    nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->attackValue)).c_str(), NK_TEXT_LEFT, numberColor);
     nk_label(ctx, "Acc: ", NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(unitOne->accuracy).c_str(), NK_TEXT_LEFT, numberColor);
+    nk_label_colored(ctx, std::to_string(pFirstSelection->accuracy).c_str(), NK_TEXT_LEFT, numberColor);
 
     float ratio[] = {0.15, 0.4, 0.05, 0.1 };
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 4, ratio);
@@ -454,67 +454,67 @@ void GuiCombat::drawActions()
     if (tagSelectionOne == Tag::PLAYER)
     {
         nk_label(ctx, "Left  this  turn: ", NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(unitOne->availableAmount).c_str(), NK_TEXT_LEFT, playerColor);
+        nk_label_colored(ctx, std::to_string(pFirstSelection->availableAmount).c_str(), NK_TEXT_LEFT, playerColor);
     }
 
-    bool bFirstSelctedIsCatapult = engine.componentManager.hasComponent<SiegeEngine>(unitOne->entity());
+    bool bFirstSelctedIsCatapult = engine.componentManager.hasComponent<SiegeEngine>(pFirstSelection->entity());
 
-    if (unitTwo != nullptr)
+    if (pSecondSelection != nullptr)
     {
-        auto tagSelectionTwo = engine.componentManager.getComponent<TagComponent>(unitTwo->entity()).value;
+        auto tagSelectionTwo = engine.componentManager.getComponent<TagComponent>(pSecondSelection->entity()).value;
         if (tagSelectionOne == Tag::ENEMY)
         {
-            pCombatSelection->selectionOne = unitTwo;
-            pCombatSelection->selectionTwo = nullptr;
+            pCombatSelection->m_pFirstUnit_C = pSecondSelection;
+            pCombatSelection->m_pSecondUnit_C = nullptr;
             return;
         }
-        if (tagSelectionTwo == Tag::ENEMY && unitOne->availableAmount != 0)
+        if (tagSelectionTwo == Tag::ENEMY && pFirstSelection->availableAmount != 0)
         {
             nk_layout_row_dynamic(ctx, windowHeight/20, 3);
             if (NK_WRAP::button_label(ctx, "Attack", m_Hovered, &engine))
             {
-                pCombatSelection->InvokeAttack(unitOne->category, value, unitTwo->category);
-                pCombatSelection->selectionOne = nullptr;
-                pCombatSelection->selectionTwo = nullptr;
+                pCombatSelection->InvokeAttack(pFirstSelection->category, value, pSecondSelection->category);
+                pCombatSelection->m_pFirstUnit_C = nullptr;
+                pCombatSelection->m_pSecondUnit_C = nullptr;
                 value = 0;
             }
-            int availableTroups = unitOne->availableAmount;
+            int availableTroups = pFirstSelection->availableAmount;
             NK_WRAP::slider_int(ctx, 0, &value, availableTroups, 1, "AttackSlider", m_Hovered, &engine);
-            nk_label_colored(ctx, getType(*unitTwo).c_str(), NK_TEXT_CENTERED, enemyColor);
+            nk_label_colored(ctx, getType(*pSecondSelection).c_str(), NK_TEXT_CENTERED, enemyColor);
             nk_layout_row_dynamic(ctx, windowHeight/30, 3);
 
             nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
             nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
             nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
         }
-        else if (tagSelectionTwo == Tag::PLAYER && unitOne->availableAmount != 0 && !bFirstSelctedIsCatapult)
+        else if (tagSelectionTwo == Tag::PLAYER && pFirstSelection->availableAmount != 0 && !bFirstSelctedIsCatapult)
         {
-            if (!engine.componentManager.hasComponent<SiegeEngine>(unitTwo->entity()))
+            if (!engine.componentManager.hasComponent<SiegeEngine>(pSecondSelection->entity()))
             {
-                pCombatSelection->selectionOne = unitTwo;
-                pCombatSelection->selectionTwo = nullptr;
+                pCombatSelection->m_pFirstUnit_C = pSecondSelection;
+                pCombatSelection->m_pSecondUnit_C = nullptr;
                 return;
             }
-            const auto& siege_C = engine.componentManager.getComponent<SiegeEngine>(unitTwo->entity());
+            const auto& siege_C = engine.componentManager.getComponent<SiegeEngine>(pSecondSelection->entity());
             const auto cost = siege_C.cost;
-            const int unusedAmount = unitTwo->totalAmount - siege_C.useableAmount - siege_C.useableAmountNew;
-            const int canUseAmount = unitOne->availableAmount / cost;
+            const int unusedAmount = pSecondSelection->totalAmount - siege_C.useableAmount - siege_C.useableAmountNew;
+            const int canUseAmount = pFirstSelection->availableAmount / cost;
 
             nk_layout_row_dynamic(ctx, windowHeight/20, 3);
             if (unusedAmount <= 0 || canUseAmount <= 0) {
-                pCombatSelection->selectionOne = unitTwo;
-                pCombatSelection->selectionTwo = nullptr;
+                pCombatSelection->m_pFirstUnit_C = pSecondSelection;
+                pCombatSelection->m_pSecondUnit_C = nullptr;
                 return;
             }
             if (NK_WRAP::button_label(ctx, "Use", m_Hovered, &engine))
             {
-                pCombatSelection->InvokeUse(unitOne->category, value, unitTwo->category);
-                pCombatSelection->selectionOne = nullptr;
-                pCombatSelection->selectionTwo = nullptr;
+                pCombatSelection->InvokeUse(pFirstSelection->category, value, pSecondSelection->category);
+                pCombatSelection->m_pFirstUnit_C = nullptr;
+                pCombatSelection->m_pSecondUnit_C = nullptr;
                 value = 0;
             }
 
-            if(unitTwo->totalAmount*cost <= unitOne->totalAmount)
+            if(pSecondSelection->totalAmount*cost <= pFirstSelection->totalAmount)
             {
                 NK_WRAP::slider_int(ctx, 0, &value, unusedAmount, 1, "UnusedAmount", m_Hovered, &engine);
             }
@@ -522,7 +522,7 @@ void GuiCombat::drawActions()
             {
                 NK_WRAP::slider_int(ctx, 0, &value, canUseAmount, 1, "CanUseAmount", m_Hovered, &engine);
             }
-            nk_label_colored(ctx, getType(*unitTwo).c_str(), NK_TEXT_CENTERED, playerColor);
+            nk_label_colored(ctx, getType(*pSecondSelection).c_str(), NK_TEXT_CENTERED, playerColor);
 
             nk_layout_row_dynamic(ctx, windowHeight/30, 3);
             nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
@@ -531,8 +531,8 @@ void GuiCombat::drawActions()
 
         }else
         {
-            pCombatSelection->selectionOne = unitTwo;
-            pCombatSelection->selectionTwo = nullptr;
+            pCombatSelection->m_pFirstUnit_C = pSecondSelection;
+            pCombatSelection->m_pSecondUnit_C = nullptr;
         }
     }
 }

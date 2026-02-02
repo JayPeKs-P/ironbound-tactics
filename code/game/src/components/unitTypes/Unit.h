@@ -33,6 +33,7 @@ struct Unit: Component {
     int speed;
     UnitCategory category;
     std::string texturePath;
+    bool m_bShouldHaveIcon = true;
 protected:
     Unit (guid_t owner, const std::string& preset);
 

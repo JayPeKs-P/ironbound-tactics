@@ -46,8 +46,13 @@ namespace gl3 {
 
     void HoverIconSystem::update(engine::Game& game) {
         auto pCombatSelection = CombatSelection::GetInstance();
+        bool bNewTurn = CombatController::getCombatState() == CombatState::BEGIN_TURN;
         game.componentManager.forEachComponent<Unit>([&](Unit& unit)
         {
+            if (bNewTurn) {
+                bool bIsSiege = game.componentManager.hasComponent<SiegeEngine>(unit.entity());
+                unit.m_bShouldHaveIcon = unit.availableAmount > 0 || bIsSiege;
+            }
             auto pUnit_E = &game.entityManager.getEntity(unit.entity());
             auto pUnitInstanceBuffer_C = &game.componentManager.getComponent<InstanceBuffer>(pUnit_E->guid());
             for (auto iIcon : pUnit_E->GetChildren()) {
@@ -67,11 +72,15 @@ namespace gl3 {
                     pVisibility_C->m_bVisible = false;
                     continue;
                 }
+                if (!unit.m_bShouldHaveIcon) {
+                    pVisibility_C->m_bVisible = false;
+                    continue;
+                }
 
-                if (pCombatSelection->selectionTwo) {
-                    guid_t iSelection = pCombatSelection->selectionOne->entity();
-                    guid_t iSelection2 = pCombatSelection->selectionTwo->entity();
-                    int iSelectionAvailable = pCombatSelection->selectionOne->availableAmount;
+                if (pCombatSelection->m_pSecondUnit_C) {
+                    guid_t iSelection = pCombatSelection->m_pFirstUnit_C->entity();
+                    guid_t iSelection2 = pCombatSelection->m_pSecondUnit_C->entity();
+                    int iSelectionAvailable = pCombatSelection->m_pFirstUnit_C->availableAmount;
                     auto pTag_C = &game.componentManager.getComponent<TagComponent>(iSelection);
                     auto pTag2_C = &game.componentManager.getComponent<TagComponent>(iSelection2);
 
@@ -88,9 +97,9 @@ namespace gl3 {
                         pUvOffset_C->v = 48;
                     }
                 }
-                else if (pCombatSelection->selectionOne) {
-                    guid_t iSelection = pCombatSelection->selectionOne->entity();
-                    int iSelectionAvailable = pCombatSelection->selectionOne->availableAmount;
+                else if (pCombatSelection->m_pFirstUnit_C) {
+                    guid_t iSelection = pCombatSelection->m_pFirstUnit_C->entity();
+                    int iSelectionAvailable = pCombatSelection->m_pFirstUnit_C->availableAmount;
                     auto pTag_C = &game.componentManager.getComponent<TagComponent>(iSelection);
 
                     bool bPlayerSelected = pTag_C->value == Tag::PLAYER;
@@ -119,6 +128,10 @@ namespace gl3 {
                     if (bUnitIsSelection || bSiegeIsUseable) {
                         pUvOffset_C->u = 20;
                     }
+                    // else if (bSiegeIsUseable) {
+                    //     pUvOffset_C->u = 8;
+                    //     pUvOffset_C->v = 49;
+                    // }
                     else {
                         pUvOffset_C->u = 11;
                     }

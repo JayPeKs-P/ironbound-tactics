@@ -266,21 +266,21 @@ void Game::update(GLFWwindow* window) {
             );
             ////////////////////////////////////////////////////////////////////////
 
-            if (pCombatSelection->selectionOne == nullptr)
+            if (pCombatSelection->m_pFirstUnit_C == nullptr)
             {
-                pCombatSelection->selectionOne = std::make_shared<Unit>(*selection);
+                pCombatSelection->m_pFirstUnit_C = std::make_shared<Unit>(*selection);
             }
             else
             {
-                pCombatSelection->selectionTwo = std::make_shared<Unit>(*selection);
+                pCombatSelection->m_pSecondUnit_C = std::make_shared<Unit>(*selection);
             }
         }
     }
     right.update(window, GLFW_MOUSE_BUTTON_RIGHT);
     if (right.clicked)
     {
-        pCombatSelection->selectionOne = nullptr;
-        pCombatSelection->selectionTwo = nullptr;
+        pCombatSelection->m_pFirstUnit_C = nullptr;
+        pCombatSelection->m_pSecondUnit_C = nullptr;
     }
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
