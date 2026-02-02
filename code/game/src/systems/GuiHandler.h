@@ -46,6 +46,7 @@ private:
     void restoreGameState();
     void selectCurrentScene(engine::Game &game);
     void renderGUI(engine::Game &game);
+    void RebuildFonts();
 
 
     void setStyleWindow(nk_style* style);
@@ -60,6 +61,10 @@ private:
 
     int windowWidth, windowHeight= 0;
     int currentW, currentH = 720;
+
+    int fbWidth, fbHeight= 0;
+    int fbWidthCurrent, fbHeightCurrent = 720;
+
     nk_font_atlas *atlas = nullptr;
     GLuint textureAtlasID = -1;
     GLFWwindow* window;

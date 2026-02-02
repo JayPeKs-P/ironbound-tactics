@@ -174,6 +174,7 @@ namespace gl3 {
         }
         if (bUnitIsSelection) {
             pUvOffset_C->u = 20;
+            pUvOffset_C->v = pUvOffset_C->originalV;
         }
         else if (!bUnitIsEnemy && bSiegeIsUseable) {
             pUvOffset_C->u = 8;
@@ -185,6 +186,7 @@ namespace gl3 {
         }
         else {
             pUvOffset_C->u = 11;
+            pUvOffset_C->v = pUvOffset_C->originalV;
         }
         return false;
     }

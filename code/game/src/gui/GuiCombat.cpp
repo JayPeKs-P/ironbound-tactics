@@ -127,23 +127,35 @@ void GuiCombat::render()
     auto pCombatSelection = CombatSelection::GetInstance();
     if (pCombatSelection->m_pFirstUnit_C != nullptr)
     {
-        if (pCombatSelection->m_pSecondUnit_C == nullptr)
-        {
-            actionBounds = nk_rect(
-            windowWidth / 4, windowHeight - windowHeight / 3.9f,
-            windowWidth / 2, windowHeight / 3.9f);
-        }else
-        {
-            actionBounds = nk_rect(
-            windowWidth / 4, windowHeight - windowHeight / 2.8f,
-            windowWidth / 2, windowHeight / 2.8f);
-        }
-        if (nk_begin(ctx, "Actions",
-            actionBounds,
+        auto bounds = nk_rect(
+        windowWidth * 4/11, windowHeight - windowHeight / 3.5f,
+        windowWidth * 3/11, windowHeight / 3.5f);
+
+        nk_style_item transparancy = nk_style_item_color(nk_color(0, 0, 0, 180));
+        nk_style_push_style_item(ctx, &ctx->style.window.fixed_background, transparancy);
+        if (nk_begin(ctx, "Info",
+            bounds,
             NK_WINDOW_BORDER | NK_WINDOW_SCROLL_AUTO_HIDE))
         {
-            drawActions();
+            DrawFirstSelection();
             nk_end(ctx);
+            nk_style_pop_style_item(ctx);
+        }
+    }
+    if (pCombatSelection->m_pSecondUnit_C != nullptr) {
+        auto bounds = nk_rect(
+        windowWidth * 7/11, windowHeight - windowHeight * 5/21,
+        windowWidth * 5/22, windowHeight * 5/21);
+
+        nk_style_item transparancy = nk_style_item_color(nk_color(0, 0, 0, 180));
+        nk_style_push_style_item(ctx, &ctx->style.window.fixed_background, transparancy);
+        if (nk_begin(ctx, "Actions",
+            bounds,
+            NK_WINDOW_BORDER | NK_WINDOW_SCROLL_AUTO_HIDE))
+        {
+            DrawSecondSelection();
+            nk_end(ctx);
+            nk_style_pop_style_item(ctx);
         }
     }
 }
@@ -416,98 +428,151 @@ void GuiCombat::drawEndTurnWindow()
     }
 }
 
-void GuiCombat::drawActions()
-{
+void GuiCombat::DrawFirstSelection() const {
+    auto& fonts = m_GuiHandler.GetFonts();
     auto pCombatSelection = CombatSelection::GetInstance();
     auto pFirstSelection = pCombatSelection->m_pFirstUnit_C;
-    auto tagSelectionOne = engine.componentManager.getComponent<TagComponent>(pFirstSelection->entity()).value;
-    auto pSecondSelection = pCombatSelection->m_pSecondUnit_C;
+    auto tagOwnerFirstSelection = engine.componentManager.getComponent<TagComponent>(pFirstSelection->entity()).value;
 
-    nk_layout_row_dynamic(ctx, windowHeight/20, 4);
-    nk_label(ctx, "Type: ", NK_TEXT_LEFT);
+    nk_layout_row_dynamic(ctx, windowHeight/20, 2);
     nk_label_colored(ctx, getType(*pFirstSelection).c_str(), NK_TEXT_LEFT, highlightColor);
-    nk_label(ctx, "Owner: ", NK_TEXT_LEFT);
-    if (tagSelectionOne == Tag::PLAYER)
+    if (tagOwnerFirstSelection == Tag::PLAYER)
     {
-        nk_label_colored(ctx, getOwner(tagSelectionOne).c_str(), NK_TEXT_LEFT, playerColor);
+        nk_label_colored(ctx, getOwner(tagOwnerFirstSelection).c_str(), NK_TEXT_LEFT, playerColor);
     }else
     {
-        nk_label_colored(ctx, getOwner(tagSelectionOne).c_str(), NK_TEXT_LEFT, enemyColor);
+        nk_label_colored(ctx, getOwner(tagOwnerFirstSelection).c_str(), NK_TEXT_LEFT, enemyColor);
     }
 
-    nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
-    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
-
-    nk_layout_row_dynamic(ctx, windowHeight/30, 6);
-    nk_label(ctx, "HP: ",NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->hpValue)).c_str(), NK_TEXT_LEFT, numberColor);
-    nk_label(ctx, "Atk: ", NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->attackValue)).c_str(), NK_TEXT_LEFT, numberColor);
-    nk_label(ctx, "Acc: ", NK_TEXT_LEFT);
-    nk_label_colored(ctx, std::to_string(pFirstSelection->accuracy).c_str(), NK_TEXT_LEFT, numberColor);
-
-    float ratio[] = {0.15, 0.4, 0.05, 0.1 };
-    nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 4, ratio);
-    nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
-    if (tagSelectionOne == Tag::PLAYER)
+    nk_layout_row_dynamic(ctx, windowHeight/40, 2);
+    nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
     {
-        nk_label(ctx, "Left  this  turn: ", NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(pFirstSelection->availableAmount).c_str(), NK_TEXT_LEFT, playerColor);
+        nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
+        if (tagOwnerFirstSelection == Tag::PLAYER)
+        {
+            nk_label(ctx, "Left  this  turn: ", NK_TEXT_LEFT);
+            nk_label_colored(ctx, std::to_string(pFirstSelection->availableAmount).c_str(), NK_TEXT_LEFT, playerColor);
+            if (engine.componentManager.hasComponent<SiegeEngine>(pFirstSelection->entity())) {
+                auto& siege_C = engine.componentManager.getComponent<SiegeEngine>(pFirstSelection->entity());
+                int iUsedAmount = siege_C.m_iUsedAmountNew + siege_C.m_iUsedAmount;
+                int iUnusedAmount = pFirstSelection->totalAmount - iUsedAmount;
+                nk_label(ctx, "Unused: ", NK_TEXT_LEFT);
+                nk_label_colored(ctx, std::to_string(iUnusedAmount).c_str(), NK_TEXT_LEFT, ColorOrange);
+
+                std::string pTextCost = std::to_string(siege_C.cost) + "  other  units  necessary  per  individual  Catapult.";
+                nk_layout_row_dynamic(ctx, windowHeight/20, 1);
+                nk_label_colored_wrap(ctx, pTextCost.c_str(), numberColor);
+                nk_layout_row_dynamic(ctx, windowHeight/40, 2);
+            }
+        }
+
+        nk_label_colored(ctx, "Stats Single Unit", NK_TEXT_LEFT, highlightColor);
+        nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+
+        nk_label(ctx, "Atk Delay: ", NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->speed)).c_str(), NK_TEXT_LEFT, ColorOrange);
+
+        nk_label(ctx, "HP: ",NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->hpValue)).c_str(), NK_TEXT_LEFT, numberColor);
+
+        nk_label(ctx, "Def: ",NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->armorValue)).c_str(), NK_TEXT_LEFT, numberColor);
+
+        nk_label(ctx, "Atk: ", NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->attackValue)).c_str(), NK_TEXT_LEFT, numberColor);
+
+        nk_label(ctx, "Accuracy: ", NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(pFirstSelection->accuracy).c_str(), NK_TEXT_LEFT, numberColor);
+
+        nk_label(ctx, "Crit Chance: ", NK_TEXT_LEFT);
+        nk_label_colored(ctx, std::to_string(static_cast<int>(pFirstSelection->critChance)).c_str(), NK_TEXT_LEFT, numberColor);
     }
+    nk_style_pop_font(ctx);
+}
+
+void GuiCombat::DrawSecondSelection() {
+    auto& fonts = m_GuiHandler.GetFonts();
+    auto pCombatSelection = CombatSelection::GetInstance();
+    auto pFirstSelection = pCombatSelection->m_pFirstUnit_C;
+    auto pSecondSelection = pCombatSelection->m_pSecondUnit_C;
 
     bool bFirstSelctedIsCatapult = engine.componentManager.hasComponent<SiegeEngine>(pFirstSelection->entity());
+    auto tagOwnerSecondSelection = engine.componentManager.getComponent<TagComponent>(pSecondSelection->entity()).value;
 
-    if (pSecondSelection == nullptr) return;
-    auto tagSelectionTwo = engine.componentManager.getComponent<TagComponent>(pSecondSelection->entity()).value;
+    float ratio[] = {0.1, 0.7, 0.2};
+    nk_layout_row_dynamic(ctx, windowHeight/25, 2);
+    nk_label_colored(ctx, getType(*pSecondSelection).c_str(), NK_TEXT_LEFT, highlightColor);
 
-    if (tagSelectionTwo == Tag::PLAYER && !bFirstSelctedIsCatapult)
+    if (tagOwnerSecondSelection == Tag::PLAYER && !bFirstSelctedIsCatapult)
     {
         const auto& siege_C = engine.componentManager.getComponent<SiegeEngine>(pSecondSelection->entity());
         const auto cost = siege_C.cost;
-        const int unusedAmount = pSecondSelection->totalAmount - siege_C.m_iUsedAmount - siege_C.m_iUsedAmountNew;
-        const int canUseAmount = pFirstSelection->availableAmount / cost;
+        const int iUnusedAmount = pSecondSelection->totalAmount - siege_C.m_iUsedAmount - siege_C.m_iUsedAmountNew;
+        const int iCanUseAmount = pFirstSelection->availableAmount / cost;
 
-        nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-        if (NK_WRAP::button_label(ctx, "Use", m_Hovered, &engine))
+        nk_label_colored(ctx, "Player", NK_TEXT_CENTERED, playerColor);
+        nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
         {
-            pCombatSelection->InvokeUse(pFirstSelection->category, value, pSecondSelection->category);
-            pCombatSelection->ResetSelections();
-            value = 0;
-        }
+            nk_label(ctx, "Unused Left: ", NK_TEXT_LEFT);
+            nk_label_colored(ctx, std::to_string(iUnusedAmount).c_str(), NK_TEXT_LEFT, ColorOrange);
+            nk_layout_row(ctx,NK_DYNAMIC,  windowHeight/30, 3, ratio);
+            nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
+            if(pSecondSelection->totalAmount*cost <= pFirstSelection->totalAmount)
+            {
+                NK_WRAP::slider_int(ctx, 0, &value, iUnusedAmount, 1, "UnusedAmount", m_Hovered, &engine);
+                if (NK_WRAP::button_label(ctx, "All", m_Hovered, &engine, 1)) {
+                    value = iUnusedAmount;
+                }
+            }
+            else
+            {
+                NK_WRAP::slider_int(ctx, 0, &value, iCanUseAmount, 1, "CanUseAmount", m_Hovered, &engine);
+                if (NK_WRAP::button_label(ctx, "All", m_Hovered, &engine, 2)) {
+                    value = iCanUseAmount;
+                }
+            }
 
-        if(pSecondSelection->totalAmount*cost <= pFirstSelection->totalAmount)
-        {
-            NK_WRAP::slider_int(ctx, 0, &value, unusedAmount, 1, "UnusedAmount", m_Hovered, &engine);
+            nk_layout_row_dynamic(ctx, windowHeight/30, 3);
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+            if (NK_WRAP::button_label(ctx, "Use", m_Hovered, &engine))
+            {
+                pCombatSelection->InvokeUse(pFirstSelection->category, value, pSecondSelection->category);
+                pCombatSelection->ResetSelections();
+                value = 0;
+            }
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
         }
-        else
-        {
-            NK_WRAP::slider_int(ctx, 0, &value, canUseAmount, 1, "CanUseAmount", m_Hovered, &engine);
-        }
-        nk_label_colored(ctx, getType(*pSecondSelection).c_str(), NK_TEXT_CENTERED, playerColor);
-
-        nk_layout_row_dynamic(ctx, windowHeight/30, 3);
-        nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
-        nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
-        nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+        nk_style_pop_font(ctx);
     }
     else
     {
-        nk_layout_row_dynamic(ctx, windowHeight/20, 3);
-        if (NK_WRAP::button_label(ctx, "Attack", m_Hovered, &engine))
-        {
-            pCombatSelection->InvokeAttack(pFirstSelection->category, value, pSecondSelection->category);
-            pCombatSelection->ResetSelections();
-            value = 0;
-        }
         int availableTroups = pFirstSelection->availableAmount;
-        NK_WRAP::slider_int(ctx, 0, &value, availableTroups, 1, "AttackSlider", m_Hovered, &engine);
-        nk_label_colored(ctx, getType(*pSecondSelection).c_str(), NK_TEXT_CENTERED, enemyColor);
-        nk_layout_row_dynamic(ctx, windowHeight/30, 3);
 
-        nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
-        nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
-        nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+        nk_label_colored(ctx, "Enemy", NK_TEXT_CENTERED, enemyColor);
+        nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
+        {
+            nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
+            nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, numberColor);
+
+            nk_layout_row(ctx,NK_DYNAMIC,  windowHeight/30, 3, ratio);
+            nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
+            NK_WRAP::slider_int(ctx, 0, &value, availableTroups, 1, "AttackSlider", m_Hovered, &engine);
+            if (NK_WRAP::button_label(ctx, "All", m_Hovered, &engine, 3)) {
+                value = availableTroups;
+            }
+
+            nk_layout_row_dynamic(ctx, windowHeight/30, 3);
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+            if (NK_WRAP::button_label(ctx, "Attack", m_Hovered, &engine))
+            {
+                pCombatSelection->InvokeAttack(pFirstSelection->category, value, pSecondSelection->category);
+                pCombatSelection->ResetSelections();
+                value = 0;
+            }
+            nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
+        }
+        nk_style_pop_font(ctx);
     }
 }
 

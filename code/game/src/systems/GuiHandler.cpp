@@ -43,29 +43,10 @@ namespace gl3 {
     void GuiHandler::initialize(engine::Game &game)
     {
         m_Fonts.resize(FONTS_LAST);
-        glfwGetWindowSize(game.getWindow(), &windowWidth, &windowHeight);
         nkCTX = nk_glfw3_init(&glfw, window, NK_GLFW3_INSTALL_CALLBACKS);
-        {
-            nk_glfw3_font_stash_begin(&glfw, &atlas);
-            m_Fonts[FANTASY_REGULAR] = nk_font_atlas_add_from_file(atlas,
-                                "assets/textures/gui/FantasyRPG1.ttf",
-                                        windowHeight/36, 0);
-            m_Fonts[FANTASY_VERY_LARGE] =  nk_font_atlas_add_from_file(atlas,
-                                "assets/textures/gui/FantasyRPG1.ttf",
-                                        windowHeight/20, 0);
-            m_Fonts[FANTASY_LARGE] =  nk_font_atlas_add_from_file(atlas,
-                                "assets/textures/gui/FantasyRPG1.ttf",
-                                        windowHeight/27, 0);
-            m_Fonts[FANTASY_SMALL] =  nk_font_atlas_add_from_file(atlas,
-                                "assets/textures/gui/FantasyRPG1.ttf",
-                                        windowHeight/45, 0);
-            m_Fonts[FANTASY_MAX_SIZE] =  nk_font_atlas_add_from_file(atlas,
-                                "assets/textures/gui/FantasyRPG1.ttf",
-                                        windowHeight/15, 0);
-            nk_glfw3_font_stash_end(&glfw);
-            /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
-            nk_style_set_font(nkCTX, &m_Fonts[FANTASY_REGULAR]->handle);
-        }
+        glfwGetFramebufferSize(engine.getWindow(), &fbWidth, &fbHeight);
+        RebuildFonts();
+
         textureAtlasID = engine::util::Texture::load("assets/textures/gui/ui_atlas_48x48.png", false);
         nk_style* style = &nkCTX->style;
         setStyleWindow(style);
@@ -113,18 +94,23 @@ namespace gl3 {
         if (currentH != windowHeight)
         {
             currentH = windowHeight;
-            nk_glfw3_font_stash_begin(&glfw, &atlas);
-            int fontSize = std::max(windowHeight / 36, 10);
-            nk_font *rpg1= nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", fontSize, 0);
-            nk_glfw3_font_stash_end(&glfw);
-            if (rpg1)
-            {
-            nk_style_set_font(nkCTX, &rpg1->handle);
-            }
-            else
-            {
-                std::cerr << "Font konnte nicht geladen werden! (Größe: " << fontSize;
-            }
+            // nk_glfw3_font_stash_begin(&glfw, &atlas);
+            // int fontSize = std::max(windowHeight / 36, 10);
+            // nk_font *rpg1= nk_font_atlas_add_from_file(atlas, "assets/textures/gui/FantasyRPG1.ttf", fontSize, 0);
+            // nk_glfw3_font_stash_end(&glfw);
+            // if (rpg1)
+            // {
+            // nk_style_set_font(nkCTX, &rpg1->handle);
+            // }
+            // else
+            // {
+            //     std::cerr << "Font konnte nicht geladen werden! (Größe: " << fontSize;
+            // }
+        }
+        glfwGetFramebufferSize(engine.getWindow(), &fbWidth, &fbHeight);
+        if (fbHeightCurrent != fbHeight) {
+            fbHeightCurrent = fbHeight;
+            RebuildFonts();
         }
         nk_glfw3_render(&glfw, NK_ANTI_ALIASING_ON,
             MAX_VERTEX_BUFFER,
@@ -153,6 +139,31 @@ namespace gl3 {
             }
         }
     }
+
+    void GuiHandler::RebuildFonts() {
+        {
+            nk_glfw3_font_stash_begin(&glfw, &atlas);
+            m_Fonts[FANTASY_REGULAR] = nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        fbHeight/36, 0);
+            m_Fonts[FANTASY_VERY_LARGE] =  nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        fbHeight/20, 0);
+            m_Fonts[FANTASY_LARGE] =  nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        fbHeight/27, 0);
+            m_Fonts[FANTASY_SMALL] =  nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        fbHeight/45, 0);
+            m_Fonts[FANTASY_MAX_SIZE] =  nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        fbHeight/15, 0);
+            nk_glfw3_font_stash_end(&glfw);
+            /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
+            nk_style_set_font(nkCTX, &m_Fonts[FANTASY_REGULAR]->handle);
+        }
+    }
+
     void GuiHandler::setStyleWindow(nk_style* style)
     {
         // style->window.fixed_background = nk_style_item_image(getTileImage(2, 54, 1, 1, 3072, 3072));

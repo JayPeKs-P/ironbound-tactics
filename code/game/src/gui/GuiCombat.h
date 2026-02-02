@@ -30,7 +30,8 @@ private:
     bool DrawRewardWindow();
     void drawTopRow();
     void drawEndTurnWindow();
-    void drawActions();
+    void DrawFirstSelection() const;
+    void DrawSecondSelection();
     void getComponents(gl3::engine::Game& game);
 
     guid_t pInf_E;
@@ -41,11 +42,12 @@ private:
     guid_t eArc_E;
     guid_t eCat_E;
 
-    struct nk_rect actionBounds;
+    // struct nk_rect infoBounds;
     nk_color highlightColor = nk_rgba(255, 250, 200, 255);
     nk_color playerColor = nk_rgba(100, 255, 100, 255);
     nk_color enemyColor = nk_rgba(255, 100, 100, 255);
     nk_color numberColor = nk_rgba(100, 200, 255, 255);
+    nk_color ColorOrange = nk_rgba(255, 165, 0, 255);
 
     int value = 0;
 
