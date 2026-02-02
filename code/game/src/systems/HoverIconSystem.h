@@ -16,7 +16,9 @@ namespace gl3 {
         explicit HoverIconSystem(engine::Game& game);
         void update(engine::Game& game);
     private:
-        void HandleIconLogic(engine::Game& game);
+        void HandleIconLogic(Unit& unit, engine::ecs::guid_t iIcon) const;
         bool HelperVisibilityBaseCases(Unit& unit, Visibility* pVisibility_C) const;
+        bool HelperCasesSecondSelection(Unit& unit, Visibility* pVisibility_C, UvOffset* pUvOffset_C) const;
+        bool HelperCasesFirstSelection(Unit& unit, Visibility* pVisibility_C, UvOffset* pUvOffset_C) const;
     };
 }

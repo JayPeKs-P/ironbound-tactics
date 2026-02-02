@@ -45,11 +45,6 @@ namespace gl3 {
     }
 
     void HoverIconSystem::update(engine::Game& game) {
-        HandleIconLogic(game);
-    }
-
-    void HoverIconSystem::HandleIconLogic(engine::Game& game) {
-        auto pCombatSelection = CombatSelection::GetInstance();
         bool bNewTurn = CombatController::getCombatState() == CombatState::BEGIN_TURN;
         game.componentManager.forEachComponent<Unit>([&](Unit& unit)
         {
@@ -60,87 +55,30 @@ namespace gl3 {
             auto pUnit_E = &game.entityManager.getEntity(unit.entity());
             for (auto iIcon : pUnit_E->GetChildren()) {
                 if (!game.componentManager.hasComponent<UvOffset>(iIcon)) continue;
-                auto pVisibility_C = &game.componentManager.getComponent<Visibility>(iIcon);
-
-                if (HelperVisibilityBaseCases(unit, pVisibility_C)) {
-                    continue;
-                }
-
-                auto pUvOffset_C = &game.componentManager.getComponent<UvOffset>(iIcon);
-
-                if (pCombatSelection->m_pSecondUnit_C) {
-                    guid_t iSelection = pCombatSelection->m_pFirstUnit_C->entity();
-                    guid_t iSelection2 = pCombatSelection->m_pSecondUnit_C->entity();
-                    int iSelectionAvailable = pCombatSelection->m_pFirstUnit_C->availableAmount;
-                    auto pTag_C = &game.componentManager.getComponent<TagComponent>(iSelection);
-                    auto pTag2_C = &game.componentManager.getComponent<TagComponent>(iSelection2);
-
-                    bool bPlayerSelected = pTag_C->value == Tag::PLAYER;
-                    bool bEnemySelected2 = pTag2_C->value == Tag::ENEMY;
-                    bool bIsSelection1 = unit.entity() == iSelection;
-                    bool bIsSelection2 = unit.entity() == iSelection2;
-                    if (bPlayerSelected && !bIsSelection1 && !bIsSelection2) {
-                        pVisibility_C->m_bVisible = false;
-                        continue;
-                    }
-                    if (bIsSelection2 && bEnemySelected2 && iSelectionAvailable > 0) {
-                        pUvOffset_C->u = 8;
-                        pUvOffset_C->v = 48;
-                    }
-                }
-                else if (pCombatSelection->m_pFirstUnit_C) {
-                    guid_t iSelection = pCombatSelection->m_pFirstUnit_C->entity();
-                    int iSelectionAvailable = pCombatSelection->m_pFirstUnit_C->availableAmount;
-                    auto pTag_C = &game.componentManager.getComponent<TagComponent>(iSelection);
-
-                    bool bPlayerSelected = pTag_C->value == Tag::PLAYER;
-                    bool bUnitIsSiege = game.componentManager.hasComponent<SiegeEngine>(pUnit_E->guid());
-                    bool bUnitIsEnemy = game.componentManager.getComponent<TagComponent>(pUnit_E->guid()).value == Tag::ENEMY;
-                    bool bUnitIsSelection = iSelection == unit.entity();
-                    if (bPlayerSelected && !bUnitIsSiege && !bUnitIsEnemy && !bUnitIsSelection) {
-                        pVisibility_C->m_bVisible = false;
-                        continue;
-                    }
-                    if (!bPlayerSelected && !bUnitIsSelection) {
-                        pVisibility_C->m_bVisible = false;
-                        continue;
-                    }
-                    if (!bUnitIsSelection && iSelectionAvailable <= 0) {
-                        pVisibility_C->m_bVisible = false;
-                        continue;
-                    }
-                    bool bSiegeIsUseable = false;
-                    if (bUnitIsSiege && !bUnitIsEnemy) {
-                        auto& siege = game.componentManager.getComponent<SiegeEngine>(pUnit_E->guid());
-                        auto iTotalSiege = unit.totalAmount;
-                        auto iTotalUsedAmount = siege.m_iUsedAmount + siege.m_iUsedAmountNew;;
-                        bool bHasUnused = iTotalSiege - iTotalUsedAmount > 0;
-                        bool bSelectionEnough = iSelectionAvailable > siege.cost;
-                        bSiegeIsUseable = bHasUnused && bSelectionEnough;
-                    }
-                    if (bUnitIsSelection) {
-                        pUvOffset_C->u = 20;
-                    }
-                    else if (!bUnitIsEnemy && bSiegeIsUseable) {
-                        pUvOffset_C->u = 8;
-                        pUvOffset_C->v = 49;
-                    }
-                    else if (!bUnitIsEnemy && !bSiegeIsUseable) {
-                        pUvOffset_C->u = 7;
-                        pUvOffset_C->v = 49;
-                    }
-                    else {
-                        pUvOffset_C->u = 11;
-                    }
-                }
-                else {
-                    pUvOffset_C->u = pUvOffset_C->originalU;
-                    pUvOffset_C->v = pUvOffset_C->originalV;
-                }
-
-                pVisibility_C->m_bVisible = true;
+                HandleIconLogic(unit, iIcon);
             }
         });
+    }
+
+    void HoverIconSystem::HandleIconLogic(Unit& unit, guid_t iIcon) const {
+        auto pCombatSelection = CombatSelection::GetInstance();
+        auto pVisibility_C = &engine.componentManager.getComponent<Visibility>(iIcon);
+
+        if (HelperVisibilityBaseCases(unit, pVisibility_C)) {
+            return;
+        }
+        auto pUvOffset_C = &engine.componentManager.getComponent<UvOffset>(iIcon);
+        if (pCombatSelection->m_pSecondUnit_C) {
+            if (HelperCasesSecondSelection(unit, pVisibility_C, pUvOffset_C)) return;
+        }
+        else if (pCombatSelection->m_pFirstUnit_C) {
+            if (HelperCasesFirstSelection(unit, pVisibility_C, pUvOffset_C)) return;
+        }
+        else {
+            pUvOffset_C->u = pUvOffset_C->originalU;
+            pUvOffset_C->v = pUvOffset_C->originalV;
+        }
+        pVisibility_C->m_bVisible = true;
     }
 
     bool HoverIconSystem::HelperVisibilityBaseCases(Unit& unit, Visibility* pVisibility_C) const {
@@ -160,6 +98,77 @@ namespace gl3 {
         if (!unit.m_bShouldHaveIcon) {
             pVisibility_C->m_bVisible = false;
             return true;
+        }
+        return false;
+    }
+
+    bool HoverIconSystem::HelperCasesSecondSelection(Unit& unit, Visibility* pVisibility_C, UvOffset* pUvOffset_C) const {
+        auto pCombatSelection = CombatSelection::GetInstance();
+        guid_t iSelection = pCombatSelection->m_pFirstUnit_C->entity();
+        guid_t iSelection2 = pCombatSelection->m_pSecondUnit_C->entity();
+        int iSelectionAvailable = pCombatSelection->m_pFirstUnit_C->availableAmount;
+        auto pTag_C = &engine.componentManager.getComponent<TagComponent>(iSelection);
+        auto pTag2_C = &engine.componentManager.getComponent<TagComponent>(iSelection2);
+
+        bool bPlayerSelected = pTag_C->value == Tag::PLAYER;
+        bool bEnemySelected2 = pTag2_C->value == Tag::ENEMY;
+        bool bIsSelection1 = unit.entity() == iSelection;
+        bool bIsSelection2 = unit.entity() == iSelection2;
+        if (bPlayerSelected && !bIsSelection1 && !bIsSelection2) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        if (bIsSelection2 && bEnemySelected2 && iSelectionAvailable > 0) {
+            pUvOffset_C->u = 8;
+            pUvOffset_C->v = 48;
+        }
+        return false;
+    }
+
+    bool HoverIconSystem::HelperCasesFirstSelection(Unit& unit, Visibility* pVisibility_C, UvOffset* pUvOffset_C) const {
+        auto pCombatSelection = CombatSelection::GetInstance();
+        guid_t iSelection = pCombatSelection->m_pFirstUnit_C->entity();
+        int iSelectionAvailable = pCombatSelection->m_pFirstUnit_C->availableAmount;
+        auto pTag_C = &engine.componentManager.getComponent<TagComponent>(iSelection);
+
+        bool bPlayerSelected = pTag_C->value == Tag::PLAYER;
+        bool bUnitIsSiege = engine.componentManager.hasComponent<SiegeEngine>(unit.entity());
+        bool bUnitIsEnemy = engine.componentManager.getComponent<TagComponent>(unit.entity()).value == Tag::ENEMY;
+        bool bUnitIsSelection = iSelection == unit.entity();
+        if (bPlayerSelected && !bUnitIsSiege && !bUnitIsEnemy && !bUnitIsSelection) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        if (!bPlayerSelected && !bUnitIsSelection) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        if (!bUnitIsSelection && iSelectionAvailable <= 0) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        bool bSiegeIsUseable = false;
+        if (bUnitIsSiege && !bUnitIsEnemy) {
+            auto& siege = engine.componentManager.getComponent<SiegeEngine>(unit.entity());
+            auto iTotalSiege = unit.totalAmount;
+            auto iTotalUsedAmount = siege.m_iUsedAmount + siege.m_iUsedAmountNew;;
+            bool bHasUnused = iTotalSiege - iTotalUsedAmount > 0;
+            bool bSelectionEnough = iSelectionAvailable > siege.cost;
+            bSiegeIsUseable = bHasUnused && bSelectionEnough;
+        }
+        if (bUnitIsSelection) {
+            pUvOffset_C->u = 20;
+        }
+        else if (!bUnitIsEnemy && bSiegeIsUseable) {
+            pUvOffset_C->u = 8;
+            pUvOffset_C->v = 49;
+        }
+        else if (!bUnitIsEnemy && !bSiegeIsUseable) {
+            pUvOffset_C->u = 7;
+            pUvOffset_C->v = 49;
+        }
+        else {
+            pUvOffset_C->u = 11;
         }
         return false;
     }
