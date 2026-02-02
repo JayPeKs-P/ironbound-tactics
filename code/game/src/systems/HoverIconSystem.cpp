@@ -45,6 +45,10 @@ namespace gl3 {
     }
 
     void HoverIconSystem::update(engine::Game& game) {
+        HandleIconLogic(game);
+    }
+
+    void HoverIconSystem::HandleIconLogic(engine::Game& game) {
         auto pCombatSelection = CombatSelection::GetInstance();
         bool bNewTurn = CombatController::getCombatState() == CombatState::BEGIN_TURN;
         game.componentManager.forEachComponent<Unit>([&](Unit& unit)
@@ -54,28 +58,15 @@ namespace gl3 {
                 unit.m_bShouldHaveIcon = unit.availableAmount > 0 || bIsSiege;
             }
             auto pUnit_E = &game.entityManager.getEntity(unit.entity());
-            auto pUnitInstanceBuffer_C = &game.componentManager.getComponent<InstanceBuffer>(pUnit_E->guid());
             for (auto iIcon : pUnit_E->GetChildren()) {
                 if (!game.componentManager.hasComponent<UvOffset>(iIcon)) continue;
-                auto pUvOffset_C = &game.componentManager.getComponent<UvOffset>(iIcon);
-
                 auto pVisibility_C = &game.componentManager.getComponent<Visibility>(iIcon);
-                if (CombatController::getCombatState() != CombatState::MAIN_PHASE) {
-                    pVisibility_C->m_bVisible = false;
+
+                if (HelperVisibilityBaseCases(unit, pVisibility_C)) {
                     continue;
                 }
-                if (unit.totalAmount <= 0) {
-                    pVisibility_C->m_bVisible = false;
-                    continue;
-                }
-                if (pUnitInstanceBuffer_C->instances.empty()) {
-                    pVisibility_C->m_bVisible = false;
-                    continue;
-                }
-                if (!unit.m_bShouldHaveIcon) {
-                    pVisibility_C->m_bVisible = false;
-                    continue;
-                }
+
+                auto pUvOffset_C = &game.componentManager.getComponent<UvOffset>(iIcon);
 
                 if (pCombatSelection->m_pSecondUnit_C) {
                     guid_t iSelection = pCombatSelection->m_pFirstUnit_C->entity();
@@ -127,13 +118,17 @@ namespace gl3 {
                         bool bSelectionEnough = iSelectionAvailable > siege.cost;
                         bSiegeIsUseable = bHasUnused && bSelectionEnough;
                     }
-                    if (bUnitIsSelection || bSiegeIsUseable) {
+                    if (bUnitIsSelection) {
                         pUvOffset_C->u = 20;
                     }
-                    // else if (bSiegeIsUseable) {
-                    //     pUvOffset_C->u = 8;
-                    //     pUvOffset_C->v = 49;
-                    // }
+                    else if (!bUnitIsEnemy && bSiegeIsUseable) {
+                        pUvOffset_C->u = 8;
+                        pUvOffset_C->v = 49;
+                    }
+                    else if (!bUnitIsEnemy && !bSiegeIsUseable) {
+                        pUvOffset_C->u = 7;
+                        pUvOffset_C->v = 49;
+                    }
                     else {
                         pUvOffset_C->u = 11;
                     }
@@ -148,7 +143,24 @@ namespace gl3 {
         });
     }
 
-    void HoverIconSystem::HelperNoSelection(guid_t iUnit) {
-
+    bool HoverIconSystem::HelperVisibilityBaseCases(Unit& unit, Visibility* pVisibility_C) const {
+        const auto& cUnitInstanceBuffer_C = engine.componentManager.getComponent<InstanceBuffer>(unit.entity());
+        if (CombatController::getCombatState() != CombatState::MAIN_PHASE) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        if (unit.totalAmount <= 0) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        if (cUnitInstanceBuffer_C.instances.empty()) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        if (!unit.m_bShouldHaveIcon) {
+            pVisibility_C->m_bVisible = false;
+            return true;
+        }
+        return false;
     }
 }
