@@ -164,12 +164,14 @@ namespace gl3 {
             return true;
         }
         bool bSiegeIsUseable = false;
+        bool bHasUnused = false;
+        bool bSelectionEnough = false;
         if (bUnitIsSiege && !bUnitIsEnemy) {
             auto& siege = engine.componentManager.getComponent<SiegeEngine>(unit.entity());
             auto iTotalSiege = unit.totalAmount;
             auto iTotalUsedAmount = siege.m_iUsedAmount + siege.m_iUsedAmountNew;;
-            bool bHasUnused = iTotalSiege - iTotalUsedAmount > 0;
-            bool bSelectionEnough = iSelectionAvailable > siege.cost;
+            bHasUnused = iTotalSiege - iTotalUsedAmount > 0;
+            bSelectionEnough = iSelectionAvailable > siege.cost;
             bSiegeIsUseable = bHasUnused && bSelectionEnough;
         }
         if (bUnitIsSelection) {
@@ -179,6 +181,12 @@ namespace gl3 {
         else if (!bUnitIsEnemy && bSiegeIsUseable) {
             pUvOffset_C->u = 8;
             pUvOffset_C->v = 49;
+        }
+        else if (!bUnitIsEnemy && !bHasUnused) {
+            pUvOffset_C->u = pUvOffset_C->originalU;
+            pUvOffset_C->v = pUvOffset_C->originalV;
+            pVisibility_C->m_bVisible = false;
+            return true;
         }
         else if (!bUnitIsEnemy && !bSiegeIsUseable) {
             pUvOffset_C->u = 7;
