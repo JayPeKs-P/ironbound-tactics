@@ -41,6 +41,8 @@ namespace gl3 {
             pIcon_E->addComponent<Transform>(iconRootTransform, iconPosition, 0, glm::vec3(0.3f, 0.3f, 0.3f));
             pIcon_E->addComponent<UvOffset>(8, 2, 64, 64);
             pIcon_E->addComponent<Visibility>(false);
+            auto pBounce = &pIcon_E->addComponent<Bounce>();
+            pBounce->m_fBase = iconPosition.y;
         });
     }
 
@@ -56,8 +58,22 @@ namespace gl3 {
             for (auto iIcon : pUnit_E->GetChildren()) {
                 if (!game.componentManager.hasComponent<UvOffset>(iIcon)) continue;
                 HandleIconLogic(unit, iIcon);
+                AnimateIcon(iIcon);
             }
         });
+    }
+
+    void HoverIconSystem::AnimateIcon(guid_t iIcon) {
+        auto pTransform_C = &engine.componentManager.getComponent<Transform>(iIcon);
+        auto pBounce_C = &engine.componentManager.getComponent<Bounce>(iIcon);
+        float fDeltaTime = engine.getDeltaTime();
+        pBounce_C->m_fCurrentTime += fDeltaTime * pBounce_C->m_fSpeed;
+
+        float two_pi = glm::two_pi<float>();
+        if (pBounce_C->m_fCurrentTime > two_pi) {
+            pBounce_C->m_fCurrentTime -= two_pi;
+        }
+        pTransform_C->localPosition.y = pBounce_C->m_fBase + pBounce_C->m_fAmplitude * glm::sin(pBounce_C->m_fCurrentTime);
     }
 
     void HoverIconSystem::HandleIconLogic(Unit& unit, guid_t iIcon) const {

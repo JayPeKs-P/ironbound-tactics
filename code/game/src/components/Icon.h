@@ -17,3 +17,15 @@ private:
     Icon(guid_t owner) : Component(owner) {
     }
 };
+struct Bounce : Component {
+    friend ComponentManager;
+    friend Entity;
+
+    float m_fCurrentTime = 0.0f;
+    float m_fSpeed = 10.0f;
+    float m_fAmplitude = 0.02f;
+    float m_fBase = 0.0f;
+
+private:
+    Bounce(guid_t owner) : Component(owner) {}
+};
