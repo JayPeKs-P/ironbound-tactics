@@ -465,7 +465,7 @@ void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, int iTar
         turnEnd.addListener([=](){
             auto pLibCombatCallback = LibCombatFunctions::GetInstance(engine);
             pLibCombatCallback->ResetUnit(iTarget, iTargetInstanceAmount);
-            pLibCombatCallback->ResetUnit(iActor, iActorCost);
+            // pLibCombatCallback->ResetUnit(iActor, iActorCost);
         });
     });
 
