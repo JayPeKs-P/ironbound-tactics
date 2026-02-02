@@ -4,12 +4,10 @@
 
 #include "GuiUnitSelection.h"
 
-// #include "../components/Model2D.h"
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 #include "../components/TagComponent.h"
 #include "../logic/LibCombatFunctions.h"
-#include "../systems/CombatController.h"
 #include "engine/Texture.h"
 #include "engine/util/Debug.h"
 

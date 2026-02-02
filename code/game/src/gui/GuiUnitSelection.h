@@ -4,7 +4,6 @@
 
 #pragma once
 #include "engine/ecs/Gui.h"
-#include "../components/CombatSelection.h"
 #include "GuiCombat.h"
 #include "engine/Events.h"
 
@@ -17,7 +16,7 @@ class GuiUnitSelection: public Gui {
 public:
     static event_t onAccept;
     GuiUnitSelection(gl3::engine::Game &game, nk_context *ctx, nk_uint& textureID);
-    ~GuiUnitSelection();
+    ~GuiUnitSelection() override;
 
     int amountToSpare;
 private:

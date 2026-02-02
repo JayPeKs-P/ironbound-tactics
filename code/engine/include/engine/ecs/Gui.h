@@ -80,7 +80,5 @@ namespace gl3::engine::ecs
         Game &engine;
         nk_context *ctx;
         nk_uint textureID;
-
-
     };
 }

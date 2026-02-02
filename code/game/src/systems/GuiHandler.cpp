@@ -10,6 +10,7 @@
 
 #include "../gui/GuiUnitSelection.h"
 #include "../gui/GuiCombat.h"
+#include "../gui/GuiMainMenu.h"
 
 
 namespace gl3 {
@@ -52,6 +53,9 @@ namespace gl3 {
             m_Fonts[FANTASY_VERY_LARGE] =  nk_font_atlas_add_from_file(atlas,
                                 "assets/textures/gui/FantasyRPG1.ttf",
                                         windowHeight/20, 0);
+            m_Fonts[FANTASY_LARGE] =  nk_font_atlas_add_from_file(atlas,
+                                "assets/textures/gui/FantasyRPG1.ttf",
+                                        windowHeight/27, 0);
             m_Fonts[FANTASY_SMALL] =  nk_font_atlas_add_from_file(atlas,
                                 "assets/textures/gui/FantasyRPG1.ttf",
                                         windowHeight/45, 0);
@@ -71,8 +75,13 @@ namespace gl3 {
         setStyleSlider(style);
         setStyleText(style);
 
-        activeGui = std::make_unique<GuiUnitSelection>(game, nkCTX, textureAtlasID);
-        activeScene = GuiScene::UNIT_SELECTION;
+        activeGui = std::make_unique<GuiMainMenu>(game, *this, nkCTX, textureAtlasID);
+        activeScene = GuiScene::MAIN_MENU;
+        GuiMainMenu::onPressPlay.addListener([&]()
+        {
+            activeScene = GuiScene::UNIT_SELECTION;
+            activeGui = std::make_unique<GuiUnitSelection>(game, nkCTX, textureAtlasID);
+        });
         GuiUnitSelection::onAccept.addListener([&](int a, int b, int c)
         {
             onChangeToCombatScene.invoke();
@@ -127,16 +136,21 @@ namespace gl3 {
         });
         switch (activeScene)
         {
-            case GuiScene::MAIN_MENU:
-                break;
-            case GuiScene::COMBAT_MENU:
+            case GuiScene::MAIN_MENU: {
                 activeGui->updateMargins(windowWidth, windowHeight);
                 activeGui->update();
                 break;
-            case GuiScene::UNIT_SELECTION:
+            }
+            case GuiScene::COMBAT_MENU: {
                 activeGui->updateMargins(windowWidth, windowHeight);
                 activeGui->update();
                 break;
+            }
+            case GuiScene::UNIT_SELECTION: {
+                activeGui->updateMargins(windowWidth, windowHeight);
+                activeGui->update();
+                break;
+            }
         }
     }
     void GuiHandler::setStyleWindow(nk_style* style)

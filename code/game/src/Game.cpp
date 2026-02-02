@@ -59,6 +59,7 @@ Game::Game(int width, int height, const std::string& title):
     pSoundSystem->RegisterSound(engine::L0SS_1, "retro_fail_sound_04.wav");
     pSoundSystem->RegisterMusic(engine::MUSIC_SELECTION, "Retro Action Game Theme #6 (looped).wav");
     pSoundSystem->RegisterMusic(engine::MUSIC_COMBAT_1, "Retro Action Game Theme #8 (looped).wav");
+    pSoundSystem->RegisterMusic(engine::MUSIC_MAIN_MENU, "Logo #2 (Looped).wav");
 
 }
 
@@ -203,10 +204,6 @@ void Game::start() {
     auto combatController = &addSystem<CombatController>();
     auto selectionSystem = &addSystem<SelectionSystem>();
     auto pHoverIconSystem = &addSystem<HoverIconSystem>();
-    // backgroundMusic = std::make_unique<SoLoud::Wav>();
-    // backgroundMusic->load(resolveAssetPath("audio/electronic-wave.mp3").string().c_str());
-    // backgroundMusic->setLooping(true);
-    // audio.playBackground(*backgroundMusic);
     CombatController::initialize.addListener([&]()
     {
         auto pInfEnemyM2D_C = &componentManager.getComponent<Model2D>(eInfID_E);
