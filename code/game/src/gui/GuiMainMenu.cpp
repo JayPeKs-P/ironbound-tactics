@@ -48,6 +48,10 @@ void GuiMainMenu::render() {
         }
         break;
     }
+    case MainMenuState::SKIN_SELECTION: {
+        SkinSelecitonDisplay();
+        break;
+    }
     case MainMenuState::TUTORIAL: {
         break;
     }
@@ -82,6 +86,12 @@ void GuiMainMenu::MainDisplay() {
     nk_label(ctx, "", NK_TEXT_LEFT);
     if (NK_WRAP::button_label(ctx, "Settings", m_Hovered, &engine)) {
         SetMenuState(MainMenuState::SETTINGS);
+    }
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    nk_label(ctx, "", NK_TEXT_LEFT);
+    if (NK_WRAP::button_label(ctx, "Change Skin", m_Hovered, &engine)) {
+        SetMenuState(MainMenuState::SKIN_SELECTION);
     }
     nk_label(ctx, "", NK_TEXT_LEFT);
 
@@ -141,6 +151,9 @@ void GuiMainMenu::SettingsDisplay() {
     if (NK_WRAP::button_label(ctx, "Back", m_Hovered, &engine)) {
         SetMenuState(MainMenuState::MAIN_MENU);
     }
+}
+
+void GuiMainMenu::SkinSelecitonDisplay() {
 }
 
 void GuiMainMenu::HelperLoadConfig() {

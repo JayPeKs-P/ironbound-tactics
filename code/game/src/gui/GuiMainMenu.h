@@ -9,7 +9,7 @@
 namespace gl3 {
     class GuiHandler;
 }
-enum class MainMenuState {MAIN_MENU, SETTINGS, TUTORIAL};
+enum class MainMenuState {MAIN_MENU, SETTINGS, SKIN_SELECTION, TUTORIAL};
 
 using gl3::engine::ecs::Gui;
 
@@ -28,6 +28,8 @@ private:
     void MainDisplay();
     void SettingsDisplay();
     void TutorialDisplay();
+    void SkinSelecitonDisplay();
+
     void HelperLoadConfig();
     gl3::GuiHandler& m_GuiHandler;
     uint8_t m_CurrentHighscore;

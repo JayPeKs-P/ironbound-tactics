@@ -25,6 +25,9 @@ using json = nlohmann::json;
 #include "../components/unitTypes/UnitCategory.h"
 #include "engine/util/Debug.h"
 
+#define BOUND_EASY 5
+#define BOUND_MEDIUM 12
+#define BOUND_HARD 22
 
 using namespace gl3;
 
@@ -317,9 +320,9 @@ void CombatController::setEnemy(engine::Game& game)
     }
 
     std::string difficulty;
-    if (roundCount >= 20) difficulty = "HARD";
-    else if (roundCount >= 10) difficulty = "MEDIUM";
-    else if (roundCount >= 5) difficulty = "EASY";
+    if (roundCount >= BOUND_HARD) difficulty = "HARD";
+    else if (roundCount >= BOUND_MEDIUM) difficulty = "MEDIUM";
+    else if (roundCount >= BOUND_EASY) difficulty = "EASY";
     else difficulty = "VERY EASY";
 
     static std::random_device random;
