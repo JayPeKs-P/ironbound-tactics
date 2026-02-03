@@ -10,7 +10,8 @@ namespace gl3 {
     class GuiHandler;
 }
 enum class MainMenuState {MAIN_MENU, SETTINGS, SKIN_SELECTION, TUTORIAL};
-enum class SkinSelection {INFANTRY, ARCHER, CATAPULT};
+enum class UnitSelection {INFANTRY, ARCHER, CATAPULT};
+enum class SkinType {BASIC, EASY, MEDIUM, HARD};
 
 using gl3::engine::ecs::Gui;
 
@@ -31,9 +32,14 @@ private:
     void SettingsDisplay();
     void TutorialDisplay();
     void SkinSelecitonDisplay();
-    void SetSkinSelection(SkinSelection newSkinSelection);
+    void SetSkinSelection(UnitSelection newSkinSelection);
     void LoadSkinSelection();
     void DeleteSkinSelection();
+    void UpdateUnitGUID();
+    void GetCurrentTextureID();
+    void UpdateInfantryTexture(SkinType newSkin);
+    void UpdateArcherTexture(SkinType newSkin);
+    void UpdateCatapultTexture(SkinType newSkin);
 
     void HelperLoadConfig();
     gl3::GuiHandler& m_GuiHandler;
@@ -46,7 +52,15 @@ private:
     nk_color ColorBlue = nk_rgba(100, 200, 255, 255);
 
     MainMenuState m_ActiveState = MainMenuState::MAIN_MENU;
-    SkinSelection m_SkinSelection = SkinSelection::INFANTRY;
+    UnitSelection m_SkinSelection = UnitSelection::INFANTRY;
+
+    guid_t m_iInfantryPlayerID;
+    guid_t m_iArcherPlayerID;
+    guid_t m_iCatapultPlayerID;
+
+    GLuint m_iInfantryTextureID = GL_MAX_INTEGER_SAMPLES;
+    GLuint m_iArcherTextureID = GL_MAX_INTEGER_SAMPLES;
+    GLuint m_iCatapultTextureID = GL_MAX_INTEGER_SAMPLES;
 
     GLuint iSkinBasic = GL_MAX_INTEGER_SAMPLES;
     GLuint iSkinEasy = GL_MAX_INTEGER_SAMPLES;
