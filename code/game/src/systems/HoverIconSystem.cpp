@@ -58,8 +58,12 @@ namespace gl3 {
             for (auto iIcon : pUnit_E->GetChildren()) {
                 if (!game.componentManager.hasComponent<UvOffset>(iIcon)) continue;
                 HandleIconLogic(unit, iIcon);
-                AnimateIcon(iIcon);
             }
+        });
+        game.componentManager.forEachComponent<Transform>([&] (Transform& transform)
+        {
+            if (!game.componentManager.hasComponent<Bounce>(transform.entity())) [[likely]] return;
+            AnimateIcon(transform.entity());
         });
     }
 

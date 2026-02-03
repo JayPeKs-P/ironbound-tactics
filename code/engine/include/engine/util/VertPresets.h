@@ -41,5 +41,13 @@ namespace gl3::engine::util::VertPreset
             -1.0f,  -0.574f,  -0.1f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,     //bottom left
             -1.0f,   0.574f,  -0.1f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f      //top left
         };
+    static std::vector<float> title =
+    {
+        //positions                  // colors                  // texture coords
+        1.0f,   0.388f,  -0.1f,      1.0f,   0.0f,   0.0f,       1.0f,   1.0f,     //top right
+        1.0f,  -0.388f,  -0.1f,      0.0f,   1.0f,   0.0f,       1.0f,   0.0f,     //bottom right
+       -1.0f,  -0.388f,  -0.1f,      0.0f,   0.0f,   1.0f,       0.0f,   0.0f,     //bottom left
+       -1.0f,   0.388f,  -0.1f,      1.0f,   1.0f,   0.0f,       0.0f,   1.0f      //top left
+   };
     static std::vector<unsigned int> backgroundIndices = {0,1,3,1,2,3};
     };

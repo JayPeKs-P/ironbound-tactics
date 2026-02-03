@@ -75,6 +75,8 @@ namespace gl3::engine::render {
             }
             else
             {
+                bool bIsVisible = game.componentManager.getComponent<Visibility>(owner).m_bVisible;
+                if (!bIsVisible) continue;
                 auto model = game.componentManager.getComponent<engine::sceneGraph::Transform>(owner).modelMatrix;
                 auto mvp = engine.calculateMvpMatrix(model);
                 setMatrix("mvp", mvp, shader_C.get_shader_program());

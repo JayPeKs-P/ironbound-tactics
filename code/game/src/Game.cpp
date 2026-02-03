@@ -67,17 +67,28 @@ void Game::start() {
     AddTextureToRegistry("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png", "Terrain");
     AddTextureToRegistry("assets/textures/entities/Arrow_No_BG.png", "Arrow");
     AddTextureToRegistry("assets/textures/gui/ui_atlas_48x48.png", "GUI");
+    AddTextureToRegistry("assets/textures/gui/title_logo.png", "Title");
     unsigned int tempTexID = -1;
 
     using namespace engine::util;
     //---- Entities ----
-    auto& guiScene_E = engine::Game::entityManager.createEntity();
 
     auto& terrain_E = engine::Game::entityManager.createEntity();
     tempTexID = GetTextureFromRegistry("Terrain");
     terrain_E.addComponent<Model2D>(VertPreset::background, VertPreset::quadIndices, tempTexID);
+    terrain_E.addComponent<Visibility>(true);
     terrain_E.addComponent<Shader>();
     terrain_E.addComponent<Transform>(origin, glm::vec3(0, 0, -0.91), 0, glm::vec3(2.75, 2.75, 1));
+
+    auto& titleLogo_E = engine::Game::entityManager.createEntity();
+    tempTexID = GetTextureFromRegistry("Title");
+    titleLogo_E.addComponent<Model2D>(VertPreset::title, VertPreset::quadIndices, tempTexID);
+    titleLogo_E.addComponent<Visibility>(true);
+    titleLogo_E.addComponent<Shader>();
+    auto& titleTransform = titleLogo_E.addComponent<Transform>(origin, glm::vec3(0, 0.5, -0.51), 0, glm::vec3(1.5, 1.5, 1));
+    auto pBounce_C = &titleLogo_E.addComponent<Bounce>();
+    pBounce_C->m_fSpeed = 2.0f;
+    pBounce_C->m_fBase = titleTransform.localPosition.y;
 
     //----- Boilerplate Entities -----
     auto pArrowPlayer_E = &entityManager.createEntity();

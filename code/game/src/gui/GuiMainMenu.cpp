@@ -11,15 +11,18 @@
 #include "../systems/GuiHandler.h"
 #include "engine/Texture.h"
 #include "../components/TagComponent.h"
+#include "engine/rendering/InstanceBuffer.h"
 #include "engine/rendering/Model2D.h"
 
 
+struct Visibility;
 GuiMainMenu::event_t GuiMainMenu::onPressPlay;
 using namespace gl3;
 GuiMainMenu::GuiMainMenu(engine::Game& game, GuiHandler& guiHandler, nk_context* ctx, nk_uint& textureID):
 Gui(game, ctx, textureID),
 m_GuiHandler(guiHandler)
 {
+    SetTitleVisibility(true);
     auto pSoundSystem = engine::SoundSystem::GetInstance();
     pSoundSystem->PlayMusic(engine::MUSIC_MAIN_MENU);
     HelperLoadConfig();
@@ -29,14 +32,11 @@ m_GuiHandler(guiHandler)
 }
 
 GuiMainMenu::~GuiMainMenu() {
+    SetTitleVisibility(false);
     DeleteSkinSelection();
 }
 
 void GuiMainMenu::render() {
-    if (nk_begin(ctx, "Background",
-        nk_rect(0, 0,
-            windowWidth, windowHeight),
-        NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
     switch (m_ActiveState) {
     case MainMenuState::MAIN_MENU: {
         if (nk_begin(ctx, "Main Menu Buttons",
@@ -44,34 +44,52 @@ void GuiMainMenu::render() {
                 windowWidth *  2/6 , windowHeight * 1/2 ),
                 NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
         {
+            SetTitleVisibility(true);
             MainDisplay();
             nk_end(ctx);
         }
         break;
     }
     case MainMenuState::SETTINGS: {
+        if (nk_begin(ctx, "Background",
+            nk_rect(0, 0,
+                windowWidth, windowHeight),
+            NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
         if (nk_begin(ctx, "Settings Menu",
             nk_rect(windowWidth * 2/6,  windowHeight * 3/ 6,
                 windowWidth *  2/6 , windowHeight * 11/24 ),
                 NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
         {
+            SetTitleVisibility(true);
             SettingsDisplay();
             nk_end(ctx);
         }
         break;
     }
     case MainMenuState::SKIN_SELECTION: {
+        if (nk_begin(ctx, "Background",
+            nk_rect(0, 0,
+                windowWidth, windowHeight),
+            NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
         if (nk_begin(ctx, "Unlocked  Skins",
             nk_rect(windowWidth / 4,  windowHeight / 4,
                 windowWidth / 2, windowHeight * 3/5),
                  NK_WINDOW_BORDER | NK_WINDOW_BORDER))
         {
+            SetTitleVisibility(false);
             SkinSelecitonDisplay();
             nk_end(ctx);
         }
         break;
     }
     case MainMenuState::TUTORIAL: {
+        if (nk_begin(ctx, "Background",
+            nk_rect(0, 0,
+                windowWidth, windowHeight),
+            NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
+
+        SetTitleVisibility(false);
+
         break;
     }
     }
@@ -562,6 +580,10 @@ void GuiMainMenu::UpdateActiveSkinType(const std::string& sKey) {
     else [[unlikely]] {
         throw std::runtime_error("Config file corrupted. Delete ../assets/config.json and restart Game.");
     }
+}
+
+void GuiMainMenu::SetTitleVisibility(bool bValue) const {
+    engine.componentManager.getComponent<Visibility>(2).m_bVisible = bValue;
 }
 
 void GuiMainMenu::HelperLoadConfig() {

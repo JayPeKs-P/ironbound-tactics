@@ -41,6 +41,7 @@ private:
     void UpdateArcherTexture(SkinType newSkin);
     void UpdateCatapultTexture(SkinType newSkin);
     void UpdateActiveSkinType(const std::string& sKey);
+    void SetTitleVisibility(bool bValue) const; //TODO: Delete and swap for safe method
 
     void HelperLoadConfig();
     gl3::GuiHandler& m_GuiHandler;
