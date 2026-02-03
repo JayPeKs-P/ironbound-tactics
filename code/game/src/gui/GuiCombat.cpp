@@ -369,16 +369,18 @@ void GuiCombat::drawTopRow()
 ////////////////////////////////////////////////////////////////////////
         return;
     }
+    auto& fonts = m_GuiHandler.GetFonts();
     float ratio[] = {0.05, 0.01,  0.1, 0.2, 0.01, 0.04, 0.2, 0.04, 0.01,  0.2, 0.1 };
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 11, ratio);
 
-    if (NK_WRAP::button_label(ctx, "esc", m_Hovered, &engine))
+    nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
     {
-        m_bPaused = true;
+        if (NK_WRAP::button_label(ctx, "esc", m_Hovered, &engine))
+        {
+            m_bPaused = true;
+        }
     }
-
-
-
+    nk_style_pop_font(ctx);
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
 
 
@@ -397,32 +399,37 @@ void GuiCombat::drawTopRow()
     nk_progress(ctx, &hp, 100, NK_FIXED);
 
     nk_label(ctx, "", NK_TEXT_CENTERED);    //spacer
-    switch (m_PlaybackState) {
-    case PlaybackState::DEFAULT: {
-        if (NK_WRAP::button_label(ctx, ">>", m_Hovered, &engine)) {
-            m_PlaybackState = PlaybackState::TWICE;
-            engine.SetSpeedUpValue(2.0f);
+
+    nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
+    {
+        switch (m_PlaybackState) {
+        case PlaybackState::DEFAULT: {
+            if (NK_WRAP::button_label(ctx, ">", m_Hovered, &engine)) {
+                m_PlaybackState = PlaybackState::TWICE;
+                engine.SetSpeedUpValue(2.0f);
+            }
+            break;
         }
-        break;
-    }
-    case PlaybackState::TWICE: {
-        if (NK_WRAP::button_label(ctx, ">>>>", m_Hovered, &engine)) {
-            m_PlaybackState = PlaybackState::MAX;
-            engine.SetSpeedUpValue(4.0f);
+        case PlaybackState::TWICE: {
+            if (NK_WRAP::button_label(ctx, ">>", m_Hovered, &engine)) {
+                m_PlaybackState = PlaybackState::MAX;
+                engine.SetSpeedUpValue(4.0f);
+            }
+            break;
         }
-        break;
-    }
-    case PlaybackState::MAX: {
-        if (NK_WRAP::button_label(ctx, ">", m_Hovered, &engine)) {
-            m_PlaybackState = PlaybackState::DEFAULT;
-            engine.SetSpeedUpValue(1.0f);
+        case PlaybackState::MAX: {
+            if (NK_WRAP::button_label(ctx, ">>>>", m_Hovered, &engine)) {
+                m_PlaybackState = PlaybackState::DEFAULT;
+                engine.SetSpeedUpValue(1.0f);
+            }
+            break;
         }
-        break;
+        default: {
+            break;
+        }
+        }
     }
-    default: {
-        break;
-    }
-    }
+    nk_style_pop_font(ctx);
 
     std::string roundLabel = "Round  " + std::to_string(CombatController::roundCount);
     nk_label_colored(ctx, roundLabel.c_str(), NK_TEXT_CENTERED, ColorYellow);
@@ -445,6 +452,7 @@ void GuiCombat::drawTopRow()
 
 void GuiCombat::drawEndTurnWindow()
 {
+    auto& fonts = m_GuiHandler.GetFonts();
     auto pCombatSelection = CombatSelection::GetInstance();
     float ratio[] = {0.5, 0.4};
     nk_layout_row(ctx, NK_DYNAMIC , windowHeight/20, 2, ratio);
@@ -452,12 +460,16 @@ void GuiCombat::drawEndTurnWindow()
     nk_label(ctx, turnLabel.c_str(), NK_TEXT_LEFT);
     // struct nk_image skip = GuiHandler::getTileImage(textureID, 9, 5, 1, 1, 3072, 3072);
     // nk_button_image(ctx, skip);
-    if (NK_WRAP::button_label(ctx, "Next", m_Hovered, &engine) && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
+    nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
     {
-        CombatController::setState(CombatState::ANIMATION);
-        pCombatSelection->m_pFirstUnit_C = nullptr;
-        pCombatSelection->m_pSecondUnit_C = nullptr;
+        if (NK_WRAP::button_label(ctx, "End", m_Hovered, &engine) && CombatController::getCombatState() == CombatState::MAIN_PHASE ) // CombatController.getState == IDLE
+        {
+            CombatController::setState(CombatState::ANIMATION);
+            pCombatSelection->m_pFirstUnit_C = nullptr;
+            pCombatSelection->m_pSecondUnit_C = nullptr;
+        }
     }
+    nk_style_pop_font(ctx);
 }
 
 void GuiCombat::DrawFirstSelection() const {

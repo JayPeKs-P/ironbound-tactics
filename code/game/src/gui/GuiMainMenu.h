@@ -26,8 +26,8 @@ public:
     }
 
 private:
-    void render();
-    void invokeSceneChange();
+    void render() override;
+    void invokeSceneChange() override;
     void MainDisplay();
     void SettingsDisplay();
     void TutorialDisplay();
@@ -40,6 +40,7 @@ private:
     void UpdateInfantryTexture(SkinType newSkin);
     void UpdateArcherTexture(SkinType newSkin);
     void UpdateCatapultTexture(SkinType newSkin);
+    void UpdateActiveSkinType(const std::string& sKey);
 
     void HelperLoadConfig();
     gl3::GuiHandler& m_GuiHandler;
@@ -53,6 +54,7 @@ private:
 
     MainMenuState m_ActiveState = MainMenuState::MAIN_MENU;
     UnitSelection m_SkinSelection = UnitSelection::INFANTRY;
+    SkinType m_ActiveSkinType = SkinType::BASIC;
 
     guid_t m_iInfantryPlayerID;
     guid_t m_iArcherPlayerID;
@@ -66,4 +68,8 @@ private:
     GLuint iSkinEasy = GL_MAX_INTEGER_SAMPLES;
     GLuint iSkinMedium = GL_MAX_INTEGER_SAMPLES;
     GLuint iSkinHard = GL_MAX_INTEGER_SAMPLES;
+
+    bool m_bEasyUnlocked = false;
+    bool m_bMediumUnlocked = false;
+    bool m_bHardUnlocked = false;
 };

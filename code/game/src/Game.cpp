@@ -117,7 +117,8 @@ void Game::start() {
     pInfID_E = InfPlayer_E.guid();
     auto& pInfU_C = InfPlayer_E.addComponent<Unit>("pInfantry");
     InfPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = AddTextureToRegistry(pInfU_C.texturePath.c_str(), "pInfantry");
+    std::string texture = GetConfigEntry("InfantryTexture");
+    tempTexID = Texture::load(texture.c_str());
     InfPlayer_E.addComponent<Model2D>(VertPreset::pQuad, VertPreset::quadIndices, tempTexID);
     InfPlayer_E.addComponent<AnimationSpeed>(0.1f);
     InfPlayer_E.addComponent<InstanceBuffer>();
@@ -130,7 +131,8 @@ void Game::start() {
     pArcID_E = ArcPlayer_E.guid();
     auto& pArcU_C = ArcPlayer_E.addComponent<Unit>("pArcher");
     ArcPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = Texture::load(pArcU_C.texturePath.c_str());
+    texture = GetConfigEntry("ArcherTexture");
+    tempTexID = Texture::load(texture.c_str());
     ArcPlayer_E.addComponent<Model2D>(VertPreset::pQuad, VertPreset::quadIndices, tempTexID);
     ArcPlayer_E.addComponent<AnimationSpeed>(0.1f);
     ArcPlayer_E.addComponent<InstanceBuffer>();
@@ -144,7 +146,8 @@ void Game::start() {
     auto& pCatU_C = CatPlayer_E.addComponent<Unit>("pCatapult");
     auto& pCatSE_C = CatPlayer_E.addComponent<SiegeEngine>(5);
     CatPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
-    tempTexID = engine::util::Texture::load(pCatU_C.texturePath.c_str());
+    texture = GetConfigEntry("CatapultTexture");
+    tempTexID = Texture::load(texture.c_str());
     CatPlayer_E.addComponent<Model2D>(engine::util::VertPreset::pQuad, engine::util::VertPreset::quadIndices, tempTexID);
     CatPlayer_E.addComponent<AnimationSpeed>(0.1f);
     CatPlayer_E.addComponent<InstanceBuffer>();

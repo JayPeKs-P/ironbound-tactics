@@ -24,9 +24,12 @@ amountToSpare(50)
             );
     });
     getComponents(game);
-    pInfTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
-    pArcTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
-    pCatTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
+    std::string texture = engine.GetConfigEntry("InfantryTexture");
+    pInfTexID = engine::util::Texture::load(texture.c_str(), false);
+    texture = engine.GetConfigEntry("ArcherTexture");
+    pArcTexID = engine::util::Texture::load(texture.c_str(), false);
+    texture = engine.GetConfigEntry("CatapultTexture");
+    pCatTexID = engine::util::Texture::load(texture.c_str(), false);
     auto pSoundSystem = engine::SoundSystem::GetInstance();
     pSoundSystem->PlayMusic(engine::MUSIC_SELECTION);
 }

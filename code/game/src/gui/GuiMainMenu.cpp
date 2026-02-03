@@ -23,6 +23,9 @@ m_GuiHandler(guiHandler)
     auto pSoundSystem = engine::SoundSystem::GetInstance();
     pSoundSystem->PlayMusic(engine::MUSIC_MAIN_MENU);
     HelperLoadConfig();
+    m_bEasyUnlocked = (m_CurrentHighscore >= BOUND_EASY);
+    m_bMediumUnlocked = (m_CurrentHighscore >= BOUND_MEDIUM);
+    m_bHardUnlocked = (m_CurrentHighscore >= BOUND_HARD);
 }
 
 GuiMainMenu::~GuiMainMenu() {
@@ -108,6 +111,8 @@ void GuiMainMenu::MainDisplay() {
     nk_label(ctx, "", NK_TEXT_LEFT);
     if (NK_WRAP::button_label(ctx, "Change Skin", m_Hovered, &engine)) {
         SetMenuState(MainMenuState::SKIN_SELECTION);
+        SetSkinSelection(UnitSelection::INFANTRY);
+        UpdateActiveSkinType(engine.GetConfigEntry("InfantryTexType"));
         UpdateUnitGUID();
         GetCurrentTextureID();
         LoadSkinSelection();
@@ -184,14 +189,17 @@ void GuiMainMenu::SkinSelecitonDisplay() {
     nk_layout_row_dynamic(ctx, windowHeight / 18, 3);
     if (NK_WRAP::button_label(ctx, "Infantry", m_Hovered, &engine)) {
         SetSkinSelection(UnitSelection::INFANTRY);
+        UpdateActiveSkinType(engine.GetConfigEntry("InfantryTexType"));
         LoadSkinSelection();
     }
     if (NK_WRAP::button_label(ctx, "Archer", m_Hovered, &engine)) {
         SetSkinSelection(UnitSelection::ARCHER);
+        UpdateActiveSkinType(engine.GetConfigEntry("ArcherTexType"));
         LoadSkinSelection();
     }
     if (NK_WRAP::button_label(ctx, "Catapult", m_Hovered, &engine)) {
         SetSkinSelection(UnitSelection::CATAPULT);
+        UpdateActiveSkinType(engine.GetConfigEntry("CatapultTexType"));
         LoadSkinSelection();
     }
     nk_layout_row_dynamic(ctx, windowHeight / 24, 1);
@@ -211,7 +219,12 @@ void GuiMainMenu::SkinSelecitonDisplay() {
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_image(ctx, unitImage);
         nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_label_colored(ctx, "Active", NK_TEXT_CENTERED, ColorYellow);
+        if (m_ActiveSkinType == SkinType::BASIC) {
+            nk_label_colored(ctx, "Active", NK_TEXT_CENTERED, ColorYellow);
+        }
+        else {
+            nk_label_colored(ctx, "Unlocked", NK_TEXT_CENTERED, ColorGreen);
+        }
         if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine)) {
             switch (m_SkinSelection) {
             case UnitSelection::INFANTRY: {
@@ -238,8 +251,13 @@ void GuiMainMenu::SkinSelecitonDisplay() {
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_image(ctx, unitImage);
         nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_label_wrap(ctx, LabelText.c_str());
-        if (m_CurrentHighscore >= BOUND_EASY) {
+        if (m_bEasyUnlocked) {
+            if (m_ActiveSkinType == SkinType::EASY) {
+                nk_label_colored(ctx, "Active", NK_TEXT_CENTERED, ColorYellow);
+            }
+            else {
+                nk_label_colored(ctx, "Unlocked", NK_TEXT_CENTERED, ColorGreen);
+            }
             if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine, 1)) {
                 switch (m_SkinSelection) {
                 case UnitSelection::INFANTRY: {
@@ -259,6 +277,7 @@ void GuiMainMenu::SkinSelecitonDisplay() {
             }
         }
         else {
+            nk_label_wrap(ctx, LabelText.c_str());
             nk_label_colored(ctx, "Locked", NK_TEXT_CENTERED, ColorRed);
         }
 
@@ -270,8 +289,13 @@ void GuiMainMenu::SkinSelecitonDisplay() {
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_image(ctx, unitImage);
         nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_label_wrap(ctx, LabelText.c_str());
-        if (m_CurrentHighscore >= BOUND_MEDIUM) {
+        if (m_bMediumUnlocked) {
+            if (m_ActiveSkinType == SkinType::MEDIUM) {
+                nk_label_colored(ctx, "Active", NK_TEXT_CENTERED, ColorYellow);
+            }
+            else {
+                nk_label_colored(ctx, "Unlocked", NK_TEXT_CENTERED, ColorGreen);
+            }
             if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine, 2)) {
                 switch (m_SkinSelection) {
                 case UnitSelection::INFANTRY: {
@@ -291,6 +315,7 @@ void GuiMainMenu::SkinSelecitonDisplay() {
             }
         }
         else {
+            nk_label_wrap(ctx, LabelText.c_str());
             nk_label_colored(ctx, "Locked", NK_TEXT_CENTERED, ColorRed);
         }
 
@@ -302,8 +327,13 @@ void GuiMainMenu::SkinSelecitonDisplay() {
         nk_label(ctx, "", NK_TEXT_LEFT);
         nk_image(ctx, unitImage);
         nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_label_wrap(ctx, LabelText.c_str());
-        if (m_CurrentHighscore >= BOUND_HARD) {
+        if (m_bHardUnlocked) {
+            if (m_ActiveSkinType == SkinType::HARD) {
+                nk_label_colored(ctx, "Active", NK_TEXT_CENTERED, ColorYellow);
+            }
+            else {
+                nk_label_colored(ctx, "Unlocked", NK_TEXT_CENTERED, ColorGreen);
+            }
             if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine, 3)) {
                 switch (m_SkinSelection) {
                 case UnitSelection::INFANTRY: {
@@ -323,6 +353,7 @@ void GuiMainMenu::SkinSelecitonDisplay() {
             }
         }
         else {
+            nk_label_wrap(ctx, LabelText.c_str());
             nk_label_colored(ctx, "Locked", NK_TEXT_CENTERED, ColorRed);
         }
 
@@ -331,6 +362,7 @@ void GuiMainMenu::SkinSelecitonDisplay() {
         if (NK_WRAP::button_label(ctx, "Return  To  Menu", m_Hovered, &engine)) {
             SetMenuState(MainMenuState::MAIN_MENU);
             SetSkinSelection(UnitSelection::INFANTRY);
+            UpdateActiveSkinType(engine.GetConfigEntry("InfantryTexType"));
             DeleteSkinSelection();
         }
     }
@@ -421,22 +453,31 @@ void GuiMainMenu::UpdateInfantryTexture(SkinType newSkin) {
     switch (newSkin) {
     case SkinType::BASIC: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png");
+        engine.SetConfigEntry("InfantryTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png");
+        engine.SetConfigEntry("InfantryTexType", "BASIC");
         break;
     }
     case SkinType::EASY: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_01_Idle.png");
+        engine.SetConfigEntry("InfantryTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_01_Idle.png");
+        engine.SetConfigEntry("InfantryTexType", "EASY");
         break;
     }
     case SkinType::MEDIUM: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_04_Idle.png");
+        engine.SetConfigEntry("InfantryTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_04_Idle.png");
+        engine.SetConfigEntry("InfantryTexType", "MEDIUM");
         break;
     }
     case SkinType::HARD: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_02_Idle.png");
+        engine.SetConfigEntry("InfantryTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_02_Idle.png");
+        engine.SetConfigEntry("InfantryTexType", "HARD");
         break;
     }
     default: {}
     }
+    UpdateActiveSkinType(engine.GetConfigEntry("InfantryTexType"));
 }
 
 void GuiMainMenu::UpdateArcherTexture(SkinType newSkin) {
@@ -445,22 +486,31 @@ void GuiMainMenu::UpdateArcherTexture(SkinType newSkin) {
     switch (newSkin) {
     case SkinType::BASIC: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png");
+        engine.SetConfigEntry("ArcherTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png");
+        engine.SetConfigEntry("ArcherTexType", "BASIC");
         break;
     }
     case SkinType::EASY: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_01_Idle.png");
+        engine.SetConfigEntry("ArcherTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_01_Idle.png");
+        engine.SetConfigEntry("ArcherTexType", "EASY");
         break;
     }
     case SkinType::MEDIUM: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_04_Idle.png");
+        engine.SetConfigEntry("ArcherTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_04_Idle.png");
+        engine.SetConfigEntry("ArcherTexType", "MEDIUM");
         break;
     }
     case SkinType::HARD: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_02_Idle.png");
+        engine.SetConfigEntry("ArcherTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_02_Idle.png");
+        engine.SetConfigEntry("ArcherTexType", "HARD");
         break;
     }
     default: {}
     }
+    UpdateActiveSkinType(engine.GetConfigEntry("ArcherTexType"));
 }
 
 void GuiMainMenu::UpdateCatapultTexture(SkinType newSkin) {
@@ -469,21 +519,48 @@ void GuiMainMenu::UpdateCatapultTexture(SkinType newSkin) {
     switch (newSkin) {
     case SkinType::BASIC: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png");
+        engine.SetConfigEntry("CatapultTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png");
+        engine.SetConfigEntry("CatapultTexType", "BASIC");
         break;
     }
     case SkinType::EASY: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_01_Idle.png");
+        engine.SetConfigEntry("CatapultTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_01_Idle.png");
+        engine.SetConfigEntry("CatapultTexType", "EASY");
         break;
     }
     case SkinType::MEDIUM: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_04_Idle.png");
+        engine.SetConfigEntry("CatapultTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_04_Idle.png");
+        engine.SetConfigEntry("CatapultTexType", "MEDIUM");
         break;
     }
     case SkinType::HARD: {
         pUnit->texture = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_02_Idle.png");
+        engine.SetConfigEntry("CatapultTexture", "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_02_Idle.png");
+        engine.SetConfigEntry("CatapultTexType", "HARD");
         break;
     }
     default: {}
+    }
+    UpdateActiveSkinType(engine.GetConfigEntry("CatapultTexType"));
+}
+
+void GuiMainMenu::UpdateActiveSkinType(const std::string& sKey) {
+    if (sKey == "BASIC") {
+        m_ActiveSkinType = SkinType::BASIC;
+    }
+    else if (sKey == "EASY") {
+        m_ActiveSkinType = SkinType::EASY;
+    }
+    else if (sKey == "MEDIUM") {
+        m_ActiveSkinType = SkinType::MEDIUM;
+    }
+    else if (sKey == "HARD") {
+        m_ActiveSkinType = SkinType::HARD;
+    }
+    else [[unlikely]] {
+        throw std::runtime_error("Config file corrupted. Delete ../assets/config.json and restart Game.");
     }
 }
 

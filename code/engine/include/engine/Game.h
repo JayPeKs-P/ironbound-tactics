@@ -9,6 +9,7 @@
 #include <typeindex>
 #include <stdexcept>
 
+#include "json.hpp"
 #include "engine/Context.h"
 #include "engine/Events.h"
 #include "engine/ecs/ComponentManager.h"
@@ -123,6 +124,8 @@ namespace gl3::engine {
         [[nodiscard]] float GetSpeedUpValue() const {return m_fSpeedupValue;}
         void SetSpeedUpValue(float value) {m_fSpeedupValue = value;}
         const char* GetConfigPath() const {return m_pConfigPath;}
+        nlohmann::basic_json<> GetConfigEntry(const char* pKey) const;
+        void SetConfigEntry(const char* pKey, const char* pValue);
     protected:
         /// @brief Constructs the game with window dimensions and title.
         ///
