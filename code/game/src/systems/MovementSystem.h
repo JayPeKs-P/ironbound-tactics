@@ -1,0 +1,58 @@
+//
+// Created by julia on 22/07/2025.
+//
+#pragma once
+#include "engine/sceneGraph/Transform.h"
+#include "engine/ecs/System.h"
+#include "engine/Events.h"
+#include "engine/Game.h"
+#include "engine/Game.h"
+
+
+struct UnitState;
+struct ProjectileState;
+enum class State;
+using gl3::engine::sceneGraph::Transform;
+namespace gl3 {
+    enum class AnimationState{ANIMATE_MOVEMENT, ANIMATE_ATTACK, ANIMATE_RESET, NOTHING};
+
+class MovementSystem: public engine::ecs::System{
+public:
+    explicit MovementSystem(engine::Game &game);
+    void Animate(float deltatime);
+    void update(engine::Game &game, Transform* root);
+    bool moveStraight(Transform& transform, glm::vec3 direction, float deltatime, State endState) const;
+    bool CheckIfTargetMoved(ProjectileState& projectileState_C) const;
+    bool CreateProjectiles(const Transform& transform, State endState, int iDelay) const;
+    bool DeleteProjectile(guid_t ID);
+    bool MoveCurved(Transform& projectileTransform, float deltatime);
+    static void SetState(AnimationState newState);
+    [[nodiscard]] static AnimationState GetState();
+private:
+    template<typename C>
+    void HelperTargetValidity(C* pComponent);
+    guid_t HelperGetTargetInstance(Transform& rootTargetTransform_C) const;
+    void HelperProjectileDelay() const;
+    void UpdateEndPosition(UnitState* pUnitState_C);
+    void HandleMovementAnimation(Transform& transform, float deltaTime);
+    void HandleAttackAnimation(Transform& transform, float deltaTime);
+    void HandleResetAnimation(Transform& transform, float deltaTime);
+    void PrepareMoving(UnitState* pUnitState_C, Transform& rootUnitTransform_C, Transform& rootTargetTransform_C);
+    void PrepareAttack(UnitState* pUnitState_C,guid_t iRootActor, Transform& rootTargetTransform_C) const;
+    void SetUnitState(Transform& rootActorTransform_C, Transform& rootTargetTransform_C, int iAmount, State initialActorState, State endActorState, int
+                                      iDelay = 0);
+    void SetResetting(Transform& unitTransform, State initialState) const;
+    void AtomicCheckAnimationFinished();
+    void UpdateAnimationStage(float deltaTime);
+
+
+    glm::vec3 playerPendingPosition = glm::vec3(-0.2, -0.3, 1.0);
+    glm::vec3 enemyPendingPosition = glm::vec3(0.0, 0.3, 0.5);
+    bool m_bMoveAnimsFinished = false;
+    bool m_bAttackAnimsFinished = false;
+    static AnimationState m_AnimationState;
+
+    float countdown = 0.5f;
+};
+
+} // gl3

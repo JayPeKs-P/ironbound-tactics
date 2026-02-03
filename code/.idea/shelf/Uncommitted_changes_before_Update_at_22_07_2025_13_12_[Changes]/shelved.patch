@@ -1,0 +1,83 @@
+Index: game/CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>cmake_minimum_required(VERSION 3.18)\r\n\r\n# set variables for source files\r\nset(SOURCE_FILES src/main.cpp\r\n        src/Game.cpp\r\n        src/Game.h\r\n        src/Assets.h\r\n        src/components/unitTypes/Unit.h\r\n        src/systems/CombatController.cpp\r\n        src/systems/CombatController.h\r\n        src/gui/guiCombat.cpp\r\n        src/gui/guiCombat.h\r\n        src/systems/GuiHandler.cpp\r\n        src/systems/GuiHandler.h\r\n        src/components/GuiState.h\r\n        src/components/CombatSelection.h\r\n        src/components/unitTypes/SiegeEngine.h\r\n        src/components/Model2D.h\r\n        src/components/Shader.h\r\n        src/systems/rendering/RenderSystem.cpp\r\n        src/systems/rendering/RenderSystem.h\r\n        src/components/InstanceBuffer.h\r\n        src/components/UnitState.h\r\n        src/systems/rendering/InstanceManager.cpp\r\n        src/systems/rendering/InstanceManager.h\r\n        src/logic/CombatFunctions.cpp\r\n        src/logic/CombatFunctions.h\r\n        src/logic/ActionEvaluation.cpp\r\n        src/logic/ActionEvaluation.h\r\n        src/components/unitTypes/UnitCategory.h\r\n        src/systems/SelectionSystem.h\r\n        src/gui/GuiUnitSelection.cpp\r\n        src/gui/GuiUnitSelection.h\r\n)\r\n\r\n# set executable name\r\nset(EXE_FILE Game)\r\n\r\n# add the executable target\r\nadd_executable(${EXE_FILE} ${SOURCE_FILES})\r\n\r\ntarget_compile_definitions(${EXE_FILE} PRIVATE DEBUG_MODE)\r\n\r\n# require C++ 17 compiler\r\ntarget_compile_features(${EXE_FILE} PRIVATE cxx_std_17)\r\n\r\n\r\n\r\ntarget_link_libraries(${EXE_FILE} PRIVATE Engine)\r\n\r\ntarget_compile_definitions(${EXE_FILE} PRIVATE ASSET_ROOT=./assets/)\r\n\r\n# copy assets to output directory before build\r\nadd_custom_command(TARGET ${EXE_FILE} PRE_BUILD\r\n        COMMAND ${CMAKE_COMMAND} -E copy_directory\r\n        ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${EXE_FILE}>/assets)\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/game/CMakeLists.txt b/game/CMakeLists.txt
+--- a/game/CMakeLists.txt	(revision 2e2c37a15af5e8951008fe7c3542bf6dcf230492)
++++ b/game/CMakeLists.txt	(date 1753182440175)
+@@ -29,6 +29,8 @@
+         src/logic/ActionEvaluation.h
+         src/components/unitTypes/UnitCategory.h
+         src/systems/SelectionSystem.h
++        src/systems/MovementSystem.cpp
++        src/systems/MovementSystem.h
+         src/gui/GuiUnitSelection.cpp
+         src/gui/GuiUnitSelection.h
+ )
+Index: game/src/systems/MovementSystem.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/game/src/systems/MovementSystem.cpp b/game/src/systems/MovementSystem.cpp
+new file mode 100644
+--- /dev/null	(date 1753182415648)
++++ b/game/src/systems/MovementSystem.cpp	(date 1753182415648)
+@@ -0,0 +1,24 @@
++//
++// Created by julia on 22/07/2025.
++//
++
++#include "MovementSystem.h"
++#include "engine/sceneGraph/Transform.h"
++#include "../components/unitTypes/Unit.h"
++
++using gl3::engine::sceneGraph::Transform;
++namespace gl3 {
++    void MovementSystem::moveTo(engine::Game& game, glm::vec3 goalPositon)
++    {
++        game.componentManager.forEachComponent<Transform>([&](Transform &transform)
++        {
++            int createdInstances = 0;
++            int maxInstances = 0;
++            if (game.componentManager.hasComponent<Unit>(transform.entity()))
++            {
++                auto unitCategory = game.componentManager.getComponent<Unit>(transform.entity()).category;
++
++            }
++        });
++    }
++} // gl3
+\ No newline at end of file
+Index: game/src/systems/MovementSystem.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/game/src/systems/MovementSystem.h b/game/src/systems/MovementSystem.h
+new file mode 100644
+--- /dev/null	(date 1753182415648)
++++ b/game/src/systems/MovementSystem.h	(date 1753182415648)
+@@ -0,0 +1,18 @@
++//
++// Created by julia on 22/07/2025.
++//
++#pragma once
++#include "engine/ecs/System.h"
++
++namespace gl3 {
++
++class MovementSystem: public engine::ecs::System{
++public:
++    explicit MovementSystem(engine::Game &game);
++    void moveTo(engine::Game &game, glm::vec3 goalPosition);
++    void update(engine::Game &game, engine::sceneGraph::Transform* root);
++private:
++    glm::vec3 movementVector;
++};
++
++} // gl3
+\ No newline at end of file

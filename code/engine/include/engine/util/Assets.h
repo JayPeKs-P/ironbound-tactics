@@ -1,0 +1,24 @@
+//
+// Created by Julian Kalb on 29/10/2024.
+//
+
+#pragma once
+
+#include <filesystem>
+
+#define GET_STRING(x) #x
+#define GET_DIR(x) GET_STRING(x)
+
+namespace fs = std::filesystem;
+
+namespace gl3 {
+
+    /// @brief Helper function that allows for shorter relative paths for assets.
+    ///
+    /// @param Relative path in ../assets/ directory.
+    /// @return Full relative path.
+    inline fs::path resolveAssetPath(const fs::path &relativeAssetPath) {
+        auto mergedPath = (GET_DIR(ASSET_ROOT) / relativeAssetPath).make_preferred();
+        return fs::canonical(mergedPath);
+    }
+}
