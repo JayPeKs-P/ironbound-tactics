@@ -188,7 +188,7 @@ namespace gl3 {
             }
         });
         std::mt19937 rng{std::random_device{}()};
-        std::uniform_int_distribution<int> dist{30, 90};
+        std::uniform_int_distribution<int> dist{59, 100};
         int random = dist(rng);
         RandomReward result;
         guid_t iUnit_ID;

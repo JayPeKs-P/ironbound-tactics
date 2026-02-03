@@ -44,23 +44,23 @@
   "EASY":{
     "1": {
       "Infantry": "eInfEASY",
-      "amountInf": 30,
+      "amountInf": 25,
       "Archer": "eArcEASY",
-      "amountArc": 10,
+      "amountArc": 15,
       "Catapult": "eCatEASY",
       "amountCat": 0
     },
     "2": {
       "Infantry": "eInfEASY",
-      "amountInf": 20,
+      "amountInf": 15,
       "Archer": "eArcEASY",
       "amountArc": 20,
-      "Catapult": "eCatEASY",
-      "amountCat": 0
+      "Catapult": "eCatMEDIUM",
+      "amountCat": 2
     },
     "3": {
       "Infantry": "eInfMEDIUM",
-      "amountInf": 15,
+      "amountInf": 10,
       "Archer": "eArcEASY",
       "amountArc": 20,
       "Catapult": "eCatEASY",
@@ -70,13 +70,13 @@
       "Infantry": "eInfEASY",
       "amountInf": 15,
       "Archer": "eArcMEDIUM",
-      "amountArc": 18,
+      "amountArc": 10,
       "Catapult": "eCatEASY",
       "amountCat": 1
     },
     "5": {
       "Infantry": "eInfMEDIUM",
-      "amountInf": 25,
+      "amountInf": 22,
       "Archer": "eArcMEDIUM",
       "amountArc": 3,
       "Catapult": "eCatMEDIUM",
@@ -86,9 +86,9 @@
   "MEDIUM": {
     "1": {
       "Infantry": "eInfMEDIUM",
-      "amountInf": 30,
+      "amountInf": 20,
       "Archer": "eArcMEDIUM",
-      "amountArc": 20,
+      "amountArc": 15,
       "Catapult": "eCatMEDIUM",
       "amountCat": 4
     },
@@ -96,7 +96,7 @@
       "Infantry": "eInfMEDIUM",
       "amountInf": 15,
       "Archer": "eArcMEDIUM",
-      "amountArc": 35,
+      "amountArc": 25,
       "Catapult": "eCatMEDIUM",
       "amountCat": 4
     },
@@ -112,9 +112,9 @@
       "Infantry": "eInfMEDIUM",
       "amountInf": 15,
       "Archer": "eArcEASY",
-      "amountArc": 35,
+      "amountArc": 30,
       "Catapult": "eCatHARD",
-      "amountCat": 4
+      "amountCat": 2
     },
     "5": {
       "Infantry": "eInfMEDIUM",
@@ -152,17 +152,17 @@
     },
     "4": {
       "Infantry": "eInfEASY",
-      "amountInf": 50,
+      "amountInf": 30,
       "Archer": "eArcMEDIUM",
-      "amountArc": 75,
+      "amountArc": 30,
       "Catapult": "eCatHARD",
-      "amountCat": 10
+      "amountCat": 5
     },
     "5": {
-      "Infantry": "eInfMEDIUM",
-      "amountInf": 50,
-      "Archer": "eArcMEDIUM",
-      "amountArc": 50,
+      "Infantry": "eInfHARD",
+      "amountInf": 20,
+      "Archer": "eArcHARD",
+      "amountArc": 40,
       "Catapult": "eCatHARD",
       "amountCat": 0
     }
