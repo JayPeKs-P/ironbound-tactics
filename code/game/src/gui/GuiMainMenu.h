@@ -10,6 +10,7 @@ namespace gl3 {
     class GuiHandler;
 }
 enum class MainMenuState {MAIN_MENU, SETTINGS, SKIN_SELECTION, TUTORIAL};
+enum class SkinSelection {INFANTRY, ARCHER, CATAPULT};
 
 using gl3::engine::ecs::Gui;
 
@@ -18,6 +19,7 @@ class GuiMainMenu: public Gui {
 public:
     static event_t onPressPlay;
     GuiMainMenu(gl3::engine::Game& game, gl3::GuiHandler& guiHandler, nk_context* ctx, nk_uint& textureID);
+    ~GuiMainMenu() override;
     void SetMenuState(MainMenuState newState) {
         m_ActiveState = newState;
     }
@@ -29,6 +31,9 @@ private:
     void SettingsDisplay();
     void TutorialDisplay();
     void SkinSelecitonDisplay();
+    void SetSkinSelection(SkinSelection newSkinSelection);
+    void LoadSkinSelection();
+    void DeleteSkinSelection();
 
     void HelperLoadConfig();
     gl3::GuiHandler& m_GuiHandler;
@@ -39,5 +44,12 @@ private:
     nk_color ColorGreen = nk_rgba(100, 255, 100, 255);
     nk_color ColorRed = nk_rgba(255, 100, 100, 255);
     nk_color ColorBlue = nk_rgba(100, 200, 255, 255);
+
     MainMenuState m_ActiveState = MainMenuState::MAIN_MENU;
+    SkinSelection m_SkinSelection = SkinSelection::INFANTRY;
+
+    GLuint iSkinBasic = GL_MAX_INTEGER_SAMPLES;
+    GLuint iSkinEasy = GL_MAX_INTEGER_SAMPLES;
+    GLuint iSkinMedium = GL_MAX_INTEGER_SAMPLES;
+    GLuint iSkinHard = GL_MAX_INTEGER_SAMPLES;
 };

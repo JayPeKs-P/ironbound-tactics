@@ -7,7 +7,9 @@
 #include <fstream>
 
 #include "json.hpp"
+#include "../systems/CombatController.h"
 #include "../systems/GuiHandler.h"
+#include "engine/Texture.h"
 
 GuiMainMenu::event_t GuiMainMenu::onPressPlay;
 using namespace gl3;
@@ -20,6 +22,10 @@ m_GuiHandler(guiHandler)
     HelperLoadConfig();
 }
 
+GuiMainMenu::~GuiMainMenu() {
+    DeleteSkinSelection();
+}
+
 void GuiMainMenu::render() {
     if (nk_begin(ctx, "Background",
         nk_rect(0, 0,
@@ -29,7 +35,7 @@ void GuiMainMenu::render() {
     case MainMenuState::MAIN_MENU: {
         if (nk_begin(ctx, "Main Menu Buttons",
             nk_rect(windowWidth * 2/6,  windowHeight * 3/ 6,
-                windowWidth *  2/6 , windowHeight * 11/24 ),
+                windowWidth *  2/6 , windowHeight * 1/2 ),
                 NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER))
         {
             MainDisplay();
@@ -49,7 +55,14 @@ void GuiMainMenu::render() {
         break;
     }
     case MainMenuState::SKIN_SELECTION: {
-        SkinSelecitonDisplay();
+        if (nk_begin(ctx, "Unlocked  Skins",
+            nk_rect(windowWidth / 4,  windowHeight / 4,
+                windowWidth / 2, windowHeight * 3/5),
+                 NK_WINDOW_BORDER | NK_WINDOW_BORDER))
+        {
+            SkinSelecitonDisplay();
+            nk_end(ctx);
+        }
         break;
     }
     case MainMenuState::TUTORIAL: {
@@ -92,6 +105,7 @@ void GuiMainMenu::MainDisplay() {
     nk_label(ctx, "", NK_TEXT_LEFT);
     if (NK_WRAP::button_label(ctx, "Change Skin", m_Hovered, &engine)) {
         SetMenuState(MainMenuState::SKIN_SELECTION);
+        LoadSkinSelection();
     }
     nk_label(ctx, "", NK_TEXT_LEFT);
 
@@ -154,6 +168,164 @@ void GuiMainMenu::SettingsDisplay() {
 }
 
 void GuiMainMenu::SkinSelecitonDisplay() {
+    auto& fonts = m_GuiHandler.GetFonts();
+    nk_layout_row_dynamic(ctx, windowHeight / 24, 1);
+    nk_style_push_font(ctx, &fonts[FANTASY_LARGE]->handle);
+    {
+        nk_label_colored(ctx, "Skin  Collection", NK_TEXT_CENTERED, ColorYellow);
+    }
+    nk_style_pop_font(ctx);
+
+    nk_layout_row_dynamic(ctx, windowHeight / 18, 3);
+    if (NK_WRAP::button_label(ctx, "Infantry", m_Hovered, &engine)) {
+        SetSkinSelection(SkinSelection::INFANTRY);
+        LoadSkinSelection();
+    }
+    if (NK_WRAP::button_label(ctx, "Archer", m_Hovered, &engine)) {
+        SetSkinSelection(SkinSelection::ARCHER);
+        LoadSkinSelection();
+    }
+    if (NK_WRAP::button_label(ctx, "Catapult", m_Hovered, &engine)) {
+        SetSkinSelection(SkinSelection::CATAPULT);
+        LoadSkinSelection();
+    }
+    nk_layout_row_dynamic(ctx, windowHeight / 24, 1);
+    nk_label(ctx, "", NK_TEXT_LEFT);
+
+    nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
+    {
+        float ratio[] = {0.01, 0.1, 0.01,  0.7, 0.18f};
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 5, ratio);
+
+        float frameDuration = 0.1f;
+        int totalFrames = 4;
+        int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
+
+        auto unitImage = nk_subimage_id(iSkinBasic, 192, 192,
+            nk_rect(currentFrame * 48, 0, 48, 48));
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_image(ctx, unitImage);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label_colored(ctx, "Active", NK_TEXT_CENTERED, ColorYellow);
+        if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine)) {
+
+        }
+
+        unitImage = nk_subimage_id(iSkinEasy, 192, 192,
+                    nk_rect(currentFrame * 48, 0, 48, 48));
+        std::string LabelText = "Reach  Round  " +
+            std::to_string(BOUND_EASY) +
+            "  for  the  first  time  to  unlock  this  skin.";
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_image(ctx, unitImage);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label_wrap(ctx, LabelText.c_str());
+        if (m_CurrentHighscore >= BOUND_EASY) {
+            if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine, 1)) {
+
+            }
+        }
+        else {
+            nk_label_colored(ctx, "Locked", NK_TEXT_CENTERED, ColorRed);
+        }
+
+        unitImage = nk_subimage_id(iSkinMedium, 192, 192,
+                    nk_rect(currentFrame * 48, 0, 48, 48));
+        LabelText = "Reach  Round  " +
+            std::to_string(BOUND_MEDIUM) +
+            "  for  the  first  time  to  unlock  this  skin.";
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_image(ctx, unitImage);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label_wrap(ctx, LabelText.c_str());
+        if (m_CurrentHighscore >= BOUND_MEDIUM) {
+            if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine, 2)) {
+
+            }
+        }
+        else {
+            nk_label_colored(ctx, "Locked", NK_TEXT_CENTERED, ColorRed);
+        }
+
+        unitImage = nk_subimage_id(iSkinHard, 192, 192,
+                    nk_rect(currentFrame * 48, 0, 48, 48));
+        LabelText = "Reach  Round  " +
+            std::to_string(BOUND_HARD) +
+            "  for  the  first  time  to  unlock  this  skin.";
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_image(ctx, unitImage);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label_wrap(ctx, LabelText.c_str());
+        if (m_CurrentHighscore >= BOUND_HARD) {
+            if (NK_WRAP::button_label(ctx, "Select", m_Hovered, &engine, 3)) {
+
+            }
+        }
+        else {
+            nk_label_colored(ctx, "Locked", NK_TEXT_CENTERED, ColorRed);
+        }
+
+        nk_layout_row_dynamic(ctx, windowHeight / 18, 3);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        if (NK_WRAP::button_label(ctx, "Return  To  Menu", m_Hovered, &engine)) {
+            SetMenuState(MainMenuState::MAIN_MENU);
+            SetSkinSelection(SkinSelection::INFANTRY);
+            DeleteSkinSelection();
+        }
+    }
+    nk_style_pop_font(ctx);
+}
+
+void GuiMainMenu::SetSkinSelection(SkinSelection newSkinSelection) {
+    m_SkinSelection = newSkinSelection;
+}
+
+void GuiMainMenu::LoadSkinSelection() {
+    DeleteSkinSelection();
+
+    switch (m_SkinSelection) {
+    case SkinSelection::INFANTRY: {
+        iSkinBasic = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
+        iSkinEasy = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_01_Idle.png", false);
+        iSkinMedium = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_04_Idle.png", false);
+        iSkinHard = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_02_Idle.png", false);
+        break;
+    }
+    case SkinSelection::ARCHER: {
+        iSkinBasic = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
+        iSkinEasy = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_01_Idle.png", false);
+        iSkinMedium = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_04_Idle.png", false);
+        iSkinHard = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_02_Idle.png", false);
+        break;
+    }
+    case SkinSelection::CATAPULT: {
+        iSkinBasic = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
+        iSkinEasy = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_01_Idle.png", false);
+        iSkinMedium = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_04_Idle.png", false);
+        iSkinHard = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_02_Idle.png", false);
+        break;
+    }
+    default: {}
+    }
+}
+
+void GuiMainMenu::DeleteSkinSelection() {
+    if (iSkinBasic != GL_MAX_INTEGER_SAMPLES) {
+        glDeleteTextures(1, &iSkinBasic);
+        iSkinBasic = GL_MAX_INTEGER_SAMPLES;
+    }
+    if (iSkinEasy != GL_MAX_INTEGER_SAMPLES) {
+        glDeleteTextures(1, &iSkinEasy);
+        iSkinEasy = GL_MAX_INTEGER_SAMPLES;
+    }
+    if (iSkinMedium != GL_MAX_INTEGER_SAMPLES) {
+        glDeleteTextures(1, &iSkinMedium);
+        iSkinMedium = GL_MAX_INTEGER_SAMPLES;
+    }
+    if (iSkinHard != GL_MAX_INTEGER_SAMPLES) {
+        glDeleteTextures(1, &iSkinHard);
+        iSkinHard = GL_MAX_INTEGER_SAMPLES;
+    }
 }
 
 void GuiMainMenu::HelperLoadConfig() {

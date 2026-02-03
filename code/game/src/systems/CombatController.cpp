@@ -25,10 +25,6 @@ using json = nlohmann::json;
 #include "../components/unitTypes/UnitCategory.h"
 #include "engine/util/Debug.h"
 
-#define BOUND_EASY 5
-#define BOUND_MEDIUM 12
-#define BOUND_HARD 22
-
 using namespace gl3;
 
 CombatController::event_t CombatController::initialize;

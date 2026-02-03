@@ -10,6 +10,11 @@
 #include "../components/unitTypes/Unit.h"
 #include "../components/unitTypes/SiegeEngine.h"
 
+#define BOUND_EASY 5
+#define BOUND_MEDIUM 12
+#define BOUND_HARD 22
+
+
 namespace gl3 {
 enum class CombatState {
     IDLE,
