@@ -170,6 +170,73 @@ namespace gl3 {
         pUnit_C->critMultiplier += fFraction;
     }
 
+    RandomReward LibCombatFunctions::GetAddReward() const {
+        guid_t iInfantry_ID = engine::ecs::invalidID;
+        guid_t iArcher_ID = engine::ecs::invalidID;
+        m_Game.componentManager.forEachComponent<Unit>([&](Unit &unit)
+        {
+            auto tag = &m_Game.componentManager.getComponent<TagComponent>(unit.entity());
+            if (tag->value != Tag::PLAYER) return;
+            switch (unit.category) {
+            case UnitCategory::INFANTRY:
+                iInfantry_ID = unit.entity();
+                break;
+            case UnitCategory::ARCHER:
+                iArcher_ID = unit.entity();
+                break;
+            default: return;
+            }
+        });
+        std::mt19937 rng{std::random_device{}()};
+        std::uniform_int_distribution<int> dist{30, 90};
+        int random = dist(rng);
+        RandomReward result;
+        guid_t iUnit_ID;
+        int iAmount = random/10;
+
+        random = dist(rng);
+        if (random % 2 == 0) {
+            iUnit_ID = iInfantry_ID;
+        }
+        else {
+            iUnit_ID = iArcher_ID;
+        }
+        int iFunctionIndex = ADD;
+
+        guid_t iBufferID = iUnit_ID;
+        {
+            auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
+            if (pUnit_C->totalAmount + iAmount > MAX_UNIT_AMOUNT) {
+                if ( MAX_UNIT_AMOUNT - pUnit_C->totalAmount > 0) {
+                    iAmount = MAX_UNIT_AMOUNT - pUnit_C->totalAmount;
+                }
+                else {
+                    if (iUnit_ID == iArcher_ID) {
+                        iUnit_ID = iInfantry_ID;
+                    }
+                    else {
+                        iUnit_ID = iInfantry_ID;
+                    }
+                }
+            }
+        }
+        if (iBufferID != iUnit_ID) {
+            auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
+            if (pUnit_C->totalAmount + iAmount > MAX_UNIT_AMOUNT) {
+                if ( MAX_UNIT_AMOUNT - pUnit_C->totalAmount > 0) {
+                    iAmount = MAX_UNIT_AMOUNT - pUnit_C->totalAmount;
+                }
+                else {
+                    iFunctionIndex = HEALTH;
+                }
+            }
+        }
+
+        return{m_FunctionKeys[iFunctionIndex],
+                    iUnit_ID,
+                    iAmount};
+    }
+
     RandomReward LibCombatFunctions::GetRandomReward() const {
         guid_t iInfantry_ID = engine::ecs::invalidID;
         guid_t iArcher_ID = engine::ecs::invalidID;
@@ -193,16 +260,15 @@ namespace gl3 {
         });
 
         std::mt19937 rng{std::random_device{}()};
-        std::uniform_int_distribution<int> dist{50, 150};
+        std::uniform_int_distribution<int> dist{56, 147};
         int random = dist(rng);
-
-        RandomReward result;
-
         guid_t iUnit_ID;
         int iAmount = random/10;
 
-        assert(!m_FunctionKeys.empty());
+         random = dist(rng);
         int iFunctionIndex = random % m_FunctionKeys.size();
+
+         random = dist(rng);
         if (random % 3 == 0) {
             iUnit_ID = iInfantry_ID;
         }
@@ -219,18 +285,10 @@ namespace gl3 {
             if (iBias == 0 || iBias == 1) {
                 iUnit_ID = iInfantry_ID;
             }
-            else if (iBias == 2 || iBias == 3 || iBias == 4) {
+            else if (iBias == 2 || iBias == 3) {
                 iUnit_ID = iArcher_ID;
             }
         }
-
-        int iAddBias = 3;
-        bool bAddBias = (random % iAddBias == 0);
-        if (iFunctionIndex != ADD && bAddBias) {
-            iFunctionIndex = ADD;
-            iAmount =static_cast<int>(static_cast<float>(iAmount) * 1.5f) ;
-        }
-
 
         if (iFunctionIndex == ADD) {
             auto pUnit_C = &m_Game.componentManager.getComponent<Unit>(iUnit_ID);
@@ -239,7 +297,7 @@ namespace gl3 {
                     iAmount = MAX_UNIT_AMOUNT - pUnit_C->totalAmount;
                 }
                 else {
-                    iFunctionIndex += iUnit_ID + 1;
+                    iFunctionIndex = ATTACK;
                 }
             }
         }

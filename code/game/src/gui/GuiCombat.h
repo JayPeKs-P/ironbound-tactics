@@ -37,6 +37,7 @@ private:
     void getComponents(gl3::engine::Game& game);
     void HelperLoadConfig();
     void HelperNewHighscore(int iValue) const;
+    void HelperResetRewardSelection();
 
     guid_t pInf_E;
     guid_t pArc_E;
@@ -61,9 +62,15 @@ private:
 
     bool justStarted = true;
     gl3::GuiHandler& m_GuiHandler;
-    bool m_bFirstEnterRewardWindow = true;
     std::vector<gl3::RandomReward> m_Rewards;
     std::unordered_map<guid_t, unsigned int> m_Textures;
 
     PlaybackState m_PlaybackState = PlaybackState::DEFAULT;
+    bool m_bFirstRewardSelected = false;
+    bool m_bSecondRewardSelected = false;
+    bool m_bThirdRewardSelected = false;
+    bool m_bFourthRewardSelected = false;
+
+    bool m_bNothingSelected = true;
+    bool m_bFirstEnterRewardWindow = true;
 };

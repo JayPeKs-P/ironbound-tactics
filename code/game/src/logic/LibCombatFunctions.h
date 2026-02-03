@@ -47,6 +47,8 @@ namespace gl3 {
         void IncreaseCritChance(guid_t iUnit_ID, int iAmount) const;
         void IncreaseCritMult(guid_t iUnit_ID, int iAmount) const;
         using pRewardFunction = void (LibCombatFunctions::*)(guid_t iUnitActor_ID, int iAmount) const;
+
+        RandomReward GetAddReward() const;
         RandomReward GetRandomReward() const;
         void InvokeRewardCallback(RandomReward& reward) const;
 

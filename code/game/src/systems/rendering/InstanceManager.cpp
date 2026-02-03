@@ -13,7 +13,7 @@
 #include "../../systems/CombatController.h"
 #include "engine/sceneGraph/SceneGraphPruner.h"
 
-#define MAX_UNITS_HORIZONTAL 15
+#define MAX_UNITS_HORIZONTAL 18
 #define MAX_UNITS_VERTICAL 5
 
 using gl3::engine::sceneGraph::Transform;

@@ -258,6 +258,7 @@ bool GuiCombat::DrawRewardWindow() {
     bool bAdvance = false;
     auto pLibCombat = LibCombatFunctions::GetInstance(engine);
     if (m_bFirstEnterRewardWindow) {
+        m_Rewards.push_back(pLibCombat->GetAddReward());
         m_Rewards.push_back(pLibCombat->GetRandomReward());
         m_Rewards.push_back(pLibCombat->GetRandomReward());
         m_Rewards.push_back(pLibCombat->GetRandomReward());
@@ -287,46 +288,89 @@ bool GuiCombat::DrawRewardWindow() {
         int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
         auto unitImage = nk_subimage_id(m_Textures.at(m_Rewards[0].m_iUnit_ID), 192, 192,
             nk_rect(currentFrame * 48, 0, 48, 48));
-
-        nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_image(ctx, unitImage);
-        nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_label(ctx, m_Rewards[0].m_FunctionKey.c_str(), NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(m_Rewards[0].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
-        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
-        {
-            pLibCombat->InvokeRewardCallback(m_Rewards[0]);
-            m_bFirstEnterRewardWindow = true;
-            bAdvance = true;
+        if (!m_bFirstRewardSelected) {
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_image(ctx, unitImage);
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_label(ctx, m_Rewards[0].m_FunctionKey.c_str(), NK_TEXT_LEFT);
+            nk_label_colored(ctx, std::to_string(m_Rewards[0].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
+            if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine))
+            {
+                if (m_bNothingSelected) {
+                    m_bNothingSelected = false;
+                    m_bFirstRewardSelected = true;
+                }
+                else {
+                    HelperResetRewardSelection();
+                    bAdvance = true;
+                }
+                pLibCombat->InvokeRewardCallback(m_Rewards[0]);
+            }
+        }
+        if (!m_bSecondRewardSelected) {
+            unitImage = nk_subimage_id(m_Textures.at(m_Rewards[1].m_iUnit_ID), 192, 192,
+                nk_rect(currentFrame * 48, 0, 48, 48));
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_image(ctx, unitImage);
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_label(ctx, m_Rewards[1].m_FunctionKey.c_str(), NK_TEXT_LEFT);
+            nk_label_colored(ctx, std::to_string(m_Rewards[1].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
+            if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 1))
+            {
+                if (m_bNothingSelected) {
+                    m_bNothingSelected = false;
+                    m_bSecondRewardSelected = true;
+                }
+                else {
+                    HelperResetRewardSelection();
+                    bAdvance = true;
+                }
+                pLibCombat->InvokeRewardCallback(m_Rewards[1]);
+            }
+        }
+        if (!m_bThirdRewardSelected) {
+            unitImage = nk_subimage_id(m_Textures.at(m_Rewards[2].m_iUnit_ID), 192, 192,
+                nk_rect(currentFrame * 48, 0, 48, 48));
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_image(ctx, unitImage);
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_label(ctx, m_Rewards[2].m_FunctionKey.c_str(), NK_TEXT_LEFT);
+            nk_label_colored(ctx, std::to_string(m_Rewards[2].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
+            if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 2))
+            {
+                if (m_bNothingSelected) {
+                    m_bNothingSelected = false;
+                    m_bThirdRewardSelected = true;
+                }
+                else {
+                    HelperResetRewardSelection();
+                    bAdvance = true;
+                }
+                pLibCombat->InvokeRewardCallback(m_Rewards[2]);
+            }
+        }
+        if (!m_bFourthRewardSelected) {
+            unitImage = nk_subimage_id(m_Textures.at(m_Rewards[3].m_iUnit_ID), 192, 192,
+                nk_rect(currentFrame * 48, 0, 48, 48));
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_image(ctx, unitImage);
+            nk_label(ctx, "", NK_TEXT_LEFT);
+            nk_label(ctx, m_Rewards[2].m_FunctionKey.c_str(), NK_TEXT_LEFT);
+            nk_label_colored(ctx, std::to_string(m_Rewards[3].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
+            if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 3))
+            {
+                if (m_bNothingSelected) {
+                    m_bNothingSelected = false;
+                    m_bFourthRewardSelected = true;
+                }
+                else {
+                    HelperResetRewardSelection();
+                    bAdvance = true;
+                }
+                pLibCombat->InvokeRewardCallback(m_Rewards[3]);
+            }
         }
 
-        unitImage = nk_subimage_id(m_Textures.at(m_Rewards[1].m_iUnit_ID), 192, 192,
-            nk_rect(currentFrame * 48, 0, 48, 48));
-        nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_image(ctx, unitImage);
-        nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_label(ctx, m_Rewards[1].m_FunctionKey.c_str(), NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(m_Rewards[1].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
-        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 1))
-        {
-            pLibCombat->InvokeRewardCallback(m_Rewards[1]);
-            m_bFirstEnterRewardWindow = true;
-            bAdvance = true;
-        }
-
-        unitImage = nk_subimage_id(m_Textures.at(m_Rewards[2].m_iUnit_ID), 192, 192,
-            nk_rect(currentFrame * 48, 0, 48, 48));
-        nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_image(ctx, unitImage);
-        nk_label(ctx, "", NK_TEXT_LEFT);
-        nk_label(ctx, m_Rewards[2].m_FunctionKey.c_str(), NK_TEXT_LEFT);
-        nk_label_colored(ctx, std::to_string(m_Rewards[2].m_iAmount).c_str(), NK_TEXT_CENTERED, ColorBlue);
-        if (NK_WRAP::button_label(ctx, "Choose", m_Hovered, &engine, 2))
-        {
-            pLibCombat->InvokeRewardCallback(m_Rewards[2]);
-            m_bFirstEnterRewardWindow = true;
-            bAdvance = true;
-        }
     }
     nk_end(ctx);
     return bAdvance;
@@ -702,9 +746,12 @@ void GuiCombat::getComponents(engine::Game &game)
             }
         }
     });
-    m_Textures[pInf_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
-    m_Textures[pArc_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
-    m_Textures[pCat_E] = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
+    std::string path = engine.GetConfigEntry("InfantryTexture");
+    m_Textures[pInf_E] = engine::util::Texture::load(path.c_str(), false);
+    path = engine.GetConfigEntry("ArcherTexture");
+    m_Textures[pArc_E] = engine::util::Texture::load(path.c_str(), false);
+    path = engine.GetConfigEntry("CatapultTexture");
+    m_Textures[pCat_E] = engine::util::Texture::load(path.c_str(), false);
 }
 
 void GuiCombat::HelperLoadConfig() {
@@ -727,4 +774,14 @@ void GuiCombat::HelperNewHighscore(int iValue) const {
     config["highscore"] = iValue;
     std::ofstream out(pConfigPath);
     out << config.dump(4);
+}
+
+void GuiCombat::HelperResetRewardSelection() {
+    m_bFirstRewardSelected = false;
+    m_bSecondRewardSelected = false;
+    m_bThirdRewardSelected = false;
+    m_bFourthRewardSelected = false;
+
+    m_bNothingSelected = true;
+    m_bFirstEnterRewardWindow = true;
 }

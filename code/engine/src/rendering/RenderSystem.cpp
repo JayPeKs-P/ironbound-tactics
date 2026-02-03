@@ -13,7 +13,7 @@
 #include "engine/rendering/Shader.h"
 #include "engine/rendering/InstanceBuffer.h"
 
-#define MAX_INSTANCES 75
+#define MAX_INSTANCES 90
 
 namespace gl3::engine::render {
     struct glStatusData {
