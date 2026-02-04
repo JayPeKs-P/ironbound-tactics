@@ -389,7 +389,8 @@ void CombatController::runEnemyTurn()
             if (engine.componentManager.hasComponent<SiegeEngine>(option.iTarget_ID) && pTargetTag_C->value == Tag::ENEMY)
             {
                 auto pTargetSiegeEngine_C = &engine.componentManager.getComponent<SiegeEngine>(option.iTarget_ID);
-                if (pTargetSiegeEngine_C->m_iUsedAmount < option.iTargetAmount) continue;
+                int iUnusedAmount = pTargetUnit_C->totalAmount - pTargetSiegeEngine_C->m_iUsedAmount - pTargetSiegeEngine_C->m_iUsedAmountNew;
+                if (iUnusedAmount <= 0) continue;
                 HelperScheduleUse(option.iActor_ID, option.iTarget_ID, option.iTargetAmount);
 #ifdef DEBUG_MODE
     DEBUG_LOG(

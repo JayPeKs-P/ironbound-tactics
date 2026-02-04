@@ -107,7 +107,7 @@ std::vector<Option> EnemyAI::generateOptions(engine::Game &game)
         if (amount < targetSE->cost) return;
         if(targetU->totalAmount*targetSE->cost <= amount)
         {
-            unusedTargets = pCatapultUnitPlayer_C->totalAmount-pCatapultSiegeEnginePlayer_C->m_iUsedAmount;
+            unusedTargets = pCatapultUnitPlayer_C->totalAmount - pCatapultSiegeEnginePlayer_C->m_iUsedAmount;
         }else
         {
             unusedTargets = actor->availableAmount / pCatapultSiegeEnginePlayer_C->cost;
@@ -134,6 +134,7 @@ std::vector<Option> EnemyAI::generateOptions(engine::Game &game)
         calcOptionAttack(iArcherEnemy_ID, pArcherUnitEnemy_C,pInfantryUnitPlayer_C, amount);
         calcOptionAttack(iArcherEnemy_ID, pArcherUnitEnemy_C,pArcherUnitPlayer_C, amount);
         calcOptionAttack(iArcherEnemy_ID, pArcherUnitEnemy_C,pCatapultUnitPlayer_C, amount);
+        calcOptionUse(iInfantryEnemy_ID, pInfantryUnitEnemy_C, pCatapultUnitEnemy_C, pCatapultSiegeEngineEnemy_C, amount);
     }
     for (int percent : {100, 90, 80, 70, 60, 50, 40, 30, 20, 10})
     {
