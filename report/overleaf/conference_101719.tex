@@ -1,0 +1,199 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Ironbound Tactics\\
+%{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
+%should not be used}
+
+}
+
+\author{\IEEEauthorblockN{\textsuperscript{} Julian Kalb}
+\IEEEauthorblockA{\textit{Game Lab III} \\
+\textit{Julius-Maximilians-Universität}\\
+Würzburg, Germany}
+
+}
+
+\maketitle
+
+\begin{abstract}
+For the scope of the  GameLab III module, which is part of the bachelors degree Games Engineering, the students
+were tasked to develop a video game in the programming language C++, without resorting to Game Engines
+or engine-like libraries.
+The resulting game is called Ironbound Tactics.
+It is a turn based strategy game, where the player fights with their own composed army against randomly selected
+armies of a computer-controlled opponent to set new highscores and unlock rewards.
+ 
+\end{abstract}
+
+%\begin{IEEEkeywords}
+%component, formatting, style, styling, insert
+%\end{IEEEkeywords}
+
+\section{Introduction}
+Modern game-engines offer a variety of functionality and features, which simplify  the development of video games
+considerably.
+They come with a toolbox, that by default takes on tasks like rendering, physics, asset-management and
+input-handling, which gives developers more freedom to focus on other aspects like gameplay, level- and
+character design.
+For this project on the other hand, the challenge was to renounce those features, and program a game from scratch.
+During a workshop, where all students were guided to find a fitting concept for the game, the decision to create a
+turn-based, "roguelike" game, where the player would, at the beginning of each run, create his own army and then proceed
+to fight randomly selected opponents was made.
+The idea was to offer the player a set of unit-types, which differ in attack speed, accuracy, damage and health points.
+The Player would then fight randomly picked armies of computer-controlled opponents, until they were defeated.
+A rather "simple" concept with clear mechanics.
+The general inspiration for Ironbound Tactics, especially the turn-based combat, stemmed from the Pokémon \cite{b1}
+franchise, though far less complicated.
+
+\section{Conception Phase}
+The decision for Ironbound Tactics to become a turn-based strategy game already came with some design implications.
+The gameplay of the final game would be based on existing entries of the "JRPG" genre.
+The core gameplay loop would work as follows: The turn of the player starts, the player decides what actions to take,
+choose the according options in the user interface and end their turn.
+Then damage calculation and attack animations would be executed.
+After that the application would evaluate, whether player or opponent had lost.
+Finally, either the current fight would end, or the next turn would start, beginning the cycle anew.
+Thus,the user interface seemed like the logical entry point to the project.
+
+\subsection{User Interface}
+The decision was made to use an existing library for the Graphical User Interface (GUI), since the custom
+implementation was deemed to time-consuming.
+The first Prototype was created using the library imgui \cite{b2}, since, at the start, it seemed like a good choice.
+The library was easy to set up and use, which was important to get started and test the first equation for damage
+calculation.
+And while imgui~\cite{b2} was a good choice for prototyping, it had one big incompatibility: The ability to skin
+the GUI objects of imgui~\cite{b2} was very limited.
+Therefore, the decision was made to switch to another library at the end of the prototyping phase called
+Nuklear~\cite{b3}.
+
+\subsection{Gameplay}
+The general idea of the gameplay was to let the player create their own constellation of units, by letting them choose
+out of a predefined pool of units, creating their army.
+There would be some kind of limitation for how many units the player would be allowed to choose, both per individual
+unit and in total.
+Three different types of units were implemented in the final version of Ironbound Tactics:
+\begin{itemize}
+    \item \textbf{Archer} units have the lowest accuracy and individual damage but deal damage at the end of the turn.
+    \item \textbf{Infantry} units are melee units.
+    They deal higher damage than \textbf{Archers}, but need to walk to their target and therefore need two turns to
+    deal damage.
+    \item \textbf{Catapult} units are the slowest, dealing damage at the end of the third turn after declaring an attack.
+    This unit also has a cost to be used, making it necessary to first assigning a fix amount of either \textbf{Archers}
+    or \textbf{Infantry} units to use them.
+    To balance these drawbacks \textbf{Catapults} deal the highest damage per instance.
+\end{itemize}
+
+On being finished, the first round of the combat loop would start.
+During a round of combat the player would fight the army of a computer-controlled opponent.
+This army would be randomly selected out of a set pool of presets.
+Both armies would fight, until all units of either side were exhausted.
+Should the players army be the first to be exhausted, the game would end and quit.
+Should on the other hand the opponents army be the first to be exhausted, the player would get the chance to select
+a reward, before entering the next round against a new opponent with a new army.
+
+\subsection{Style}
+During the creation of the first prototype the decision for the art style and visual setting were made.
+The art style would be 2D Pixelart, since fitting assets were available from the start.
+The setting would be medieval.
+This decision was heavily implicated by the general game concept, since the mixture of close- and ranged-combat
+seemed to offer good variety during unit design.
+
+\section{System Design}
+Sources and instructions to implement a rendering pipeline and create custom systems were provided to the students.
+Since the game was to be created without the usage of an engine, a lot of thought had to be put into the design of
+those systems.
+
+\subsection{Entity Component System}
+An entity component system (ECS) is a pattern, that is commonly used in game development.
+Commonly object-oriented programming and inheritance are used as an architectural pattern during software development.
+In object orientation entities are designed similarly to the perceived world, where base classes are created with
+attributes, always considering reusability in similar classes.
+An entity would therefore be seen as an object, that is an instance of such a class.
+In an entity component system on the other hand, entities are typically represented by lightweight identifiers.
+This design philosophy entails separating entities, components and systems.
+Components are assigned to entities, which are identified by a unique identifier.
+The assigned components are then stored into dedicated containers for their type.
+This is advantageous in settings like game development, since often entities have a lot of attributes in common, like
+a mesh and a texture, and only differ in small items.
+As those common attributes can often be processed at the same point in the program, the resulting serialization of
+components into dedicated containers can give a significant boost in performance.
+
+A basic custom implementation of an ECS was provided to the students, which was expanded during the development
+of Ironbound Tactics.
+While a lot of created systems are only useful to this game, some concepts like the sound-system and the render-system
+were designed to be reusable and applicable to other types of games.
+
+\subsection{Rendering}
+In the instructions OpenGL~\cite{b4} and GLFW~\cite{b5} were used to set up fundamental functionality like creating
+a window and a basic render pipeline.
+Since Ironbound Tactics was going to be a 2D game, the complexity and workload of the render pipeline would probably
+be on the lower end, it was decided to keep with OpenGL~\cite{b4}.
+Still there were some adjustments to be made.
+
+As an example, the starting point was making a draw call to the graphics card for each individual entity.
+Since Ironbound Tactics would likely have a lot of instances of the same unit be at the screen at the same time,
+this would become a problem, as individual draw-calls are a very demanding process on the computer.
+A component "Instance Buffer" was therefore introduced, which, in combination with a scene-graph structure, allowed to
+batch duplicate instances of a single entity, into a single buffer, reducing the necessary draw-calls down to one.
+
+\section{Testing \& Feedback}
+During the course of the GameLab III module, the students had the opportunity to attend to regular feedback sessions.
+From the start this feedback was very helpfully in shaping and refining Ironbound Tactics.
+For example, for the longest time the game only consisted of the user interface, as the logic for turn handling and
+damage calculation was a difficult task.
+For this reason development did get stuck in this phase for a while.
+During one of the feedback sessions the advice was given, to not postpone the visual representation too far to the end
+of the development, as the visual feedback would help getting a grasp of the impact of what was going on behind the
+scenes.
+The decision to listen to this feedback turned out to be very good.
+It helped a lot to tackle the problems at that time from a different perspective, and provided a different point to
+continue work, resulting in a decrease of frustration.
+
+Ironbound Tactics was also tested by peers.
+The received feedback did not only result in improved balancing, the discovery, reproduction and fix of bugs, but also in refining existing
+features and coming up with new ones.
+
+As an example, it was noted, that the available decisions the player has during their turn were to ambiguous.
+The idea to create icons, that hover over the possible actions was given as a possible solution, which was well received
+after implementation.
+Also, the replayability was criticised, as the motivation to chase a new highscore and experiment with different setups
+and rewards died down quickly.
+A tester came up with the idea, to give the player the ability to unlock the textures of your opponents army.
+Since this feedback came at a very late stage of development it had to be evaluated, if the implementation of this
+feature would still be possible.
+It turned out to be not to complex, as the implemented systems were simple to extend.
+
+\section{Conclusion}
+Ironbound Tactics was, in its final state, again reviewed by peers.
+The general tone of the feedback was very positive.
+Players enjoyed the art style and general gameplay loop, although there was still some criticism of the balancing.
+Also, some minor bugs persisted until the final release.
+
+Concluding the end of the GameLab III module, Ironbound Tactics can be described as a fun experience.
+In the future the game could be expanded in several ways.
+For example an idea to update the graphics style from 2D to "2.5D" was also scrapped during development.
+This would improve the perceived visual quality of the game a lot, and also open up the possibility to add more lighting
+effects.
+Also, it would be possible to expand the existing selection of units with broader variety, making the
+gameplay experience more diverse each run.
+
+\begin{thebibliography}{00}
+\bibitem{b1} Game Freak, Pokémon Red Version, Game Boy. Nintendo, 1996.
+\bibitem{b2} O. Ocornut, “Dear ImGui”, GitHub repository. [Online]. Available: https://github.com/ocornut/imgui
+\bibitem{b3} V.D. (vurtun), "Nuklear - Immediate-Mode-UI", GitHub repository. [Online]. Available: https://github.com/Immediate-Mode-UI/Nuklear
+\bibitem{b4} Khronos Group, OpenGL 4.6 Core Profile Specification, Khronos Group, 2017.
+\bibitem{b5} M. Geelnard and C. Heine, “GLFW — An OpenGL framework,” GLFW
+\end{thebibliography}
+\vspace{12pt}
+\end{document}
