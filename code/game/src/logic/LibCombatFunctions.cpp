@@ -137,10 +137,6 @@ namespace gl3 {
         if (!m_Game.componentManager.hasComponent<SiegeEngine>(iUnit_ID)) {
             pUnit_C->availableAmount = pUnit_C->totalAmount;
         }
-        else {
-            auto pSiege_C = &m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID);
-            pSiege_C->m_iUsedAmount += iAmount;
-        }
     }
 
     void LibCombatFunctions::IncreaseAttack(guid_t iUnit_ID, int iAmount) const {

@@ -666,7 +666,7 @@ void GuiCombat::DrawSecondSelection() {
         nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
         {
             nk_label(ctx, "Total  Left: ", NK_TEXT_LEFT);
-            nk_label_colored(ctx, std::to_string(pFirstSelection->totalAmount).c_str(), NK_TEXT_LEFT, ColorBlue);
+            nk_label_colored(ctx, std::to_string(pSecondSelection->totalAmount).c_str(), NK_TEXT_LEFT, ColorBlue);
 
             nk_layout_row(ctx,NK_DYNAMIC,  windowHeight/30, 3, ratio);
             nk_label(ctx, std::to_string(value).c_str(),NK_TEXT_CENTERED);
