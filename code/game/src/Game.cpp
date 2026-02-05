@@ -64,6 +64,7 @@ Game::Game(int width, int height, const std::string& title):
 }
 
 void Game::start() {
+    InitializeGameConfiguration();
     AddTextureToRegistry("assets/textures/entities/Tactical RPG overworld pack 3x/Terrain.png", "Terrain");
     AddTextureToRegistry("assets/textures/entities/Arrow_No_BG.png", "Arrow");
     AddTextureToRegistry("assets/textures/gui/ui_atlas_48x48.png", "GUI");
@@ -289,4 +290,64 @@ void Game::update(GLFWwindow* window) {
 }
 
 void Game::draw() {
+}
+
+void Game::InitializeGameConfiguration() const {
+    using json = nlohmann::json;
+    json config;
+
+    std::ifstream in(m_pConfigPath);
+    if (in.good()) {
+        try {
+            in >> config;
+        }
+        catch (...) {
+            config = {
+                {"highscore", 0},
+                {"InfantryTexture", "NONE"},
+                {"InfantryTexType", "NONE"},
+                {"ArcherTexture", "NONE"},
+                {"ArcherTexType", "NONE"},
+                {"CatapultTexture", "NONE"},
+                {"CatapultTexType", "NONE"}
+            };
+        }
+    }
+    else {
+        config = {
+            {"highscore", 0},
+            {"InfantryTexture", "NONE"},
+            {"InfantryTexType", "NONE"},
+            {"ArcherTexture", "NONE"},
+            {"ArcherTexType", "NONE"},
+            {"CatapultTexture", "NONE"},
+            {"CatapultTexType", "NONE"}
+        };
+    }
+    config.emplace("highscore", 0);
+    config.emplace("InfantryTexture", "NONE");
+    config.emplace("InfantryTexType", "NONE");
+    config.emplace("ArcherTexture", "NONE");
+    config.emplace("ArcherTexType", "NONE");
+    config.emplace("CatapultTexture", "NONE");
+    config.emplace("CatapultTexType", "NONE");
+
+    auto InfantryTexture = config["InfantryTexture"];
+    auto ArcherTexture = config["ArcherTexture"];
+    auto CatapultTexture = config["CatapultTexture"];
+    if (InfantryTexture == "NONE" || ArcherTexture == "NONE" || CatapultTexture == "NONE") {
+        InfantryTexture = "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png";
+        ArcherTexture = "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png";
+        CatapultTexture = "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png";
+
+        config["InfantryTexture"] = InfantryTexture;
+        config["InfantryTexType"] =  "BASIC";
+        config["ArcherTexture"] = ArcherTexture;
+        config["ArcherTexType"] = "BASIC";
+        config["CatapultTexture"] = CatapultTexture;
+        config["CatapultTexType"] =  "BASIC";
+    }
+
+    std::ofstream out(m_pConfigPath);
+    out << config.dump(4);
 }

@@ -160,15 +160,16 @@ void GuiMainMenu::SettingsDisplay() {
     nk_layout_row_dynamic(ctx, windowHeight / 50, 1);
     nk_label(ctx, "", NK_TEXT_LEFT);
 
-    float ratio[] = {0.05f, 0.325f, 0.53f, 0.05f};
+    float ratio[] = {0.05f, 0.325f, 0.5f, 0.08f};
     nk_layout_row(ctx, NK_DYNAMIC, windowHeight / 18, 4, ratio);
     nk_label(ctx, "", NK_TEXT_LEFT);
     nk_label(ctx, "Volume", NK_TEXT_LEFT);
     auto pSoundSystem = engine::SoundSystem::GetInstance();
     float fCurrentVolume = pSoundSystem->GetVolume();
-    float newValue = NK_WRAP::slider_float(ctx, 0.0f, fCurrentVolume, 1.0f, 0.05f, "Volume", m_Hovered, &engine);
-    pSoundSystem->SetVolume(newValue);
-    nk_label(ctx, "", NK_TEXT_LEFT);
+    float fnewVolume = NK_WRAP::slider_float(ctx, 0.0f, fCurrentVolume, 1.0f, 0.05f, "Volume", m_Hovered, &engine);
+    pSoundSystem->SetVolume(fnewVolume);
+    uint8_t iCurrentVolume = static_cast<uint8_t>((fCurrentVolume + 0.00001f) * 100);
+    nk_label_colored(ctx, std::to_string(iCurrentVolume).c_str(), NK_TEXT_CENTERED, ColorBlue);
 
     nk_layout_row_dynamic(ctx, windowHeight / 50, 1);
     nk_label(ctx, "", NK_TEXT_LEFT);
@@ -180,6 +181,8 @@ void GuiMainMenu::SettingsDisplay() {
     nk_label(ctx, "", NK_TEXT_LEFT);
     if (NK_WRAP::button_label(ctx, "Toggle", m_Hovered, &engine)) {
         engine.ToggleFullScreen();
+        bool bFullscreen = engine.GetConfigEntry("fullscreen");
+        engine.SetConfigEntry("fullscreen", !bFullscreen);
     }
     nk_label(ctx, "", NK_TEXT_LEFT);
     nk_label(ctx, "", NK_TEXT_LEFT);
@@ -192,6 +195,7 @@ void GuiMainMenu::SettingsDisplay() {
     nk_label(ctx, "", NK_TEXT_LEFT);
     if (NK_WRAP::button_label(ctx, "Back", m_Hovered, &engine)) {
         SetMenuState(MainMenuState::MAIN_MENU);
+        engine.SetConfigEntry("volume", fnewVolume);
     }
 }
 

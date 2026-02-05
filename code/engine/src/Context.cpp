@@ -7,6 +7,7 @@
 
 namespace gl3::engine::context {
     void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+        if (width == 0 || height == 0) return;
         glViewport(0, 0, width, height);
     }
 
@@ -40,6 +41,12 @@ namespace gl3::engine::context {
         while(!glfwWindowShouldClose(window)) {
             glClearColor(0.000f, 0.000f, 0.000f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            int w, h;
+            glfwGetFramebufferSize(window, &w, &h);
+            if (w == 0 || h == 0) {
+                glfwWaitEvents();
+                continue;
+            }
             update(*this);
             glfwPollEvents();
             glfwSwapBuffers(window);
@@ -47,6 +54,7 @@ namespace gl3::engine::context {
     }
 
     Context::~Context() {
+        glfwDestroyWindow(window);
         glfwTerminate();
     }
 }

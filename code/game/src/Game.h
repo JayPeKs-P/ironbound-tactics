@@ -23,6 +23,7 @@ namespace gl3
         void start() override;
         void update(GLFWwindow *window) override;
         void draw() override;
+        void InitializeGameConfiguration() const;
 
         guid_t pInfID_E = -1;
         guid_t pArcID_E = -1;

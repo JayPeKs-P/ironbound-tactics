@@ -25,23 +25,28 @@ nlohmann::basic_json<> Game::GetConfigEntry(const char* pKey) const {
     return config[pKey];
 }
 
-void Game::SetConfigEntry(const char* pKey, const char* pValue) {
+template<typename T>
+void Game::SetConfigEntry(const char* pKey, T tValue) {
     using json = nlohmann::json;
     json config;
     std::ifstream in(m_pConfigPath);
     in >> config;
 
-    config[pKey] = pValue;
+    config[pKey] = tValue;
     std::ofstream out(m_pConfigPath);
     out << config.dump(4);
 }
-
+template void Game::SetConfigEntry<const char*>(const char*, const char*);
+template void Game::SetConfigEntry<bool>(const char*, bool);
+template void Game::SetConfigEntry<float>(const char*, float);
+template void Game::SetConfigEntry<int>(const char*, int);
 
 Game::Game(int width, int height, const std::string& title):
 context(width, height, title),
 componentManager(*this),
 entityManager(componentManager,*this)
 {
+    LoadConfig();
     Log::init();
     origin = &entityManager.createEntity().addComponent<sceneGraph::Transform>();
 }
@@ -113,12 +118,11 @@ unsigned int Game::GetTextureFromRegistry(const char* pKey) {
 
 void Game::run()
 {
-    LoadConfig();
     auto sceneGraphUpdater = &addSystem<sceneGraph::SceneGraphUpdater>();
     auto sceneGraphPruner = &addSystem<sceneGraph::SceneGraphPruner>();
     auto renderer = &addSystem<render::RenderSystem>();
 
-
+    SetSettings();
     onStartup.invoke(*this);
     start();
     onAfterStartup.invoke(*this);
@@ -144,7 +148,7 @@ void Game::updateDeltaTime()
     lastFrameTime = frameTime;
 }
 
-void Game::LoadConfig() {
+void Game::LoadConfig() const {
     using json = nlohmann::json;
     json config;
 
@@ -155,54 +159,33 @@ void Game::LoadConfig() {
         }
         catch (...) {
             config = {
-                {"highscore", 0},
                 {"volume", 0.3f},
-                {"InfantryTexture", "NONE"},
-                {"InfantryTexType", "NONE"},
-                {"ArcherTexture", "NONE"},
-                {"ArcherTexType", "NONE"},
-                {"CatapultTexture", "NONE"},
-                {"CatapultTexType", "NONE"}
+                {"fullscreen", false}
             };
         }
     }
     else {
         config = {
-            {"highscore", 0},
             {"volume", 0.3f},
-            {"InfantryTexture", "NONE"},
-            {"InfantryTexType", "NONE"},
-            {"ArcherTexture", "NONE"},
-            {"ArcherTexType", "NONE"},
-            {"CatapultTexture", "NONE"},
-            {"CatapultTexType", "NONE"}
+            {"fullscreen", false}
         };
     }
-    config.emplace("highscore", 0);
     config.emplace("volume", 0.3f);
-    config.emplace("InfantryTexture", "NONE");
-    config.emplace("InfantryTexType", "NONE");
-    config.emplace("ArcherTexture", "NONE");
-    config.emplace("ArcherTexType", "NONE");
-    config.emplace("CatapultTexture", "NONE");
-    config.emplace("CatapultTexType", "NONE");
-
-    auto InfantryTexture = config["InfantryTexture"];
-    auto ArcherTexture = config["ArcherTexture"];
-    auto CatapultTexture = config["CatapultTexture"];
-    if (InfantryTexture == "NONE" || ArcherTexture == "NONE" || CatapultTexture == "NONE") {
-        InfantryTexture = "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png";
-        ArcherTexture = "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png";
-        CatapultTexture = "assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png";
-
-        config["InfantryTexture"] = InfantryTexture;
-        config["InfantryTexType"] =  "BASIC";
-        config["ArcherTexture"] = ArcherTexture;
-        config["ArcherTexType"] = "BASIC";
-        config["CatapultTexture"] = CatapultTexture;
-        config["CatapultTexType"] =  "BASIC";
-    }
-
+    config.emplace("fullscreen", false);
     std::ofstream out(m_pConfigPath);
     out << config.dump(4);
+}
+
+void Game::SetSettings() {
+    using json = nlohmann::json;
+    json config;
+    std::ifstream in(m_pConfigPath);
+    in >> config;
+    auto pSoundSystem = SoundSystem::GetInstance();
+    float fVolume = config.value("volume", 0.3f);
+    pSoundSystem->SetVolume(fVolume);
+    bool iFullscreen = config.value("fullscreen", false);
+    if (iFullscreen != 0) {
+        ToggleFullScreen();
+    }
 }

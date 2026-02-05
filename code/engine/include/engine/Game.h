@@ -125,7 +125,9 @@ namespace gl3::engine {
         void SetSpeedUpValue(float value) {m_fSpeedupValue = value;}
         const char* GetConfigPath() const {return m_pConfigPath;}
         nlohmann::basic_json<> GetConfigEntry(const char* pKey) const;
-        void SetConfigEntry(const char* pKey, const char* pValue);
+
+        template<typename T>
+        void SetConfigEntry(const char* pKey, T tValue);
     protected:
         /// @brief Constructs the game with window dimensions and title.
         ///
@@ -152,9 +154,10 @@ namespace gl3::engine {
 
         /// @brief Time in seconds since the last frame.
         float deltaTime = 1.0f / 60;
-    private:
         const char* m_pConfigPath = "assets/config.json";
-        void LoadConfig();
+    private:
+        void LoadConfig() const;
+        void SetSettings();
         float m_fSpeedupValue = 1.0f;
         SystemContainer systems;
         context::Context context;
