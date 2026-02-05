@@ -38,14 +38,14 @@ RepositoryRoot/
     │                       
     ├── poster/             
     │                       
-    ├── report/             // Forthcoming
+    ├── report/             
     │                       
-    └── trailer/            // Forthcoming
+    └── trailer/            
 ```
 ## Usage
 A playable build of the game is located in `root/builds`.  To compile the source code clone the repository. **This project has several external dependencies which are embedded as submodules**. To minimize the risk of compilation issues use:
 ```bash
-git clone --recurse-submodules https://github.com/JayPeKs-P/ironbound-tactics
+git clone --recurse-submodules https://gitlab2.informatik.uni-wuerzburg.de/GE/Teaching/gl3/projects/2025/51-gl3-kalb.git
 ```
 
 
@@ -70,6 +70,8 @@ To compile the source code use the [Visual Studio 2022](https://visualstudio.mic
 ### Assets
 - [Tactical RPG Overworld Pack](https://www.gamedevmarket.net/asset/tactical-rpg-overworld-pack) for units and world textures
 - [Fantasy RPG UI pack](https://www.gamedevmarket.net/asset/rpg-ui-pack) for GUI
+- [Massive Game Music Collection]() by AndySv for Music
+- [Pro Sound Collection](https://www.gamedevmarket.net/asset/pro-sound-collection) by Gamemaster Audio for Sound Effects
 
 ## Upcoming Features
 - [ ] Sound effects
