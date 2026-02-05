@@ -67,6 +67,7 @@ void CombatController::handleTurn()
         initialize.invoke();
         auto pEnemyAI = EnemyAI::GetInstance();
         pEnemyAI->setGuids(engine);
+        HelperResetPlayerUnits();
         setState(CombatState::BEGIN_TURN);
         break;}
     case CombatState::BEGIN_TURN:
@@ -133,6 +134,7 @@ void CombatController::handleTurn()
     }
 
     case CombatState::VICTORY:
+        engine.actionRegister.ClearAllActions();
         setState(CombatState::REWARD_PHASE);
         break;
     case CombatState::REWARD_PHASE:
@@ -485,5 +487,21 @@ void CombatController::HelperScheduleUse(guid_t iActor, guid_t iTarget, int iTar
     });
 
     pActorUnit_C->availableAmount -= iActorCost;
+}
+
+void CombatController::HelperResetPlayerUnits() const {
+    engine.componentManager.forEachComponent<Unit>([&](Unit& unit)
+    {
+        auto& tag = engine.componentManager.getComponent<TagComponent>(unit.entity());
+        if (tag.value == Tag::ENEMY) return;
+        bool bIsSiege = engine.componentManager.hasComponent<SiegeEngine>(unit.entity());
+        if (!bIsSiege) {
+            unit.availableAmount = unit.totalAmount;
+        }
+        else {
+            auto& siege = engine.componentManager.getComponent<SiegeEngine>(unit.entity());
+            unit.availableAmount = siege.m_iUsedAmount;
+        }
+    });
 }
 

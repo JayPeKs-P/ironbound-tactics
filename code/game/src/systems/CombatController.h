@@ -73,6 +73,7 @@ private:
     void runEnemyTurn();
     void scheduleAttack(guid_t iActor, guid_t iTarget, int iAmountActors);
     void HelperScheduleUse(guid_t iActor, guid_t iTarget, int iTargetInstanceAmount) const;
+    void HelperResetPlayerUnits() const;
 
 
     guid_t iInfantryPlayer;

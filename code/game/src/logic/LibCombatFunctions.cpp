@@ -75,6 +75,7 @@ namespace gl3 {
             auto pSiege_C = &m_Game.componentManager.getComponent<SiegeEngine>(iUnit_ID);
             pSiege_C->m_iUsedAmount -= iAmountDead;
             if (pSiege_C->m_iUsedAmount <= 0) pSiege_C->m_iUsedAmount = 0;
+            if (pUnit_C->availableAmount > pSiege_C->m_iUsedAmount) pUnit_C->availableAmount = pSiege_C->m_iUsedAmount;
         }
     }
 
