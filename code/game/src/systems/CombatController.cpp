@@ -23,7 +23,7 @@ using json = nlohmann::json;
 #include "engine/logic/ActionRegistry.h"
 
 #include "../components/unitTypes/UnitCategory.h"
-#include "engine/util/Debug.h"
+#include "../Debug.h"
 
 using namespace gl3;
 

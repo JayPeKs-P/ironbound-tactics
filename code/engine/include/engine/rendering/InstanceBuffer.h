@@ -16,14 +16,6 @@ struct InstanceBuffer: Component
 {
     friend ComponentManager;
     friend Entity;
-    // /// Delete copy constructor.
-    // InstanceBuffer(const InstanceBuffer &other) = delete;
-    // /// Custom move semantics.
-    // InstanceBuffer(InstanceBuffer &&other) noexcept
-    // {
-    //     std::swap(this->VBO, other.VBO);
-    //     this->instances = std::move(other.instances);
-    // }
     /// @brief Stores the MVP matrices of each instance.
     std::vector <glm::mat4> instances;
     std::vector <glm::vec2> instanceUVs;
@@ -32,15 +24,15 @@ struct InstanceBuffer: Component
     unsigned int VBO = 0;
     unsigned int uvVBO = 0;
 
-
-    ///@brief Used for animation if texture has animation frames.
-    // float uvOffset = 0.0f;
 private:
     explicit InstanceBuffer(guid_t owner):
     Component(owner) {}
 };
+
 enum UnitDirection : uint8_t{DOWN, LEFT, RIGHT, UP};
 enum UnitAffiliation : uint8_t{PLAYER = RIGHT, ENEMY = LEFT};
+
+/// @brief Component that can be used to store the location of a texture quad in a texture atlas.
 struct UvOffset: Component {
     friend ComponentManager;
     friend Entity;
@@ -63,6 +55,7 @@ private:
     m_iHorizontalSize(hSize),
     m_iVerticalSize(vSize){}
 };
+/// @brief Component to manage the speed in which an animation is played.
 struct AnimationSpeed: Component {
     friend ComponentManager;
     friend Entity;
@@ -74,6 +67,7 @@ private:
     m_fFrameTime(fFrameTime){}
 };
 
+/// @brief Component that defines, if an Entity should be rendered or not.
 struct Visibility: Component {
     friend ComponentManager;
     friend Entity;
@@ -83,6 +77,7 @@ private:
     Component(owner),
     m_bVisible(bVisible){}
 };
+/// @brief Component to track how many instances of an entity exist.
 struct InstanceAmount: Component {
     friend ComponentManager;
     friend Entity;

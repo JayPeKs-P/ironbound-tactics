@@ -3,7 +3,7 @@
 //
 
 #include "GuiCombat.h"
-#include "engine/util/Debug.h"
+#include "../Debug.h"
 #include <iostream>
 #include <ranges>
 

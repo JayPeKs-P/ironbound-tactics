@@ -8,7 +8,7 @@
 
 #include "CombatController.h"
 #include "../components/unitTypes/UnitCategory.h"
-#include "engine/util/Debug.h"
+#include "../Debug.h"
 
 
 #include "../components/TagComponent.h"

@@ -7,6 +7,7 @@
 #include "spdlog/spdlog.h"
 
 namespace gl3::engine {
+    /// @brief Used to log specified information to the console in a predefined style.
     class Log {
     public:
         static void init();

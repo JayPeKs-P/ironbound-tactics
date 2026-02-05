@@ -27,7 +27,7 @@
 #include "engine/Texture.h"
 #include "engine/util/VertPresets.h"
 
-#include "engine/util/Debug.h"
+#include "Debug.h"
 #include "systems/CombatController.h"
 #include "systems/MovementSystem.h"
 #include "systems/SelectionSystem.h"

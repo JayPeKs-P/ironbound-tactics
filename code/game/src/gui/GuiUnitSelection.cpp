@@ -9,7 +9,7 @@
 #include "../components/TagComponent.h"
 #include "../logic/LibCombatFunctions.h"
 #include "engine/Texture.h"
-#include "engine/util/Debug.h"
+#include "../Debug.h"
 
 using namespace gl3;
 GuiUnitSelection::event_t GuiUnitSelection::onAccept;

@@ -86,31 +86,37 @@ namespace gl3::engine::render {
         /// @param shaderProgram The shader program to target.
         static void setFloat(const std::string& uniformName, float value, GLuint shaderProgram);
 
-        /// ID of the vertex shader used for instance rendering.
+        /// ID of the vertex shader used for instance rendering with animated textures.
         unsigned int instanceVertexShader;
 
-        /// ID of the fragment shader used for instance rendering.
+        /// ID of the fragment shader used for instance rendering with animated textures.
         unsigned int instanceFragmentShader;
 
-        /// ID of the shader program used for instance rendering.
+        /// ID of the shader program used for instance rendering with animated textures.
         unsigned int instanceProgram;
 
 
+        /// ID of the vertex shader used for instance rendering without animated textures.
         unsigned int inanimateBatchVert;
+        /// ID of the fragment shader used for instance rendering without animated textures.
         unsigned int inanimateBatchFrag;
+        /// ID of the shader program used for instance rendering without animated textures.
         unsigned int inanimateBatchProgram;
 
+        /// ID of the vertex shader used for non-instance rendering of a Texture atlas.
         unsigned int guiAtlasVert;
+        /// ID of the fragment shader used for non-instance rendering of a Texture atlas.
         unsigned int guiAtlasFrag;
+        /// ID of the shader program used for non-instance rendering of a Texture atlas.
         unsigned int guiAtlasProgram;
 
-        /// ID of the vertex shader used for non-instance rendering.
+        /// ID of the vertex shader used for non-instance rendering of a single image.
         unsigned int singleVertexShader;
 
-        /// ID of the fragment shader used for non-instance rendering.
+        /// ID of the fragment shader used for non-instance rendering of a single image.
         unsigned int singleFragmentShader;
 
-        /// ID of the shader program used for non-instance rendering.
+        /// ID of the shader program used for non-instance rendering of a single image.
         unsigned int singleProgram;
     };
 } // gl3
