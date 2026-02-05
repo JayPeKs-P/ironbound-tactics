@@ -331,6 +331,12 @@ bool GuiCombat::DrawRewardWindow() {
                 else {
                     HelperResetRewardSelection();
                     bAdvance = true;
+                    int iCurrentRound = CombatController::roundCount;
+                    if (iCurrentRound > m_CurrentHighscore) {
+                        m_CurrentHighscore = iCurrentRound;
+                        HelperNewHighscore(iCurrentRound);
+                        m_bNewHighscore = true;
+                    }
                 }
                 pLibCombat->InvokeRewardCallback(m_Rewards[1]);
             }
@@ -352,6 +358,12 @@ bool GuiCombat::DrawRewardWindow() {
                 else {
                     HelperResetRewardSelection();
                     bAdvance = true;
+                    int iCurrentRound = CombatController::roundCount;
+                    if (iCurrentRound > m_CurrentHighscore) {
+                        m_CurrentHighscore = iCurrentRound;
+                        HelperNewHighscore(iCurrentRound);
+                        m_bNewHighscore = true;
+                    }
                 }
                 pLibCombat->InvokeRewardCallback(m_Rewards[2]);
             }
@@ -373,6 +385,12 @@ bool GuiCombat::DrawRewardWindow() {
                 else {
                     HelperResetRewardSelection();
                     bAdvance = true;
+                    int iCurrentRound = CombatController::roundCount;
+                    if (iCurrentRound > m_CurrentHighscore) {
+                        m_CurrentHighscore = iCurrentRound;
+                        HelperNewHighscore(iCurrentRound);
+                        m_bNewHighscore = true;
+                    }
                 }
                 pLibCombat->InvokeRewardCallback(m_Rewards[3]);
             }

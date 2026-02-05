@@ -52,14 +52,16 @@ namespace gl3 {
         bool bSecondHasSiege = game.componentManager.hasComponent<SiegeEngine>(m_pSecondUnit_C->entity());
         if (!bSecondHasSiege) return;
 
-        const auto& siege_C = game.componentManager.getComponent<SiegeEngine>(m_pSecondUnit_C->entity());
-        int iTotalUsedAmount = siege_C.m_iUsedAmount + siege_C.m_iUsedAmountNew;
-        bool bHasUnused = m_pSecondUnit_C->totalAmount - iTotalUsedAmount > 0;
-        bool bFirstHasEnough = m_pFirstUnit_C->totalAmount > siege_C.cost;
-        if (!bHasUnused || !bFirstHasEnough) {
-            m_pFirstUnit_C = m_pSecondUnit_C;
-            m_pSecondUnit_C = nullptr;
-            return;
+        if (bSecondIsPlayer) {
+            const auto& siege_C = game.componentManager.getComponent<SiegeEngine>(m_pSecondUnit_C->entity());
+            int iTotalUsedAmount = siege_C.m_iUsedAmount + siege_C.m_iUsedAmountNew;
+            bool bHasUnused = m_pSecondUnit_C->totalAmount - iTotalUsedAmount > 0;
+            bool bFirstHasEnough = m_pFirstUnit_C->totalAmount > siege_C.cost;
+            if (!bHasUnused || !bFirstHasEnough) {
+                m_pFirstUnit_C = m_pSecondUnit_C;
+                m_pSecondUnit_C = nullptr;
+                return;
+            }
         }
     }
 }
