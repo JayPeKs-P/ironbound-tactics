@@ -277,7 +277,7 @@ bool GuiCombat::DrawRewardWindow() {
         auto& fonts = m_GuiHandler.GetFonts();
         nk_layout_row_dynamic(ctx, windowHeight / 8, 1);
         nk_style_push_font(ctx, &fonts[FANTASY_VERY_LARGE]->handle);
-        nk_label_colored(ctx, "Choose a Reward: ", NK_TEXT_CENTERED, ColorYellow);
+        nk_label_colored(ctx, "Choose two Rewards: ", NK_TEXT_CENTERED, ColorYellow);
         nk_style_pop_font(ctx);
 
         float ratio[] = {0.01, 0.1, 0.05, 0.45, 0.15, 0.2};
@@ -304,6 +304,12 @@ bool GuiCombat::DrawRewardWindow() {
                 else {
                     HelperResetRewardSelection();
                     bAdvance = true;
+                    int iCurrentRound = CombatController::roundCount;
+                    if (iCurrentRound > m_CurrentHighscore) {
+                        m_CurrentHighscore = iCurrentRound;
+                        HelperNewHighscore(iCurrentRound);
+                        m_bNewHighscore = true;
+                    }
                 }
                 pLibCombat->InvokeRewardCallback(m_Rewards[0]);
             }
