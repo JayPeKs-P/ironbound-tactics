@@ -13,7 +13,8 @@
 As part of the module *GameLab III*, which is one of the core modules of the bachelors degree *Games Engineering* at Julius-Maximilians-University Würzburg, students are tasked to develop a videogame in *C++* without using existing engines or engine-like
 libraries.
 `Ironbound Tactics` is the game I create in course of this module. It is a turn based endless battler, where the player creates an army by picking their units out of a set pool and then fights the armies of random computer controlled opponents.
-***This project is still Work In Progress***
+For further information have a look in ther docs. Additionaly parts of the code base can be used to support the creation of
+new games. An instruction on how to do this can also be found in the docs. 
 
 ## Project Structure
 
@@ -55,6 +56,8 @@ To compile the source code use the [Visual Studio 2022](https://visualstudio.mic
 > This project uses an implementation of the SoLoud library, that **requires** the MSVC compiler. Should you encounter any problems, make sure it is properly set up. (In [CLion](https://www.jetbrains.com/clion/) make sure it is the first entry in the list of compilers in
 >  `Settings / Build, Execution, Deployment / Toolchains`)
 
+Should you be interested in creating your own game from scratch it is **NECESSARY** to keep the genereal structure of the project. Just delete the content of the game folder and adjust the CMakeFile.txt in the directory. Inlusion of all content in the `engine/` and `extern/` subdirectory are mandatory, as is the existence of the `assets/` directory.
+
 ## External Dependencies
 
 | **Library**                                                       | **Explanation**                                                                               |
@@ -68,21 +71,8 @@ To compile the source code use the [Visual Studio 2022](https://visualstudio.mic
 | [nlohmann_json](https://github.com/nlohmann/json)                 | For .json integration                                                                         |
 | [spdlog](https://github.com/gabime/spdlog)                 | For better logging                                                                         |
 ### Assets
-- [Tactical RPG Overworld Pack](https://www.gamedevmarket.net/asset/tactical-rpg-overworld-pack) for units and world textures
-- [Fantasy RPG UI pack](https://www.gamedevmarket.net/asset/rpg-ui-pack) for GUI
-- [Massive Game Music Collection]() by AndySv for Music
-- [Pro Sound Collection](https://www.gamedevmarket.net/asset/pro-sound-collection) by Gamemaster Audio for Sound Effects
+- [Tactical RPG Overworld Pack](https://www.gamedevmarket.net/asset/tactical-rpg-overworld-pack) by **Franuka** for units and world textures
+- [Fantasy RPG UI pack](https://www.gamedevmarket.net/asset/rpg-ui-pack) by **Franuka** for GUI
+- [Massive Game Music Collection]() by **AndySv** for Music
+- [Pro Sound Collection](https://www.gamedevmarket.net/asset/pro-sound-collection) by **Gamemaster Audio** for Sound Effects
 
-## Upcoming Features
-- [ ] Sound effects
-- [ ] Projectile Animations
-- [ ] Rework of attack animations
-- [ ] Tutorial
-- [ ] More unit types
-	- [ ] Assault Cover to protect units from incoming range attacks
-	- [ ] Cavalry for faster melee attacks
-- [ ] Refine enemy AI
-- [ ] Refine damage calculation
-## Documentation
-An explanation on how to play `Ironbound Tactics` is found in the [docs](https://JayPeKs-P.github.io/ironbound-tactics/), 
-<del>as well as a step-by-step guide on how to use the engine codebase to create a new game</del>.

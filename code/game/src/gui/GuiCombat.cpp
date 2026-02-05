@@ -127,6 +127,7 @@ void GuiCombat::render()
     else if (CombatController::getCombatState() == CombatState::REWARD_PHASE) {
         if (DrawRewardWindow()) {
             CombatController::setState(CombatState::PREPARE);
+            engine.elapsedTime = 0;
             m_Rewards.clear();
         }
     }

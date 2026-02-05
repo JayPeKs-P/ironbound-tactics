@@ -87,6 +87,7 @@ namespace gl3 {
                 game.entityManager.deleteEntity(child_E);
             }
         });
+        engine.elapsedTime = 0;
     }
 
     void InstanceManager::update(Game& game) {

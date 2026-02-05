@@ -22,6 +22,7 @@ GuiMainMenu::GuiMainMenu(engine::Game& game, GuiHandler& guiHandler, nk_context*
 Gui(game, ctx, textureID),
 m_GuiHandler(guiHandler)
 {
+    engine.elapsedTime = 0;
     SetTitleVisibility(true);
     auto pSoundSystem = engine::SoundSystem::GetInstance();
     pSoundSystem->PlayMusic(engine::MUSIC_MAIN_MENU);
@@ -36,6 +37,7 @@ m_GuiHandler(guiHandler)
 }
 
 GuiMainMenu::~GuiMainMenu() {
+    engine.elapsedTime = 0;
     glDeleteTextures(1, &iGuiTextureID);
     glDeleteTextures(1, &pInfTexID);
     glDeleteTextures(1, &pArcTexID);

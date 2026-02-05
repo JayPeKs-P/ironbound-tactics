@@ -17,6 +17,7 @@ GuiUnitSelection::GuiUnitSelection(engine::Game& game, nk_context* ctx, nk_uint&
 Gui(game, ctx, textureID),
 amountToSpare(50)
 {
+    engine.elapsedTime = 0;
     onAccept.addListener([&](int a, int b, int c)
     {
         DEBUG_LOG(
@@ -36,6 +37,7 @@ amountToSpare(50)
 
 GuiUnitSelection::~GuiUnitSelection()
 {
+    engine.elapsedTime = 0;
     glDeleteTextures(1, &pInfTexID);
     glDeleteTextures(1, &pArcTexID);
     glDeleteTextures(1, &pCatTexID);

@@ -113,11 +113,25 @@ namespace gl3::engine {
 
         engine::combat::ActionRegistry actionRegister;
         float elapsedTime = 0.0f;
+
+        /// @brief Can be used to synchronize speed up of any kind in the application.
         [[nodiscard]] float GetSpeedUpValue() const {return m_fSpeedupValue;}
+
+        /// @brief Can be used to synchronize speed up of any kind in the application.
         void SetSpeedUpValue(float value) {m_fSpeedupValue = value;}
+        /// @return The fix path, where the `config.json` is located.
         const char* GetConfigPath() const {return m_pConfigPath;}
+
+        /// @brief Get the value of an entry in `config.json`
+        /// @param pKey The Key of the desired entry
+        /// @return The value of the specified key. Can be cast to various base types like `int`, `bool` or `float`
         nlohmann::basic_json<> GetConfigEntry(const char* pKey) const;
 
+        /// @brief Add or adjust an existing entry in config.json
+        ///
+        /// @tparam T Type of the key. Has to be either `float`, `bool`, `int` or `const char*`.
+        /// @param pKey The key of the entry.
+        /// @param tValue The value of the entry.
         template<typename T>
         void SetConfigEntry(const char* pKey, T tValue);
     protected:
@@ -147,8 +161,10 @@ namespace gl3::engine {
         /// @brief Time in seconds since the last frame.
         float deltaTime = 1.0f / 60;
         const char* m_pConfigPath = "assets/config.json";
-    private:
+        /// @brief Called once at when the core of the application starts. Checks if a file `config.json` exists in the
+        /// `/assets` directory, creates and fills it with basic values if it does not yet exist.
         void LoadConfig() const;
+    private:
         void SetSettings();
         float m_fSpeedupValue = 1.0f;
         SystemContainer systems;
