@@ -32,6 +32,10 @@ namespace gl3::engine {
         using event_t = events::Event<Game, Game&>;
         using SystemContainer = std::unordered_map<std::type_index, std::unique_ptr<ecs::System>>;
 
+        /// @brief Use this to register new objects that have System as base class. Only instance can be registered per sub-System.
+        /// @tparam S The type of System
+        /// @tparam Args Arguments that the @tparam S specified System requires
+        /// @return Reference to the registered System.
         template<typename S, typename ...Args>
         [[nodiscard]] S &addSystem(Args&& ...args) {
             auto system = std::make_unique<S>(*this, std::forward<Args>(args)...);
@@ -39,6 +43,8 @@ namespace gl3::engine {
             systems[std::type_index(typeid(S))] = std::move(system);
             return systemRef;
         }
+        /// @tparam S Class that inherits from System
+        /// @return Reference to a registered System.
         template<typename S>
         S &getSystem() {
             auto it = systems.find(std::type_index(typeid(S)));
@@ -74,6 +80,7 @@ namespace gl3::engine {
         ///
         /// @return Pointer to GLFWwindow.
         GLFWwindow *getWindow() {return context.getWindow();}
+        /// @brief Toggles the current monitor in OpenGL
         void ToggleFullScreen();
 
         ///@brief Returns the current value of the delta-time variable.
@@ -81,7 +88,14 @@ namespace gl3::engine {
         ///@return Value of delta-time.
         float getDeltaTime() {return deltaTime;}
 
+        /// @brief Used to load a texture into OpenGL and register the ID to a map.
+        ///
+        /// @param pPath Path of the Texture.
+        /// @param pTextureName Optional. If set is used as the key in the container. Can make code more readable.
+        /// @return GLuint of the registered texture ID
         unsigned int AddTextureToRegistry(const char* pPath, const char* pTextureName = nullptr);
+        /// @param pKey Has to be registered first by using AddTextureToRegistry()
+        /// @return GLuint of a registered texture
         unsigned int GetTextureFromRegistry(const char* pKey);
 
 

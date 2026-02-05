@@ -56,7 +56,7 @@ To compile the source code use the [Visual Studio 2022](https://visualstudio.mic
 > This project uses an implementation of the SoLoud library, that **requires** the MSVC compiler. Should you encounter any problems, make sure it is properly set up. (In [CLion](https://www.jetbrains.com/clion/) make sure it is the first entry in the list of compilers in
 >  `Settings / Build, Execution, Deployment / Toolchains`)
 
-Should you be interested in creating your own game from scratch it is **NECESSARY** to keep the genereal structure of the project. Just delete the content of the game folder and adjust the CMakeFile.txt in the directory. Inlusion of all content in the `engine/` and `extern/` subdirectory are mandatory, as is the existence of the `assets/` directory.
+Should you be interested in creating your own game from scratch it is **NECESSARY** to keep the general structure of the project. Just delete the content of the game folder and adjust the `CMakeFile.txt` in the directory. Inclusion of all content in the `engine/` and `extern/` subdirectory are mandatory, as is the existence of the `assets/` directory.
 
 ## External Dependencies
 
