@@ -23,14 +23,8 @@ add_library(${ENGINE_NAME} ${HEADER_LIST} ${PRIVATE_HEADER_LIST} ${SOURCE_LIST}
         include/engine/rendering/Model2D.h
         include/engine/rendering/Shader.h
         include/engine/rendering/InstanceBuffer.h
-        include/engine/fsm/State.h
-        src/fsm/StateMachine.cpp
-        include/engine/fsm/StateMachine.h
         include/engine/Log.cpp
         include/engine/Log.h
-        include/engine/gui/Gui.h
-        src/gui/GuiManager.cpp
-        include/engine/gui/GuiManager.h
         src/SoundSystem.cpp
         include/engine/SoundSystem.h
 )

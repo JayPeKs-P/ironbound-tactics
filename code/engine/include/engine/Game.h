@@ -18,15 +18,9 @@
 
 #include "engine/sceneGraph/Transform.h"
 
-#include "engine/fsm/StateMachine.h"
-
 #include "logic/ActionRegistry.h"
 
 
-// namespace SoLoud {
-//     class Wav;
-//     class Soloud;
-// }
 
 namespace gl3::engine {
     /// @brief Core game class, that manages the main structures the main loop and manages core systems and ECS state.
@@ -116,8 +110,6 @@ namespace gl3::engine {
         ComponentManager componentManager;
         ecs::EntityManager entityManager;
         sceneGraph::Transform* origin = nullptr;
-
-        fsm::StateMachine SceneManagerFSM;
 
         engine::combat::ActionRegistry actionRegister;
         float elapsedTime = 0.0f;

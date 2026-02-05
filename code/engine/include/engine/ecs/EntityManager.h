@@ -45,6 +45,7 @@ namespace gl3::engine::ecs {
         /// @return Reference to the entity object associated to the passed ID.
         [[nodiscard]] Entity &getEntity(guid_t guid);
 
+        /// @brief Checks if the Entity still exists.
         bool IsAlive(guid_t guid);
 
         /// @brief Function to check, if one or more entities have the specified component.
@@ -75,6 +76,7 @@ namespace gl3::engine::ecs {
         /// @brief Erases all @ref gl3::engine::ecs::Entity in the deleteList from the entities container.
         ///
         /// This funcion is passed to @ref gl3::engine::Game::onAfterUpdate.
+        /// The guid of the erased entity is added to a container to be recycled.
         void purgeEntities();
 
         ComponentManager &componentManager;

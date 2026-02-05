@@ -14,15 +14,6 @@ namespace gl3::engine::ecs {
     /// A System has access to the ECS context (engine::Game object).
     /// All custom systems should inherit from this class.
     class System {
-        // friend class Game;
-    public:
-        // /// Prevent move semantics.
-        // System(System &&) = delete;
-        //
-        // /// Delete copy constructor.
-        // System(const System &) = delete;
-        // virtual ~System() = default;
-
     protected:
         /// @brief Create a System object and store a reference to the game instance.
         ///

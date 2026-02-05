@@ -46,6 +46,13 @@ namespace gl3::engine {
             m_iCurrentMusic = UINT_MAX;
     }
 
+    SoundSystem::~SoundSystem() {
+        if (m_pSoundSystem) {
+            delete m_pSoundSystem;
+            m_pSoundSystem = nullptr;
+        }
+    }
+
     SoundSystem::SoundSystem() {
         m_pAudioPlayer = std::make_unique<SoLoud::Soloud>();
         m_pAudioPlayer->init();

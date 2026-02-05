@@ -70,6 +70,7 @@ namespace gl3::engine::ecs {
             removeComponent<C>(component);
         }
 
+        /// @param Returns the child container.
         std::vector<guid_t> &GetChildren() {
             return m_Children;
         }
@@ -86,10 +87,18 @@ namespace gl3::engine::ecs {
             componentManager.removeComponents(id);
         }
 
+        /// @brief Adds a guid to this Entity as a child reference.
+        ///
+        /// Class has a container, that stores references.
+        /// @param Identifier of Entity, that should be treated as this Entities child.
         void AddChild(guid_t iChild) {
             m_Children.push_back(iChild);
         }
 
+        /// @brief Removes a guid from this Entity as a child reference.
+        ///
+        /// Class has a container, that stores references.
+        /// @param Identifier of Entity, that should be removed as this Entities child.
         void RemoveChild(guid_t iChild) {
             std::erase(m_Children, iChild);
         }
