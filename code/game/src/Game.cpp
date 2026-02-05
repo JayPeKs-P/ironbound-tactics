@@ -156,7 +156,7 @@ void Game::start() {
     auto& CatPlayer_E = engine::Game::entityManager.createEntity();
     pCatID_E = CatPlayer_E.guid();
     auto& pCatU_C = CatPlayer_E.addComponent<Unit>("pCatapult");
-    auto& pCatSE_C = CatPlayer_E.addComponent<SiegeEngine>(5);
+    auto& pCatSE_C = CatPlayer_E.addComponent<SiegeEngine>(3);
     CatPlayer_E.addComponent<TagComponent>(Tag{Tag::PLAYER});
     texture = GetConfigEntry("CatapultTexture");
     tempTexID = Texture::load(texture.c_str());
@@ -203,7 +203,7 @@ void Game::start() {
     auto& eCatU_C = CatEnemy_E.addComponent<Unit>(
         "pCatapult"
     );
-    auto& eCatSE_C = CatEnemy_E.addComponent<SiegeEngine>(5);
+    auto& eCatSE_C = CatEnemy_E.addComponent<SiegeEngine>(3);
     CatEnemy_E.addComponent<TagComponent>(Tag{Tag::ENEMY});
     CatEnemy_E.addComponent<Model2D>(engine::util::VertPreset::eQuad, engine::util::VertPreset::quadIndices, tempTexID);
     CatEnemy_E.addComponent<AnimationSpeed>(0.1f);

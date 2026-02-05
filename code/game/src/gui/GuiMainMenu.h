@@ -52,6 +52,7 @@ private:
     nk_color ColorGreen = nk_rgba(100, 255, 100, 255);
     nk_color ColorRed = nk_rgba(255, 100, 100, 255);
     nk_color ColorBlue = nk_rgba(100, 200, 255, 255);
+    nk_color ColorOrange = nk_rgba(255, 165, 0, 255);
 
     MainMenuState m_ActiveState = MainMenuState::MAIN_MENU;
     UnitSelection m_SkinSelection = UnitSelection::INFANTRY;
@@ -69,6 +70,11 @@ private:
     GLuint iSkinEasy = GL_MAX_INTEGER_SAMPLES;
     GLuint iSkinMedium = GL_MAX_INTEGER_SAMPLES;
     GLuint iSkinHard = GL_MAX_INTEGER_SAMPLES;
+
+    GLuint iGuiTextureID = GL_MAX_INTEGER_SAMPLES;
+    GLuint pInfTexID = GL_MAX_INTEGER_SAMPLES;
+    GLuint pArcTexID = GL_MAX_INTEGER_SAMPLES;
+    GLuint pCatTexID = GL_MAX_INTEGER_SAMPLES;
 
     bool m_bEasyUnlocked = false;
     bool m_bMediumUnlocked = false;

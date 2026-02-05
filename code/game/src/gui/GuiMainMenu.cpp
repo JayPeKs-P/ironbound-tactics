@@ -29,9 +29,17 @@ m_GuiHandler(guiHandler)
     m_bEasyUnlocked = (m_CurrentHighscore >= BOUND_EASY);
     m_bMediumUnlocked = (m_CurrentHighscore >= BOUND_MEDIUM);
     m_bHardUnlocked = (m_CurrentHighscore >= BOUND_HARD);
+    iGuiTextureID = engine::util::Texture::load("assets/textures/gui/ui_atlas_48x48.png", false);
+    pInfTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Soldier_05_Idle.png", false);
+    pArcTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Archer_05_Idle.png", false);
+    pCatTexID = engine::util::Texture::load("assets/textures/entities/Tactical RPG overworld pack 3x/Character sprites/Siege_05_Idle.png", false);
 }
 
 GuiMainMenu::~GuiMainMenu() {
+    glDeleteTextures(1, &iGuiTextureID);
+    glDeleteTextures(1, &pInfTexID);
+    glDeleteTextures(1, &pArcTexID);
+    glDeleteTextures(1, &pCatTexID);
     SetTitleVisibility(false);
     DeleteSkinSelection();
 }
@@ -88,7 +96,15 @@ void GuiMainMenu::render() {
                 windowWidth, windowHeight),
             NK_WINDOW_NO_INPUT | NK_WINDOW_NO_SCROLLBAR))nk_end(ctx);
 
-        SetTitleVisibility(false);
+        if (nk_begin(ctx, "How to play",
+            nk_rect(windowWidth / 4,  5,
+                windowWidth / 2, windowHeight * 127/128),
+                 NK_WINDOW_BORDER | NK_WINDOW_BORDER))
+        {
+            SetTitleVisibility(false);
+            TutorialDisplay();
+            nk_end(ctx);
+        }
 
         break;
     }
@@ -197,6 +213,122 @@ void GuiMainMenu::SettingsDisplay() {
         SetMenuState(MainMenuState::MAIN_MENU);
         engine.SetConfigEntry("volume", fnewVolume);
     }
+}
+
+void GuiMainMenu::TutorialDisplay() {
+    auto& fonts = m_GuiHandler.GetFonts();
+    nk_layout_row_dynamic(ctx, windowHeight / 24, 1);
+    nk_style_push_font(ctx, &fonts[FANTASY_LARGE]->handle);
+    {
+        nk_label_colored(ctx, "How  To  Play", NK_TEXT_CENTERED, ColorYellow);
+    }
+    nk_style_pop_font(ctx);
+    nk_style_push_font(ctx, &fonts[FANTASY_SMALL]->handle);
+    {
+        nk_layout_row_dynamic(ctx, windowHeight * 16/100, 1);
+        std::string sExplanation = "Ironbound  Tactics  is  a  turn  based  strategy  game,  where  you  create  your  own  army.  ";
+        sExplanation += "When  clicking  on  play  you  are  presented  with  three  sliders  to  distribute  your  units.  ";
+        sExplanation += "At  the  top  of  the  window  you  can  your  maximum  amount  of  available  points.  ";
+        sExplanation += "The  number  next  to  the  slider  represents  your  total  spent  points  on  a  single  unit.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        float frameDuration = 0.1f;
+        int totalFrames = 4;
+        int currentFrame = static_cast<int>(engine.elapsedTime / frameDuration) % totalFrames;
+        auto unitImage = nk_subimage_id(pInfTexID, 192, 192,
+            nk_rect(currentFrame * 48, 0, 48, 48));
+        float ratioImage[] = {0.1, 0.9};
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 2, ratioImage);
+        nk_image(ctx, unitImage);
+        sExplanation = "Infantry  units  are  melee  units.  They  deal  good  damage,  but  take  two  turns  to  walk  ";
+        sExplanation += "to  their  Target  and  deal  damage.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        unitImage = nk_subimage_id(pArcTexID, 192, 192,
+            nk_rect(currentFrame * 48, 0, 48, 48));
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 2, ratioImage);
+        nk_image(ctx, unitImage);
+        sExplanation = "Archer  units  have  not  the  highest  damage  and  accuracy,  but  deal  damage  at  the  end  ";
+        sExplanation += "of  the  turn  they  were  commanded  to  attack.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        unitImage = nk_subimage_id(pCatTexID, 192, 192,
+            nk_rect(currentFrame * 48, 0, 48, 48));
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 2, ratioImage);
+        nk_image(ctx, unitImage);
+        sExplanation = "Catapults  deal  the  highest  individual  damage.  The  drawbacks  are,  that  they  take  three  ";
+        sExplanation += "turns  to  deal  damage. Also  3  other  units  have  to  be  using  them.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        nk_layout_row_dynamic(ctx, windowHeight * 6/100, 1);
+        sExplanation = "When  you  are  happy with  your  selection  press  accept  to  start  the  first  round  of  combat.  ";
+        sExplanation += "Here  you  have  some  different  options:";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        nk_layout_row_dynamic(ctx, windowHeight * 6/100, 1);
+        sExplanation = "Combat";
+        nk_label_colored(ctx, sExplanation.c_str(), NK_TEXT_CENTERED, ColorYellow);
+
+        float ratio[] = {0.25f, 0.75f};
+        nk_layout_row(ctx,NK_DYNAMIC, windowHeight * 6/100, 2, ratio);
+        sExplanation = "Left  click";
+        nk_label_colored(ctx, sExplanation.c_str(), NK_TEXT_LEFT, ColorBlue);
+        sExplanation = "Select  a  unit  type,  either  on  your  side  of  the  field,  or  your  opponents  to  inspect  ";
+        sExplanation += "its  stats.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        nk_layout_row(ctx,NK_DYNAMIC, windowHeight * 6/100, 2, ratio);
+        sExplanation = "Right  click";
+        nk_label_colored(ctx, sExplanation.c_str(), NK_TEXT_LEFT, ColorOrange);
+        sExplanation = "Clear  your  current  selection.";
+        nk_label(ctx, sExplanation.c_str(), NK_TEXT_LEFT);
+
+        int iTileX = 8;
+        int iTileY = 49;
+        auto iconImage = nk_subimage_id(iGuiTextureID, 3072, 3072,
+            nk_rect(iTileX * 48, iTileY * 48, 48, 48));
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 2, ratioImage);
+        nk_image(ctx, iconImage);
+        sExplanation = "When  selecting  one  of  your  units,  you  will notice,  that  the  icon  hovering  over  your  ";
+        sExplanation += "Catapults  will  change.  The  reason  for  this,  is  that catapults  have  a  cost,  that";
+        nk_label_wrap(ctx, sExplanation.c_str());
+        nk_layout_row_dynamic(ctx, windowHeight * 12/100, 1);
+        sExplanation = "need  to  be  paid  once, per  instance.  A  silver  key  will  tell  you,  that  the  units  you  have  ";
+        sExplanation += "currently  selected  have  enough  unused  units  available  this  turn  to  use  at  least  one  ";
+        sExplanation += "catapult  instance.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        iTileX = 7;
+        iTileY = 49;
+        iconImage = nk_subimage_id(iGuiTextureID, 3072, 3072, nk_rect(iTileX * 48, iTileY * 48, 48, 48));
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 2, ratioImage);
+        nk_image(ctx, iconImage);
+        sExplanation = "A  brown  key  signals,  that  not  enough  available  units  of  the  currently  selected   type";
+        sExplanation += "are  left  this  turn.  If  the  icon  disappears,  there  are  no  catapults  left  to  be  used.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        iTileX = 8;
+        iTileY = 48;
+        iconImage = nk_subimage_id(iGuiTextureID, 3072, 3072, nk_rect(iTileX * 48, iTileY * 48, 48, 48));
+        nk_layout_row(ctx, NK_DYNAMIC , windowHeight / 13, 2, ratioImage);
+        nk_image(ctx, iconImage);
+        sExplanation = "With  one  of  your  units  selected,  select  one  of  your  opponents.  If  you  still  have  units  ";
+        sExplanation += "available  this  turn  you  can  schedule  an  attack.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+        nk_layout_row_dynamic(ctx, windowHeight * 12/100, 1);
+        sExplanation = "If  you  want  to  end  your  turn  click  the  button  at  the  top  of  the  screen.";
+        nk_label_wrap(ctx, sExplanation.c_str());
+
+
+        nk_layout_row_dynamic(ctx, windowHeight / 18, 5);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        nk_label(ctx, "", NK_TEXT_LEFT);
+        if (NK_WRAP::button_label(ctx, "Back", m_Hovered, &engine, 2)) {
+            SetMenuState(MainMenuState::MAIN_MENU);
+        }
+    }
+    nk_style_pop_font(ctx);
 }
 
 void GuiMainMenu::SkinSelecitonDisplay() {
