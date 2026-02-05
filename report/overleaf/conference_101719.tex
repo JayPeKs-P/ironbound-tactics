@@ -47,12 +47,11 @@ They come with a toolbox, that by default takes on tasks like rendering, physics
 input-handling, which gives developers more freedom to focus on other aspects like gameplay, level- and
 character design.
 For this project on the other hand, the challenge was to renounce those features, and program a game from scratch.
-During a workshop, where all students were guided to find a fitting concept for the game, the decision to create a
-turn-based, "roguelike" game, where the player would, at the beginning of each run, create his own army and then proceed
-to fight randomly selected opponents was made.
+During a workshop, where all students were guided to find a fitting concept for the game, the decision was made to create a
+turn-based, "roguelike" game, where the player would, at the beginning of each run, create their own army and then proceed
+to fight randomly selected opponents.
 The idea was to offer the player a set of unit-types, which differ in attack speed, accuracy, damage and health points.
 The Player would then fight randomly picked armies of computer-controlled opponents, until they were defeated.
-A rather "simple" concept with clear mechanics.
 The general inspiration for Ironbound Tactics, especially the turn-based combat, stemmed from the Pokémon \cite{b1}
 franchise, though far less complicated.
 
@@ -68,14 +67,13 @@ Thus,the user interface seemed like the logical entry point to the project.
 
 \subsection{User Interface}
 The decision was made to use an existing library for the Graphical User Interface (GUI), since the custom
-implementation was deemed to time-consuming.
-The first Prototype was created using the library imgui \cite{b2}, since, at the start, it seemed like a good choice.
+implementation was deemed too time-consuming.
+The first Prototype was created using the library imgui \cite{b2}.
 The library was easy to set up and use, which was important to get started and test the first equation for damage
 calculation.
-And while imgui~\cite{b2} was a good choice for prototyping, it had one big incompatibility: The ability to skin
+And while imgui~\cite{b2} was a good choice for prototyping, there was one big incompatibility: The ability to skin
 the GUI objects of imgui~\cite{b2} was very limited.
-Therefore, the decision was made to switch to another library at the end of the prototyping phase called
-Nuklear~\cite{b3}.
+Therefore, at the end of the prototyping phase the decision was made to switch to another library called Nuklear~\cite{b3}.
 
 \subsection{Gameplay}
 The general idea of the gameplay was to let the player create their own constellation of units, by letting them choose
@@ -94,12 +92,12 @@ Three different types of units were implemented in the final version of Ironboun
     To balance these drawbacks \textbf{Catapults} deal the highest damage per instance.
 \end{itemize}
 
-On being finished, the first round of the combat loop would start.
+When the player is done with the distribution of their units, the first round of the combat loop would start.
 During a round of combat the player would fight the army of a computer-controlled opponent.
 This army would be randomly selected out of a set pool of presets.
 Both armies would fight, until all units of either side were exhausted.
-Should the players army be the first to be exhausted, the game would end and quit.
-Should on the other hand the opponents army be the first to be exhausted, the player would get the chance to select
+If the players army is the first to be exhausted, the game would end and quit.
+On the other hand, if the opponents army is the first to be exhausted, the player would get the chance to select
 a reward, before entering the next round against a new opponent with a new army.
 
 \subsection{Style}
@@ -111,8 +109,7 @@ seemed to offer good variety during unit design.
 
 \section{System Design}
 Sources and instructions to implement a rendering pipeline and create custom systems were provided to the students.
-Since the game was to be created without the usage of an engine, a lot of thought had to be put into the design of
-those systems.
+Since the game was to be created without the usage of an engine, the design of those systems was fairly complex.
 
 \subsection{Entity Component System}
 An entity component system (ECS) is a pattern, that is commonly used in game development.
@@ -137,12 +134,13 @@ were designed to be reusable and applicable to other types of games.
 \subsection{Rendering}
 In the instructions OpenGL~\cite{b4} and GLFW~\cite{b5} were used to set up fundamental functionality like creating
 a window and a basic render pipeline.
-Since Ironbound Tactics was going to be a 2D game, the complexity and workload of the render pipeline would probably
-be on the lower end, it was decided to keep with OpenGL~\cite{b4}.
+As Ironbound Tactics was planned as a 2D game, the complexity and workload of the render pipeline would
+be on the lower end.
+Therefore it was decided to keep using OpenGL~\cite{b4}.
 Still there were some adjustments to be made.
 
 As an example, the starting point was making a draw call to the graphics card for each individual entity.
-Since Ironbound Tactics would likely have a lot of instances of the same unit be at the screen at the same time,
+Since Ironbound Tactics would be likely to have a lot of instances of the same unit be at the screen at the same time,
 this would become a problem, as individual draw-calls are a very demanding process on the computer.
 A component "Instance Buffer" was therefore introduced, which, in combination with a scene-graph structure, allowed to
 batch duplicate instances of a single entity, into a single buffer, reducing the necessary draw-calls down to one.
@@ -156,14 +154,11 @@ For this reason development did get stuck in this phase for a while.
 During one of the feedback sessions the advice was given, to not postpone the visual representation too far to the end
 of the development, as the visual feedback would help getting a grasp of the impact of what was going on behind the
 scenes.
-The decision to listen to this feedback turned out to be very good.
-It helped a lot to tackle the problems at that time from a different perspective, and provided a different point to
-continue work, resulting in a decrease of frustration.
+Implementing this feedback provided another point to continue to work from, resulting in a decrease of frustration.\newline
 
 Ironbound Tactics was also tested by peers.
 The received feedback did not only result in improved balancing, the discovery, reproduction and fix of bugs, but also in refining existing
 features and coming up with new ones.
-
 As an example, it was noted, that the available decisions the player has during their turn were to ambiguous.
 The idea to create icons, that hover over the possible actions was given as a possible solution, which was well received
 after implementation.
@@ -172,7 +167,7 @@ and rewards died down quickly.
 A tester came up with the idea, to give the player the ability to unlock the textures of your opponents army.
 Since this feedback came at a very late stage of development it had to be evaluated, if the implementation of this
 feature would still be possible.
-It turned out to be not to complex, as the implemented systems were simple to extend.
+It turned out to be not too complex, as the implemented systems were simple to extend.
 
 \section{Conclusion}
 Ironbound Tactics was, in its final state, again reviewed by peers.
