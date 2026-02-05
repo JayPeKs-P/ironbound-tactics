@@ -9,7 +9,7 @@
 namespace gl3 {
     class GuiHandler;
 }
-enum class MainMenuState {MAIN_MENU, SETTINGS, SKIN_SELECTION, TUTORIAL};
+enum class MainMenuState {MAIN_MENU, SETTINGS, SKIN_SELECTION, TUTORIAL, CREDITS};
 enum class UnitSelection {INFANTRY, ARCHER, CATAPULT};
 enum class SkinType {BASIC, EASY, MEDIUM, HARD};
 
