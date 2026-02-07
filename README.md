@@ -13,7 +13,7 @@
 As part of the module *GameLab III*, which is one of the core modules of the bachelors degree *Games Engineering* at Julius-Maximilians-University Würzburg, students are tasked to develop a videogame in *C++* without using existing engines or engine-like
 libraries.
 `Ironbound Tactics` is the game I create in course of this module. It is a turn based endless battler, where the player creates an army by picking their units out of a set pool and then fights the armies of random computer controlled opponents.
-For further information have a look in ther docs. Additionaly parts of the code base can be used to support the creation of
+For further information have a look in the docs. Additionally parts of the code base can be used to support the creation of
 new games. An instruction on how to do this can also be found in the docs. 
 
 ## Project Structure
@@ -73,6 +73,6 @@ Should you be interested in creating your own game from scratch it is **NECESSAR
 ### Assets
 - [Tactical RPG Overworld Pack](https://www.gamedevmarket.net/asset/tactical-rpg-overworld-pack) by **Franuka** for units and world textures
 - [Fantasy RPG UI pack](https://www.gamedevmarket.net/asset/rpg-ui-pack) by **Franuka** for GUI
-- [Massive Game Music Collection]() by **AndySv** for Music
+- [Massive Game Music Collection](https://www.gamedevmarket.net/asset/massive-game-music-collection) by **AndySv** for Music
 - [Pro Sound Collection](https://www.gamedevmarket.net/asset/pro-sound-collection) by **Gamemaster Audio** for Sound Effects
 
